@@ -1,17 +1,13 @@
 import React from 'react';
-import {connect} from "react-redux";
-import {Link} from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
-class SideNavigation extends React.Component {
-  render() {
-    const { match } = this.props;
-
-    return (
-      <div className="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-        <Link to={`${match.path}/cameras`}/>
-      </div>
-    );
-  }
+function SideNavigation() {
+  return (
+    <div className="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+      <NavLink className="nav-link" activeClassName="active" to="/dashboard/cameras">Cameras</NavLink>
+      <NavLink className="nav-link" to="/sign_out">Sign Out</NavLink>
+    </div>
+  );
 }
 
-export default connect()(SideNavigation);
+export default SideNavigation;

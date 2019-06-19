@@ -1,15 +1,15 @@
-import React from "react";
-import SideNavigation from "../side_navigation";
-import MainContent from "../main_content";
+import React from 'react';
+import SideNavigation from '../side_navigation';
+import MainContent from '../main_content';
 
-function Dashboard (props) {
+function Dashboard() {
   return (
     <div className="row">
       <div className="col-2">
-        <SideNavigation {...props} />
+        <SideNavigation/>
       </div>
       <div className="col-10">
-        <MainContent />
+        <MainContent/>
       </div>
     </div>
   )

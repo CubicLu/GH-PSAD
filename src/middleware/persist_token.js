@@ -5,7 +5,7 @@ const persistTokenMiddleware = _ => next => action => {
   switch (action.type) {
     case ON_INIT:
       // TODO: add token verification logic here (via fetch 'verify-token')
-      const token_payload = localStorage.getItem("TOKEN");
+      const token_payload = localStorage.TOKEN;
 
       if (token_payload) {
         return next(UserActions.setToken(token_payload));
@@ -14,6 +14,9 @@ const persistTokenMiddleware = _ => next => action => {
       }
     case UserActions.SET_TOKEN:
       localStorage.setItem("TOKEN", action.payload);
+      break;
+    case UserActions.CLEAR_TOKEN:
+      localStorage.removeItem("TOKEN");
   }
 
   return next(action);

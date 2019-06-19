@@ -1,14 +1,16 @@
 import React from 'react';
-import {connect} from "react-redux";
+import { withRouter } from 'react-router';
+import CameraRoute from 'routes/camera';
+import PrivateRoute from 'routes/private_route';
 
-class MainContent extends React.Component {
-  render() {
-    return (
-      <div className="tab-content">
-        {/*TODO: add content*/}
-      </div>
-    );
-  }
+function MainContent(props) {
+  const { match } = props;
+
+  return (
+    <div className="tab-content">
+      <PrivateRoute path={`${match.path}/cameras`} component={CameraRoute}/>
+    </div>
+  );
 }
 
-export default connect()(MainContent);
+export default withRouter(MainContent);
