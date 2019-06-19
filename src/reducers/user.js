@@ -8,9 +8,9 @@ const initialState = {
 function auth(state = initialState, action) {
   switch (action.type) {
     case UserActions.SET_TOKEN:
-      localStorage.setItem("token", action.token);
       return Object.assign({}, state, {
-        isAuthorized: true
+        isAuthorized: true,
+        token: action.payload
       });
     default:
       return state;

@@ -12,10 +12,10 @@ function authFetch(username, password) {
   })
 }
 
-function setToken(token) {
+function setToken(payload) {
   return {
     type: SET_TOKEN,
-    token: token
+    payload: payload
   }
 }
 

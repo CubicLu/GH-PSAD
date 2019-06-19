@@ -5,7 +5,7 @@ import {bindActionCreators} from 'redux'
 import {UserActions} from "actions";
 import {isEmpty} from 'underscore';
 import {Spinner} from 'reactstrap';
-import Alert from "reactstrap/es/Alert";
+import {Alert, Button, Input} from "reactstrap";
 
 class Login extends React.Component {
   constructor(props) {
@@ -17,14 +17,6 @@ class Login extends React.Component {
       isFetching: false
     };
   }
-
-  usernameChange = (event) => this.setState({
-    username: event.target.value
-  });
-
-  passwordChange = (event) => this.setState({
-    password: event.target.value
-  });
 
   submitForm = (event) => {
     event.preventDefault();
@@ -61,11 +53,13 @@ class Login extends React.Component {
 
   setToken(promise) {
     promise.then(json => {
-      this.props.setToken(json.token);
       this.setState({
         isFetching: false,
         errors: {}
       });
+
+      this.props.setToken(json.token);
+      this.props.history.push('/dashboard');
     });
   }
 
@@ -95,6 +89,15 @@ class Login extends React.Component {
     )
   };
 
+  componentDidMount() {
+    document.body.style.background = '#007bff';
+    document.body.style.background = 'linear-gradient(to right, #0062E6, #33AEFF)';
+  }
+
+  componentWillUnmount() {
+    document.body.style.background = null;
+  }
+
   render() {
     return (
       <div className="container">
@@ -107,23 +110,16 @@ class Login extends React.Component {
                 <fieldset disabled={this.state.isFetching}>
                   <form onSubmit={this.submitForm} className={styles[ "form-signin" ]}>
                     <div className={styles[ "form-label-group" ]}>
-                      <input type="email"
-                             value={this.state.username}
-                             onChange={this.usernameChange}
-                             className="form-control"
-                             placeholder="Email address"
-                             required
-                             autoFocus/>
+                      <Input type="email" value={this.state.username} onChange={event => this.setState({
+                        username: event.target.value
+                      })} placeholder="Email address" required autoFocus />
                       <label htmlFor="inputEmail">Email address</label>
                     </div>
 
                     <div className={styles[ "form-label-group" ]}>
-                      <input type="password"
-                             value={this.state.password}
-                             onChange={this.passwordChange}
-                             className="form-control"
-                             placeholder="Password"
-                             required/>
+                      <Input type="password" value={this.state.password} onChange={event => this.setState({
+                        password: event.target.value
+                      })} placeholder="Password" required />
                       <label htmlFor="inputPassword">Password</label>
                     </div>
 
@@ -131,9 +127,9 @@ class Login extends React.Component {
                       <input type="checkbox" className="custom-control-input" id="customCheck1"/>
                       <label className="custom-control-label" htmlFor="customCheck1">Remember password</label>
                     </div>
-                    <button className={`${styles.btn} btn-lg btn-primary btn-block text-uppercase`} type="submit">
+                    <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
                       {this.state.isFetching ? this.showSpinner() : "Sign In"}
-                    </button>
+                    </Button>
                   </form>
                 </fieldset>
               </div>
