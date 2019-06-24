@@ -1,2 +1,10 @@
 import * as UserActions from './user';
-export { UserActions };
+import * as CameraActions from './camera';
+
+const ON_INIT = 'ON_INIT';
+
+const onInit = {
+  type: ON_INIT
+};
+
+export { UserActions, CameraActions, ON_INIT, onInit };

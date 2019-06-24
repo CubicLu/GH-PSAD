@@ -1,16 +1,17 @@
 import {UserActions} from 'actions';
 import {combineReducers} from 'redux';
 
-const initialState = {
-  isAuthorized: false
-};
-
-function auth(state = initialState, action) {
+function auth(state = { isAuthorized: false }, action) {
   switch (action.type) {
     case UserActions.SET_TOKEN:
-      localStorage.setItem("token", action.token);
       return Object.assign({}, state, {
-        isAuthorized: true
+        isAuthorized: true,
+        token: action.payload
+      });
+    case UserActions.CLEAR_TOKEN:
+      return Object.assign({}, state, {
+        isAuthorized: false,
+        token: null
       });
     default:
       return state;

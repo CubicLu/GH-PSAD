@@ -1,23 +1,16 @@
-import fetch from 'cross-fetch';
-import env from '.env';
-
 const SET_TOKEN = 'SET_TOKEN';
+const CLEAR_TOKEN = 'CLEAR_TOKEN';
 
-
-function authFetch(username, password) {
-  return fetch(`${env.backend_url}/dashboard/auth/sign_in`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password })
-  })
-}
-
-function setToken(token) {
+function setToken(payload) {
   return {
     type: SET_TOKEN,
-    token: token
+    payload: payload
   }
 }
 
+const clearToken = {
+  type: CLEAR_TOKEN
+};
 
-export {SET_TOKEN, authFetch, setToken};
+
+export {SET_TOKEN, CLEAR_TOKEN, setToken, clearToken};
