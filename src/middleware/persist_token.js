@@ -1,9 +1,9 @@
 /*eslint default-case: "off"*/
-import {ON_INIT, UserActions} from "actions";
+import {INIT, UserActions} from "actions";
 
 const persistTokenMiddleware = _ => next => action => {
   switch (action.type) {
-    case ON_INIT:
+    case INIT:
       // TODO: add token verification logic here (via fetch 'verify-token')
       const token_payload = localStorage.TOKEN;
 

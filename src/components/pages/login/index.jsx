@@ -1,9 +1,9 @@
 import React from 'react';
-import styles from './login.module.sass';
+import styles from './index.module.sass';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { authFetch } from 'api/user';
-import { setToken } from 'actions/user';
+import { auth } from 'api/users';
+import { setToken } from 'actions/users';
 import { Button, Input } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
 import { fromJson as showErrors } from 'components/helpers/errors';
@@ -25,60 +25,42 @@ class Login extends React.Component {
       isFetching: true
     });
 
-    this.withCatch(authFetch(this.state.username, this.state.password).then(
-      res => this.handleResponse(res)
-    ));
+    auth(this.state.username, this.state.password)
+      .then(res => this.setToken(res.data))
+      .catch(error => this.setErrors(error))
   };
 
-  handleResponse(res) {
-    if (res.ok) {
-      this.setToken(res.json());
-    } else {
-      this.setErrors(res.json());
-    }
+  setToken(data) {
+    this.setState({
+      isFetching: false,
+      errors: {}
+    });
+
+    this.props.setToken(data.token);
+    this.props.history.push('/dashboard');
   }
 
-  setToken(promise) {
-    promise.then(json => {
-      this.setState({
-        isFetching: false,
-        errors: {}
-      });
+  setErrors(error) {
+    let errors;
 
-      this.props.setToken(json.token);
-      this.props.history.push('/dashboard');
+    if (error.response) {
+      errors = error.response.data.errors;
+    } else {
+      errors = { server: ['Unexpected error'] }
+    }
+
+    this.setState({
+      isFetching: false,
+      errors: errors
     });
   }
 
-  withCatch(promise) {
-    promise.catch(error => {
-      console.error(error);
-      this.setState({
-        isFetching: false,
-        errors: {
-          server: ['Unexpected error']
-        }
-      });
-    })
-  }
-
-  setErrors(promise) {
-    this.withCatch(promise.then(json => {
-        this.setState({
-          isFetching: false,
-          errors: json.errors
-        });
-      }
-    ))
-  }
-
   componentDidMount() {
-    document.body.style.background = '#007bff';
-    document.body.style.background = 'linear-gradient(to right, #0062E6, #33AEFF)';
+    document.body.classList.add(styles.body);
   }
 
   componentWillUnmount() {
-    document.body.style.background = null;
+    document.body.classList.remove(styles.body);
   }
 
   render() {
@@ -93,17 +75,18 @@ class Login extends React.Component {
                 <fieldset disabled={this.state.isFetching}>
                   <form onSubmit={this.submitForm} className={styles['form-signin']}>
                     <div className={styles['form-label-group']}>
-                      <Input type="email" value={this.state.username} onChange={event => this.setState({
+                      <Input id="email" type="email" value={this.state.username} onChange={event => this.setState({
                         username: event.target.value
                       })} placeholder="Email address" required autoFocus/>
-                      <label htmlFor="inputEmail">Email address</label>
+                      <label htmlFor="email">Email address</label>
                     </div>
 
                     <div className={styles['form-label-group']}>
-                      <Input type="password" value={this.state.password} onChange={event => this.setState({
-                        password: event.target.value
-                      })} placeholder="Password" required/>
-                      <label htmlFor="inputPassword">Password</label>
+                      <Input id="password" name="password" type="password" value={this.state.password}
+                             onChange={event => this.setState({ password: event.target.value })}
+                             placeholder="Password"
+                             required/>
+                      <label htmlFor="password">Password</label>
                     </div>
 
                     <div className="custom-control custom-checkbox mb-3">

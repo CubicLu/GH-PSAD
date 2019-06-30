@@ -36,8 +36,16 @@ const withFetching = (Component, fetchData) => {
       fetchData(this);
     }
 
+    fetchStarted = () => {
+      this.setState({ isFetching: true });
+    };
+
     render() {
-      return <Component isFetching={this.state.isFetching} {...this.props} />
+      return <Component
+        isFetching={this.state.isFetching}
+        fetchStarted={this.fetchStarted}
+        fetchFinished={this.fetchFinished}
+        {...this.props} />
     }
   }
 };

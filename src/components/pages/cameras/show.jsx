@@ -1,14 +1,12 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { isEmpty } from 'underscore';
 import { Col, Form, FormGroup, Input, Label, Card, CardHeader, CardBody } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import withFetching from 'components/modules/with_fetching';
-import { show } from 'api/camera';
-import { setRecord } from 'actions/camera';
-import { parkingLot } from 'components/helpers/camera';
+import { show } from 'api/cameras';
+import { setRecord } from 'actions/entities';
+import { SET_RECORD } from 'actions/cameras';
+import { parkingLot } from 'components/helpers/cameras';
 import { displayUnixTimestamp } from 'components/helpers';
+import connectRecord from 'components/modules/connect_record';
 
 class Show extends React.Component {
   renderRecord() {
@@ -61,32 +59,4 @@ class Show extends React.Component {
   }
 }
 
-function mapState(state, ownProps) {
-  const { params } = ownProps.match;
-  const { records } = state.camera;
-  return { record: records[params.id] };
-}
-
-function mapDispatch(dispatch) {
-  return bindActionCreators({ setRecord }, dispatch);
-}
-
-function fetchData(wrapper) {
-  if (!isEmpty(wrapper.props.record)) {
-    wrapper.fetchFinished();
-    return;
-  }
-
-  const { params } = wrapper.props.match;
-
-  show(params.id)
-    .then(res => res.json())
-    .then(json => wrapper.props.setRecord(json))
-    .catch(err => console.error(err))
-    .finally(wrapper.fetchFinished)
-}
-
-export default connect(
-  mapState,
-  mapDispatch
-)(withFetching(Show, fetchData));
+export default connectRecord('camera', SET_RECORD, show, Show);

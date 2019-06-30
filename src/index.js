@@ -7,7 +7,7 @@ import persistTokenMiddleware from 'middleware/persist_token';
 import {createLogger} from 'redux-logger';
 import * as serviceWorker from 'serviceWorker';
 import reducers from 'reducers';
-import { onInit } from "actions";
+import { init } from "actions";
 import 'bootstrap/dist/css/bootstrap.css';
 import 'styles/global.sass';
 
@@ -22,7 +22,7 @@ const store = createStore(
   )
 );
 
-store.dispatch(onInit);
+store.dispatch(init);
 
 ReactDOM.render(
   <Root store={store} />,
@@ -33,3 +33,5 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+export default store;
