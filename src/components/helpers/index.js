@@ -22,11 +22,11 @@ const dateToUnix = date => {
   return date.getTime() / 1000;
 };
 
-const btnSpinner = () => {
+const btnSpinner = (props = {}) => {
   return (
     <span>
         Loading...
-        <Spinner className="ml-1" size="sm" color="default"/>
+        <Spinner {...props} size="sm" color="default"/>
       </span>
   )
 };
