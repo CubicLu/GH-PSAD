@@ -25,9 +25,9 @@ class Login extends React.Component {
       isFetching: true
     });
 
-    authFetch(this.state.username, this.state.password).then(
+    this.withCatch(authFetch(this.state.username, this.state.password).then(
       res => this.handleResponse(res)
-    );
+    ));
   };
 
   handleResponse(res) {
@@ -50,14 +50,8 @@ class Login extends React.Component {
     });
   }
 
-  setErrors(promise) {
-    promise.then(json => {
-        this.setState({
-          isFetching: false,
-          errors: json.errors
-        });
-      }
-    ).catch(error => {
+  withCatch(promise) {
+    promise.catch(error => {
       console.error(error);
       this.setState({
         isFetching: false,
@@ -66,6 +60,16 @@ class Login extends React.Component {
         }
       });
     })
+  }
+
+  setErrors(promise) {
+    this.withCatch(promise.then(json => {
+        this.setState({
+          isFetching: false,
+          errors: json.errors
+        });
+      }
+    ))
   }
 
   componentDidMount() {
