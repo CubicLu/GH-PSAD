@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { isEmpty } from 'underscore';
 import { connect } from 'react-redux';
 import withFetching from 'components/modules/with_fetching';
+import { list as selectList } from 'selectors/list';
 
 const connectList = (entity_name, action_type, fetcher, Component) => {
   function mapState(state) {
@@ -20,13 +21,7 @@ const connectList = (entity_name, action_type, fetcher, Component) => {
     }
 
     fetcher()
-      .then(res => wrapper.props.setList({
-          list: res.data,
-          total: parseInt(res.headers['x-total'], 10),
-          perPage: parseInt(res.headers['x-per-page'], 10),
-          page: parseInt(res.headers['x-page'], 10)
-        })
-      )
+      .then(res => wrapper.props.setList(selectList(res)))
       .catch(err => console.error(err))
       .finally(wrapper.fetchFinished)
   }

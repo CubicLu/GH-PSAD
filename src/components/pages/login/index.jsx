@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { auth } from 'api/users';
 import { setToken } from 'actions/users';
-import { Button, Input } from 'reactstrap';
+import { Button, Card, Col, Input, Row } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
 import { fromJson as showErrors } from 'components/helpers/errors';
 
@@ -66,9 +66,9 @@ class Login extends React.Component {
   render() {
     return (
       <div className="container">
-        <div className="row">
-          <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
-            <div className={`card ${styles['card-signin']} my-5`}>
+        <Row>
+          <Col sm={9} md={7} lg={5} className="mx-auto">
+            <Card className={`${styles['card-signin']} my-5`}>
               <div className={styles['card-body']}>
                 {showErrors(this.state.errors)}
                 <h5 className={`${styles['card-title']} text-center`}>Sign In</h5>
@@ -99,9 +99,9 @@ class Login extends React.Component {
                   </form>
                 </fieldset>
               </div>
-            </div>
-          </div>
-        </div>
+            </Card>
+          </Col>
+        </Row>
       </div>
     );
   }

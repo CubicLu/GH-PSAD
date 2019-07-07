@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, ButtonGroup, ButtonToolbar, Input, InputGroup } from 'reactstrap';
 import { debounce } from 'underscore';
+import { list as selectList } from 'selectors/list';
 
 class BasicListToolbar extends React.Component {
   constructor(props) {
@@ -17,17 +18,17 @@ class BasicListToolbar extends React.Component {
   };
 
   filter = event => {
-    const { fetchStarted, fetchFinished, fetcher, page, perPage } = this.props;
+    const { fetchStarted, fetchFinished, fetcher } = this.props;
 
     fetchStarted();
-    fetcher(page, perPage, event.target.value)
+    fetcher(null, null, event.target.value)
       .then(this.filterSucceed)
       .catch(this.filterFailed)
       .finally(fetchFinished);
   };
 
   filterSucceed = res => {
-    this.props.setList(res.data);
+    this.props.setList(selectList(res));
   };
 
   filterFailed = error => {
