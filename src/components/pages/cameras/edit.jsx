@@ -1,14 +1,11 @@
 import React from 'react';
 import { Col, Form, FormGroup, Input, Label, Card, CardHeader, CardBody, Button } from 'reactstrap';
-import { bindActionCreators } from 'redux';
-import { isEmpty } from 'underscore';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { generatePath } from 'react-router';
-import withFetching from 'components/modules/with_fetching';
-import { show, update } from 'api/camera';
-import { setRecord } from 'actions/camera';
+import { show, update } from 'api/cameras';
 import { btnSpinner } from 'components/helpers';
+import connectRecord from 'components/modules/connect_record';
+import { SET_RECORD } from 'actions/cameras';
 
 class Edit extends React.Component {
   constructor(props) {
@@ -32,24 +29,21 @@ class Edit extends React.Component {
 
     this.setState({ isFetching: true });
     update(id, { name, stream, login, password })
-      .then(this.handleUpdate);
+      .then(this.updateSucceed)
+      .catch(this.updateFailed)
   };
 
-  handleUpdate = res => {
+  updateSucceed = res => {
     const { backPath, match, history, setRecord } = this.props;
     const { id } = match.params;
 
-    if (res.ok) {
-      res.json()
-        .then(json => {
-        setRecord(json);
-        history.push(generatePath(backPath, { id }))
-      })
-    } else {
-      res.json()
-        .then(json => console.error(json));
-    }
+    setRecord(res.data);
+    this.setState({ isFetching: false });
+    history.push(generatePath(backPath, { id }));
+  };
 
+  updateFailed = error => {
+    console.error(error.message);
     this.setState({ isFetching: false });
   };
 
@@ -106,32 +100,4 @@ class Edit extends React.Component {
   }
 }
 
-function mapState(state, ownProps) {
-  const { params } = ownProps.match;
-  const { records } = state.camera;
-  return { record: records[params.id] || {} };
-}
-
-function mapDispatch(dispatch) {
-  return bindActionCreators({ setRecord }, dispatch);
-}
-
-function fetchData(wrapper) {
-  if (!isEmpty(wrapper.props.record)) {
-    wrapper.fetchFinished();
-    return;
-  }
-
-  const { params } = wrapper.props.match;
-
-  show(params.id)
-    .then(res => res.json())
-    .then(json => wrapper.props.setRecord(json))
-    .catch(err => console.error(err))
-    .finally(wrapper.fetchFinished)
-}
-
-export default connect(
-  mapState,
-  mapDispatch
-)(withFetching(Edit, fetchData));
+export default connectRecord('camera', SET_RECORD, show, Edit);

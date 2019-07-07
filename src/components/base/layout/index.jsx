@@ -1,0 +1,24 @@
+import React from 'react';
+import { Container } from 'reactstrap';
+import Header from 'components/base/header';
+import { connect } from 'react-redux';
+
+class Layout extends React.Component {
+  render() {
+    return (
+      <React.Fragment>
+        {this.props.isAuthorized ? <Header/> : null}
+        <Container fluid>
+          {this.props.children}
+        </Container>
+      </React.Fragment>
+    );
+  }
+}
+
+const mapState = state => {
+  const { isAuthorized } = state.user.auth;
+  return { isAuthorized };
+};
+
+export default connect(mapState)(Layout);

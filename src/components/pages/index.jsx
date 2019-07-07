@@ -5,27 +5,29 @@ import Dashboard from './dashboard';
 import { connect } from 'react-redux';
 import PrivateRoute from 'routes/private_route';
 import Layout from 'components/base/layout';
-import { clearToken } from 'actions/user';
+import { clearToken } from 'actions/users';
 
 class App extends React.Component {
   componentDidMount() {
-    const { match, history } = this.props;
+    const { location, history } = this.props;
 
-    if (match.path === '/') {
+    if (location.pathname === '/') {
       history.push('/dashboard');
     }
   }
 
   render () {
     return (
-      <Layout>
+      <React.Fragment>
+        <Layout>
+          <Route path='/sign_out' render={() => {
+            this.props.dispatch(clearToken);
+            return <Redirect to="/login"/>
+          }} />
+          <PrivateRoute path="/dashboard" component={Dashboard}/>
+        </Layout>
         <Route path="/login" component={Login}/>
-        <Route path='/sign_out' render={() => {
-          this.props.dispatch(clearToken);
-          return <Redirect to="/login"/>
-        }} />
-        <PrivateRoute path="/dashboard" component={Dashboard}/>
-      </Layout>
+      </React.Fragment>
     );
   }
 }

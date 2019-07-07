@@ -1,0 +1,4 @@
+const SET_LIST = 'SET_CAMERA_LIST';
+const SET_RECORD = 'SET_CAMERA_RECORD';
+
+export {SET_LIST, SET_RECORD};

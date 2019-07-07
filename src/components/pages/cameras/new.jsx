@@ -3,8 +3,9 @@ import { Col, Form, FormGroup, Input, Label, Card, CardHeader, CardBody, Button 
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { create } from 'api/camera';
-import { setRecord } from 'actions/camera';
+import { create } from 'api/cameras';
+import { setRecord } from 'actions/entities';
+import { SET_RECORD } from 'actions/cameras';
 import { btnSpinner } from 'components/helpers';
 import { fromJson as showErrors } from 'components/helpers/errors';
 
@@ -29,19 +30,21 @@ class New extends React.Component {
 
     this.setState({ isFetching: true });
     create({ name, stream, login, password, parking_lot_id })
-      .then(this.handleCreate);
+      .then(this.createSucceed)
+    .catch(this.createFailed);
   };
 
-  handleCreate = res => {
+  createSucceed = res => {
     const { backPath, history, setRecord } = this.props;
 
-    if (res.ok) {
-      res.json().then(json => {
-        setRecord(json);
-        history.push(backPath);
-      })
-    } else {
-      res.json().then(json => this.setState({ errors: json.errors }));
+    setRecord(res.data);
+    this.setState({ isFetching: false });
+    history.push(backPath);
+  };
+
+  createFailed = error => {
+    if (error.response) {
+      this.setState({ errors: error.response.data.errors })
     }
 
     this.setState({ isFetching: false });
@@ -106,7 +109,7 @@ class New extends React.Component {
 }
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({ setRecord }, dispatch);
+  return bindActionCreators({ setRecord: setRecord(SET_RECORD) }, dispatch);
 }
 
 export default connect(
