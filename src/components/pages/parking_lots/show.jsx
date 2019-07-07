@@ -1,8 +1,7 @@
 import React from 'react';
-import { Col, Form, FormGroup, Input, Label, Card, CardHeader, CardBody, Row } from 'reactstrap';
+import { Col, Form, Card, CardHeader, CardBody, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { show } from 'api/parking_lots';
-import { setRecord } from 'actions/parking_lots';
 import connectRecord from 'components/modules/connect_record';
 import { SET_RECORD } from 'actions/parking_lots';
 

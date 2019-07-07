@@ -2,7 +2,6 @@ import React from 'react';
 import { Col, Form, FormGroup, Input, Label, Card, CardHeader, CardBody } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { show } from 'api/cameras';
-import { setRecord } from 'actions/entities';
 import { SET_RECORD } from 'actions/cameras';
 import { parkingLot } from 'components/helpers/cameras';
 import { displayUnixTimestamp } from 'components/helpers';

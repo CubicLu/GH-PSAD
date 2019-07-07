@@ -17,6 +17,16 @@ class BasicListToolbar extends React.Component {
     history.push(`${match.path}/new`);
   };
 
+  refresh = () => {
+    const { fetchStarted, fetchFinished, fetcher } = this.props;
+
+    fetchStarted();
+    fetcher()
+      .then(this.filterSucceed)
+      .catch(this.filterFailed)
+      .finally(fetchFinished);
+  };
+
   filter = event => {
     const { fetchStarted, fetchFinished, fetcher } = this.props;
 
@@ -46,6 +56,9 @@ class BasicListToolbar extends React.Component {
 
     return (
       <ButtonToolbar className="pb-1 float-right">
+        <ButtonGroup className="mr-1">
+          <Button onClick={this.refresh}>Refresh</Button>
+        </ButtonGroup>
         <InputGroup className="mr-1">
           <Input value={this.state.filter} onChange={this.onFilter}/>
         </InputGroup>

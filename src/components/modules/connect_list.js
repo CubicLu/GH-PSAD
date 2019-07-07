@@ -1,4 +1,4 @@
-import { setList } from 'actions/entities';
+import { invoke } from 'actions';
 import { bindActionCreators } from 'redux';
 import { isEmpty } from 'underscore';
 import { connect } from 'react-redux';
@@ -11,7 +11,7 @@ const connectList = (entity_name, action_type, fetcher, Component) => {
   }
 
   function mapDispatch(dispatch) {
-    return bindActionCreators({ setList: setList(action_type) }, dispatch);
+    return bindActionCreators({ setList: invoke(action_type) }, dispatch);
   }
 
   function fetchData(wrapper) {

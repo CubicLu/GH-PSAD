@@ -13,4 +13,12 @@ const parkingLot = lot => {
   );
 };
 
-export { parkingLot };
+const fields = () => [
+  { name: 'name', label: 'Name' },
+  { name: 'stream', label: 'Stream' },
+  { name: 'login', label: 'Login' },
+  { name: 'password', label: 'Password' },
+  { name: 'parking_lot_id', label: 'Parking Lot' }
+];
+
+export { parkingLot, fields };
