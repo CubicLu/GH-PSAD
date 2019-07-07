@@ -101,7 +101,7 @@ class ResetPassword extends React.Component {
                     <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
                       {this.state.isFetching ? btnSpinner({ className: styles['spinner-border'] }) : 'Reset'}
                     </Button>
-                    <Link to='/login' className=" mr-1">I Want To Sign In</Link>              
+                    <Link to='/login' className="mr-1 mt-2 d-block">I Want To Sign In</Link>              
                   </form>
                 </fieldset>
               </div>

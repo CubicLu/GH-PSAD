@@ -94,7 +94,7 @@ class Login extends React.Component {
                       <input type="checkbox" className="custom-control-input" id="customCheck1"/>
                       <label className="custom-control-label" htmlFor="customCheck1">Remember password</label>
                     </div>
-                    <Link to='/send_reset_password_instrucctions' className=" mr-1">Forgot your password?</Link>              
+                    <Link to='/send_reset_password_instrucctions' className=" mr-1 mb-2 d-block">Forgot your password?</Link>              
                     <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
                       {this.state.isFetching ? btnSpinner({ className: styles['spinner-border'] }) : 'Sign In'}
                     </Button>
