@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { setList } from 'actions/parking_lots';
 import { index } from 'api/parking_lots';
 import { displayUnixTimestamp } from 'components/helpers';
 import { Col, Row, Table } from 'reactstrap';

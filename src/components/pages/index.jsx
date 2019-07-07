@@ -22,7 +22,7 @@ class App extends React.Component {
         <Layout>
           <Route path='/sign_out' render={() => {
             this.props.dispatch(clearToken);
-            return <Redirect to="/login"/>
+            return <Redirect to="/login"/>;
           }} />
           <PrivateRoute path="/dashboard" component={Dashboard}/>
         </Layout>
