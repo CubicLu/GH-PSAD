@@ -3,11 +3,13 @@ COPY . /app
 WORKDIR ./app
 RUN npm install
 RUN npm run build
-VOLUME /app
 
-FROM nginx
-RUN rm /etc/nginx/conf.d/default.conf
-COPY --from=build /app/nginx.conf /etc/nginx/conf.d/
+RUN apt-get update && apt-get install -y nginx
+RUN rm /etc/nginx/sites-enabled/default*
+COPY ./nginx.conf /etc/nginx/sites-enabled/default
 WORKDIR /usr/share/nginx/html
-COPY --from=build /app/build ./
-EXPOSE 80
+RUN cd /app/build/ && cp -r * /usr/share/nginx/html/
+#RUN service nginx reload
+EXPOSE 8090
+
+CMD ["nginx", "-g", "daemon off;"]
