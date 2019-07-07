@@ -1,6 +1,8 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router';
 import Login from './login';
+import SendResetPasswordInstructions from './send_reset_password_instructions';
+import ResetPassword from './reset_password';
 import Dashboard from './dashboard';
 import { connect } from 'react-redux';
 import PrivateRoute from 'routes/private_route';
@@ -27,6 +29,8 @@ class App extends React.Component {
           <PrivateRoute path="/dashboard" component={Dashboard}/>
         </Layout>
         <Route path="/login" component={Login}/>
+        <Route path="/send_reset_password_instrucctions" component={SendResetPasswordInstructions}/>
+        <Route path="/reset_password/:reset_password_token" component={ResetPassword}/>
       </React.Fragment>
     );
   }

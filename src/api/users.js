@@ -5,4 +5,16 @@ function auth(username, password) {
   return axios.post(`${env.backend_url}/dashboard/auth/sign_in`, { username, password })
 }
 
-export { auth };
+function sendResetPasswordInstructionsRequest(username) {
+  return axios.post(`${env.backend_url}/dashboard/auth/send_reset_password_instructions`, { username})
+}
+
+function resetPasswordRequest(password, reset_password_token) {
+  return axios.put(`${env.backend_url}/dashboard/auth/reset_password`, { password, reset_password_token })
+}
+
+export { 
+  auth,
+  sendResetPasswordInstructionsRequest,
+  resetPasswordRequest
+};

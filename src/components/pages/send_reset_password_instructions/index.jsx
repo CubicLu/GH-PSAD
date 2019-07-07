@@ -1,22 +1,21 @@
 import React from 'react';
-import styles from './index.module.sass';
+import styles from './send_reset_password_instructions.module.sass';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { auth } from 'api/users';
-import { setToken } from 'actions/users';
-import { Link } from 'react-router-dom';
+import { sendResetPasswordInstructionsRequest } from 'api/users';
 import { Button, Input } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
 import { fromJson as showErrors } from 'components/helpers/errors';
+import { Alert } from 'reactstrap';
 
-class Login extends React.Component {
+
+class SendResetPasswordInstructions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
-      password: '',
-      errors: {},
-      isFetching: false
+      successMessage: '', 
+      errors: {}
     };
   }
 
@@ -26,23 +25,22 @@ class Login extends React.Component {
       isFetching: true
     });
 
-    auth(this.state.username, this.state.password)
-      .then(res => this.setToken(res.data))
+    sendResetPasswordInstructionsRequest(this.state.username)
+      .then(res => this.setSuccessMessage())
       .catch(error => this.setErrors(error))
-  };
 
-  setToken(data) {
+  };
+  
+  setSuccessMessage () {
     this.setState({
+      successMessage: 'We have sent a recovery password to your email, please follow the instructions',
       isFetching: false,
       errors: {}
     });
-
-    this.props.setToken(data.token);
-    this.props.history.push('/dashboard');
   }
 
   setErrors(error) {
-    let errors;
+     let errors;
 
     if (error.response) {
       errors = error.response.data.errors;
@@ -72,31 +70,22 @@ class Login extends React.Component {
             <div className={`card ${styles['card-signin']} my-5`}>
               <div className={styles['card-body']}>
                 {showErrors(this.state.errors)}
-                <h5 className={`${styles['card-title']} text-center`}>Sign In</h5>
+                {this.state.successMessage &&
+                  <Alert color="success">
+                    {this.state.successMessage}
+                  </Alert>
+                }
+                <h5 className={`${styles['card-title']} text-center`}>Reset Your Password</h5>
                 <fieldset disabled={this.state.isFetching}>
                   <form onSubmit={this.submitForm} className={styles['form-signin']}>
                     <div className={styles['form-label-group']}>
-                      <Input id="email" type="email" value={this.state.username} onChange={event => this.setState({
+                      <Input type="email" value={this.state.username} onChange={event => this.setState({
                         username: event.target.value
                       })} placeholder="Email address" required autoFocus/>
-                      <label htmlFor="email">Email address</label>
+                      <label htmlFor="inputEmail">Email address</label>
                     </div>
-
-                    <div className={styles['form-label-group']}>
-                      <Input id="password" name="password" type="password" value={this.state.password}
-                             onChange={event => this.setState({ password: event.target.value })}
-                             placeholder="Password"
-                             required/>
-                      <label htmlFor="password">Password</label>
-                    </div>
-
-                    <div className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" id="customCheck1"/>
-                      <label className="custom-control-label" htmlFor="customCheck1">Remember password</label>
-                    </div>
-                    <Link to='/send_reset_password_instrucctions' className=" mr-1">Forgot your password?</Link>              
                     <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
-                      {this.state.isFetching ? btnSpinner({ className: styles['spinner-border'] }) : 'Sign In'}
+                      {this.state.isFetching ? btnSpinner({ className: styles['spinner-border'] }) : 'Reset'}
                     </Button>
                   </form>
                 </fieldset>
@@ -110,10 +99,10 @@ class Login extends React.Component {
 }
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({ setToken }, dispatch);
+  return bindActionCreators({}, dispatch);
 }
 
 export default connect(
   null,
   mapDispatch
-)(Login);
+)(SendResetPasswordInstructions);
