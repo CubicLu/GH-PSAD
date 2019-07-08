@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './send_reset_password_instructions.module.sass';
+import styles from 'styles/body-card.module.sass';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { sendResetPasswordInstructionsRequest } from 'api/users';

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './index.module.sass';
+import styles from 'styles/body-card.module.sass';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { auth } from 'api/users';

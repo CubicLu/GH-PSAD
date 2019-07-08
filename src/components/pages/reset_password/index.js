@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './reset_password.module.sass';
+import styles from 'styles/body-card.module.sass';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
