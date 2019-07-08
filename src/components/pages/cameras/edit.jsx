@@ -1,11 +1,12 @@
 import React from 'react';
-import { Col, Form, FormGroup, Input, Label, Card, CardHeader, CardBody, Button } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Card, CardHeader, CardBody } from 'reactstrap';
 import { generatePath } from 'react-router';
 import { show, update } from 'api/cameras';
 import { btnSpinner } from 'components/helpers';
+import { fields } from 'components/helpers/cameras';
 import connectRecord from 'components/modules/connect_record';
 import { SET_RECORD } from 'actions/cameras';
+import CommonForm from 'components/base/common_form';
 
 class Edit extends React.Component {
   constructor(props) {
@@ -21,14 +22,11 @@ class Edit extends React.Component {
     if (record) this.setState(record);
   }
 
-  updateRecord = event => {
-    event.preventDefault();
-
+  updateRecord = state => {
     const { id } = this.props.match.params;
-    const { name, stream, login, password } = this.state;
-
     this.setState({ isFetching: true });
-    update(id, { name, stream, login, password })
+
+    update(id, state.values)
       .then(this.updateSucceed)
       .catch(this.updateFailed)
   };
@@ -47,49 +45,27 @@ class Edit extends React.Component {
     this.setState({ isFetching: false });
   };
 
+  values = () => {
+    const { record } = this.props;
+    let values = Object.assign({}, record);
+    values.parking_lot_id = record.parking_lot ? record.parking_lot.id : null;
+    return values;
+  };
+
   renderRecord() {
-    const { record, backPath } = this.props;
+    const { backPath, record } = this.props;
 
     return (
       <Card>
         <CardHeader>Edit Camera</CardHeader>
         <CardBody>
-          <fieldset disabled={this.state.isFetching}>
-            <Form>
-              <FormGroup row>
-                <Label for="name" sm={2}>Name</Label>
-                <Col sm={10}>
-                  <Input id="name" value={this.state.name}
-                         onChange={event => this.setState({ name: event.target.value })}/>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label for="stream" sm={2}>Stream</Label>
-                <Col sm={10}>
-                  <Input id="stream" value={this.state.stream}
-                         onChange={event => this.setState({ stream: event.target.value })}/>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label for="login" sm={2}>Login</Label>
-                <Col sm={10}>
-                  <Input id="login" value={this.state.login}
-                         onChange={event => this.setState({ login: event.target.value })}/>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label for="password" sm={2}>Password</Label>
-                <Col sm={10}>
-                  <Input id="password" type="password" value={this.state.password}
-                         onChange={event => this.setState({ password: event.target.value })}/>
-                </Col>
-              </FormGroup>
-              <Link to={generatePath(backPath, { id: record.id })} className="btn btn-primary mr-1">Back</Link>
-              <Button onClick={this.updateRecord} color="success" type="submit">
-                {this.state.isFetching ? btnSpinner() : 'Update'}
-              </Button>
-            </Form>
-          </fieldset>
+          <CommonForm
+            {...this.props}
+            backPath={generatePath(backPath, { id: record.id })}
+            values={this.values()}
+            fields={fields()}
+            isFetching={this.state.isFetching}
+            submitForm={this.updateRecord}/>
         </CardBody>
       </Card>
     );

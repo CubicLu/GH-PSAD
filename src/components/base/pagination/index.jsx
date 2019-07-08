@@ -1,6 +1,7 @@
 import React from 'react';
 import { times } from 'underscore';
 import { Pagination as Paggy, PaginationItem, PaginationLink } from 'reactstrap';
+import { list as selectList } from 'selectors/list';
 
 class Pagination extends React.Component {
   renderPages = () => {
@@ -33,12 +34,7 @@ class Pagination extends React.Component {
   };
 
   openSucceed = res => {
-    this.props.setList({
-      list: res.data,
-      total: parseInt(res.headers['x-total'], 10),
-      perPage: parseInt(res.headers['x-per-page'], 10),
-      page: parseInt(res.headers['x-page'], 10)
-    });
+    this.props.setList(selectList(res));
   };
 
   openFailed = error => {

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { setList } from 'actions/entities';
 import { SET_LIST } from 'actions/cameras';
 import { index } from 'api/cameras';
 import { displayUnixTimestamp } from 'components/helpers';
