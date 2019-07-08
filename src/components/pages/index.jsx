@@ -29,7 +29,7 @@ class App extends React.Component {
           <PrivateRoute path="/dashboard" component={Dashboard}/>
         </Layout>
         <Route path="/login" component={Login}/>
-        <Route path="/send_reset_password_instrucctions" component={SendResetPasswordInstructions}/>
+        <Route path="/forgot_password" component={SendResetPasswordInstructions}/>
         <Route path="/reset_password/:reset_password_token" component={ResetPassword}/>
       </React.Fragment>
     );

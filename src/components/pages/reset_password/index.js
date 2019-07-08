@@ -6,9 +6,11 @@ import { bindActionCreators } from 'redux'
 import { resetPasswordRequest } from 'api/users';
 import { auth } from 'api/users';
 import { Link } from 'react-router-dom';
-import { Button, Input, Alert } from 'reactstrap';
+import { Button, Input, Alert, Container, Row, Col } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
-import { fromJson as showErrors } from 'components/helpers/errors';
+import { setErrorsMessages } from 'components/helpers/messages';
+import { handleInputChange } from 'components/helpers/handle_input_change';
+import Card from 'components/base/layout/card';
 
 class ResetPassword extends React.Component {
   constructor(props) {
@@ -17,8 +19,7 @@ class ResetPassword extends React.Component {
       password: '',
       password_confirmation: '',
       reset_password_token: '',
-      passwordsMatch: true,
-      errors: {},
+      messages: [],
       isFetching: false
     };
   }
@@ -32,27 +33,17 @@ class ResetPassword extends React.Component {
       });
       return resetPasswordRequest(this.state.password, this.state.reset_password_token)
         .then(res => this.props.history.push('/login'))
-        .catch(error => this.setErrors(error))
+        .catch(error => {
+            this.setState({
+              isFetching: false,
+              messages: setErrorsMessages(error)
+            });
+        })
     }
     this.setState({
-      passwordsMatch: false,
+      messages: setErrorsMessages('Your password and confirmation password do not match')
     });
   };
-  
-  setErrors(error) {
-    let errors;
-
-    if (error.response) {
-      errors = error.response.data.errors;
-    } else {
-      errors = { server: ['Unexpected error'] }
-    }
-
-    this.setState({
-      isFetching: false,
-      errors: errors
-    });
-  }
 
   componentDidMount() {
     this.setState({
@@ -65,50 +56,45 @@ class ResetPassword extends React.Component {
     document.body.classList.remove(styles.body);
   }
 
+
+
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
-            <div className={`card ${styles['card-signin']} my-5`}>
-              <div className={styles['card-body']}>
-                {showErrors(this.state.errors)}
-                {!this.state.passwordsMatch &&
-                  <Alert color="danger">
-                    Your password and confirmation password do not match
-                  </Alert>
-                }
-                <h5 className={`${styles['card-title']} text-center`}>Set Your New Password</h5>
-                <fieldset disabled={this.state.isFetching}>
-                  <form onSubmit={this.submitForm} className={styles['form-signin']}>
+      <Card isFetching={this.state.isFetching} messages={this.state.messages}>
+        <form onSubmit={this.submitForm} >
 
-                    <div className={styles['form-label-group']}>
-                      <Input id="password" name="password" type="password" value={this.state.password}
-                             onChange={event => this.setState({ password: event.target.value })}
-                             placeholder="Password"
-                             required/>
-                      <label htmlFor="password">Password</label>
-                    </div>
-
-                    <div className={styles['form-label-group']}>
-                      <Input id="password_confirmation" name="password_confirmation" type="password" value={this.state.password_confirmation}
-                             onChange={event => this.setState({ password_confirmation: event.target.value })}
-                             placeholder="Confirmation Password"
-                             required/>
-                      <label htmlFor="password_confirmation">Password Confirmation</label>
-                    </div>
-
-                    <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
-                      {this.state.isFetching ? btnSpinner({ className: styles['spinner-border'] }) : 'Reset'}
-                    </Button>
-                    <Link to='/login' className="mr-1 mt-2 d-block">I Want To Sign In</Link>              
-                  </form>
-                </fieldset>
-              </div>
-            </div>
+          <div className="form-label-group">
+            <Input 
+              id="password"
+              name="password"
+              type="password"
+              value={this.state.password}
+              onChange={handleInputChange.bind(this)}
+              placeholder="Password"
+              required
+            />
+            <label htmlFor="password">Password</label>
           </div>
-        </div>
-      </div>
+
+          <div className="form-label-group">
+            <Input 
+              id="password_confirmation" 
+              name="password_confirmation"
+              type="password" 
+              value={this.state.password_confirmation}
+              onChange={handleInputChange.bind(this)}
+              placeholder="Password Confirmation"
+              required
+            />
+            <label htmlFor="password_confirmation">Password Confirmation</label>
+          </div>
+
+          <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
+            {this.state.isFetching ? btnSpinner({ className: "spinner-border" }) : 'Reset'}
+          </Button>
+          <Link to='/login' className="mr-1 mt-2 d-block">I Want To Sign In</Link>              
+        </form>
+      </Card>
     );
   }
 }

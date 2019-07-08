@@ -3,10 +3,12 @@ import styles from './send_reset_password_instructions.module.sass';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { sendResetPasswordInstructionsRequest } from 'api/users';
-import { Button, Input } from 'reactstrap';
+import { Button, Input, Container, Row, Col } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
-import { fromJson as showErrors } from 'components/helpers/errors';
+import { handleInputChange } from 'components/helpers/handle_input_change';
+import { setErrorsMessages, setSuccessMessage } from 'components/helpers/messages';
 import { Alert } from 'reactstrap';
+import Card from 'components/base/layout/card';
 
 
 class SendResetPasswordInstructions extends React.Component {
@@ -15,8 +17,8 @@ class SendResetPasswordInstructions extends React.Component {
     this.state = {
       username: '',
       successMessage: '', 
-      errors: {}
-    };
+      messages: {}
+    }; 
   }
 
   submitForm = (event) => {
@@ -27,30 +29,19 @@ class SendResetPasswordInstructions extends React.Component {
 
     sendResetPasswordInstructionsRequest(this.state.username)
       .then(res => this.setSuccessMessage())
-      .catch(error => this.setErrors(error))
+      .catch(error => {
+        this.setState({
+          isFetching: false,
+          messages: setErrorsMessages(error)
+        });
+      })
 
   };
   
   setSuccessMessage () {
     this.setState({
-      successMessage: 'We have sent a recovery password to your email, please follow the instructions',
       isFetching: false,
-      errors: {}
-    });
-  }
-
-  setErrors(error) {
-     let errors;
-
-    if (error.response) {
-      errors = error.response.data.errors;
-    } else {
-      errors = { server: ['Unexpected error'] }
-    }
-
-    this.setState({
-      isFetching: false,
-      errors: errors
+      messages: setSuccessMessage('We have sent a recovery password to your email, please follow the instructions')
     });
   }
 
@@ -61,39 +52,28 @@ class SendResetPasswordInstructions extends React.Component {
   componentWillUnmount() {
     document.body.classList.remove(styles.body);
   }
-
+  
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
-            <div className={`card ${styles['card-signin']} my-5`}>
-              <div className={styles['card-body']}>
-                {showErrors(this.state.errors)}
-                {this.state.successMessage &&
-                  <Alert color="success">
-                    {this.state.successMessage}
-                  </Alert>
-                }
-                <h5 className={`${styles['card-title']} text-center`}>Reset Your Password</h5>
-                <fieldset disabled={this.state.isFetching}>
-                  <form onSubmit={this.submitForm} className={styles['form-signin']}>
-                    <div className={styles['form-label-group']}>
-                      <Input type="email" value={this.state.username} onChange={event => this.setState({
-                        username: event.target.value
-                      })} placeholder="Email address" required autoFocus/>
-                      <label htmlFor="inputEmail">Email address</label>
-                    </div>
-                    <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
-                      {this.state.isFetching ? btnSpinner({ className: styles['spinner-border'] }) : 'Reset'}
-                    </Button>
-                  </form>
-                </fieldset>
-              </div>
-            </div>
+      <Card isFetching={this.state.isFetching} messages={this.state.messages}>
+        <form onSubmit={this.submitForm}>
+          <div className="form-label-group">
+            <Input 
+              type="email" 
+              value={this.state.username} 
+              name="username"
+              onChange={handleInputChange.bind(this)} 
+              placeholder="Email address" 
+              required 
+              autoFocus
+            />
+            <label htmlFor="inputEmail">Email address</label>
           </div>
-        </div>
-      </div>
+          <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
+            {this.state.isFetching ? btnSpinner({ className: "spinner-border" }) : 'Reset'}
+          </Button>
+        </form>
+      </Card>
     );
   }
 }
