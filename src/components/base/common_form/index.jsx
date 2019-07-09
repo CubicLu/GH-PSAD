@@ -1,6 +1,6 @@
 import React from 'react';
-import { Form, Text, withFormState } from 'informed';
-import { Button, Col, FormGroup, Label } from 'reactstrap';
+import { Form, Text, Select, Option, withFormState } from 'informed';
+import { Button, Col, FormGroup, Label, Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { btnSpinner } from 'components/helpers';
 
@@ -17,16 +17,27 @@ class CommonForm extends React.Component {
   renderInput = field => {
     switch (field.type) {
       case 'select':
+        return (
+          <Select className="form-control" field={field.name}  type="select" >
+            <Option value="" disabled>
+              Select One...
+            </Option>
+            {field.options.map(option => {
+              return <Option value={option.value}>{option.label}</Option>
+            })}
+          </Select>
+        )
         break;
       case 'something else':
         break;
       default:
-        return <Text className="form-control" {...field.props} field={field.name} validate={field.validate}/>;
+        return <Text value='asd' className="form-control" {...field.props} field={field.name} validate={field.validate}/>;
     }
   };
 
   renderFields = () => {
     const { fields } = this.props;
+
     return fields.map((field, idx) => this.renderField(field, idx));
   };
 

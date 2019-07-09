@@ -1,3 +1,4 @@
+import * as AdminActions from './admins';
 import * as UserActions from './users';
 import * as CameraActions from './cameras';
 import * as ParkingLotActions from './parking_lots';
@@ -17,4 +18,4 @@ const invoke = type => {
   }
 };
 
-export { UserActions, CameraActions, ParkingLotActions, INIT, init, invoke };
+export { UserActions, AdminActions, CameraActions, ParkingLotActions, INIT, init, invoke };
