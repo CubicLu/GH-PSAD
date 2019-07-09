@@ -29,7 +29,7 @@ class New extends React.Component {
 
   createSucceed = res => {
     const { backPath, history, setRecord } = this.props;
-
+    
     setRecord(res.data);
     this.setState({ isFetching: false });
     history.push(backPath);
@@ -53,7 +53,6 @@ class New extends React.Component {
   }
 
   render() {
-    debugger
     return (
       <Card>
         <CardHeader>New Admin</CardHeader>
