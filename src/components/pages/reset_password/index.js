@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from 'styles/body-card.module.sass';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
@@ -11,6 +10,7 @@ import { btnSpinner } from 'components/helpers';
 import { setErrorsMessages } from 'components/helpers/messages';
 import { handleInputChange } from 'components/helpers/handle_input_change';
 import Card from 'components/base/layout/card';
+import LayoutAuth from 'components/base/layout/auth';
 
 class ResetPassword extends React.Component {
   constructor(props) {
@@ -49,52 +49,47 @@ class ResetPassword extends React.Component {
     this.setState({
       reset_password_token: this.props.match.params.reset_password_token
     })
-    document.body.classList.add(styles.body);
   }
-
-  componentWillUnmount() {
-    document.body.classList.remove(styles.body);
-  }
-
-
 
   render() {
     return (
-      <Card isFetching={this.state.isFetching} messages={this.state.messages}>
-        <form onSubmit={this.submitForm} >
+      <LayoutAuth>
+        <Card isFetching={this.state.isFetching} messages={this.state.messages}>
+          <form onSubmit={this.submitForm} >
 
-          <div className="form-label-group">
-            <Input 
-              id="password"
-              name="password"
-              type="password"
-              value={this.state.password}
-              onChange={handleInputChange.bind(this)}
-              placeholder="Password"
-              required
-            />
-            <label htmlFor="password">Password</label>
-          </div>
+            <div className="form-label-group">
+              <Input 
+                id="password"
+                name="password"
+                type="password"
+                value={this.state.password}
+                onChange={handleInputChange.bind(this)}
+                placeholder="Password"
+                required
+              />
+              <label htmlFor="password">Password</label>
+            </div>
 
-          <div className="form-label-group">
-            <Input 
-              id="password_confirmation" 
-              name="password_confirmation"
-              type="password" 
-              value={this.state.password_confirmation}
-              onChange={handleInputChange.bind(this)}
-              placeholder="Password Confirmation"
-              required
-            />
-            <label htmlFor="password_confirmation">Password Confirmation</label>
-          </div>
+            <div className="form-label-group">
+              <Input 
+                id="password_confirmation" 
+                name="password_confirmation"
+                type="password" 
+                value={this.state.password_confirmation}
+                onChange={handleInputChange.bind(this)}
+                placeholder="Password Confirmation"
+                required
+              />
+              <label htmlFor="password_confirmation">Password Confirmation</label>
+            </div>
 
-          <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
-            {this.state.isFetching ? btnSpinner({ className: "spinner-border" }) : 'Reset'}
-          </Button>
-          <Link to='/login' className="mr-1 mt-2 d-block">I Want To Sign In</Link>              
-        </form>
-      </Card>
+            <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
+              {this.state.isFetching ? btnSpinner({ className: "spinner-border" }) : 'Reset'}
+            </Button>
+            <Link to='/login' className="mr-1 mt-2 d-block">I Want To Sign In</Link>              
+          </form>
+        </Card>
+      </LayoutAuth>
     );
   }
 }
