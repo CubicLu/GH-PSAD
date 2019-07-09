@@ -22,7 +22,6 @@ class New extends React.Component {
 
   saveRecord = state => {
     this.setState({ isFetching: true });
-    console.log(state.values)
     create(state.values)
       .then(this.createSucceed)
       .catch(this.createFailed);
@@ -54,6 +53,7 @@ class New extends React.Component {
   }
 
   render() {
+    debugger
     return (
       <Card>
         <CardHeader>New Admin</CardHeader>
