@@ -31,39 +31,39 @@ class Show extends React.Component {
       <CardBody>
         <Form>
           <FormGroup row>
-            <Label for="stream" sm={2}>Email</Label>
+            <Label for="email" sm={2}>Email</Label>
             <Col sm={10}>
-              <Input id="stream" plaintext readOnly value={record.email}/>
+              <Input id="email" plaintext readOnly value={record.email}/>
             </Col>
           </FormGroup>
           <FormGroup row>
-            <Label for="login" sm={2}>Username</Label>
+            <Label for="username" sm={2}>Username</Label>
             <Col sm={10}>
-              <Input id="login" plaintext readOnly value={record.username}/>
+              <Input id="username" plaintext readOnly value={record.username}/>
             </Col>
           </FormGroup>
           <FormGroup row>
-            <Label for="login" sm={2}>Name</Label>
+            <Label for="name" sm={2}>Name</Label>
             <Col sm={10}>
-              <Input id="login" plaintext readOnly value={record.name}/>
+              <Input id="name" plaintext readOnly value={record.name}/>
             </Col>
           </FormGroup>
           <FormGroup row>
-            <Label for="login" sm={2}>Phone</Label>
+            <Label for="phone" sm={2}>Phone</Label>
             <Col sm={10}>
-              <Input id="login" plaintext readOnly value={record.phone}/>
+              <Input id="phone" plaintext readOnly value={record.phone}/>
             </Col>
           </FormGroup>
           <FormGroup row>
-            <Label for="login" sm={2}>Role</Label>
+            <Label for="role" sm={2}>Role</Label>
             <Col sm={10}>
-              <Input id="login" plaintext readOnly value={showRoleName(this.state.roles, record.role_id)}/>
+              <Input id="role" plaintext readOnly value={showRoleName(this.state.roles, record.role_id)}/>
             </Col>
           </FormGroup>
           <FormGroup row>
-            <Label for="login" sm={2}>Status</Label>
+            <Label for="status" sm={2}>Status</Label>
             <Col sm={10}>
-              <Input id="login" plaintext readOnly value={record.status}/>
+              <Input id="status" plaintext readOnly value={record.status}/>
             </Col>
           </FormGroup>
           <Link to={backPath} className="btn btn-primary mr-1">Back</Link>
