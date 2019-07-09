@@ -1,12 +1,15 @@
 import React from 'react';
-import styles from './index.module.sass';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { auth } from 'api/users';
 import { setToken } from 'actions/users';
-import { Button, Card, Col, Input, Row } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { Button, Input } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
-import { fromJson as showErrors } from 'components/helpers/errors';
+import { setErrorsMessages } from 'components/helpers/messages';
+import { handleInputChange } from 'components/helpers/handle_input_change';
+import Card from 'components/base/layout/card';
+import LayoutAuth from 'components/base/layout/auth';
 
 class Login extends React.Component {
   constructor(props) {
@@ -14,7 +17,7 @@ class Login extends React.Component {
     this.state = {
       username: '',
       password: '',
-      errors: {},
+      messages: [],
       isFetching: false
     };
   }
@@ -27,82 +30,67 @@ class Login extends React.Component {
 
     auth(this.state.username, this.state.password)
       .then(res => this.setToken(res.data))
-      .catch(error => this.setErrors(error))
+      .catch(error => {
+            this.setState({
+              isFetching: false,
+              messages: setErrorsMessages(error)
+            });
+      })
   };
 
   setToken(data) {
     this.setState({
       isFetching: false,
-      errors: {}
+      messages: []
     });
 
     this.props.setToken(data.token);
     this.props.history.push('/dashboard');
   }
 
-  setErrors(error) {
-    let errors;
-
-    if (error.response) {
-      errors = error.response.data.errors;
-    } else {
-      errors = { server: ['Unexpected error'] }
-    }
-
-    this.setState({
-      isFetching: false,
-      errors: errors
-    });
-  }
-
-  componentDidMount() {
-    document.body.classList.add(styles.body);
-  }
-
-  componentWillUnmount() {
-    document.body.classList.remove(styles.body);
-  }
-
   render() {
     return (
-      <div className="container">
-        <Row>
-          <Col sm={9} md={7} lg={5} className="mx-auto">
-            <Card className={`${styles['card-signin']} my-5`}>
-              <div className={styles['card-body']}>
-                {showErrors(this.state.errors)}
-                <h5 className={`${styles['card-title']} text-center`}>Sign In</h5>
-                <fieldset disabled={this.state.isFetching}>
-                  <form onSubmit={this.submitForm} className={styles['form-signin']}>
-                    <div className={styles['form-label-group']}>
-                      <Input id="email" type="email" value={this.state.username} onChange={event => this.setState({
-                        username: event.target.value
-                      })} placeholder="Email address" required autoFocus/>
-                      <label htmlFor="email">Email address</label>
-                    </div>
-
-                    <div className={styles['form-label-group']}>
-                      <Input id="password" name="password" type="password" value={this.state.password}
-                             onChange={event => this.setState({ password: event.target.value })}
-                             placeholder="Password"
-                             required/>
-                      <label htmlFor="password">Password</label>
-                    </div>
-
-                    <div className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" id="customCheck1"/>
-                      <label className="custom-control-label" htmlFor="customCheck1">Remember password</label>
-                    </div>
-                    <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
-                      {this.state.isFetching ? btnSpinner({ className: styles['spinner-border'] }) : 'Sign In'}
-                    </Button>
-                  </form>
-                </fieldset>
+      <LayoutAuth>
+        <Card isFetching={this.state.isFetching} messages={this.state.messages}>
+            <form onSubmit={this.submitForm}>
+              <div className="form-label-group">
+                <Input 
+                  id="email"
+                  type="email"
+                  value={this.state.username}
+                  name="username"
+                  onChange={handleInputChange.bind(this)} 
+                  placeholder="Email address"
+                  required
+                  autoFocus
+                />
+                <label htmlFor="email">Email address</label>
               </div>
-            </Card>
-          </Col>
-        </Row>
-      </div>
+  
+              <div className="form-label-group">
+                <Input
+                  id="password"
+                  type="password"
+                  value={this.state.password}
+                  name="password"
+                  onChange={handleInputChange.bind(this)} 
+                  placeholder="Password"
+                  required
+                />
+                <label htmlFor="password">Password</label>
+              </div>
+  
+              <div className="custom-control custom-checkbox mb-3">
+                <input type="checkbox" className="custom-control-input" id="customCheck1"/>
+                <label className="custom-control-label" htmlFor="customCheck1">Remember password</label>
+              </div>
+              <Link to='/forgot_password' className="mr-1 mb-2 d-block">Forgot your password?</Link>              
+              <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
+                {this.state.isFetching ? btnSpinner({ className: "spinner-border" }) : 'Sign In'}
+              </Button>
+            </form>
+        </Card>
+      </LayoutAuth>
     );
   }
 }
