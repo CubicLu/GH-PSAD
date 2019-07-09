@@ -12,6 +12,11 @@ function Routing(props) {
   return (
     <React.Fragment>
       <Route exact path={match.path} component={Index}/>
+      <Route exact path={`${match.path}/:id/edit`} render={renderWithBackPath(Edit, `${match.url}/:id`)}/>
+      <Switch>
+        <Route exact path={`${match.path}/new`} render={renderWithBackPath(New, match.path)}/>
+        <Route exact path={`${match.path}/:id`} render={renderWithBackPath(Show, match.path)}/>
+      </Switch>
     </React.Fragment>
   );
 }
