@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container } from 'reactstrap';
-import Header from 'components/base/header'; 
 
 class LayoutAuth extends React.Component {
   render() {

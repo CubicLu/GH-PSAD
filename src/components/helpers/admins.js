@@ -1,4 +1,3 @@
-import React from 'react';
 import humanizeString from 'humanize-string';
 
 const fields = (roles) => [

@@ -1,11 +1,9 @@
 import React from 'react';
-import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { resetPasswordRequest } from 'api/users';
-import { auth } from 'api/users';
 import { Link } from 'react-router-dom';
-import { Button, Input, Alert, Container, Row, Col } from 'reactstrap';
+import { Button, Input, Container, Row, Col } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
 import { setErrorsMessages } from 'components/helpers/messages';
 import { handleInputChange } from 'components/helpers/handle_input_change';
