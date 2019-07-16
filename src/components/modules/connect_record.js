@@ -1,38 +1,25 @@
-import { invoke } from 'actions';
-import { bindActionCreators } from 'redux';
-import { isEmpty } from 'underscore';
-import { connect } from 'react-redux';
-import withFetching from 'components/modules/with_fetching';
+import fetchData from './fetch_data';
 
 const connectRecord = (entity_name, action_type, fetcher, Component) => {
-  function mapState(state, ownProps) {
+  const prop = 'record';
+  const action = 'setRecord';
+
+  const mapState = (state, ownProps) => {
     const { params } = ownProps.match;
     const { records } = state[entity_name];
-    return { record: records[params.id] };
-  }
+    return { [prop]: records[params.id] };
+  };
 
-  function mapDispatch(dispatch) {
-    return bindActionCreators({ setRecord: invoke(action_type) }, dispatch);
-  }
-
-  function fetchData(wrapper) {
-    if (!isEmpty(wrapper.props.record)) {
-      wrapper.fetchFinished();
-      return;
+  return fetchData(
+    {
+      Component,
+      fetcher,
+      mapState,
+      prop,
+      action_type,
+      action
     }
-
-    const { params } = wrapper.props.match;
-
-    fetcher(params.id)
-      .then(res => wrapper.props.setRecord(res.data))
-      .catch(err => console.error(err))
-      .finally(wrapper.fetchFinished)
-  }
-
-  return connect(
-    mapState,
-    mapDispatch
-  )(withFetching(Component, fetchData));
+  );
 };
 
 export default connectRecord;
