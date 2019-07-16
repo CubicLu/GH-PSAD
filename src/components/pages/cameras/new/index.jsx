@@ -21,7 +21,7 @@ class New extends React.Component {
   saveRecord = state => {
     this.setState({ isFetching: true });
 
-    create(state.values)
+    create({ data: state.values })
       .then(this.createSucceed)
       .catch(this.createFailed);
   };

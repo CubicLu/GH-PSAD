@@ -26,7 +26,7 @@ class Edit extends React.Component {
     const { id } = this.props.match.params;
     this.setState({ isFetching: true });
 
-    update(id, state.values)
+    update({ id, data: state.values })
       .then(this.updateSucceed)
       .catch(this.updateFailed)
   };

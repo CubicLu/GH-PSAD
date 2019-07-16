@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router';
-import Index from 'components/pages/parking_lots';
+import Index from 'components/pages/parking_lots/index';
 import Show from 'components/pages/parking_lots/show';
 import Edit from 'components/pages/parking_lots/edit';
 import New from 'components/pages/parking_lots/new';
