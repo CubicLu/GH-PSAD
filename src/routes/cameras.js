@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router';
-import Index from 'components/pages/cameras';
+import Index from 'components/pages/cameras/index';
 import Show from 'components/pages/cameras/show';
 import Edit from 'components/pages/cameras/edit';
 import New from 'components/pages/cameras/new';
