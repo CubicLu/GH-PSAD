@@ -6,6 +6,7 @@ import { SET_RECORD } from 'actions/cameras';
 import { parkingLot } from 'components/helpers/cameras';
 import { displayUnixTimestamp } from 'components/helpers';
 import connectRecord from 'components/modules/connect_record';
+import resourceFetcher from 'components/modules/resource_fetcher';
 
 class Show extends React.Component {
   renderRecord() {
@@ -58,4 +59,4 @@ class Show extends React.Component {
   }
 }
 
-export default connectRecord('camera', SET_RECORD, show, Show);
+export default connectRecord('camera', SET_RECORD, resourceFetcher(show), Show);

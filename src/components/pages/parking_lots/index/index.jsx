@@ -4,6 +4,7 @@ import { index } from 'api/parking_lots';
 import { displayUnixTimestamp } from 'components/helpers';
 import { Col, Row, Table } from 'reactstrap';
 import connectList from 'components/modules/connect_list';
+import resourceFetcher from 'components/modules/resource_fetcher';
 import { SET_LIST } from 'actions/parking_lots';
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 import Pagination from 'components/base/pagination';
@@ -69,4 +70,4 @@ class Index extends React.Component {
   }
 }
 
-export default connectList('parking_lot', SET_LIST, index, Index);
+export default connectList('parking_lot', SET_LIST, resourceFetcher(index), Index);

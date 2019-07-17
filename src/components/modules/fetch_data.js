@@ -5,24 +5,20 @@ import { invoke } from 'actions';
 import withFetching from 'components/modules/with_fetching';
 
 const fetchData = props => {
-  const { Component, fetcher, action, actionType, prop, mapState, selector } = props;
+  const { Component, fetcher, action, actionType, prop, mapState } = props;
+  let { processResponse } = props;
+
+  if (!processResponse) {
+    processResponse = res => res.data;
+  }
 
   const mapDispatch = dispatch => {
     return bindActionCreators({ [action]: invoke(actionType) }, dispatch);
   };
 
   const fetch = wrapper => {
-    if (!isEmpty(wrapper.props[prop])) {
-      wrapper.fetchFinished();
-      return;
-    }
-
-    const { params } = wrapper.props.match;
-
-    fetcher(params)
-      .then(res => wrapper.props[action](selector ? selector(res) : res.data))
-      .catch(err => console.error(err))
-      .finally(wrapper.fetchFinished)
+    const fetchCondition = isEmpty(wrapper.props[prop]);
+    fetcher(wrapper, fetchCondition, res => wrapper.props[action](processResponse(res)));
   };
 
   return connect(
