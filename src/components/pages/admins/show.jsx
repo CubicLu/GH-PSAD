@@ -6,7 +6,6 @@ import { SET_RECORD } from 'actions/admins';
 import { displayUnixTimestamp } from 'components/helpers';
 import connectRecord from 'components/modules/connect_record';
 import { index } from 'api/roles';
-import humanizeString from 'humanize-string';
 
 class Show extends React.Component {
   constructor(props) {
@@ -57,7 +56,7 @@ class Show extends React.Component {
           <FormGroup row>
             <Label for="role" sm={2}>Role</Label>
             <Col sm={10}>
-              <Input id="role" plaintext readOnly value={showRoleName(this.state.roles, record.role_id)}/>
+              <Input id="role" plaintext readOnly value={record.role.name}/>
             </Col>
           </FormGroup>
           <FormGroup row>
@@ -76,15 +75,6 @@ class Show extends React.Component {
   render() {
     return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
   }
-}
-
-function showRoleName(roles, role_id) {
-  if (roles.length) {
-    const role = roles.find(role => role.id == role_id)
-    if (role) {
-      return humanizeString(role.name)
-    }
-  } 
 }
 
 export default connectRecord('admin', SET_RECORD, show, Show);

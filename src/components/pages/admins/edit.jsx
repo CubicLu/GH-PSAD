@@ -19,11 +19,7 @@ class Edit extends React.Component {
   }
 
   componentDidMount() {
-    // Index Roles
-    index()
-      .then(response => {
-        this.setState({roles: response.data});
-      })
+    index().then(response => this.setState({ roles: response.data }));
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
@@ -35,7 +31,7 @@ class Edit extends React.Component {
     const { id } = this.props.match.params;
     this.setState({ isFetching: true });
 
-    update(id, state.values)
+    update({ id, data: state.values })
       .then(this.updateSucceed)
       .catch(this.updateFailed)
   };
@@ -56,11 +52,9 @@ class Edit extends React.Component {
 
   values = () => {
     const { record } = this.props;
-    var values = {}
-    for (const [key, value] of Object.entries(record)) {
-      values[`user[${key}]`] = value
-    } 
-    return values;
+    return Object.assign({}, record, {
+      role_id: record.role.id
+    })
   };
 
   renderRecord() {

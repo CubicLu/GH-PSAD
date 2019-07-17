@@ -1,12 +1,12 @@
 import fetchData from './fetch_data';
 
-const connectRecord = (entity_name, action_type, fetcher, Component) => {
+const connectRecord = (entity, actionType, fetcher, Component) => {
   const prop = 'record';
   const action = 'setRecord';
 
   const mapState = (state, ownProps) => {
     const { params } = ownProps.match;
-    const { records } = state[entity_name];
+    const { records } = state[entity];
     return { [prop]: records[params.id] };
   };
 
@@ -16,7 +16,7 @@ const connectRecord = (entity_name, action_type, fetcher, Component) => {
       fetcher,
       mapState,
       prop,
-      action_type,
+      actionType,
       action
     }
   );
