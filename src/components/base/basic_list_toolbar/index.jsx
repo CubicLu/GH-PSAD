@@ -31,7 +31,7 @@ class BasicListToolbar extends React.Component {
     const { fetchStarted, fetchFinished, fetcher } = this.props;
 
     fetchStarted();
-    fetcher(null, null, event.target.value)
+    fetcher({ query: event.target.value })
       .then(this.filterSucceed)
       .catch(this.filterFailed)
       .finally(fetchFinished);

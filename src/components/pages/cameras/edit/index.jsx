@@ -5,6 +5,7 @@ import { show, update } from 'api/cameras';
 import { btnSpinner } from 'components/helpers';
 import { fields } from 'components/helpers/cameras';
 import connectRecord from 'components/modules/connect_record';
+import resourceFetcher from 'components/modules/resource_fetcher';
 import { SET_RECORD } from 'actions/cameras';
 import CommonForm from 'components/base/common_form';
 
@@ -14,12 +15,6 @@ class Edit extends React.Component {
     this.state = {
       isFetching: false
     }
-  }
-
-
-  componentWillReceiveProps(nextProps, nextContext) {
-    const { record } = nextProps;
-    if (record) this.setState(record);
   }
 
   updateRecord = state => {
@@ -76,4 +71,4 @@ class Edit extends React.Component {
   }
 }
 
-export default connectRecord('camera', SET_RECORD, show, Edit);
+export default connectRecord('camera', SET_RECORD, resourceFetcher(show), Edit);

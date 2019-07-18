@@ -5,9 +5,10 @@ import { show, update } from 'api/admins';
 import { btnSpinner } from 'components/helpers';
 import { fields } from 'components/helpers/admins';
 import connectRecord from 'components/modules/connect_record';
+import { isEmpty } from 'underscore';
 import { SET_RECORD } from 'actions/admins';
 import CommonForm from 'components/base/common_form';
-import { index } from 'api/roles';
+import { index as roles_index } from 'api/roles';
 
 class Edit extends React.Component {
   constructor(props) {
@@ -18,13 +19,9 @@ class Edit extends React.Component {
     }
   }
 
-  componentDidMount() {
-    index().then(response => this.setState({ roles: response.data }));
-  }
-
-  componentWillReceiveProps(nextProps, nextContext) {
-    const { record } = nextProps;
-    if (record) this.setState(record);
+  componentWillReceiveProps(nextProps) {
+    const { roles } = nextProps;
+    if (roles) this.setState({ roles });
   }
 
   updateRecord = state => {
@@ -80,4 +77,20 @@ class Edit extends React.Component {
   }
 }
 
-export default connectRecord('admin', SET_RECORD, show, Edit);
+const showWithRoles = (wrapper, fetchCondition, onResponse) => {
+  if (!fetchCondition && !isEmpty(wrapper.state.roles)) {
+    wrapper.fetchFinished();
+    return;
+  }
+
+  const { params } = wrapper.props.match;
+
+  const show_promise = show(params).then(onResponse);
+  const roles_promise = roles_index().then(res => wrapper.setState({ roles: res.data }));
+
+  Promise.all([show_promise, roles_promise])
+    .catch(err => console.error(err))
+    .finally(wrapper.fetchFinished);
+};
+
+export default connectRecord('admin', SET_RECORD, showWithRoles, Edit);

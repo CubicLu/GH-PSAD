@@ -42,10 +42,10 @@ const withFetching = (Component, fetchData) => {
 
     render() {
       return <Component
-        isFetching={this.state.isFetching}
+        {...this.props}
+        {...this.state}
         fetchStarted={this.fetchStarted}
-        fetchFinished={this.fetchFinished}
-        {...this.props} />
+        fetchFinished={this.fetchFinished} />
     }
   }
 };

@@ -5,6 +5,7 @@ import { show } from 'api/admins';
 import { SET_RECORD } from 'actions/admins'; 
 import { displayUnixTimestamp } from 'components/helpers';
 import connectRecord from 'components/modules/connect_record';
+import resourceFetcher from 'components/modules/resource_fetcher';
 import { index } from 'api/roles';
 
 class Show extends React.Component {
@@ -77,4 +78,4 @@ class Show extends React.Component {
   }
 }
 
-export default connectRecord('admin', SET_RECORD, show, Show);
+export default connectRecord('admin', SET_RECORD, resourceFetcher(show), Show);

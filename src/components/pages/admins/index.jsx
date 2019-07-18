@@ -5,6 +5,7 @@ import { index } from 'api/admins';
 import { displayUnixTimestamp } from 'components/helpers';
 import { Col, Row, Table } from 'reactstrap';
 import connectList from 'components/modules/connect_list';
+import resourceFetcher from 'components/modules/resource_fetcher';
 import Pagination from 'components/base/pagination';
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 
@@ -61,4 +62,4 @@ class Index extends React.Component {
   }
 }
 
-export default connectList('admin', SET_LIST, index, Index);
+export default connectList('admin', SET_LIST, resourceFetcher(index), Index);

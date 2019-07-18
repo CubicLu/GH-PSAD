@@ -4,6 +4,7 @@ import fetchData from './fetch_data';
 const connectList = (entity, actionType, fetcher, Component) => {
   const prop = 'list';
   const action = 'setList';
+  const processResponse = res => selectList(res);
 
   const mapState = state => state[entity].index;
 
@@ -15,7 +16,7 @@ const connectList = (entity, actionType, fetcher, Component) => {
       actionType,
       prop,
       action,
-      selector: selectList
+      processResponse
     }
   );
 };
