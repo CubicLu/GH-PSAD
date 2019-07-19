@@ -5,9 +5,9 @@ import { bindActionCreators } from 'redux';
 import { create } from 'api/cameras';
 import { invoke } from 'actions';
 import { SET_RECORD } from 'actions/cameras';
-import { btnSpinner } from 'components/helpers';
-import { fields } from 'components/helpers/cameras';
+import { fields } from 'components/helpers/fields/cameras';
 import { fromJson as showErrors } from 'components/helpers/errors';
+import saveRecord from 'components/modules/form_actions/save_record';
 import CommonForm from 'components/base/common_form';
 
 class New extends React.Component {
@@ -17,30 +17,6 @@ class New extends React.Component {
       isFetching: false
     }
   }
-
-  saveRecord = state => {
-    this.setState({ isFetching: true });
-
-    create(state.values)
-      .then(this.createSucceed)
-      .catch(this.createFailed);
-  };
-
-  createSucceed = res => {
-    const { backPath, history, setRecord } = this.props;
-
-    setRecord(res.data);
-    this.setState({ isFetching: false });
-    history.push(backPath);
-  };
-
-  createFailed = error => {
-    if (error.response) {
-      this.setState({ errors: error.response.data.errors })
-    }
-
-    this.setState({ isFetching: false });
-  };
 
   render() {
     return (
@@ -52,7 +28,7 @@ class New extends React.Component {
             {...this.props}
             fields={fields()}
             isFetching={this.state.isFetching}
-            submitForm={this.saveRecord}/>
+            submitForm={saveRecord.bind(this, create)}/>
         </CardBody>
       </Card>
     );

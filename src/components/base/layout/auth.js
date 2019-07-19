@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container } from 'reactstrap';
 
-class LayoutAuth extends React.Component {
+class AuthLayout extends React.Component {
   render() {
     return (
       <React.Fragment>
@@ -13,4 +13,4 @@ class LayoutAuth extends React.Component {
   }
 }
 
-export default LayoutAuth;
+export default AuthLayout

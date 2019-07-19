@@ -2,22 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { sendResetPasswordInstructionsRequest } from 'api/users';
-import { Button, Input, Container, Row, Col } from 'reactstrap';
+import { Button, Input } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
 import { handleInputChange } from 'components/helpers/handle_input_change';
 import { setErrorsMessages, setSuccessMessage } from 'components/helpers/messages';
-import { Alert } from 'reactstrap';
-import Card from 'components/base/layout/card';
-import LayoutAuth from 'components/base/layout/auth';
+import CardLayout from 'components/base/layout/card';
+import AuthLayout from 'components/base/layout/auth';
 
 class SendResetPasswordInstructions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
-      successMessage: '', 
+      successMessage: '',
       messages: {}
-    }; 
+    };
   }
 
   submitForm = (event) => {
@@ -36,7 +35,7 @@ class SendResetPasswordInstructions extends React.Component {
       })
 
   };
-  
+
   setSuccessMessage () {
     this.setState({
       isFetching: false,
@@ -46,17 +45,17 @@ class SendResetPasswordInstructions extends React.Component {
 
   render() {
     return (
-      <LayoutAuth>
-        <Card isFetching={this.state.isFetching} messages={this.state.messages}>
+      <AuthLayout>
+        <CardLayout title="Reset Your Password" isFetching={this.state.isFetching} messages={this.state.messages}>
           <form onSubmit={this.submitForm}>
             <div className="form-label-group">
-              <Input 
-                type="email" 
-                value={this.state.username} 
+              <Input
+                type="email"
+                value={this.state.username}
                 name="username"
-                onChange={handleInputChange.bind(this)} 
-                placeholder="Email address" 
-                required 
+                onChange={handleInputChange.bind(this)}
+                placeholder="Email address"
+                required
                 autoFocus
               />
               <label htmlFor="inputEmail">Email address</label>
@@ -65,8 +64,8 @@ class SendResetPasswordInstructions extends React.Component {
               {this.state.isFetching ? btnSpinner({ className: "spinner-border" }) : 'Reset'}
             </Button>
           </form>
-        </Card>
-      </LayoutAuth>
+        </CardLayout>
+      </AuthLayout>
     );
   }
 }

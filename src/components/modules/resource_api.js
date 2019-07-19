@@ -1,28 +1,33 @@
 import fetchApi from 'components/modules/fetch_api';
 
 const resourceApi = resources => {
-  const index = (page, perPage, query) => {
-    return fetchApi(`dashboard/${resources}`, { method: 'GET', params: { page, perPage, query } });
+  const index = (params = {}) => {
+    const { page, perPage, query } = params;
+    return fetchApi(`dashboard/${resources}`, { method: 'GET', params: { page, perPage, ...query } });
   };
 
-  const show = id => {
+  const show = (params = {}) => {
+    const { id } = params;
     return fetchApi(`dashboard/${resources}/${id}`, { method: 'GET' });
   };
 
-  const update = (id, data) => {
+  const update = (params = {}) => {
+    const { id, data } = params;
     return fetchApi(`dashboard/${resources}/${id}`, {
       method: 'PUT',
       data
     })
   };
 
-  const destroy = id => {
+  const destroy = (params = {}) => {
+    const { id } = params;
     return fetchApi(`dashboard/${resources}/${id}`, {
       method: 'DELETE'
     })
   };
 
-  const create = data => {
+  const create = (params = {}) => {
+    const { data } = params;
     return fetchApi(`dashboard/${resources}`, {
       method: 'POST',
       data

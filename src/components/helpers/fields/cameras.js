@@ -21,4 +21,14 @@ const fields = () => [
   { name: 'parking_lot_id', label: 'Parking Lot' }
 ];
 
-export { parkingLot, fields };
+const showFields = () => [
+  { name: 'name', label: 'Name' },
+  { name: 'stream', label: 'Stream' },
+  { name: 'login', label: 'Login' },
+  { name: 'password', label: 'Password' },
+  { name: 'parking_lot.id', label: 'Parking Lot' },
+  { name: 'created_at', label: 'Created At' },
+  { name: 'updated_at', label: 'Updated At' }
+];
+
+export { parkingLot, fields, showFields};

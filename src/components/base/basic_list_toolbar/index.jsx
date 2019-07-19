@@ -31,7 +31,7 @@ class BasicListToolbar extends React.Component {
     const { fetchStarted, fetchFinished, fetcher } = this.props;
 
     fetchStarted();
-    fetcher(null, null, event.target.value)
+    fetcher({ query: event.target.value })
       .then(this.filterSucceed)
       .catch(this.filterFailed)
       .finally(fetchFinished);
@@ -53,9 +53,9 @@ class BasicListToolbar extends React.Component {
 
   render() {
     const { label } = this.props;
-
     return (
       <ButtonToolbar className="pb-1 float-right">
+        { this.props.children }
         <ButtonGroup className="mr-1">
           <Button onClick={this.refresh}>Refresh</Button>
         </ButtonGroup>
@@ -65,6 +65,7 @@ class BasicListToolbar extends React.Component {
         <ButtonGroup>
           <Button onClick={this.newRecord}>{label}</Button>
         </ButtonGroup>
+
       </ButtonToolbar>
     );
   }

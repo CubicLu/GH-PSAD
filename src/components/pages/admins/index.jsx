@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { SET_LIST } from 'actions/admins';
 import { index } from 'api/admins';
-import { displayUnixTimestamp } from 'components/helpers';
 import { Col, Row, Table } from 'reactstrap';
 import connectList from 'components/modules/connect_list';
+import resourceFetcher from 'components/modules/resource_fetcher';
 import Pagination from 'components/base/pagination';
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 
@@ -22,7 +22,7 @@ class Index extends React.Component {
 
     return list.map((record, idx) => {
       return (
-        <tr key={idx}> 
+        <tr key={idx}>
           <td><Link to={`${match.path}/${record.id}`}>{record.email}</Link></td>
           <td>{record.username}</td>
           <td>{record.status}</td>
@@ -61,4 +61,4 @@ class Index extends React.Component {
   }
 }
 
-export default connectList('admin', SET_LIST, index, Index);
+export default connectList('admin', SET_LIST, resourceFetcher(index), Index);

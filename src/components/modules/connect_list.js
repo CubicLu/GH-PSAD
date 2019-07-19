@@ -1,35 +1,24 @@
-import { invoke } from 'actions';
-import { bindActionCreators } from 'redux';
-import { isEmpty } from 'underscore';
-import { connect } from 'react-redux';
-import withFetching from 'components/modules/with_fetching';
 import { list as selectList } from 'selectors/list';
+import fetchData from './fetch_data';
 
-const connectList = (entity_name, action_type, fetcher, Component) => {
-  function mapState(state) {
-    return state[entity_name].index;
-  }
+const connectList = (entity, actionType, fetcher, Component) => {
+  const prop = 'list';
+  const action = 'setList';
+  const processResponse = res => selectList(res);
 
-  function mapDispatch(dispatch) {
-    return bindActionCreators({ setList: invoke(action_type) }, dispatch);
-  }
+  const mapState = state => state[entity].index;
 
-  function fetchData(wrapper) {
-    if (!isEmpty(wrapper.props.list)) {
-      wrapper.fetchFinished();
-      return;
+  return fetchData(
+    {
+      Component,
+      fetcher,
+      mapState,
+      actionType,
+      prop,
+      action,
+      processResponse
     }
-
-    fetcher()
-      .then(res => wrapper.props.setList(selectList(res)))
-      .catch(err => console.error(err))
-      .finally(wrapper.fetchFinished)
-  }
-
-  return connect(
-    mapState,
-    mapDispatch
-  )(withFetching(Component, fetchData));
+  );
 };
 
 export default connectList;

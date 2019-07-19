@@ -2,28 +2,31 @@ import React from 'react';
 import { Card, CardHeader, CardBody } from 'reactstrap';
 import { generatePath } from 'react-router';
 import { show, update } from 'api/admins';
-import { btnSpinner } from 'components/helpers';
-import { fields } from 'components/helpers/admins';
+import { fields } from 'components/helpers/fields/admins';
 import connectRecord from 'components/modules/connect_record';
 import { SET_RECORD } from 'actions/admins';
 import CommonForm from 'components/base/common_form';
-import { index } from 'api/roles';
+import { search as dropdowns_search } from 'api/dropdowns';
+import waitUntilFetched from 'components/modules/wait_until_fetched';
+import resourceFetcher from 'components/modules/resource_fetcher';
+import updateRecord from 'components/modules/form_actions/update_record';
 
 class Edit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isFetching: false,
+      isFetching: true,
       roles: []
     }
   }
 
   componentDidMount() {
-    // Index Roles
-    index()
-      .then(response => {
-        this.setState({roles: response.data});
-      })
+    waitUntilFetched.call(this,
+      dropdowns_search('role_id')
+        .then(response => {
+          this.setState({roles: response.data});
+        })
+    )
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
@@ -31,51 +34,28 @@ class Edit extends React.Component {
     if (record) this.setState(record);
   }
 
-  updateRecord = state => {
-    const { id } = this.props.match.params;
-    this.setState({ isFetching: true });
-
-    update(id, state.values)
-      .then(this.updateSucceed)
-      .catch(this.updateFailed)
-  };
-
-  updateSucceed = res => {
-    const { backPath, match, history, setRecord } = this.props;
-    const { id } = match.params;
-
-    setRecord(res.data);
-    this.setState({ isFetching: false });
-    history.push(generatePath(backPath, { id }));
-  };
-
-  updateFailed = error => {
-    console.error(error.message);
-    this.setState({ isFetching: false });
-  };
 
   values = () => {
     const { record } = this.props;
-    var values = {}
-    for (const [key, value] of Object.entries(record)) {
-      values[`user[${key}]`] = value
-    } 
-    return values;
+    return Object.assign({}, record, {
+      role_id: record.role.id
+    })
   };
 
   renderRecord() {
     const { backPath, record } = this.props;
+    const path = generatePath(backPath, { id: record.id })
     return (
       <Card>
         <CardHeader>Edit Admin</CardHeader>
         <CardBody>
           <CommonForm
             {...this.props}
-            backPath={generatePath(backPath, { id: record.id })}
+            backPath={path}
             values={this.values()}
             fields={fields(this.state.roles)}
             isFetching={this.state.isFetching}
-            submitForm={this.updateRecord}/>
+            submitForm={updateRecord.bind(this, update, path)}/>
         </CardBody>
       </Card>
     );
@@ -86,4 +66,4 @@ class Edit extends React.Component {
   }
 }
 
-export default connectRecord('admin', SET_RECORD, show, Edit);
+export default connectRecord('admin', SET_RECORD, resourceFetcher(show), Edit);

@@ -1,0 +1,7 @@
+const SET_LIST = 'SET_TICKET_LIST';
+const SET_RECORD = 'SET_TICKET_RECORD';
+
+export { 
+  SET_LIST, 
+  SET_RECORD 
+};

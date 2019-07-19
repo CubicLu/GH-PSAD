@@ -6,6 +6,8 @@ const withApiCatch = promise => {
     switch (res.status) {
       case 401:
         store.dispatch(clearToken);
+        break;
+      default:
     }
 
     return res;
