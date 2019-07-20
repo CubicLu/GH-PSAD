@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 // import { generatePath } from 'react-router';
-import { btnSpinner } from 'components/helpers';
 
 class Edit extends React.Component {
   constructor(props) {

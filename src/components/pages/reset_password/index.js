@@ -1,16 +1,14 @@
 import React from 'react';
-import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { resetPasswordRequest } from 'api/users';
-import { auth } from 'api/users';
 import { Link } from 'react-router-dom';
-import { Button, Input, Alert, Container, Row, Col } from 'reactstrap';
+import { Button, Input } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
 import { setErrorsMessages } from 'components/helpers/messages';
 import { handleInputChange } from 'components/helpers/handle_input_change';
-import Card from 'components/base/layout/card';
-import LayoutAuth from 'components/base/layout/auth';
+import CardLayout from 'components/base/layout/card';
+import AuthLayout from 'components/base/layout/auth';
 
 class ResetPassword extends React.Component {
   constructor(props) {
@@ -27,7 +25,7 @@ class ResetPassword extends React.Component {
   submitForm = (event) => {
     event.preventDefault();
 
-    if(this.state.password == this.state.password_confirmation) {
+    if(this.state.password === this.state.password_confirmation) {
       this.setState({
         isFetching: true,
       });
@@ -53,12 +51,12 @@ class ResetPassword extends React.Component {
 
   render() {
     return (
-      <LayoutAuth>
-        <Card isFetching={this.state.isFetching} messages={this.state.messages}>
+      <AuthLayout>
+        <CardLayout title="Reset Your Password" isFetching={this.state.isFetching} messages={this.state.messages}>
           <form onSubmit={this.submitForm} >
 
             <div className="form-label-group">
-              <Input 
+              <Input
                 id="password"
                 name="password"
                 type="password"
@@ -71,10 +69,10 @@ class ResetPassword extends React.Component {
             </div>
 
             <div className="form-label-group">
-              <Input 
-                id="password_confirmation" 
+              <Input
+                id="password_confirmation"
                 name="password_confirmation"
-                type="password" 
+                type="password"
                 value={this.state.password_confirmation}
                 onChange={handleInputChange.bind(this)}
                 placeholder="Password Confirmation"
@@ -86,10 +84,10 @@ class ResetPassword extends React.Component {
             <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
               {this.state.isFetching ? btnSpinner({ className: "spinner-border" }) : 'Reset'}
             </Button>
-            <Link to='/login' className="mr-1 mt-2 d-block">I Want To Sign In</Link>              
+            <Link to='/login' className="mr-1 mt-2 d-block">I Want To Sign In</Link>
           </form>
-        </Card>
-      </LayoutAuth>
+        </CardLayout>
+      </AuthLayout>
     );
   }
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { index } from 'api/parking_lots';
-import { displayUnixTimestamp } from 'components/helpers';
 import { Col, Row, Table } from 'reactstrap';
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';

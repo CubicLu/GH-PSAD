@@ -3,7 +3,7 @@ import fetchApi from 'components/modules/fetch_api';
 const resourceApi = resources => {
   const index = (params = {}) => {
     const { page, perPage, query } = params;
-    return fetchApi(`dashboard/${resources}`, { method: 'GET', params: { page, perPage, query } });
+    return fetchApi(`dashboard/${resources}`, { method: 'GET', params: { page, perPage, ...query } });
   };
 
   const show = (params = {}) => {

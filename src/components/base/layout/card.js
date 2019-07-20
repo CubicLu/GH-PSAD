@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { showMessages } from 'components/helpers/messages';
 
-export default function Card({messages, isFetching, children}) {
+ function CardLayout({messages, isFetching, children, title}) {
   return (
      <Container>
         <Row>
@@ -10,7 +10,7 @@ export default function Card({messages, isFetching, children}) {
             <div className="card custom-card my-5">
               <div className="card-body">
                 {showMessages(messages)}
-                <h5 className="card-title text-center">Reset Your Password</h5>
+                <h5 className="card-title text-center">{title}</h5>
                 <fieldset disabled={isFetching}>
                   {children}
                 </fieldset>
@@ -21,3 +21,5 @@ export default function Card({messages, isFetching, children}) {
       </Container>
   );
 }
+
+export default CardLayout

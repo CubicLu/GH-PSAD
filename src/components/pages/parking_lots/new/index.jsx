@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { btnSpinner } from 'components/helpers';
 
 class New extends React.Component {
   constructor(props) {
