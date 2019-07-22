@@ -15,6 +15,6 @@ const showFields = (officers, statuses) => [
   { name: 'agency.phone', label: 'Agency Phone'},
   { name: 'officer.name', label: 'Officer Name'},
   { name: 'officer.email', label: 'Officer Email'},
-]
+];
 
 export { fields, showFields };

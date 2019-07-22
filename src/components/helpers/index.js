@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
+import 'react-datepicker/dist/react-datepicker.css';
 import { Input, Spinner } from 'reactstrap';
 
 const momentUnix = timestamp => {
@@ -15,7 +15,7 @@ const displayUnixTimestamp = timestamp => {
 const unixDatePicker = (timestamp, inputProps, pickerProps) => {
   return (
     <DatePicker selected={momentUnix(timestamp).toDate()} customInput={<Input {...inputProps}/>} {...pickerProps}/>
-    )
+  )
 };
 
 const dateToUnix = date => {
@@ -31,4 +31,10 @@ const btnSpinner = (props = {}) => {
   )
 };
 
-export { momentUnix, displayUnixTimestamp, unixDatePicker, dateToUnix, btnSpinner };
+const camelize = (text, separator = '_') => (
+  text.split(separator)
+    .map(w => w.replace(/./, m => m.toUpperCase()))
+    .join(' ')
+);
+
+export { momentUnix, camelize, displayUnixTimestamp, unixDatePicker, dateToUnix, btnSpinner };

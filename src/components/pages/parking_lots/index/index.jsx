@@ -23,7 +23,7 @@ class Index extends React.Component {
     return list.map((record, idx) => {
       return (
         <tr key={idx}>
-          <td><Link to={`${match.path}/${record.id}`}>{record.name}</Link></td>
+          <td><Link to={`${match.path}/${record.id}/edit`}>{record.name}</Link></td>
           <td>{record.id}</td>
           <td>{record.address}</td>
           <td>{record.email}</td>

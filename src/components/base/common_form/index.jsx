@@ -8,13 +8,14 @@ import CustomMultiSelect from './fields/custom_select/multi';
 import ImageInput from './fields/image';
 import Divider from './fields/divider';
 import * as FieldType from './field_types';
+import { labelFor } from 'components/helpers/forms';
 
 class CommonForm extends React.Component {
 
   renderField = (field, key) => (
     <FormGroup row key={key}>
       { field.divider && <Divider info={field.divider}/> }
-      <Label for={field.name} sm={2}>{field.label}</Label>
+      <Label for={field.name} sm={2}>{labelFor(field)}</Label>
       <Col sm={10}>
         {this.renderInput(field)}
       </Col>
@@ -30,7 +31,7 @@ class CommonForm extends React.Component {
       case FieldType.PASSWORD_FIELD:
         return <Text className="form-control" {...field.props} field={field.name}  type="password" validate={field.validate}/>;
       case FieldType.SELECT_FIELD:
-        return <CustomSelect field={field} />;
+        return <CustomSelect field={field}/>;
       default:
         return <Text className="form-control" {...field.props} field={field.name} validate={field.validate}/>;
     }

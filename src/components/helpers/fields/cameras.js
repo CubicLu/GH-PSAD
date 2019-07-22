@@ -14,11 +14,11 @@ const parkingLot = lot => {
 };
 
 const fields = () => [
-  { name: 'name', label: 'Name' },
-  { name: 'stream', label: 'Stream' },
-  { name: 'login', label: 'Login' },
-  { name: 'password', label: 'Password' },
-  { name: 'parking_lot_id', label: 'Parking Lot' }
+  { name: 'name', mandatory: true },
+  { name: 'stream', mandatory: true },
+  { name: 'login' },
+  { name: 'password' },
+  { name: 'parking_lot_id',  mandatory: true }
 ];
 
 const showFields = () => [
