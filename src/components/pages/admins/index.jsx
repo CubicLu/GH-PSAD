@@ -2,23 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { SET_LIST } from 'actions/admins';
 import { index } from 'api/admins';
-import { Col, Row, Table } from 'reactstrap';
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import Pagination from 'components/base/pagination';
 import BasicListToolbar from 'components/base/basic_list_toolbar';
+import IndexTable from 'components/base/table';
 
 class Index extends React.Component {
+
   renderRecords = () => {
     const { list, match } = this.props;
-
-    if (this.props.isFetching) {
-      return (<tr>
-        <td>
-          Loading data...
-        </td>
-      </tr>);
-    }
 
     return list.map((record, idx) => {
       return (
@@ -34,29 +26,22 @@ class Index extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
-        <Row>
-          <Col xs="12">
-            <BasicListToolbar {...this.props} fetcher={index} label="Create Admin"/>
-          </Col>
-          <Col xs="12">
-            <Table>
-              <thead>
-              <tr>
-                <th>Email</th>
-                <th>Username</th>
-                <th>Status</th>
-                <th>Name</th>
-              </tr>
-              </thead>
-              <tbody>
-              {this.renderRecords()}
-              </tbody>
-            </Table>
-          </Col>
-        </Row>
-        <Pagination {...this.props} fetcher={index}/>
-      </React.Fragment>
+      <IndexTable
+        {...this.props}
+        fetcher={index}
+        toolbar={<BasicListToolbar {...this.props} fetcher={index} label="Create Admin"/>}
+        columns={
+          <React.Fragment>
+            <th attr="username">Username</th>
+            <th attr="name">Name</th>
+            <th attr="email">Email</th>
+            <th attr="roles.name">Role</th>
+            <th attr="status">Status</th>
+          </React.Fragment>
+        }
+        renderRecords={this.renderRecords}
+      >
+      </IndexTable>
     );
   }
 }

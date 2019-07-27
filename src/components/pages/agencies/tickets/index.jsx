@@ -1,24 +1,16 @@
 import React from 'react';
 import { SET_LIST } from 'actions/agencies/tickets';
 import { index } from 'api/parking/tickets';
-import { Col, Row, Table } from 'reactstrap';
 import connectList from 'components/modules/connect_list';
-import Pagination from 'components/base/pagination';
 import BasicBackListToolbar from 'components/base/basic_list_toolbar/back';
 import Ticket from 'components/base/agencies/tickets';
 import resourceFetcher from 'components/modules/resource_fetcher';
+import IndexTable from 'components/base/table';
 
 class Index extends React.Component {
   renderRecords = () => {
     const { list, match } = this.props;
 
-    if (this.props.isFetching) {
-      return (<tr>
-        <td>
-          Loading data...
-        </td>
-      </tr>);
-    }
     return list.map((record, idx) => (
       <Ticket
         index
@@ -34,34 +26,25 @@ class Index extends React.Component {
     const agency_id = match.params.agency_id
     const agency = this.props.list[0] && this.props.list[0].agency
     return (
-      <React.Fragment>
-        <Row>
-          <Col xs="12">
-            <BasicBackListToolbar {...this.props} label={`${agency && agency.name} Tickets`} link={`/dashboard/agencies/${this.props.match.params.agency_id}`} fetcher={index}>
-            </BasicBackListToolbar>
-          </Col>
-          <Col xs="12">
-            <Table>
-              <thead>
-              <tr>
-                <th>#</th>
-                <th>Officer</th>
-                <th>Parking Lot</th>
-                <th>Status</th>
-                <th>Type</th>
-                <th>Created At</th>
-                <th>Actions</th>
-
-              </tr>
-              </thead>
-              <tbody>
-              {this.renderRecords()}
-              </tbody>
-            </Table>
-          </Col>
-        </Row>
-        <Pagination {...this.props} query={{agency_id}} fetcher={index} />
-      </React.Fragment>
+      <IndexTable
+        {...this.props}
+        fetcher={index}
+        paginationQuery={{agency_id}}
+        toolbar={ <BasicBackListToolbar {...this.props} label={`${agency && agency.name} Tickets`} link={backPath} fetcher={index}/>}
+        columns={
+          <React.Fragment>
+            <th attr="parking_tickets.id">#</th>
+            <th attr="admins.name">Officer</th>
+            <th attr="parking_lots.name">Parking Lot</th>
+            <th attr="parking_tickets.status">Status</th>
+            <th attr="parking_rules.name">Type</th>
+            <th attr="parking_tickets.created_at">Created At</th>
+            <th disableSort>Actions</th>
+          </React.Fragment>
+        }
+        renderRecords={this.renderRecords}
+      >
+      </IndexTable>
     );
   }
 }

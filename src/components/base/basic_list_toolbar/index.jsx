@@ -18,9 +18,9 @@ class BasicListToolbar extends React.Component {
   };
 
   refresh = () => {
-    const { fetchStarted, fetchFinished, fetcher } = this.props;
+    const { handleRefresh, fetchFinished, fetcher } = this.props;
 
-    fetchStarted();
+    handleRefresh();
     fetcher()
       .then(this.filterSucceed)
       .catch(this.filterFailed)

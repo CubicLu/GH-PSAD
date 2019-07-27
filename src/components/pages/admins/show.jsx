@@ -10,21 +10,6 @@ import CommonShowForm from 'components/base/common_form/show';
 import { showFields } from 'components/helpers/fields/admins';
 
 class Show extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      roles: []
-    }
-  }
-
-  componentDidMount() {
-    waitUntilFetched.call(this,
-      dropdowns_search()
-        .then(response => {
-          this.setState({roles: response.data});
-        })
-    )
-  }
 
   renderRecord() {
     const { record, backPath, match } = this.props;
