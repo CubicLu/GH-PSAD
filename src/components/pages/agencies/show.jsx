@@ -16,18 +16,17 @@ import CommonShowForm from 'components/base/common_form/show';
 import { showFields } from 'components/helpers/fields/agencies';
 
 class Show extends React.Component {
-
   state = {
     collapse: false
   }
 
-  openCollapsable(attribute) {
+  openCollapsable (attribute) {
     this.setState((state) => ({
       [attribute]: !state[attribute]
-    }))
+    }));
   }
 
-  renderRecord() {
+  renderRecord () {
     const { record, backPath, match } = this.props;
     return (
       <React.Fragment>
@@ -45,7 +44,7 @@ class Show extends React.Component {
         <Card className="mt-5" onClick={() => this.openCollapsable('collapse')}>
           <CardHeader>
             Ticket Assignment ({record.parking_tickets_total})
-            <span dangerouslySetInnerHTML={{__html: this.state.collapse ? '&#9650;' : '&#9660;'}}></span>
+            <span dangerouslySetInnerHTML={{ __html: this.state.collapse ? '&#9650;' : '&#9660;' }}></span>
             (<Link to={`/dashboard/agencies/${record.id}/tickets/`}>See All</Link>)
           </CardHeader>
         </Card>
@@ -65,10 +64,10 @@ class Show extends React.Component {
             </thead>
             <tbody>
               {
-                record.parking_tickets.map(parking_ticket => (
+                record.parking_tickets.map(parkingTicket => (
                   <Ticket
-                    key={parking_ticket.id}
-                    parking_ticket={parking_ticket}
+                    key={parkingTicket.id}
+                    parking_ticket={parkingTicket}
                     agency_id={record.id}
                   />
                 ))
@@ -80,7 +79,7 @@ class Show extends React.Component {
     );
   }
 
-  render() {
+  render () {
     return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
   }
 }

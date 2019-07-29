@@ -16,11 +16,11 @@ const invoke = type => {
     return {
       type,
       payload
-    }
-  }
+    };
+  };
 };
 
-export { 
+export {
   UserActions,
   AdminActions,
   AgencyActions,

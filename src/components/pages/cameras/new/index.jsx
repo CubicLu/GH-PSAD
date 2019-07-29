@@ -11,14 +11,14 @@ import saveRecord from 'components/modules/form_actions/save_record';
 import CommonForm from 'components/base/common_form';
 
 class New extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       isFetching: false
-    }
+    };
   }
 
-  render() {
+  render () {
     return (
       <Card>
         <CardHeader>New Camera</CardHeader>
@@ -28,14 +28,14 @@ class New extends React.Component {
             {...this.props}
             fields={fields()}
             isFetching={this.state.isFetching}
-            submitForm={saveRecord.bind(this, create)}/>
+            submitForm={saveRecord.bind(this, create)} />
         </CardBody>
       </Card>
     );
   }
 }
 
-function mapDispatch(dispatch) {
+function mapDispatch (dispatch) {
   return bindActionCreators({ setRecord: invoke(SET_RECORD) }, dispatch);
 }
 

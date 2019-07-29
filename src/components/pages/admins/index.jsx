@@ -8,8 +8,7 @@ import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';
 
 class Index extends React.Component {
-
-  renderRecords = () => {
+  renderRecords () {
     const { list, match } = this.props;
 
     return list.map((record, idx) => {
@@ -24,7 +23,7 @@ class Index extends React.Component {
     });
   };
 
-  render() {
+  render () {
     return (
       <IndexTable
         {...this.props}

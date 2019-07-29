@@ -1,5 +1,3 @@
-import { generatePath } from 'react-router';
-
 function updateRecord(update, backPath, state) {
   const { id } = this.props.match.params;
   this.setState({ isFetching: true });

@@ -10,23 +10,23 @@ import CommonForm from 'components/base/common_form';
 import updateRecord from 'components/modules/form_actions/update_record';
 
 class Edit extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       isFetching: false
-    }
+    };
   }
 
   values = () => {
     const { record } = this.props;
-    let values = Object.assign({}, record);
+    const values = Object.assign({}, record);
     values.parking_lot_id = record.parking_lot ? record.parking_lot.id : null;
     return values;
   };
 
-  renderRecord() {
+  renderRecord () {
     const { backPath, record } = this.props;
-    const path = generatePath(backPath, { id: record.id })
+    const path = generatePath(backPath, { id: record.id });
 
     return (
       <Card>
@@ -44,7 +44,7 @@ class Edit extends React.Component {
     );
   }
 
-  render() {
+  render () {
     return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
   }
 }

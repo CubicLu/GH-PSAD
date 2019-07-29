@@ -3,9 +3,10 @@ import { Button, ButtonGroup, ButtonToolbar, Input, InputGroup } from 'reactstra
 import { debounce } from 'underscore';
 import { list as selectList } from 'selectors/list';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 class BasicBackListToolbar extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       filter: ''
@@ -52,17 +53,17 @@ class BasicBackListToolbar extends React.Component {
     this.serverFilter(event);
   };
 
-  render() {
-    const { label, link } = this.props;
+  render () {
+    const { label, backPath } = this.props;
     return (
       <ButtonToolbar className="pb-1 float-right">
-        <ButtonGroup  size="lg" className="mr-1">
+        <ButtonGroup size="lg" className="mr-1">
           <h3 className="mr-4">
             { label }
           </h3>
         </ButtonGroup>
         <ButtonGroup className="mr-1">
-          <Link to={link} className="btn btn-primary">
+          <Link to={backPath} className="btn btn-primary">
             Back
           </Link>
         </ButtonGroup>
@@ -76,5 +77,17 @@ class BasicBackListToolbar extends React.Component {
     );
   }
 }
+
+BasicBackListToolbar.propTypes = {
+  match: PropTypes.object.isRequired,
+  history: PropTypes.array.isRequired,
+  handleRefresh: PropTypes.func.isRequired,
+  fetchFinished: PropTypes.func.isRequired,
+  fetchStarted: PropTypes.func.isRequired,
+  fetcher: PropTypes.func.isRequired,
+  setList: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired,
+  backPath: PropTypes.string.isRequired
+};
 
 export default BasicBackListToolbar;

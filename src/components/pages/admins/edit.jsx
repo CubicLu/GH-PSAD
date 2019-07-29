@@ -6,45 +6,44 @@ import { fields } from 'components/helpers/fields/admins';
 import connectRecord from 'components/modules/connect_record';
 import { SET_RECORD } from 'actions/admins';
 import CommonForm from 'components/base/common_form';
-import { search as dropdowns_search } from 'api/dropdowns';
+import { search as dropdownsSearch } from 'api/dropdowns';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
 
 class Edit extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       isFetching: true,
       roles: []
-    }
+    };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     waitUntilFetched.call(this,
-      dropdowns_search('role_id')
+      dropdownsSearch('role_id')
         .then(response => {
-          this.setState({roles: response.data});
+          this.setState({ roles: response.data });
         })
-    )
+    );
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
+  componentWillReceiveProps (nextProps, nextContext) {
     const { record } = nextProps;
     if (record) this.setState(record);
   }
-
 
   values = () => {
     const { record } = this.props;
     return Object.assign({}, record, {
       role_id: record.role.id
-    })
+    });
   };
 
-  renderRecord() {
+  renderRecord () {
     const { backPath, record } = this.props;
-    const path = generatePath(backPath, { id: record.id })
+    const path = generatePath(backPath, { id: record.id });
     return (
       <Card>
         <CardHeader>Edit Admin</CardHeader>
@@ -61,7 +60,7 @@ class Edit extends React.Component {
     );
   }
 
-  render() {
+  render () {
     return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
   }
 }

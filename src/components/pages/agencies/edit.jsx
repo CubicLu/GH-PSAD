@@ -12,43 +12,42 @@ import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
 
 class Edit extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       isFetching: true,
       managers: [],
       town_managers: [],
       officers: []
-    }
+    };
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
+  componentWillReceiveProps (nextProps, nextContext) {
     const { record } = nextProps;
     if (record) this.setState(record);
   }
 
   values = () => {
     const { record } = this.props;
-    let values = {}
+    const values = {};
     for (const [key, value] of Object.entries(record)) {
-
       switch (key) {
-       case 'manager':
-        values[`agency[manager_id]`] = value.id
-        break;
-       case 'officers':
-        values[`agency[officer_ids]`] = value
-        break;
-      case 'town_manager':
-        values[`agency[town_manager_id]`] = value.id
-        break;
-       default:
-        values[`agency[${key}]`] = value
+        case 'manager':
+          values[`agency[manager_id]`] = value.id;
+          break;
+        case 'officers':
+          values[`agency[officer_ids]`] = value;
+          break;
+        case 'town_manager':
+          values[`agency[town_manager_id]`] = value.id;
+          break;
+        default:
+          values[`agency[${key}]`] = value;
       }
     }
 
     for (const [key, value] of Object.entries(record.location)) {
-      values[`agency[location][${key}]`] = value
+      values[`agency[location][${key}]`] = value;
     }
     return values;
   };
@@ -56,15 +55,15 @@ class Edit extends React.Component {
   componentDidMount () {
     waitUntilFetched.call(this,
       searchAdminByRoleName(['manager', 'officer', 'town_manager'])
-        .then((result) => this.setState({...result}))
+        .then((result) => this.setState({ ...result }))
         .catch(this.handleFailed)
-    )
+    );
   }
 
-  renderRecord() {
+  renderRecord () {
     const { backPath, record, match } = this.props;
-    const { officers, managers, town_managers} = this.state
-    const path = generatePath(backPath, { id: record.id })
+    const { officers, managers, town_managers } = this.state;
+    const path = generatePath(backPath, { id: record.id });
 
     return (
       <Card>
@@ -82,7 +81,7 @@ class Edit extends React.Component {
     );
   }
 
-  render() {
+  render () {
     return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
   }
 }

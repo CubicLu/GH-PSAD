@@ -2,12 +2,13 @@ import React from 'react';
 import { Container } from 'reactstrap';
 import Header from 'components/base/header';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 class Layout extends React.Component {
-  render() {
+  render () {
     return (
       <React.Fragment>
-        {this.props.isAuthorized ? <Header/> : null}
+        {this.props.isAuthorized ? <Header /> : null}
         <Container fluid>
           {this.props.children}
         </Container>
@@ -19,6 +20,11 @@ class Layout extends React.Component {
 const mapState = state => {
   const { isAuthorized } = state.user.auth;
   return { isAuthorized };
+};
+
+Layout.propTypes = {
+  isAuthorized: PropTypes.bool.isRequired,
+  children: PropTypes.elementType.isRequired
 };
 
 export default connect(mapState)(Layout);

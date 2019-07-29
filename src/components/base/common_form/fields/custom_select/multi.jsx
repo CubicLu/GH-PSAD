@@ -2,36 +2,46 @@ import React, { useState } from 'react';
 import MultiSelect from 'react-select';
 import { isEmpty } from 'underscore';
 import { Text } from 'informed';
+import PropTypes from 'prop-types';
 
-function MultiSelectCustom ({options, values, field_name}) {
+function CustomMultiSelect ({ options, values, fieldName }) {
   const [selectedOptions, setSelectedOptions] = useState({});
 
-  if(isEmpty(selectedOptions) && values[field_name]) {
+  if (isEmpty(selectedOptions) && values[fieldName]) {
     setSelectedOptions({
-      [field_name]: values[field_name].map(element => ({value: element.id, label: element.email}))
-    })
+      [fieldName]: values[fieldName].map(element => ({ value: element.id, label: element.email }))
+    });
   }
 
   return (
     <React.Fragment>
       <MultiSelect
         isMulti
-        value={selectedOptions[field_name]}
+        value={selectedOptions[fieldName]}
         onChange={(selectedOptions) => {
-          setSelectedOptions({ [field_name]: selectedOptions})
+          setSelectedOptions({ [fieldName]: selectedOptions });
         }}
         options={options}
       />
-      {selectedOptions[field_name] && selectedOptions[field_name].map(({ label, value}, i) => {
+      {selectedOptions[fieldName] && selectedOptions[fieldName].map(({ label, value }, i) => {
         return <Text
           key={label}
           hidden
-          field={`${field_name}[${i}]`}
+          field={`${fieldName}[${i}]`}
           initialValue={value}
-        />
+        />;
       })}
     </React.Fragment>
-  )
+  );
 }
 
-export default MultiSelectCustom;
+CustomMultiSelect.propTypes = {
+  options: PropTypes.arrayOf(PropTypes.shape({
+    value: PropTypes.string,
+    label: PropTypes.string
+  })),
+  values: PropTypes.object.isRequired,
+  fieldName: PropTypes.string.isRequired
+};
+
+export default CustomMultiSelect;

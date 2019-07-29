@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
 import { sendResetPasswordInstructionsRequest } from 'api/users';
 import { Button, Input } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
@@ -10,7 +10,7 @@ import CardLayout from 'components/base/layout/card';
 import AuthLayout from 'components/base/layout/auth';
 
 class SendResetPasswordInstructions extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       username: '',
@@ -32,8 +32,7 @@ class SendResetPasswordInstructions extends React.Component {
           isFetching: false,
           messages: setErrorsMessages(error)
         });
-      })
-
+      });
   };
 
   setSuccessMessage () {
@@ -43,7 +42,7 @@ class SendResetPasswordInstructions extends React.Component {
     });
   }
 
-  render() {
+  render () {
     return (
       <AuthLayout>
         <CardLayout title="Reset Your Password" isFetching={this.state.isFetching} messages={this.state.messages}>
@@ -61,7 +60,7 @@ class SendResetPasswordInstructions extends React.Component {
               <label htmlFor="inputEmail">Email address</label>
             </div>
             <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
-              {this.state.isFetching ? btnSpinner({ className: "spinner-border" }) : 'Reset'}
+              {this.state.isFetching ? btnSpinner({ className: 'spinner-border' }) : 'Reset'}
             </Button>
           </form>
         </CardLayout>
@@ -70,7 +69,7 @@ class SendResetPasswordInstructions extends React.Component {
   }
 }
 
-function mapDispatch(dispatch) {
+function mapDispatch (dispatch) {
   return bindActionCreators({}, dispatch);
 }
 

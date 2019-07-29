@@ -5,9 +5,10 @@ import { show } from 'api/parking_lots';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import { SET_RECORD } from 'actions/parking_lots';
+import PropTypes from 'prop-types';
 
 class Show extends React.Component {
-  renderRecord() {
+  renderRecord () {
     const { record, backPath, match } = this.props;
 
     return (<Card>
@@ -23,16 +24,26 @@ class Show extends React.Component {
       </CardHeader>
       <CardBody>
         <Form>
-          <Link to={backPath} className="btn btn-primary mr-1">Back</Link>
-          <Link to={`${match.url}/edit`} className="btn btn-primary">Edit</Link>
+          <Link to={backPath} className='btn btn-primary mr-1'>Back</Link>
+          <Link to={`${match.url}/edit`} className='btn btn-primary'>Edit</Link>
         </Form>
       </CardBody>
     </Card>);
   }
 
-  render() {
+  render () {
     return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
   }
 }
+
+Show.propTypes = {
+  backPath: PropTypes.string.isRequired,
+  match: PropTypes.object.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  record: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string
+  })
+};
 
 export default connectRecord('parking_lot', SET_RECORD, resourceFetcher(show), Show);

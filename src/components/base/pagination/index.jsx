@@ -6,7 +6,7 @@ import { list as selectList } from 'selectors/list';
 class Pagination extends React.Component {
   renderPages = () => {
     const { page, perPage, total } = this.props;
-    let pages = [];
+    const pages = [];
 
     times(Math.round(total / perPage), i => {
       const pageNumber = i + 1;
@@ -67,7 +67,7 @@ class Pagination extends React.Component {
     this.open(lastPage);
   };
 
-  render() {
+  render () {
     const { total, perPage } = this.props;
 
     if (total < perPage) return null;

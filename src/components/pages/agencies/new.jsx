@@ -13,26 +13,26 @@ import saveRecord from 'components/modules/form_actions/save_record';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
 
 class New extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       isFetching: true,
       town_managers: [],
       managers: [],
       officers: []
-    }
+    };
   }
 
   componentDidMount () {
     waitUntilFetched.call(this,
       searchAdminByRoleName(['manager', 'officer', 'town_manager'])
-        .then((result) => this.setState({...result}))
+        .then((result) => this.setState({ ...result }))
         .catch(this.handleFailed)
-    )
+    );
   }
 
-  render() {
-    const { town_managers, managers, officers} = this.state
+  render () {
+    const { town_managers, managers, officers } = this.state;
 
     return (
       <Card>
@@ -44,14 +44,14 @@ class New extends React.Component {
             values={exampleData}
             fields={fields(officers, managers, town_managers)}
             isFetching={this.state.isFetching}
-            submitForm={saveRecord.bind(this, create)}/>
+            submitForm={saveRecord.bind(this, create)} />
         </CardBody>
       </Card>
     );
   }
 }
 
-function mapDispatch(dispatch) {
+function mapDispatch (dispatch) {
   return bindActionCreators({ setRecord: invoke(SET_RECORD) }, dispatch);
 }
 

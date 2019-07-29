@@ -21,16 +21,16 @@ class Index extends React.Component {
     ));
   };
 
-  render() {
+  render () {
     const { match } = this.props;
-    const agency_id = match.params.agency_id
-    const agency = this.props.list[0] && this.props.list[0].agency
+    const agency_id = match.params.agency_id;
+    const agency = this.props.list[0] && this.props.list[0].agency;
     return (
       <IndexTable
         {...this.props}
         fetcher={index}
-        paginationQuery={{agency_id}}
-        toolbar={ <BasicBackListToolbar {...this.props} label={`${agency && agency.name} Tickets`} link={backPath} fetcher={index}/>}
+        paginationQuery={{ agency_id }}
+        toolbar={ <BasicBackListToolbar {...this.props} label={`${agency && agency.name} Tickets`} link={''} fetcher={index}/>}
         columns={
           <React.Fragment>
             <th attr="parking_tickets.id">#</th>

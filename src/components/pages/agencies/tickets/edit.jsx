@@ -12,30 +12,30 @@ import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
 
 class Edit extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       isFetching: true,
       statuses: [],
       officers: []
-    }
+    };
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
+  componentWillReceiveProps (nextProps, nextContext) {
     const { record } = nextProps;
     if (record) this.setState(record);
   }
 
   values = () => {
     const { record } = this.props;
-    var values = {}
+    var values = {};
     for (const [key, value] of Object.entries(record)) {
-         switch (key) {
-       case 'officer':
-        values[`admin_id`] = value.id
-        break;
-       default:
-        values[key] = value
+      switch (key) {
+        case 'officer':
+          values[`admin_id`] = value.id;
+          break;
+        default:
+          values[key] = value;
       }
     }
     return values;
@@ -44,37 +44,36 @@ class Edit extends React.Component {
   componentDidMount () {
     waitUntilFetched.call(this,
       searchAdminByRoleName(['officer'])
-        .then((result) => this.setState({...result}))
+        .then((result) => this.setState({ ...result }))
         .catch(this.handleFailed),
       statuses()
-        .then(({data}) => {
+        .then(({ data }) => {
           this.setState({
             statuses: data.statuses
-          })
+          });
         })
-    )
+    );
   }
 
   willReturnTo (backPath, match) {
-    const params = new URLSearchParams( this.props.location.search)
-    if(params.get('index')) {
-      return [backPath, { agency_id: match.params.agency_id }]
+    const params = new URLSearchParams(this.props.location.search);
+    if (params.get('index')) {
+      return [backPath, { agency_id: match.params.agency_id }];
     } else {
-      return ['/dashboard/agencies/:agency_id', { agency_id: match.params.agency_id }]
+      return ['/dashboard/agencies/:agency_id', { agency_id: match.params.agency_id }];
     }
-
   }
 
-  renderRecord() {
+  renderRecord () {
     const { backPath, match } = this.props;
-    const [path, params] = this.willReturnTo(backPath, match)
+    const [path, params] = this.willReturnTo(backPath, match);
     return (
       <Card>
         <CardHeader>Edit Ticket</CardHeader>
         <CardBody>
           <CommonForm
             {...this.props}
-            backPath={generatePath(path, params )}
+            backPath={generatePath(path, params)}
             values={this.values()}
             fields={fields(this.state.officers, this.state.statuses)}
             isFetching={this.state.isFetching}
@@ -84,7 +83,7 @@ class Edit extends React.Component {
     );
   }
 
-  render() {
+  render () {
     return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
   }
 }

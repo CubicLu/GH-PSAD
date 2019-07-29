@@ -3,15 +3,14 @@ import { connect } from 'react-redux';
 // import { generatePath } from 'react-router';
 
 class Edit extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       isFetching: false
-    }
+    };
   }
 
-
-  render() {
+  render () {
     return this.props.isFetching ? <div>Loading data...</div> : <div>Data is loaded</div>;
   }
 }

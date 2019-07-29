@@ -10,7 +10,6 @@ import Divider from './fields/divider';
 import * as FieldType from './field_types';
 
 class CommonForm extends React.Component {
-
   renderField = (field, key) => (
     <FormGroup row key={key}>
       { field.divider && <Divider info={field.divider}/> }
@@ -24,9 +23,9 @@ class CommonForm extends React.Component {
   renderInput = field => {
     switch (field.type) {
       case FieldType.MULTISELECT_FIELD:
-        return <CustomMultiSelect field_name={field.name} options={field.options} values={this.props.values} />
+        return <CustomMultiSelect fieldName={field.name} options={field.options} values={this.props.values} />;
       case FieldType.FILE_FIELD:
-        return  <ImageInput className="form-control" {...field.props} field={field.name}/>;
+        return <ImageInput className="form-control" {...field.props} field={field.name}/>;
       case FieldType.SELECT_FIELD:
         return <CustomSelect field={field} />;
       default:
@@ -59,7 +58,7 @@ class CommonForm extends React.Component {
     </React.Fragment>
   );
 
-  render() {
+  render () {
     const { values, isFetching } = this.props;
     return (
       isFetching ? <div>Loading data...</div> : <Form initialValues={values} component={this.renderForm}/>

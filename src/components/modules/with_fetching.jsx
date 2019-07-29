@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 /*
  This HOC component was initially developed to prevent errors/warnings/memory leaks in case
@@ -14,24 +16,24 @@ import React from 'react';
  */
 const withFetching = (Component, fetchData) => {
   return class extends React.Component {
-    constructor(props) {
+    constructor (props) {
       super(props);
       this.state = {
         isFetching: true
       };
     }
 
-    componentWillUnmount() {
+    componentWillUnmount () {
       this._isMounted = false;
     }
 
     fetchFinished = () => {
       if (this._isMounted) {
-        this.setState({ isFetching: false })
+        this.setState({ isFetching: false });
       }
     };
 
-    componentDidMount() {
+    componentDidMount () {
       this._isMounted = true;
       fetchData(this);
     }
@@ -40,14 +42,14 @@ const withFetching = (Component, fetchData) => {
       this.setState({ isFetching: true });
     };
 
-    render() {
+    render () {
       return <Component
         {...this.props}
         {...this.state}
         fetchStarted={this.fetchStarted}
-        fetchFinished={this.fetchFinished} />
+        fetchFinished={this.fetchFinished} />;
     }
-  }
+  };
 };
 
 export default withFetching;

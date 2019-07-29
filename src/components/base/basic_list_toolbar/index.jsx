@@ -2,9 +2,10 @@ import React from 'react';
 import { Button, ButtonGroup, ButtonToolbar, Input, InputGroup } from 'reactstrap';
 import { debounce } from 'underscore';
 import { list as selectList } from 'selectors/list';
+import PropTypes from 'prop-types';
 
 class BasicListToolbar extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       filter: ''
@@ -51,11 +52,10 @@ class BasicListToolbar extends React.Component {
     this.serverFilter(event);
   };
 
-  render() {
+  render () {
     const { label } = this.props;
     return (
       <ButtonToolbar className="pb-1 float-right">
-        { this.props.children }
         <ButtonGroup className="mr-1">
           <Button onClick={this.refresh}>Refresh</Button>
         </ButtonGroup>
@@ -70,5 +70,16 @@ class BasicListToolbar extends React.Component {
     );
   }
 }
+
+BasicListToolbar.propTypes = {
+  match: PropTypes.object.isRequired,
+  history: PropTypes.array.isRequired,
+  handleRefresh: PropTypes.func.isRequired,
+  fetchFinished: PropTypes.func.isRequired,
+  fetchStarted: PropTypes.func.isRequired,
+  fetcher: PropTypes.func.isRequired,
+  setList: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired
+};
 
 export default BasicListToolbar;

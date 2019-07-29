@@ -2,12 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 class New extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       isFetching: false,
       errors: {}
-    }
+    };
   }
 
   // saveRecord = event => {
@@ -20,10 +20,9 @@ class New extends React.Component {
   //     .then(this.handleCreate);
   // };
 
-  render() {
+  render () {
     return null;
   }
 }
-
 
 export default connect()(New);
