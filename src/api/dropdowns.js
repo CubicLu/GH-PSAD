@@ -4,4 +4,4 @@ const search = (fieldName) => {
   return fetchApi(`dashboard/dropdowns/${fieldName}`, { method: 'GET' });
 };
 
-export { search }
+export { search };

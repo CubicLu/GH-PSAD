@@ -2,7 +2,7 @@ import { Select, Option } from 'informed';
 import React from 'react';
 
 const CustomSelect = props => {
-  const { field } = props;
+  const { field, options = [] } = props;
 
   return (
     <Select className="form-control" field={field.name}  type="select" >

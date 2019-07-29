@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { Button, Input } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
 import { setErrorsMessages } from 'components/helpers/messages';
-import { handleInputChange } from 'components/helpers/handle_input_change';
 import CardLayout from 'components/base/layout/card';
 import AuthLayout from 'components/base/layout/auth';
 
@@ -25,17 +24,17 @@ class ResetPassword extends React.Component {
   submitForm = (event) => {
     event.preventDefault();
 
-    if(this.state.password === this.state.password_confirmation) {
+    if (this.state.password === this.state.password_confirmation) {
       this.setState({
         isFetching: true,
       });
       return resetPasswordRequest(this.state.password, this.state.reset_password_token)
         .then(res => this.props.history.push('/login'))
         .catch(error => {
-            this.setState({
-              isFetching: false,
-              messages: setErrorsMessages(error)
-            });
+          this.setState({
+            isFetching: false,
+            messages: setErrorsMessages(error)
+          });
         })
     }
     this.setState({
@@ -53,7 +52,7 @@ class ResetPassword extends React.Component {
     return (
       <AuthLayout>
         <CardLayout title="Reset Your Password" isFetching={this.state.isFetching} messages={this.state.messages}>
-          <form onSubmit={this.submitForm} >
+          <form onSubmit={this.submitForm}>
 
             <div className="form-label-group">
               <Input
@@ -61,7 +60,7 @@ class ResetPassword extends React.Component {
                 name="password"
                 type="password"
                 value={this.state.password}
-                onChange={handleInputChange.bind(this)}
+                onChange={e => this.setState({ [e.target.name]: e.target.value })}
                 placeholder="Password"
                 required
               />
@@ -74,7 +73,7 @@ class ResetPassword extends React.Component {
                 name="password_confirmation"
                 type="password"
                 value={this.state.password_confirmation}
-                onChange={handleInputChange.bind(this)}
+                onChange={e => this.setState({ [e.target.name]: e.target.value })}
                 placeholder="Password Confirmation"
                 required
               />
@@ -82,7 +81,7 @@ class ResetPassword extends React.Component {
             </div>
 
             <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
-              {this.state.isFetching ? btnSpinner({ className: "spinner-border" }) : 'Reset'}
+              {this.state.isFetching ? btnSpinner({ className: 'spinner-border' }) : 'Reset'}
             </Button>
             <Link to='/login' className="mr-1 mt-2 d-block">I Want To Sign In</Link>
           </form>
@@ -93,7 +92,7 @@ class ResetPassword extends React.Component {
 }
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({ }, dispatch);
+  return bindActionCreators({}, dispatch);
 }
 
 export default connect(

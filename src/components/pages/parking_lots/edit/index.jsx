@@ -1,14 +1,15 @@
 import React from 'react';
-import { generatePath } from 'react-router';
 import { btnSpinner } from 'components/helpers';
 import { Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
-import HorizontalForm from 'components/base/horizontal_form';
+import { Form } from 'informed';
 import { fields } from 'components/helpers/parking_lots';
 import connectRecord from 'components/modules/connect_record';
 import { SET_RECORD } from 'actions/parking_lots';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import { show, update } from 'api/parking_lots';
 import { NavLink } from 'react-router-dom';
+import updateRecord from 'components/modules/form_actions/update_record';
+import { renderFields, renderButtons, renderField } from 'components/base/form';
 
 class Edit extends React.Component {
   constructor(props) {
@@ -18,38 +19,26 @@ class Edit extends React.Component {
     }
   }
 
-  updateRecord = state => {
-    const { id } = this.props.match.params;
-    this.setState({ isFetching: true });
-
-    update({ id, data: state.values })
-      .then(this.updateSucceed)
-      .catch(this.updateFailed)
+  onSubmit = () => {
+    return updateRecord.bind(this, update, '/dashboard/parking_lots')
   };
 
-  updateSucceed = res => {
-    const { backPath, match, history, setRecord } = this.props;
-    const { id } = match.params;
+  renderFields() {
+    const step = 4;
+    let start = 0;
+    let fieldList = [];
 
-    setRecord(res.data);
-    this.setState({ isFetching: false });
-    history.push(generatePath(backPath, { id }));
-  };
+    while (start < fields.length) {
+      fieldList.push((<Col key={start} md={4}>{renderFields(fields.slice(start, start + step), fieldProps)}</Col>));
+      start += step;
+    }
 
-  updateFailed = error => {
-    console.error(error.message);
-    this.setState({ isFetching: false });
-  };
-
-  values = () => {
-    const { record } = this.props;
-    let values = Object.assign({}, record);
-    values.parking_lot_id = record.parking_lot ? record.parking_lot.id : null;
-    return values;
-  };
+    return fieldList;
+  }
 
   renderRecord() {
-    const { match, record } = this.props;
+    const { match, record, backPath } = this.props;
+    const { isFetching } = this.state;
 
     return (
       <Card>
@@ -69,12 +58,25 @@ class Edit extends React.Component {
           </Row>
         </CardHeader>
         <CardBody>
-          <HorizontalForm
-            {...this.props}
-            values={this.values()}
-            fields={fields}
-            isFetching={this.state.isFetching}
-            submitForm={this.updateRecord}/>
+          <fieldset disabled={isFetching}>
+            <Form initialValues={record} onSubmit={this.onSubmit()}>
+              {
+                ({ formState }) => (
+                  <React.Fragment>
+                    <Row>
+                      <Col md={4}>
+                        {renderField({ name: 'avatar', type: 'file' }, fieldProps)}
+                      </Col>
+                    </Row>
+                    <Row>
+                      {this.renderFields()}
+                    </Row>
+                    {renderButtons(formState, { isFetching, backPath })}
+                  </React.Fragment>
+                )
+              }
+            </Form>
+          </fieldset>
         </CardBody>
       </Card>
     );
@@ -84,5 +86,7 @@ class Edit extends React.Component {
     return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
   }
 }
+
+const fieldProps = { lSize: 6 };
 
 export default connectRecord('parking_lot', SET_RECORD, resourceFetcher(show), Edit);

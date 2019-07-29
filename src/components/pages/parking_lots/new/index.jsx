@@ -10,16 +10,6 @@ class New extends React.Component {
     }
   }
 
-  // saveRecord = event => {
-  //   event.preventDefault();
-  //
-  //   const { name, stream, login, password, parking_lot_id } = this.state;
-  //
-  //   this.setState({ isFetching: true });
-  //   create({ name, stream, login, password, parking_lot_id })
-  //     .then(this.handleCreate);
-  // };
-
   render() {
     return null;
   }
