@@ -8,16 +8,21 @@ import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';
 
 class Index extends React.Component {
-  renderRecords () {
+  renderRecords = () => {
     const { list, match } = this.props;
 
     return list.map((record, idx) => {
       return (
         <tr key={idx}>
-          <td><Link to={`${match.path}/${record.id}`}>{record.email}</Link></td>
-          <td>{record.username}</td>
-          <td>{record.status}</td>
+          <td><Link to={`${match.path}/${record.id}`}>{record.username}</Link></td>
           <td>{record.name}</td>
+          <td>{record.email}</td>
+          <td>{record.role.name}</td>
+          <td>
+            <span className={`btn btn-${record.status === 'active' ? 'success' : 'warning'}`}>
+              {record.status}
+            </span>
+          </td>
         </tr>
       );
     });
