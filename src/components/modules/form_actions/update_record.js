@@ -16,7 +16,9 @@ function updateSucceed(backPath, res) {
 }
 
 function updateFailed(error) {
-  console.error(error.message);
+  if (error.response) {
+    this.setState({ errors: error.response.data.errors })
+  }
   this.setState({ isFetching: false });
 }
 
