@@ -27,6 +27,8 @@ class CommonForm extends React.Component {
         return <CustomMultiSelect field_name={field.name} options={field.options} values={this.props.values} />
       case FieldType.FILE_FIELD:
         return  <ImageInput className="form-control" {...field.props} field={field.name}/>;
+      case FieldType.PASSWORD_FIELD:
+        return <Text className="form-control" {...field.props} field={field.name}  type="password" validate={field.validate}/>;
       case FieldType.SELECT_FIELD:
         return <CustomSelect field={field} />;
       default:
@@ -45,7 +47,7 @@ class CommonForm extends React.Component {
     return (
       <React.Fragment>
         <Link to={backPath} className="btn btn-primary mr-1">Back</Link>
-        <Button onClick={() => submitForm(formState)} color="success" type="submit">
+        <Button onClick={() => submitForm(formState.values)} color="success" type="submit">
           {isFetching ? btnSpinner() : 'Save'}
         </Button>
       </React.Fragment>

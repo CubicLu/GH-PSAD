@@ -1,9 +1,9 @@
-import { generatePath } from 'react-router';
 
-function updateRecord(update, backPath, state) {
+function updateRecord(update, backPath, values) {
   const { id } = this.props.match.params;
   this.setState({ isFetching: true });
-  update({ id, data:  JSON.parse(JSON.stringify(state.values)) })
+
+  update({ id, data: JSON.parse(JSON.stringify(values)) })
     .then(updateSucceed.bind(this, backPath))
     .catch(updateFailed.bind(this))
 };
@@ -17,7 +17,9 @@ function updateSucceed(backPath, res) {
 };
 
 function updateFailed(error) {
-  console.error(error.message);
+  if (error.response) {
+    this.setState({ errors: error.response.data.errors })
+  }
   this.setState({ isFetching: false });
 };
 

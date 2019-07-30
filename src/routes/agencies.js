@@ -13,8 +13,12 @@ const Routing = ({match}) => (
     <Route exact path={`${match.path}/:id/edit`} render={renderWithBackPath(Edit, `${match.url}/:id`)}/>
     <Switch>
       <Route exact path={`${match.path}/new`} render={renderWithBackPath(New, match.path)}/>
-      <Route exact path={`${match.path}/:id`} render={renderWithBackPath(Show, match.path)}/>
-      <Route path={`${match.path}/:agency_id/tickets`} component={TicketsRoutes}/>
+      <Route path={`${match.path}/:id`} render={(props) => (
+          <React.Fragment>
+            <Route exact path={`${props.match.path}`} component={renderWithBackPath(Show, match.path)}/>
+            <Route path={`${match.path}/:agency_id/tickets`} render={() => <TicketsRoutes parent={{...props}} />}/>
+          </React.Fragment>
+        )}/>
     </Switch>
   </React.Fragment>
 )

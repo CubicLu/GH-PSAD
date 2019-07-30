@@ -10,15 +10,18 @@ import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name
 import waitUntilFetched from 'components/modules/wait_until_fetched';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
+import { fromJson as showErrors } from 'components/helpers/errors';
 
 class Edit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isFetching: true,
-      managers: [],
-      town_managers: [],
-      officers: []
+      dropdowns: {
+        managers: [],
+        town_managers: [],
+        officers: []
+      }
     }
   }
 
@@ -29,47 +32,31 @@ class Edit extends React.Component {
 
   values = () => {
     const { record } = this.props;
-    let values = {}
-    for (const [key, value] of Object.entries(record)) {
-
-      switch (key) {
-       case 'manager':
-        values[`agency[manager_id]`] = value.id
-        break;
-       case 'officers':
-        values[`agency[officer_ids]`] = value
-        break;
-      case 'town_manager':
-        values[`agency[town_manager_id]`] = value.id
-        break;
-       default:
-        values[`agency[${key}]`] = value
-      }
-    }
-
-    for (const [key, value] of Object.entries(record.location)) {
-      values[`agency[location][${key}]`] = value
-    }
-    return values;
+    let values = Object.assign({}, record);
+    values.manager_id = record.manager ? record.manager.id : null;
+    values.town_manager_id = record.town_manager ? record.town_manager.id : null;
+    values.officer_ids = record.officers ? record.officers : null;
+    return values
   };
 
   componentDidMount () {
     waitUntilFetched.call(this,
       searchAdminByRoleName(['manager', 'officer', 'town_manager'])
-        .then((result) => this.setState({...result}))
+        .then((result) => this.setState({dropdowns: {...result}}))
         .catch(this.handleFailed)
     )
   }
 
   renderRecord() {
-    const { backPath, record, match } = this.props;
-    const { officers, managers, town_managers} = this.state
+    const { backPath, record } = this.props;
+    const { officers, managers, town_managers} = this.state.dropdowns
     const path = generatePath(backPath, { id: record.id })
 
     return (
       <Card>
         <CardHeader>Edit Agencies</CardHeader>
         <CardBody>
+          {showErrors(this.state.errors)}
           <CommonForm
             {...this.props}
             backPath={path}

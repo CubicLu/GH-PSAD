@@ -5,7 +5,7 @@ import { SET_RECORD } from 'actions/cameras';
 import { displayUnixTimestamp } from 'components/helpers';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import CommonShowForm from 'components/base/common_form/show';
+import ShowForm from 'components/base/show_form';
 import { showFields } from 'components/helpers/fields/cameras';
 
 class Show extends React.Component {
@@ -24,7 +24,7 @@ class Show extends React.Component {
     return (<Card>
       <CardHeader>{record.name}</CardHeader>
       <CardBody>
-          <CommonShowForm
+          <ShowForm
             fields={showFields()}
             values={this.values()}
             backPath={backPath}
