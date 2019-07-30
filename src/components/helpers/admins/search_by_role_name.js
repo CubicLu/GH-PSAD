@@ -4,7 +4,7 @@ import pluralize from 'pluralize';
 const searchAdminByRoleName = (role_names) => {
 
  return new Promise((resolve, reject) => {
-    search(role_names)
+    search({role_names})
       .then(({data}) => {
         let container = {}
         data.forEach(element => {

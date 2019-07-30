@@ -1,6 +1,6 @@
-function saveRecord(create, state) {
+function saveRecord(create, values) {
   this.setState({ isFetching: true });
-  create({ data: JSON.parse(JSON.stringify(state.values)) })
+  create({ data: JSON.parse(JSON.stringify(values)) })
     .then(createSucceed.bind(this))
     .catch(handleFailed.bind(this));
 };

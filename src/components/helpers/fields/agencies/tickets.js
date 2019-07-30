@@ -1,10 +1,8 @@
-import humanizeString from 'humanize-string';
-
 import * as FieldType from 'components/base/common_form/field_types';
 
 const fields = (officers, statuses) => [
   { name: 'admin_id', label: 'Officer *', type: FieldType.SELECT_FIELD,  options: officers.map(officer => { return {value: officer.id, label: officer.email}})  },
-  { name: 'status', label: 'Status *', type: FieldType.SELECT_FIELD,  options: statuses.map(status => { return {value: status, label: humanizeString(status)}})   },
+  { name: 'status', label: 'Status *', type: FieldType.SELECT_FIELD,  options: statuses.map(status => { return {value: status, label: status}})   },
 ]
 
 const showFields = (officers, statuses) => [

@@ -13,7 +13,7 @@ function resetPasswordRequest(password, reset_password_token) {
   return axios.put(`${env.backend_url}/dashboard/auth/reset_password`, { password, reset_password_token })
 }
 
-export { 
+export {
   auth,
   sendResetPasswordInstructionsRequest,
   resetPasswordRequest

@@ -12,7 +12,7 @@ import { SET_RECORD } from 'actions/agencies';
 import Ticket from 'components/base/agencies/tickets';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import CommonShowForm from 'components/base/common_form/show';
+import ShowForm from 'components/base/show_form';
 import { showFields } from 'components/helpers/fields/agencies';
 
 class Show extends React.Component {
@@ -29,12 +29,13 @@ class Show extends React.Component {
 
   renderRecord() {
     const { record, backPath, match } = this.props;
+    const ticketURL = `${match.url}/tickets`
     return (
       <React.Fragment>
         <Card>
           <CardHeader>{record.name}</CardHeader>
           <CardBody>
-            <CommonShowForm
+            <ShowForm
               fields={showFields()}
               values={record}
               backPath={backPath}
@@ -46,7 +47,7 @@ class Show extends React.Component {
           <CardHeader>
             Ticket Assignment ({record.parking_tickets_total})
             <span dangerouslySetInnerHTML={{__html: this.state.collapse ? '&#9650;' : '&#9660;'}}></span>
-            (<Link to={`/dashboard/agencies/${record.id}/tickets/`}>See All</Link>)
+            (<Link to={ticketURL}>See All</Link>)
           </CardHeader>
         </Card>
 
@@ -69,7 +70,7 @@ class Show extends React.Component {
                   <Ticket
                     key={parking_ticket.id}
                     parking_ticket={parking_ticket}
-                    agency_id={record.id}
+                    url={ticketURL}
                   />
                 ))
               }
