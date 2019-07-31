@@ -7,4 +7,8 @@ const search = (query) => {
   return fetchApi(`dashboard/admins/search`, { method: 'GET', params: { ...query } });
 };
 
-export { index, show, update, destroy, create, search };
+function checkAdminPassword(password) {
+  return fetchApi(`dashboard/admins/check_password`, { method: 'POST', data: { password } });
+}
+
+export { index, show, update, destroy, create, search, checkAdminPassword };

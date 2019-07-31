@@ -1,4 +1,3 @@
-
 import * as FieldType from 'components/base/common_form/field_types';
 
 const fields = (officers, statuses) => [

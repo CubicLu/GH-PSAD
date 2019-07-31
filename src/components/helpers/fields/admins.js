@@ -1,34 +1,39 @@
+import faker from 'faker'
 import * as FieldType from 'components/base/common_form/field_types';
 
 const fields = (roles) => [
-  { name: 'email', label: 'Email *' },
   { name: 'username', label: 'Username *' },
-  { name: 'phone', label: 'Phone *' },
+  { name: 'name', label: 'Name' },
+  { name: 'email', label: 'Email *' },
+  { name: 'phone', label: 'Phone' },
+  {
+    name: 'role_id',
+    label: 'Role *',
+    type: FieldType.SELECT_FIELD,
+    options: roles.map(({value, label}) => {
+      const disabled = label === 'super_admin' || label === 'system_admin'
+      return { value, label, disabled };
+    })
+  },
+  { name: 'avatar', label: 'Profile Picture', type: FieldType.FILE_FIELD, },
   {
     name: 'status',
     label: 'Status *',
     type: FieldType.SELECT_FIELD,
     options: [{ value: 'active', label: 'Active' }, { value: 'suspended', label: 'Suspended' }]
   },
-  {
-    name: 'role_id',
-    label: 'Role *',
-    type: FieldType.SELECT_FIELD,
-    options: roles.map(({value, label}) => {
-      return { value, label };
-    })
-  },
-  { name: 'name', label: 'Name' },
+
 ];
 
-
 const showFields = () => [
-  { name: 'email', label: 'Email' },
   { name: 'username', label: 'Username' },
-  { name: 'phone', label: 'Phone' },
-  { name: 'status', label: 'Status', },
-  { name: 'role.name', label: 'Role' },
+  { name: 'avatar', label: 'Profile Picture', type: FieldType.FILE_FIELD },
   { name: 'name', label: 'Name' },
+  { name: 'email', label: 'Email' },
+  { name: 'phone', label: 'Phone' },
+  { name: 'id', label: 'ID' },
+  { name: 'role.name', label: 'Role' },
+  { name: 'status', label: 'Status', },
 ];
 
 
@@ -52,5 +57,14 @@ const filterFields = (roles) => [
   },
 ];
 
+const exampleData = process.env.NODE_ENV !== 'production' ? {
+  email: faker.internet.email(),
+  username: faker.internet.userName(),
+  name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+  phone: '+13583767678',
+  status: 'suspended'
+} : {
+  status: 'suspended'
+} // These are defaults values for each field
 
-export { fields, showFields, filterFields };
+export { fields, showFields, exampleData, filterFields };

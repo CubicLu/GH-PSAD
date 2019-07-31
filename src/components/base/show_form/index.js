@@ -9,10 +9,10 @@ import {
   ListGroupItem
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import * as FieldType from './field_types';
+import * as FieldType from '../common_form/field_types';
 import _ from 'lodash'
 
-class CommonShowForm extends React.Component {
+class ShowForm extends React.Component {
 
   renderField = (field, key) => (
     <FormGroup row key={key}>
@@ -24,10 +24,10 @@ class CommonShowForm extends React.Component {
   );
 
   listField = (list, innerLabel) => (<ListGroup>
-        {
-          list.map((element, index) => <ListGroupItem key={`${element[innerLabel]}${index}`}> #{index+1}: {element[innerLabel]}</ListGroupItem>)
-        }
-      </ListGroup>
+      {
+        list.map((element, index) => <ListGroupItem key={`${element[innerLabel]}${index}`}> #{index+1}: {element[innerLabel]}</ListGroupItem>)
+      }
+    </ListGroup>
   )
 
   renderInput = field => {
@@ -54,7 +54,7 @@ class CommonShowForm extends React.Component {
     return (
       <React.Fragment>
         <Link to={backPath} className="btn btn-primary mr-1">Back</Link>
-        <Link to={`${editURL}/edit`} className="btn btn-primary">Edit</Link>
+        {editURL && <Link to={`${editURL}/edit`} className="btn btn-primary">Edit</Link>}
       </React.Fragment>
     );
   };
@@ -71,4 +71,4 @@ class CommonShowForm extends React.Component {
   }
 }
 
-export default CommonShowForm;
+export default ShowForm;

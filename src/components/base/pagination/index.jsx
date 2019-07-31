@@ -8,7 +8,7 @@ class Pagination extends React.Component {
     const { page, perPage, total } = this.props;
     const pages = [];
 
-    times(Math.round(total / perPage), i => {
+    times(Math.ceil(total / perPage), i => {
       const pageNumber = i + 1;
 
       pages.push(
@@ -24,7 +24,7 @@ class Pagination extends React.Component {
   };
 
   open = page => {
-    const { match, fetchStarted, fetchFinished, fetcher, perPage, query } = this.props;
+    const { fetchStarted, fetchFinished, fetcher, perPage, query } = this.props;
     fetchStarted();
     fetcher({ page, perPage, ...query })
       .then(this.openSucceed)

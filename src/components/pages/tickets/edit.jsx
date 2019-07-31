@@ -10,6 +10,7 @@ import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name
 import waitUntilFetched from 'components/modules/wait_until_fetched';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
+import { fromJson as showErrors } from 'components/helpers/errors';
 
 class Edit extends React.Component {
   constructor (props) {
@@ -28,16 +29,9 @@ class Edit extends React.Component {
 
   values = () => {
     const { record } = this.props;
-    var values = {};
-    for (const [key, value] of Object.entries(record)) {
-      switch (key) {
-        case 'officer':
-          values[`admin_id`] = value.id;
-          break;
-        default:
-          values[key] = value;
-      }
-    }
+    let values = Object.assign({}, record);
+    values.admin_id = record.officer ? record.officer.id : null;
+
     return values;
   };
 
@@ -55,29 +49,21 @@ class Edit extends React.Component {
     );
   }
 
-  willReturnTo (backPath, match) {
-    const params = new URLSearchParams(this.props.location.search);
-    if (params.get('index')) {
-      return [backPath, { agency_id: match.params.agency_id }];
-    } else {
-      return ['/dashboard/agencies/:agency_id', { agency_id: match.params.agency_id }];
-    }
-  }
-
-  renderRecord () {
-    const { backPath, match } = this.props;
-    const [path, params] = this.willReturnTo(backPath, match);
+  renderRecord() {
+    const { backPath, record } = this.props;
+    const backPathWithId = generatePath(backPath, { id: record.id })
     return (
       <Card>
         <CardHeader>Edit Ticket</CardHeader>
         <CardBody>
+          {showErrors(this.state.errors)}
           <CommonForm
             {...this.props}
-            backPath={generatePath(path, params)}
+            backPath={backPathWithId}
             values={this.values()}
             fields={fields(this.state.officers, this.state.statuses)}
             isFetching={this.state.isFetching}
-            submitForm={updateRecord.bind(this, update, generatePath(path, params))}/>
+            submitForm={updateRecord.bind(this, update, backPathWithId)}/>
         </CardBody>
       </Card>
     );

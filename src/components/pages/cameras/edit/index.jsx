@@ -8,6 +8,7 @@ import resourceFetcher from 'components/modules/resource_fetcher';
 import { SET_RECORD } from 'actions/cameras';
 import CommonForm from 'components/base/common_form';
 import updateRecord from 'components/modules/form_actions/update_record';
+import { fromJson as showErrors } from 'components/helpers/errors';
 
 class Edit extends React.Component {
   constructor (props) {
@@ -32,6 +33,7 @@ class Edit extends React.Component {
       <Card>
         <CardHeader>Edit Camera</CardHeader>
         <CardBody>
+          {showErrors(this.state.errors)}
           <CommonForm
             {...this.props}
             backPath={path}

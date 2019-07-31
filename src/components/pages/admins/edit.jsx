@@ -10,23 +10,27 @@ import { search as dropdownsSearch } from 'api/dropdowns';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
+import PasswordConfirmationModal from 'components/helpers/modals/password_confirmation';
+import { fromJson as showErrors } from 'components/helpers/errors';
+import * as FieldType from 'components/base/common_form/field_types';
 
 class Edit extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
       isFetching: true,
-      roles: []
-    };
+      roles: [],
+      modal: false,
+      formStateValues: {},
+      password_verification: ''
+    }
   }
 
   componentDidMount () {
     waitUntilFetched.call(this,
       dropdownsSearch('role_id')
-        .then(response => {
-          this.setState({ roles: response.data });
-        })
-    );
+        .then(response => this.setState({roles: response.data})),
+    )
   }
 
   componentWillReceiveProps (nextProps, nextContext) {
@@ -41,22 +45,58 @@ class Edit extends React.Component {
     });
   };
 
-  renderRecord () {
+  toggleModal = () => {
+    this.setState(prevState => ({
+      modal: !prevState.modal
+    }));
+  }
+
+  fieldsForCommonForm = () => {
+    let fieldsSet = fields(this.state.roles)
+    fieldsSet.push({
+      name: 'password', label: 'New Password', type: FieldType.PASSWORD_FIELD
+    })
+    return fieldsSet
+  }
+
+  submitForm = (values) => {
+    const { backPath, record } = this.props;
+    const path = generatePath(backPath, { id: record.id })
+    if(document.querySelector('input[name="password"]').value) {
+      this.toggleModal()
+      this.setState({
+        formStateValues: JSON.parse(JSON.stringify(values))
+      })
+    } else {
+      updateRecord.call(this, update, path, values)
+    }
+
+  }
+
+  renderRecord() {
     const { backPath, record } = this.props;
     const path = generatePath(backPath, { id: record.id });
     return (
-      <Card>
-        <CardHeader>Edit Admin</CardHeader>
-        <CardBody>
-          <CommonForm
-            {...this.props}
-            backPath={path}
-            values={this.values()}
-            fields={fields(this.state.roles)}
-            isFetching={this.state.isFetching}
-            submitForm={updateRecord.bind(this, update, path)}/>
-        </CardBody>
-      </Card>
+      <React.Fragment>
+        <PasswordConfirmationModal
+          toggleModal={this.toggleModal}
+          isOpen={this.state.modal}
+          handleSuccess={()=>{ updateRecord.call(this, update, path, this.state.formStateValues) }}
+        />
+        <Card>
+          <CardHeader>Edit Admin</CardHeader>
+          <CardBody>
+            {showErrors(this.state.errors)}
+            <CommonForm
+              {...this.props}
+              backPath={path}
+              values={this.values()}
+              fields={this.fieldsForCommonForm()}
+              isFetching={this.state.isFetching}
+              submitForm={this.submitForm}/>
+          </CardBody>
+        </Card>
+      </React.Fragment>
     );
   }
 

@@ -13,16 +13,15 @@ class Index extends React.Component {
 
     return list.map((record, idx) => (
       <Ticket
-        index
         key={record.id}
         parking_ticket={record}
-        agency_id={match.params.agency_id}
+        url={match.url}
       />
     ));
   };
 
   render () {
-    const { match } = this.props;
+    const { match, backPath } = this.props;
     const agency_id = match.params.agency_id;
     const agency = this.props.list[0] && this.props.list[0].agency;
     return (
@@ -30,7 +29,7 @@ class Index extends React.Component {
         {...this.props}
         fetcher={index}
         paginationQuery={{ agency_id }}
-        toolbar={ <BasicBackListToolbar {...this.props} label={`${agency && agency.name} Tickets`} link={''} fetcher={index}/>}
+        toolbar={ <BasicBackListToolbar {...this.props} label={`${agency && agency.name} Tickets`} link={backPath} fetcher={index}/>}
         columns={
           <React.Fragment>
             <th attr="parking_tickets.id">#</th>
