@@ -2,10 +2,13 @@ import React from 'react';
 import { Col, Row, Table } from 'reactstrap';
 import Pagination from 'components/base/pagination';
 import TRSort from './tr_sort';
+import ModalFilter from 'components/helpers/modals/filter';
 import './table.sass'
+
 class IndexTable extends React.Component {
   state = {
-    sortedAttr: {}
+    sortedAttr: {},
+    filterModalOpen: false
   }
 
   renderRecords = () => {
@@ -22,19 +25,13 @@ class IndexTable extends React.Component {
     return renderRecords()
   };
 
-  handleSortedClick = (attr) => {
-    this.props.fetchStarted()
-    this.setState({
-      sortedAttr: attr
-    });
-  }
+  handleSortedClick = (attr) =>  this.setState({ sortedAttr: attr });
 
   handleSortedTableFetched = () => this.props.fetchFinished();
 
-  handleRefresh = () => {
-    this.props.fetchStarted();
-    this.setState({sortedAttr: {}})
-  };
+  toggleModal = event => this.setState((state) => ({ filterModalOpen: !state.filterModalOpen }));
+
+  handleRefresh = () => this.setState({sortedAttr: {}})
 
   setQuery = (sortedAttr) => {
     const { paginationQuery } = this.props
@@ -46,13 +43,21 @@ class IndexTable extends React.Component {
   }
 
   render() {
-    const { sortedAttr } = this.state
-    const { toolbar, columns, fetcher, setList } = this.props
-    const toolbarWithProps = React.cloneElement(toolbar, { handleRefresh: this.handleRefresh })
+    const { sortedAttr, filterModalOpen } = this.state
+    const { toolbar, columns } = this.props
+    const toolbarWithProps = React.cloneElement(toolbar, {
+      handleRefresh: this.handleRefresh,
+      onClickFilter: this.toggleModal
+    })
     const query = this.setQuery(sortedAttr)
 
     return (
       <React.Fragment>
+        <ModalFilter
+          isOpen={filterModalOpen}
+          toggleModal={this.toggleModal}
+          {...this.props}
+        />
         <Row>
           <Col xs="12">
             {toolbarWithProps}
@@ -60,24 +65,23 @@ class IndexTable extends React.Component {
           <Col xs="12">
             <Table className="index-table">
               <thead>
-              <TRSort
-                handledFetched={this.handleSortedTableFetched}
-                handleClick={this.handleSortedClick}
-                setList={setList}
-                fetcher={fetcher}
-                sortedAttr={sortedAttr}
-                setQuery={this.setQuery}
-              >
-                {columns.props.children}
-              </TRSort>
+                <TRSort
+                  {...this.props}
+                  handledFetched={this.handleSortedTableFetched}
+                  handleClick={this.handleSortedClick}
+                  sortedAttr={sortedAttr}
+                  setQuery={this.setQuery}
+                >
+                  {columns.props.children}
+                </TRSort>
               </thead>
               <tbody>
-              {this.renderRecords()}
+               {this.renderRecords()}
               </tbody>
             </Table>
           </Col>
         </Row>
-        <Pagination {...this.props} fetcher={fetcher} query={query}/>
+        <Pagination {...this.props} query={query}/>
       </React.Fragment>
     );
   }

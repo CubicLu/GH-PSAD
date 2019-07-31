@@ -3,7 +3,7 @@ import { list as selectList } from 'selectors/list';
 
 const TRSort = (props) => {
 
-  const { fetcher, setList, handleClick, handledFetched, sortedAttr, setQuery} = props
+  const { fetcher, fetchStarted, setList, handleClick, handledFetched, sortedAttr, setQuery} = props
   return (
     <tr>
       {
@@ -16,6 +16,7 @@ const TRSort = (props) => {
                     keyword: th.props.attr,
                     asc: th.props.attr === sortedAttr.keyword ? !sortedAttr.asc : true
                   }
+                  fetchStarted()
                   fetcher(setQuery(newSortedAttr))
                     .then((res) => {
                       setList(selectList(res));

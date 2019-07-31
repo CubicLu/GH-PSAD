@@ -32,4 +32,25 @@ const showFields = () => [
 ];
 
 
-export { fields, showFields };
+const filterFields = (roles) => [
+  { name: 'name', label: 'Name' },
+  { name: 'email', label: 'Email' },
+  { name: 'username', label: 'Username' },
+  {
+    name: 'status',
+    label: 'Status',
+    type: FieldType.SELECT_FIELD,
+    options: [{ value: 'active', label: 'Active' }, { value: 'suspended', label: 'Suspended' }]
+  },
+  {
+    name: 'role_names',
+    label: 'Role',
+    type: FieldType.MULTISELECT_FIELD,
+    options: roles.map(({value, label}) => {
+      return { value, label };
+    })
+  },
+];
+
+
+export { fields, showFields, filterFields };
