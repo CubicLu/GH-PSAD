@@ -1,11 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Route, Switch, withRouter } from 'react-router';
 import Index from 'components/pages/admins';
 import Show from 'components/pages/admins/show';
 import Edit from 'components/pages/admins/edit';
 import New from 'components/pages/admins/new';
 import renderWithBackPath from 'components/modules/render_with_back_path';
-import PropTypes from 'prop-types';
 
 const Routing = ({ match }) => (
   <React.Fragment>

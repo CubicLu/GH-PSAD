@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardHeader, CardBody } from 'reactstrap';
 import { generatePath } from 'react-router';
 import { update, statuses, show } from 'api/parking/tickets';
@@ -73,5 +74,15 @@ class Edit extends React.Component {
     return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
   }
 }
+
+Edit.propTypes = {
+  backPath: PropTypes.string.isRequired,
+  match: PropTypes.object.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  record: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    officer: PropTypes.object
+  })
+};
 
 export default connectRecord('ticket', SET_RECORD, resourceFetcher(show), Edit);

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Form, Text } from 'informed';
 import { Button, Col, FormGroup, Label } from 'reactstrap';
 import { Link } from 'react-router-dom';
@@ -10,7 +11,6 @@ import {
   Divider,
   FieldType
 } from 'components/helpers/form_fields';
-import PropTypes from 'prop-types';
 
 class CommonForm extends React.Component {
   renderField = (field, key) => (

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import MultiSelect from 'react-select';
 import { isEmpty, defaults } from 'underscore';
 import { Text } from 'informed';
-
-import PropTypes from 'prop-types';
 
 function CustomMultiSelect ({ options, values, fieldName }) {
   const [selectedOptions, setSelectedOptions] = useState({});

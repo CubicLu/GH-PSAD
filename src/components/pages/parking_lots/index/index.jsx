@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { SET_LIST } from 'actions/parking_lots';
 import { index } from 'api/parking_lots';
@@ -51,5 +52,10 @@ class Index extends React.Component {
     );
   }
 }
+
+Index.propTypes = {
+  list: PropTypes.arrayOf(PropTypes.object).isRequired,
+  match: PropTypes.object.isRequired
+};
 
 export default connectList('parking_lot', SET_LIST, resourceFetcher(index), Index);

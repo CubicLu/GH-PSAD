@@ -1,11 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Col, Form, Card, CardHeader, CardBody, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { show } from 'api/parking_lots';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import { SET_RECORD } from 'actions/parking_lots';
-import PropTypes from 'prop-types';
 
 class Show extends React.Component {
   renderRecord () {

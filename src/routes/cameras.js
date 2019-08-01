@@ -1,11 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Route, Switch, withRouter } from 'react-router';
 import Index from 'components/pages/cameras/index';
 import Show from 'components/pages/cameras/show';
 import Edit from 'components/pages/cameras/edit';
 import New from 'components/pages/cameras/new';
 import renderWithBackPath from 'components/modules/render_with_back_path';
-import PropTypes from 'prop-types';
 
 const Routing = ({ match }) => (
   <React.Fragment>

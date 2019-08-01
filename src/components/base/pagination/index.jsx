@@ -1,8 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { times } from 'underscore';
 import { Pagination as Paggy, PaginationItem, PaginationLink } from 'reactstrap';
 import { list as selectList } from 'selectors/list';
-import PropTypes from 'prop-types';
 
 class Pagination extends React.Component {
   renderPages = () => {

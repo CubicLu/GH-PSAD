@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import AdminRoute from 'routes/admins';
 import AgencyRoute from 'routes/agencies';
@@ -18,5 +19,9 @@ function MainContent (props) {
     </div>
   );
 }
+
+MainContent.propTypes = {
+  match: PropTypes.object.required
+};
 
 export default withRouter(MainContent);

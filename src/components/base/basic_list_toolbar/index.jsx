@@ -1,8 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, ButtonGroup, ButtonToolbar, InputGroup } from 'reactstrap';
 import { debounce } from 'underscore';
 import { list as selectList } from 'selectors/list';
-import PropTypes from 'prop-types';
 
 class BasicListToolbar extends React.Component {
   constructor (props) {

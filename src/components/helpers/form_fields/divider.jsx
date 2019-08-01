@@ -1,6 +1,6 @@
 import React from 'react';
-import { Col } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { Col } from 'reactstrap';
 
 const Divider = (props) => {
   const { info } = props;

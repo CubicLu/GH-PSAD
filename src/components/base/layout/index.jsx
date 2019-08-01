@@ -1,8 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Container } from 'reactstrap';
 import Header from 'components/base/header';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
 class Layout extends React.Component {
   render () {

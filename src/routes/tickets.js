@@ -1,10 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Route, Switch, withRouter } from 'react-router';
 import TicketIndex from 'components/pages/tickets';
 import TicketEdit from 'components/pages/tickets/edit';
 import TicketShow from 'components/pages/tickets/show';
 import renderWithBackPath from 'components/modules/render_with_back_path';
-import PropTypes from 'prop-types';
 
 const Routing = (props) => {
   const { match, parent } = props;

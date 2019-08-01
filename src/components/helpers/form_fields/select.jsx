@@ -1,6 +1,6 @@
-import { Select, Option } from 'informed';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Select, Option } from 'informed';
 
 const CustomSelect = props => {
   const { field } = props;

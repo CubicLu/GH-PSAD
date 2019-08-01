@@ -1,9 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, ButtonGroup, ButtonToolbar, Input, InputGroup } from 'reactstrap';
 import { debounce } from 'underscore';
 import { list as selectList } from 'selectors/list';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 class BasicBackListToolbar extends React.Component {
   constructor (props) {

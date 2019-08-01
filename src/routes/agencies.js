@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Route, Switch, withRouter } from 'react-router';
 import Index from 'components/pages/agencies';
 import Edit from 'components/pages/agencies/edit';
@@ -6,7 +7,6 @@ import Show from 'components/pages/agencies/show';
 import New from 'components/pages/agencies/new';
 import TicketsRoutes from './tickets';
 import renderWithBackPath from 'components/modules/render_with_back_path';
-import PropTypes from 'prop-types';
 
 const Routing = ({ match }) => (
   <React.Fragment>
@@ -17,7 +17,7 @@ const Routing = ({ match }) => (
       <Route path={`${match.path}/:id`} render={(props) => (
         <React.Fragment>
           <Route exact path={`${props.match.path}`} component={renderWithBackPath(Show, match.path)}/>
-          <Route path={`${match.path}/:agency_id/tickets`} render={() => <TicketsRoutes parent={{ ...props }} />}/>
+          <Route path={`${match.path}/:agencyId/tickets`} render={() => <TicketsRoutes parent={{ ...props }} />}/>
         </React.Fragment>
       )}/>
     </Switch>
