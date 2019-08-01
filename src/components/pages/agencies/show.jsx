@@ -65,10 +65,10 @@ class Show extends React.Component {
             </thead>
             <tbody>
               {
-                record.parking_tickets.map(parkingTicket => (
+                record.parkingTickets.map(parkingTicket => (
                   <Ticket
-                    key={parking_ticket.id}
-                    parking_ticket={parking_ticket}
+                    key={parkingTicket.id}
+                    parkingTicket={parkingTicket}
                     url={ticketURL}
                   />
                 ))
