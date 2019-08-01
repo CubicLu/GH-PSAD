@@ -19,11 +19,11 @@ class BasicListToolbar extends React.Component {
   refresh = () => {
     const { handleRefresh, fetchFinished, fetchStarted, fetcher } = this.props;
 
-    fetchStarted()
+    fetchStarted();
     handleRefresh();
     fetcher()
       .then(this.refreshSucceed)
-      .catch((error) => { console.log(error)})
+      .catch((error) => { console.log(error); })
       .finally(fetchFinished);
   };
 
@@ -55,6 +55,7 @@ BasicListToolbar.propTypes = {
   handleRefresh: PropTypes.func.isRequired,
   fetchFinished: PropTypes.func.isRequired,
   fetchStarted: PropTypes.func.isRequired,
+  onClickFilter: PropTypes.func.isRequired,
   fetcher: PropTypes.func.isRequired,
   setList: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired

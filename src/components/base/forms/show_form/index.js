@@ -9,7 +9,7 @@ import {
   ListGroupItem
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import * as FieldType from '../common_form/field_types';
+import { FieldType } from 'components/helpers/form_fields'
 import _ from 'lodash'
 
 class ShowForm extends React.Component {

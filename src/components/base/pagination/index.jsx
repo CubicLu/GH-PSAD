@@ -2,6 +2,7 @@ import React from 'react';
 import { times } from 'underscore';
 import { Pagination as Paggy, PaginationItem, PaginationLink } from 'reactstrap';
 import { list as selectList } from 'selectors/list';
+import PropTypes from 'prop-types';
 
 class Pagination extends React.Component {
   renderPages = () => {
@@ -91,5 +92,16 @@ class Pagination extends React.Component {
     );
   }
 }
+
+Pagination.propTypes = {
+  total: PropTypes.number.isRequired,
+  perPage: PropTypes.number.isRequired,
+  page: PropTypes.number.isRequired,
+  fetchFinished: PropTypes.func.isRequired,
+  fetchStarted: PropTypes.func.isRequired,
+  fetcher: PropTypes.func.isRequired,
+  query: PropTypes.object,
+  setList: PropTypes.func.isRequired
+};
 
 export default Pagination;

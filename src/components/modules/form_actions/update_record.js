@@ -1,9 +1,11 @@
 
+import { cloneDeep } from 'lodash'
+
 function updateRecord(update, backPath, values) {
   const { id } = this.props.match.params;
   this.setState({ isFetching: true });
 
-  update({ id, data: JSON.parse(JSON.stringify(values)) })
+  update({ id, data: cloneDeep(values) })
     .then(updateSucceed.bind(this, backPath))
     .catch(updateFailed.bind(this))
 };

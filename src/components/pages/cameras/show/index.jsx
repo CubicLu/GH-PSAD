@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardHeader, CardBody } from 'reactstrap';
 import { show } from 'api/cameras';
 import { SET_RECORD } from 'actions/cameras';
 import { displayUnixTimestamp } from 'components/helpers';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import ShowForm from 'components/base/show_form';
+import ShowForm from 'components/base/forms/show_form';
 import { showFields } from 'components/helpers/fields/cameras';
 
 class Show extends React.Component {
@@ -37,5 +38,17 @@ class Show extends React.Component {
     return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
   }
 }
+
+Show.propTypes = {
+  backPath: PropTypes.string.isRequired,
+  match: PropTypes.object.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  record: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    updated_at: PropTypes.number.isRequired,
+    created_at: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired
+  })
+};
 
 export default connectRecord('camera', SET_RECORD, resourceFetcher(show), Show);

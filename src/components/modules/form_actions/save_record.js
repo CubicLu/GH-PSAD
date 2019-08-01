@@ -1,13 +1,14 @@
+import { cloneDeep } from 'lodash'
+
 function saveRecord(create, values) {
   this.setState({ isFetching: true });
-  create({ data: JSON.parse(JSON.stringify(values)) })
+  create({ data: cloneDeep(values) })
     .then(createSucceed.bind(this))
     .catch(handleFailed.bind(this));
 };
 
 function createSucceed(res) {
   const { backPath, history, setRecord } = this.props;
-
   setRecord(res.data);
   this.setState({ isFetching: false });
   history.push(backPath);

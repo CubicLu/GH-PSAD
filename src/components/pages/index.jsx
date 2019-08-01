@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Redirect, Route } from 'react-router';
 import Login from './login';
 import SendResetPasswordInstructions from './send_reset_password_instructions';
@@ -35,5 +36,11 @@ class App extends React.Component {
     );
   }
 }
+
+App.propTypes = {
+  location: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
+};
 
 export default connect()(App);

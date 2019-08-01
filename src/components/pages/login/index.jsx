@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { auth } from 'api/users';
@@ -98,6 +99,11 @@ class Login extends React.Component {
 function mapDispatch (dispatch) {
   return bindActionCreators({ setToken }, dispatch);
 }
+
+Login.propTypes = {
+  setToken: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
+};
 
 export default connect(
   null,

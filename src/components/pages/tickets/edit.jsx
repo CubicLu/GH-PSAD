@@ -5,7 +5,7 @@ import { update, statuses, show } from 'api/parking/tickets';
 import { fields } from 'components/helpers/fields/agencies/tickets';
 import connectRecord from 'components/modules/connect_record';
 import { SET_RECORD } from 'actions/agencies/tickets';
-import CommonForm from 'components/base/common_form';
+import CommonForm from 'components/base/forms/common_form';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
 import resourceFetcher from 'components/modules/resource_fetcher';
@@ -29,7 +29,7 @@ class Edit extends React.Component {
 
   values = () => {
     const { record } = this.props;
-    let values = Object.assign({}, record);
+    const values = Object.assign({}, record);
     values.admin_id = record.officer ? record.officer.id : null;
 
     return values;
@@ -49,9 +49,9 @@ class Edit extends React.Component {
     );
   }
 
-  renderRecord() {
+  renderRecord () {
     const { backPath, record } = this.props;
-    const backPathWithId = generatePath(backPath, { id: record.id })
+    const backPathWithId = generatePath(backPath, { id: record.id });
     return (
       <Card>
         <CardHeader>Edit Ticket</CardHeader>

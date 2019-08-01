@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { SET_LIST } from 'actions/cameras';
 import { index } from 'api/cameras';
@@ -46,5 +47,10 @@ class Index extends React.Component {
     );
   }
 }
+
+Index.propTypes = {
+  list: PropTypes.arrayOf(PropTypes.object).isRequired,
+  match: PropTypes.object.isRequired
+};
 
 export default connectList('camera', SET_LIST, resourceFetcher(index), Index);

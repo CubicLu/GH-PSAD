@@ -1,18 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardHeader, CardBody } from 'reactstrap';
 import { generatePath } from 'react-router';
 import { show, update } from 'api/admins';
 import { fields } from 'components/helpers/fields/admins';
 import connectRecord from 'components/modules/connect_record';
 import { SET_RECORD } from 'actions/admins';
-import CommonForm from 'components/base/common_form';
+import CommonForm from 'components/base/forms/common_form';
 import { search as dropdownsSearch } from 'api/dropdowns';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
 import PasswordConfirmationModal from 'components/helpers/modals/password_confirmation';
 import { fromJson as showErrors } from 'components/helpers/errors';
-import * as FieldType from 'components/base/common_form/field_types';
+import { FieldType } from 'components/helpers/form_fields';
+import { cloneDeep } from 'lodash';
 
 class Edit extends React.Component {
   constructor (props) {
@@ -23,14 +25,14 @@ class Edit extends React.Component {
       modal: false,
       formStateValues: {},
       password_verification: ''
-    }
+    };
   }
 
   componentDidMount () {
     waitUntilFetched.call(this,
       dropdownsSearch('role_id')
-        .then(response => this.setState({roles: response.data})),
-    )
+        .then(response => this.setState({ roles: response.data }))
+    );
   }
 
   componentWillReceiveProps (nextProps, nextContext) {
@@ -52,28 +54,27 @@ class Edit extends React.Component {
   }
 
   fieldsForCommonForm = () => {
-    let fieldsSet = fields(this.state.roles)
+    const fieldsSet = fields(this.state.roles);
     fieldsSet.push({
       name: 'password', label: 'New Password', type: FieldType.PASSWORD_FIELD
-    })
-    return fieldsSet
+    });
+    return fieldsSet;
   }
 
   submitForm = (values) => {
     const { backPath, record } = this.props;
-    const path = generatePath(backPath, { id: record.id })
-    if(document.querySelector('input[name="password"]').value) {
-      this.toggleModal()
+    const path = generatePath(backPath, { id: record.id });
+    if (document.querySelector('input[name="password"]').value) {
+      this.toggleModal();
       this.setState({
-        formStateValues: JSON.parse(JSON.stringify(values))
-      })
+        formStateValues: cloneDeep(values)
+      });
     } else {
-      updateRecord.call(this, update, path, values)
+      updateRecord.call(this, update, path, values);
     }
-
   }
 
-  renderRecord() {
+  renderRecord () {
     const { backPath, record } = this.props;
     const path = generatePath(backPath, { id: record.id });
     return (
@@ -81,7 +82,7 @@ class Edit extends React.Component {
         <PasswordConfirmationModal
           toggleModal={this.toggleModal}
           isOpen={this.state.modal}
-          handleSuccess={()=>{ updateRecord.call(this, update, path, this.state.formStateValues) }}
+          handleSuccess={() => { updateRecord.call(this, update, path, this.state.formStateValues); }}
         />
         <Card>
           <CardHeader>Edit Admin</CardHeader>
@@ -104,5 +105,15 @@ class Edit extends React.Component {
     return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
   }
 }
+
+Edit.propTypes = {
+  backPath: PropTypes.string.isRequired,
+  match: PropTypes.object.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  record: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    role: PropTypes.object.isRequired
+  })
+};
 
 export default connectRecord('admin', SET_RECORD, resourceFetcher(show), Edit);

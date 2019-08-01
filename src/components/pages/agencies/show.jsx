@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Card,
   CardHeader,
@@ -12,7 +13,7 @@ import { SET_RECORD } from 'actions/agencies';
 import Ticket from 'components/base/agencies/tickets';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import ShowForm from 'components/base/show_form';
+import ShowForm from 'components/base/forms/show_form';
 import { showFields } from 'components/helpers/fields/agencies';
 
 class Show extends React.Component {
@@ -28,7 +29,7 @@ class Show extends React.Component {
 
   renderRecord () {
     const { record, backPath, match } = this.props;
-    const ticketURL = `${match.url}/tickets`
+    const ticketURL = `${match.url}/tickets`;
     return (
       <React.Fragment>
         <Card>
@@ -45,7 +46,7 @@ class Show extends React.Component {
         <Card className="mt-5" onClick={() => this.openCollapsable('collapse')}>
           <CardHeader>
             Ticket Assignment ({record.parking_tickets_total})
-            <span dangerouslySetInnerHTML={{__html: this.state.collapse ? '&#9650;' : '&#9660;'}}></span>
+            <span dangerouslySetInnerHTML={{ __html: this.state.collapse ? '&#9650;' : '&#9660;' }}></span>
             (<Link to={ticketURL}>See All</Link>)
           </CardHeader>
         </Card>
@@ -65,7 +66,7 @@ class Show extends React.Component {
             </thead>
             <tbody>
               {
-                record.parkingTickets.map(parkingTicket => (
+                record.parking_tickets.map(parkingTicket => (
                   <Ticket
                     key={parkingTicket.id}
                     parkingTicket={parkingTicket}
@@ -84,5 +85,16 @@ class Show extends React.Component {
     return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
   }
 }
+
+Show.propTypes = {
+  backPath: PropTypes.string.isRequired,
+  match: PropTypes.object.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  record: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    parking_tickets_total: PropTypes.number.isRequired,
+    parking_tickets: PropTypes.arrayOf(PropTypes.object).isRequired
+  })
+};
 
 export default connectRecord('agency', SET_RECORD, resourceFetcher(show), Show);

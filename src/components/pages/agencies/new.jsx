@@ -8,7 +8,7 @@ import { SET_RECORD } from 'actions/agencies';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import { fields, exampleData } from 'components/helpers/fields/agencies';
 import { fromJson as showErrors } from 'components/helpers/errors';
-import CommonForm from 'components/base/common_form';
+import CommonForm from 'components/base/forms/common_form';
 import saveRecord from 'components/modules/form_actions/save_record';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
 
@@ -17,7 +17,7 @@ class New extends React.Component {
     super(props);
     this.state = {
       isFetching: true,
-      town_managers: [],
+      townManagers: [],
       managers: [],
       officers: []
     };
@@ -32,7 +32,7 @@ class New extends React.Component {
   }
 
   render () {
-    const { town_managers, managers, officers } = this.state;
+    const { townManagers, managers, officers } = this.state;
 
     return (
       <Card>
@@ -42,7 +42,7 @@ class New extends React.Component {
           <CommonForm
             {...this.props}
             values={exampleData}
-            fields={fields(officers, managers, town_managers)}
+            fields={fields(officers, managers, townManagers)}
             isFetching={this.state.isFetching}
             submitForm={saveRecord.bind(this, create)} />
         </CardBody>

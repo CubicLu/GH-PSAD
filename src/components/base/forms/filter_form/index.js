@@ -1,13 +1,14 @@
 import React from 'react';
 import { Form, Text } from 'informed';
 import { Button, Col, FormGroup, Label } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import { btnSpinner } from 'components/helpers';
-import CustomSelect from './fields/custom_select';
-import CustomMultiSelect from './fields/custom_select/multi';
-import ImageInput from './fields/image';
-import Divider from './fields/divider';
-import * as FieldType from './field_types';
+import {
+ CustomSelect,
+ CustomMultiSelect,
+ ImageInput,
+ Divider,
+ FieldType
+} from 'components/helpers/form_fields'
 
 class CommonForm extends React.Component {
   renderField = (field, key) => (
@@ -27,7 +28,7 @@ class CommonForm extends React.Component {
       case FieldType.FILE_FIELD:
         return <ImageInput className="form-control" {...field.props} field={field.name}/>;
       case FieldType.PASSWORD_FIELD:
-        return <Text className="form-control" {...field.props} field={field.name}  type="password" validate={field.validate}/>;
+        return <Text className="form-control" {...field.props} field={field.name} type="password" validate={field.validate}/>;
       case FieldType.SELECT_FIELD:
         return <CustomSelect field={field} />;
       default:
@@ -41,13 +42,15 @@ class CommonForm extends React.Component {
   };
 
   renderButtons = formState => {
-    const { backPath, submitForm, isFetching } = this.props;
+    const { cancelFilter, submitForm, isFetching } = this.props;
 
     return (
       <React.Fragment>
-        <Link to={backPath} className="btn btn-primary mr-1">Back</Link>
-        <Button onClick={() => submitForm(formState.values)} color="success" type="submit">
-          {isFetching ? btnSpinner() : 'Save'}
+         <Button onClick={cancelFilter} className="btn btn-default mr-1">
+          Close
+        </Button>
+        <Button onClick={() => submitForm(formState.values)} color="primary" type="submit">
+          {isFetching ? btnSpinner() : 'Filter'}
         </Button>
       </React.Fragment>
     );

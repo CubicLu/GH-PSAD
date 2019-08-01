@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { SET_LIST } from 'actions/admins';
-import { index } from 'api/admins';
+import { index, search } from 'api/admins';
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import BasicListToolbar from 'components/base/basic_list_toolbar';
@@ -9,11 +10,10 @@ import IndexTable from 'components/base/table';
 import { filterFields } from 'components/helpers/fields/admins';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
 import { search as dropdownsSearch } from 'api/dropdowns';
-import { search } from 'api/admins';
 
 class Index extends React.Component {
   state = {
-    filterRolesField: [],
+    filterRolesField: []
   }
 
   renderRecords = () => {
@@ -28,7 +28,7 @@ class Index extends React.Component {
           <td>{record.role.name}</td>
           <td>
             <span className={`btn btn-${record.status === 'active' ? 'success' : 'danger'}`}>
-             {record.status}
+              {record.status}
             </span>
           </td>
         </tr>
@@ -46,14 +46,12 @@ class Index extends React.Component {
     })
   )
 
-
   componentDidMount () {
     waitUntilFetched.call(this,
       dropdownsSearch('role_names_filter')
         .then(response => this.setState({ filterRolesField: response.data }))
     );
   }
-
 
   render () {
     return (
@@ -84,5 +82,10 @@ class Index extends React.Component {
     );
   }
 }
+
+Index.propTypes = {
+  list: PropTypes.arrayOf(PropTypes.object).isRequired,
+  match: PropTypes.object.isRequired
+};
 
 export default connectList('admin', SET_LIST, resourceFetcher(index), Index);

@@ -1,5 +1,5 @@
 import faker from 'faker'
-import * as FieldType from 'components/base/common_form/field_types';
+import { FieldType } from 'components/helpers/form_fields'
 
 const fields = (roles) => [
   { name: 'username', label: 'Username *' },

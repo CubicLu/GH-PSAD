@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { SET_LIST } from 'actions/agencies';
 import { index } from 'api/agencies';
@@ -47,5 +48,10 @@ class Index extends React.Component {
     );
   }
 }
+
+Index.propTypes = {
+  list: PropTypes.arrayOf(PropTypes.object).isRequired,
+  match: PropTypes.object.isRequired
+};
 
 export default connectList('agency', SET_LIST, resourceFetcher(index), Index);
