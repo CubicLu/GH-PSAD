@@ -9,7 +9,7 @@ import { SET_RECORD } from 'actions/agencies/tickets';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import ShowForm from 'components/base/forms/show_form';
-import { showFields } from 'components/helpers/fields/agencies/tickets';
+import { showFields } from 'components/helpers/fields/tickets';
 
 class Show extends React.Component {
 

@@ -21,7 +21,7 @@ function MainContent (props) {
 }
 
 MainContent.propTypes = {
-  match: PropTypes.object.required
+  match: PropTypes.object.isRequired
 };
 
 export default withRouter(MainContent);

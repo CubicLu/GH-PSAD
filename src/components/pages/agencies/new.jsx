@@ -17,22 +17,24 @@ class New extends React.Component {
     super(props);
     this.state = {
       isFetching: true,
-      townManagers: [],
-      managers: [],
-      officers: []
+      dropdowns: {
+        townManagers: [],
+        managers: [],
+        officers: []
+      }
     };
   }
 
   componentDidMount () {
     waitUntilFetched.call(this,
       searchAdminByRoleName(['manager', 'officer', 'town_manager'])
-        .then((result) => this.setState({ ...result }))
+        .then((result) => this.setState({ dropdowns: { ...result, townManagers: result.town_managers } }))
         .catch(this.handleFailed)
     );
   }
 
   render () {
-    const { townManagers, managers, officers } = this.state;
+    const { officers, managers, townManagers } = this.state.dropdowns;
 
     return (
       <Card>

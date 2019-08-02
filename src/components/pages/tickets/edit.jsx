@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Card, CardHeader, CardBody } from 'reactstrap';
 import { generatePath } from 'react-router';
 import { update, statuses, show } from 'api/parking/tickets';
-import { fields } from 'components/helpers/fields/agencies/tickets';
+import { fields } from 'components/helpers/fields/tickets';
 import connectRecord from 'components/modules/connect_record';
 import { SET_RECORD } from 'actions/agencies/tickets';
 import CommonForm from 'components/base/forms/common_form';

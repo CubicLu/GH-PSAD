@@ -43,7 +43,7 @@ class Edit extends React.Component {
   componentDidMount () {
     waitUntilFetched.call(this,
       searchAdminByRoleName(['manager', 'officer', 'town_manager'])
-        .then((result) => this.setState({ dropdowns: { ...result } }))
+        .then((result) => this.setState({ dropdowns: { ...result, townManagers: result.town_managers  } }))
         .catch(this.handleFailed)
     );
   }

@@ -27,7 +27,7 @@ function mapState (state) {
 PrivateRoute.propTypes = {
   component: PropTypes.elementType.isRequired,
   isAuthorized: PropTypes.bool.isRequired,
-  location: PropTypes.object.isRequired
+  location: PropTypes.object
 };
 
 export default connect(
