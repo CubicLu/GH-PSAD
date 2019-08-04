@@ -17,4 +17,12 @@ const showFields = (officers, statuses) => [
   { name: 'officer.email', label: 'Officer Email'}
 ]
 
-export { fields, showFields };
+const filterFields = (officers, statuses) => [
+  { name: 'tickets_id', label: 'Ticket ID'},
+  { name: 'admins_email', label: 'Officer email'},
+  { name: 'parking_lot_name', label: 'Parking Lot'},
+  { name: 'tickets_status', label: 'Ticket Status'},
+  { name: 'tickets_type', label: 'Ticket Type'}
+]
+
+export { fields, showFields, filterFields };

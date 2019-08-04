@@ -47,7 +47,7 @@ class Show extends React.Component {
           <CardHeader>
             Ticket Assignment ({record.parking_tickets_total})
             <span dangerouslySetInnerHTML={{ __html: this.state.collapse ? '&#9650;' : '&#9660;' }}></span>
-            (<Link to={ticketURL}>See All</Link>)
+            { record.parking_tickets_total > 0 && <Link to={ticketURL}>See All</Link>}
           </CardHeader>
         </Card>
 

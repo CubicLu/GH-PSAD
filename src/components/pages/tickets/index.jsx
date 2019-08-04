@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SET_LIST } from 'actions/agencies/tickets';
+import { SET_LIST } from 'actions/tickets';
 import { index } from 'api/parking/tickets';
+import { filterFields } from 'components/helpers/fields/tickets';
 import connectList from 'components/modules/connect_list';
 import BasicBackListToolbar from 'components/base/basic_list_toolbar/back';
 import Ticket from 'components/base/agencies/tickets';
@@ -15,22 +16,38 @@ class Index extends React.Component {
     return list.map((record, idx) => (
       <Ticket
         key={record.id}
-        parking_ticket={record}
+        parkingTicket={record}
         url={match.url}
       />
     ));
   };
 
+
+  filterFetcher = (values) => {
+    const { match } = this.props;
+    return index({
+      agency_id: match.params.agency_id,
+      query: {
+        'query[id]': values.tickets_id,
+        'query[email]': values.admins_email,
+        'query[name]': values.parking_lot_name,
+        'query[status]': values.tickets_status,
+        'query[type]': values.tickets_type
+      }
+    })
+  }
+
   render () {
     const { match, backPath } = this.props;
-    const agencyId = match.params.agencyId;
+    const agencyId = match.params.agency_id;
     const agency = this.props.list[0] && this.props.list[0].agency;
     return (
       <IndexTable
         {...this.props}
-        fetcher={index}
-        paginationQuery={{ agencyId }}
-        toolbar={ <BasicBackListToolbar {...this.props} label={`${agency && agency.name} Tickets`} link={backPath} fetcher={index}/>}
+        paginationQuery={{ agency_id: agencyId }}
+        toolbar={ <BasicBackListToolbar {...this.props} label={`${agency && agency.name} Tickets`} link={backPath} fetcher={index.bind(this, { agency_id: agencyId })}/>}
+        filterFields={filterFields()}
+        filterFetcher={this.filterFetcher}
         columns={
           <React.Fragment>
             <th attr="parking_tickets.id">#</th>

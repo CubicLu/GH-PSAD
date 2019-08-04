@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { SET_LIST } from 'actions/agencies';
 import { index, search } from 'api/agencies';
-import connectList from 'components/modules/connect_list';
 import { filterFields } from 'components/helpers/fields/agencies';
+import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';
@@ -14,7 +14,6 @@ class Index extends React.Component {
     const { list, match } = this.props;
 
     return list.map((record, idx) => {
-      debugger
       return (
         <tr key={idx}>
           <td><Link to={`${match.path}/${record.id}`}>{record.name}</Link></td>
@@ -28,21 +27,19 @@ class Index extends React.Component {
     });
   };
 
-  filterFetcher = (values) => {
-    return (
+  filterFetcher = (values) => (
     search({
       'query[agencies.email]': values.email,
       'query[agencies.name]': values.name,
       'query[agencies.phone]': values.phone,
       'query[locations.full_address]': values.full_address
     })
-  )}
+  )
 
   render () {
     return (
       <IndexTable
         {...this.props}
-        fetcher={index}
         toolbar={ <BasicListToolbar {...this.props} fetcher={index} label="Create Agency"/> }
         filterFields={filterFields()}
         filterFetcher={this.filterFetcher}

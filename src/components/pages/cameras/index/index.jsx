@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { SET_LIST } from 'actions/cameras';
-import { index } from 'api/cameras';
+import { index, search } from 'api/cameras';
+import { filterFields } from 'components/helpers/fields/cameras';
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import BasicListToolbar from 'components/base/basic_list_toolbar';
@@ -26,12 +27,22 @@ class Index extends React.Component {
     });
   };
 
+  // TODO search method on back-end
+  filterFetcher = (values) => (
+    search({
+      'name': values.name,
+      'stream': values.stream,
+      'parking_lot': values.parking_lot
+    })
+  )
+
   render () {
     return (
       <IndexTable
         {...this.props}
-        fetcher={index}
         toolbar={ <BasicListToolbar {...this.props} fetcher={index} label="Create Camera"/> }
+        filterFields={filterFields()}
+        filterFetcher={this.filterFetcher}
         columns={
           <React.Fragment>
             <th attr="name">Name</th>

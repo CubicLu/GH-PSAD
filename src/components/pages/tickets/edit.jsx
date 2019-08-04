@@ -5,7 +5,7 @@ import { generatePath } from 'react-router';
 import { update, statuses, show } from 'api/parking/tickets';
 import { fields } from 'components/helpers/fields/tickets';
 import connectRecord from 'components/modules/connect_record';
-import { SET_RECORD } from 'actions/agencies/tickets';
+import { SET_RECORD } from 'actions/tickets';
 import CommonForm from 'components/base/forms/common_form';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import waitUntilFetched from 'components/modules/wait_until_fetched';

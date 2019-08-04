@@ -31,4 +31,10 @@ const showFields = () => [
   { name: 'updated_at', label: 'Updated At' }
 ];
 
-export { parkingLot, fields, showFields};
+const filterFields = () => [
+  { name: 'name', label: 'Name' },
+  { name: 'stream', label: 'Stream' },
+  { name: 'parking_lot', label: 'Parking Lot' }
+]
+
+export { parkingLot, fields, showFields, filterFields};

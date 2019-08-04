@@ -57,7 +57,6 @@ class Index extends React.Component {
     return (
       <IndexTable
         {...this.props}
-        fetcher={index}
         toolbar={
           <BasicListToolbar
             {...this.props}

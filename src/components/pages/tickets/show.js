@@ -5,7 +5,7 @@ import {
   CardBody
 } from 'reactstrap';
 import { show } from 'api/parking/tickets';
-import { SET_RECORD } from 'actions/agencies/tickets';
+import { SET_RECORD } from 'actions/tickets';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import ShowForm from 'components/base/forms/show_form';

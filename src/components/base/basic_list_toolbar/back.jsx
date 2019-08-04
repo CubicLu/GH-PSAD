@@ -1,19 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup, ButtonToolbar, Input, InputGroup } from 'reactstrap';
-import { debounce } from 'underscore';
+import { Button, ButtonGroup, ButtonToolbar } from 'reactstrap';
 import { list as selectList } from 'selectors/list';
 import { Link } from 'react-router-dom';
 
 class BasicBackListToolbar extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      filter: ''
-    };
-    this.serverFilter = debounce(this.filter, 1000);
-  }
-
   newRecord = () => {
     const { match, history } = this.props;
     history.push(`${match.path}/new`);
@@ -21,40 +12,20 @@ class BasicBackListToolbar extends React.Component {
 
   refresh = () => {
     const { handleRefresh, fetchFinished, fetcher } = this.props;
-
     handleRefresh();
     fetcher()
-      .then(this.filterSucceed)
-      .catch(this.filterFailed)
+      .then(this.refreshSucceed)
+      .catch((error) => { console.log(error); })
       .finally(fetchFinished);
   };
 
-  filter = event => {
-    const { fetchStarted, fetchFinished, fetcher } = this.props;
-
-    fetchStarted();
-    fetcher({ query: event.target.value })
-      .then(this.filterSucceed)
-      .catch(this.filterFailed)
-      .finally(fetchFinished);
-  };
-
-  filterSucceed = res => {
-    this.props.setList(selectList(res));
-  };
-
-  filterFailed = error => {
-    console.error(error.message);
-  };
-
-  onFilter = event => {
-    this.setState({ filter: event.target.value });
-    event.persist();
-    this.serverFilter(event);
-  };
+  refreshSucceed = (res) => {
+    debugger
+    this.props.setList(selectList(res))
+  }
 
   render () {
-    const { label, backPath } = this.props;
+    const { label, backPath, onClickFilter } = this.props;
     return (
       <ButtonToolbar className="pb-1 float-right">
         <ButtonGroup size="lg" className="mr-1">
@@ -70,9 +41,9 @@ class BasicBackListToolbar extends React.Component {
         <ButtonGroup className="mr-1">
           <Button onClick={this.refresh}>Refresh</Button>
         </ButtonGroup>
-        <InputGroup className="mr-1">
-          <Input value={this.state.filter} onChange={this.onFilter}/>
-        </InputGroup>
+        <ButtonGroup className="mr-1">
+          <Button onClick={onClickFilter}>Filter</Button>
+        </ButtonGroup>
       </ButtonToolbar>
     );
   }
@@ -81,7 +52,8 @@ class BasicBackListToolbar extends React.Component {
 BasicBackListToolbar.propTypes = {
   match: PropTypes.object.isRequired,
   history: PropTypes.array.isRequired,
-  handleRefresh: PropTypes.func.isRequired,
+  handleRefresh: PropTypes.func,
+  onClickFilter: PropTypes.func,
   fetchFinished: PropTypes.func.isRequired,
   fetchStarted: PropTypes.func.isRequired,
   fetcher: PropTypes.func.isRequired,
