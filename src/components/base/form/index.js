@@ -1,59 +1,70 @@
-import { Button, Col, FormGroup, Label } from 'reactstrap';
+import { Button, Col, FormGroup, Label, Row } from 'reactstrap';
 import React from 'react';
 import { labelFor } from 'components/helpers/forms';
-import * as FieldType from 'components/base/common_form/field_types';
+import * as FieldType from './field_types';
 import { Form, Text } from 'informed';
 import { Link } from 'react-router-dom';
-import ImageInput from 'components/base/common_form/fields/image';
-import CustomSelect from 'components/base/common_form/fields/custom_select';
-import CustomMultiSelect from 'components/base/common_form/fields/custom_select/multi';
+import ImageInput from './fields/image';
+import CustomSelect from './fields/custom_select';
+import CustomMultiSelect from './fields/custom_select/multi';
 import { btnSpinner } from 'components/helpers';
+import TextWithLink from './fields/text_with_link';
+import Increaser from './fields/increaser';
 
 const renderField = (field, props = {}) => {
-  if (field.fields) {
-    return renderFields(field.fields, Object.assign(
-      {},
-      props,
-      { prefix: `${field.name}.` }
-      )
-    );
-  }
-
-  const { lSize = 2, iSize = 6, prefix = '' } = props;
-  const fieldName = `${prefix}${field.name}`;
+  const { lSize = 2, iSize = 6 } = props;
 
   return (
     <FormGroup row>
-      <Label for={fieldName} md={lSize}>{labelFor(field)}</Label>
+      <Label for={field.name} md={lSize}>{labelFor(field)}</Label>
       <Col md={iSize}>
-        {field.render ? field.render(field, fieldName, props) : renderInput(field, fieldName, props)}
+        {field.render ? field.render(field, props) : renderInput(field, props)}
       </Col>
     </FormGroup>
   );
 };
 
-const renderInput = (field, fieldName, props = {}) => {
+const renderInput = (field, props = {}) => {
   switch (field.type) {
     case FieldType.MULTISELECT_FIELD:
       const { values = [] } = props;
-      return <CustomMultiSelect fieldName={fieldName} options={field.options} values={values}/>;
+      return <CustomMultiSelect field={field} values={values}/>;
     case FieldType.FILE_FIELD:
-      return <ImageInput className="form-control" field={fieldName}/>;
+      return <ImageInput className="form-control" field={field.name}/>;
     case FieldType.SELECT_FIELD:
-      return <CustomSelect field={fieldName} options={field.options}/>;
+      return <CustomSelect field={field}/>;
+    case FieldType.TEXT_LINK:
+      return <TextWithLink field={field}/>;
+    case FieldType.INCREASER:
+      return <Increaser field={field}/>;
     default:
-      return <Text className="form-control" field={fieldName}/>;
+      return <Text className="form-control" field={field.name}/>;
   }
 };
 
 const renderFields = (fields, props = {}) => (
-  fields.map((field, idx) => {
-    return (
-      <React.Fragment key={idx}>
+  fields.map((field, idx) => (
+    <React.Fragment key={idx}>
+      <FormGroup row>
         {renderField(field, props)}
-      </React.Fragment>);
-  })
+      </FormGroup>
+    </React.Fragment>)
+  )
 );
+
+const renderFieldsWithGrid = (fields, step, cols, props = {}) => {
+  let fieldList = [];
+  let start = 0;
+
+  while (start < fields.length) {
+    const mappedFields = fields.slice(start, start + step)
+      .map((field, idx) => <Col key={idx} md={cols}>{renderField(field, props)}</Col>);
+    fieldList.push((<Row key={start}>{mappedFields}</Row>));
+    start += step;
+  }
+
+  return fieldList;
+};
 
 const renderButtons = (formState, props = {}) => {
   const { backPath, isFetching } = props;
@@ -69,18 +80,20 @@ const renderButtons = (formState, props = {}) => {
 };
 
 const renderForm = (props = {}) => {
-  const { values, isFetching, fields } = props;
+  const { values, isFetching, submitForm, fields } = props;
 
   return (
     <fieldset disabled={isFetching}>
-      <Form initialValues={values} component={({ formState }) => (
-        <React.Fragment>
-          {renderFields(fields)}
-          {renderButtons(formState, props)}
-        </React.Fragment>
-      )}/>
+      <Form onSubmit={submitForm} initialValues={values}>
+        {({ formState }) => (
+          <React.Fragment>
+            {renderFields(fields)}
+            {renderButtons(formState, props)}
+          </React.Fragment>
+        )}
+      </Form>
     </fieldset>
   );
 };
 
-export { renderField, renderFields, renderButtons, renderForm, renderInput };
+export { renderField, renderFields, renderFieldsWithGrid, renderButtons, renderForm, renderInput };

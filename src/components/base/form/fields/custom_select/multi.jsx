@@ -3,12 +3,12 @@ import MultiSelect from 'react-select';
 import { isEmpty } from 'underscore';
 import { Text } from 'informed';
 
-function MultiSelectCustom({ options, values, fieldName }) {
+function MultiSelectCustom({ options, values, name }) {
   const [selectedOptions, setSelectedOptions] = useState({});
 
-  if (isEmpty(selectedOptions) && values[fieldName]) {
+  if (isEmpty(selectedOptions) && values[name]) {
     setSelectedOptions({
-      [fieldName]: values[fieldName].map(element => ({ value: element.id, label: element.email }))
+      [name]: values[name].map(element => ({ value: element.id, label: element.email }))
     })
   }
 
@@ -16,17 +16,17 @@ function MultiSelectCustom({ options, values, fieldName }) {
     <React.Fragment>
       <MultiSelect
         isMulti
-        value={selectedOptions[fieldName]}
+        value={selectedOptions[name]}
         onChange={(selectedOptions) => {
-          setSelectedOptions({ [fieldName]: selectedOptions })
+          setSelectedOptions({ [name]: selectedOptions })
         }}
         options={options}
       />
-      {selectedOptions[fieldName] && selectedOptions[fieldName].map(({ label, value }, i) => {
+      {selectedOptions[name] && selectedOptions[name].map(({ label, value }, i) => {
         return <Text
           key={label}
           hidden
-          field={`${fieldName}[${i}]`}
+          field={`${name}[${i}]`}
           initialValue={value}
         />
       })}

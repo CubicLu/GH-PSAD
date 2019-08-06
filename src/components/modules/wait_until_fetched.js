@@ -1,4 +1,4 @@
 export default function (...promises) {
   Promise.all(promises)
-    .finally(() => this.setState({ isFetching: false }))
+    .finally(() => this.setState({ isSaving: false }))
 }

@@ -1,45 +1,22 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { Card, CardBody, CardHeader, Row } from 'reactstrap';
+import { fields } from 'components/helpers/fields/parking/settings';
 import { Form } from 'informed';
+import { renderFieldsWithGrid } from 'components/base/form';
 
 class Edit extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isFetching: false
-    };
-  }
-
-
-  render() {
-    const { match, record, backPath } = this.props;
-    const { isFetching } = this.state;
+  render () {
+    const { record, isSaving, setFormApi } = this.props;
 
     return (
       <Card>
         <CardHeader>
-
+          Parking Lot Parameters
         </CardHeader>
         <CardBody>
-          <fieldset disabled={isFetching}>
-            <Form>
-              {
-                ({ formState }) => (
-                  <React.Fragment>
-                    {/*<Row>*/}
-                      {/*<Col md={4}>*/}
-                        {/*{renderField({ name: 'avatar', type: 'file' }, fieldProps)}*/}
-                      {/*</Col>*/}
-                    {/*</Row>*/}
-                    {/*<Row>*/}
-                      {/*{this.renderFields()}*/}
-                    {/*</Row>*/}
-                    {/*{renderButtons(formState, { isFetching, backPath })}*/}
-                  </React.Fragment>
-                )
-              }
+          <fieldset disabled={isSaving}>
+            <Form getApi={setFormApi} initialValues={record} >
+              {renderFieldsWithGrid(fields, 2, 6, fieldProps)}
             </Form>
           </fieldset>
         </CardBody>
@@ -47,5 +24,7 @@ class Edit extends React.Component {
     );
   }
 }
-// export default connectRecord('parking/setting', SET_RECORD, resourceFetcher(show), Edit);
-export default connect()(Edit);
+
+const fieldProps = { lSize: 6 };
+
+export default Edit;

@@ -5,7 +5,7 @@ class New extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isFetching: false,
+      isSaving: false,
       errors: {}
     }
   }

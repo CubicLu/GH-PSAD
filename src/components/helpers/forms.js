@@ -1,15 +1,23 @@
 import { camelize } from './index';
+import { last } from 'underscore';
 
 const labelFor = field => {
   if (field.label) return withAsterisk(field.mandatory, field.label);
 
-  let label;
-  const idPostfixMatch = field.name.match(/_id/);
+  let label = field.name;
+
+  const isNestedField = label.match(/\./);
+
+  if (isNestedField) {
+    label = last(field.name.split('.'));
+  }
+
+  const idPostfixMatch = label.match(/_id/);
 
   if (idPostfixMatch) {
-    label = camelize(field.name.slice(0, idPostfixMatch.index));
+    label = camelize(label.slice(0, idPostfixMatch.index));
   } else {
-    label = camelize(field.name);
+    label = camelize(label);
   }
 
   return withAsterisk(field.mandatory, label);
