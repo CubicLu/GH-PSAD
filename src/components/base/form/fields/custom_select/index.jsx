@@ -3,6 +3,7 @@ import React from 'react';
 
 const CustomSelect = props => {
   const { field } = props;
+  const { options = [] } = field;
 
   return (
     <Select className="form-control" field={field.name}  type="select" >

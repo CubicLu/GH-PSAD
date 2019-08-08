@@ -1,21 +1,19 @@
 import { search } from 'api/admins';
-import pluralize from 'pluralize';
 
-const searchAdminByRoleName = (role_names) => {
+const searchAdminByRoleName = roleNames => new Promise((resolve, reject) => {
+  search(roleNames)
+    .then(({ data }) => {
+      let container = {};
 
- return new Promise((resolve, reject) => {
-    search({role_names})
-      .then(({data}) => {
-        let container = {}
-        data.forEach(element => {
-          container[pluralize(element.role.name)] = container[pluralize(element.role.name)] || []
-          container[pluralize(element.role.name)].push(element)
-        })
+      data.forEach(element => {
+        container[element.role.name] = container[element.role.name] ?
+          container[element.role.name].push(element) :
+          [element];
+      });
 
-        resolve(container)
-      })
-    .catch((err) => reject(err))
-  })
-}
+      resolve(container)
+    })
+    .catch(err => reject(err));
+});
 
-export default searchAdminByRoleName
+export default searchAdminByRoleName;

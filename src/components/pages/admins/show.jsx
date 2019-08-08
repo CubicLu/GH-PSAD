@@ -8,12 +8,9 @@ import ShowForm from 'components/base/show_form';
 import { showFields } from 'components/helpers/fields/admins';
 
 class Show extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   renderRecord() {
     const { record, backPath, match } = this.props;
+
     return (<Card>
       <CardHeader>{record.email}</CardHeader>
       <CardBody>
@@ -21,7 +18,7 @@ class Show extends React.Component {
             fields={showFields()}
             values={record}
             backPath={backPath}
-            editURL={record.actions.update ? match.url : ''}
+            editURL={match.url}
           />
       </CardBody>
     </Card>);

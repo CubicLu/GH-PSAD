@@ -16,7 +16,7 @@ class Edit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isFetching: true,
+      isSaving: true,
       statuses: [],
       officers: []
     }
@@ -62,7 +62,7 @@ class Edit extends React.Component {
             backPath={backPathWithId}
             values={this.values()}
             fields={fields(this.state.officers, this.state.statuses)}
-            isFetching={this.state.isFetching}
+            isFetching={this.state.isSaving}
             submitForm={updateRecord.bind(this, update, backPathWithId)}/>
         </CardBody>
       </Card>

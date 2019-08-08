@@ -1,7 +1,7 @@
 import faker from 'faker'
-import * as FieldType from 'components/base/common_form/field_types';
+import * as FieldType from 'components/base/form/field_types';
 
-const fields = (officers, managers, town_managers) => [
+const fields = (officers = [], managers = [], town_managers = []) => [
   { name: 'avatar', label: 'Image', type: FieldType.FILE_FIELD},
   { name: 'email', label: 'Email *' },
   { name: 'name', label: 'Name *' },

@@ -16,7 +16,7 @@ class New extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isFetching: true,
+      isSaving: true,
       roles: []
     }
   }
@@ -38,7 +38,7 @@ class New extends React.Component {
             values={exampleData}
             {...this.props}
             fields={fields(this.state.roles)}
-            isFetching={this.state.isFetching}
+            isFetching={this.state.isSaving}
             submitForm={saveRecord.bind(this, create)}/>
         </CardBody>
       </Card>

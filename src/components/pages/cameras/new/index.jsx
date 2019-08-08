@@ -14,7 +14,7 @@ class New extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isFetching: false
+      isSaving: false
     }
   }
 
@@ -27,7 +27,7 @@ class New extends React.Component {
           <CommonForm
             {...this.props}
             fields={fields()}
-            isFetching={this.state.isFetching}
+            isFetching={this.state.isSaving}
             submitForm={saveRecord.bind(this, create)}/>
         </CardBody>
       </Card>

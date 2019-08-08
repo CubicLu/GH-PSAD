@@ -1,4 +1,4 @@
-import * as FieldType from 'components/base/common_form/field_types';
+import * as FieldType from 'components/base/form/field_types';
 
 const fields = (officers, statuses) => [
   { name: 'admin_id', label: 'Officer *', type: FieldType.SELECT_FIELD,  options: officers.map(officer => { return {value: officer.id, label: officer.email}})  },
@@ -15,6 +15,6 @@ const showFields = (officers, statuses) => [
   { name: 'agency.phone', label: 'Agency Phone'},
   { name: 'officer.name', label: 'Officer Name'},
   { name: 'officer.email', label: 'Officer Email'},
-]
+];
 
 export { fields, showFields };

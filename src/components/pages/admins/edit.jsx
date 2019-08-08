@@ -12,13 +12,13 @@ import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
 import PasswordConfirmationModal from 'components/helpers/modals/password_confirmation';
 import { fromJson as showErrors } from 'components/helpers/errors';
-import * as FieldType from 'components/base/common_form/field_types';
+import * as FieldType from 'components/base/form/field_types';
 
 class Edit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isFetching: true,
+      isSaving: true,
       roles: [],
       modal: false,
       formStateValues: {},
@@ -92,7 +92,7 @@ class Edit extends React.Component {
               backPath={path}
               values={this.values()}
               fields={this.fieldsForCommonForm()}
-              isFetching={this.state.isFetching}
+              isFetching={this.state.isSaving}
               submitForm={this.submitForm}/>
           </CardBody>
         </Card>
