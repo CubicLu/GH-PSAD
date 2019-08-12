@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 import { Button, Input } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
 import { setErrorsMessages } from 'components/helpers/messages';
-import { handleInputChange } from 'components/helpers/handle_input_change';
 import CardLayout from 'components/base/layout/card';
 import AuthLayout from 'components/base/layout/auth';
 
@@ -60,7 +59,7 @@ class Login extends React.Component {
                 type="email"
                 value={this.state.username}
                 name="username"
-                onChange={handleInputChange.bind(this)}
+                onChange={e => this.setState({ [e.target.name]: e.target.value })}
                 placeholder="Email address"
                 required
                 autoFocus
@@ -74,7 +73,7 @@ class Login extends React.Component {
                 type="password"
                 value={this.state.password}
                 name="password"
-                onChange={handleInputChange.bind(this)}
+                onChange={e => this.setState({ [e.target.name]: e.target.value })}
                 placeholder="Password"
                 required
               />

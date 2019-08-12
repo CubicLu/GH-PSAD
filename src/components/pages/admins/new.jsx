@@ -13,13 +13,11 @@ import saveRecord from 'components/modules/form_actions/save_record';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
 
 class New extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      isFetching: true,
-      roles: []
-    };
+  state = {
+    isSaving: true,
+    roles: []
   }
+
 
   componentDidMount () {
     waitUntilFetched.call(this,
@@ -38,8 +36,8 @@ class New extends React.Component {
             values={exampleData}
             {...this.props}
             fields={fields(this.state.roles)}
-            isFetching={this.state.isFetching}
-            submitForm={saveRecord.bind(this, create)} />
+            isFetching={this.state.isSaving}
+            submitForm={saveRecord.bind(this, create)}/>
         </CardBody>
       </Card>
     );

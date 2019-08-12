@@ -8,22 +8,17 @@ import connectRecord from 'components/modules/connect_record';
 import { SET_RECORD } from 'actions/agencies';
 import CommonForm from 'components/base/forms/common_form';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
-import waitUntilFetched from 'components/modules/wait_until_fetched';
-import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
 import { fromJson as showErrors } from 'components/helpers/errors';
 
 class Edit extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      isFetching: true,
-      dropdowns: {
-        managers: [],
-        townManagers: [],
-        officers: []
-      }
-    };
+  state = {
+    isSaving: true,
+    dropdowns: {
+      managers: [],
+      townManagers: [],
+      officers: []
+    }
   }
 
   componentWillReceiveProps (nextProps, nextContext) {
@@ -55,7 +50,7 @@ class Edit extends React.Component {
 
     return (
       <Card>
-        <CardHeader>Edit Agencies</CardHeader>
+        <CardHeader>Edit Agency</CardHeader>
         <CardBody>
           {showErrors(this.state.errors)}
           <CommonForm
@@ -63,7 +58,7 @@ class Edit extends React.Component {
             backPath={path}
             values={this.values()}
             fields={fields(officers, managers, townManagers)}
-            isFetching={this.state.isFetching}
+            isFetching={this.state.isSaving}
             submitForm={updateRecord.bind(this, update, path)}/>
         </CardBody>
       </Card>

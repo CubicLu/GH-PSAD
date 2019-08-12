@@ -16,12 +16,9 @@ import React from 'react';
  */
 const withFetching = (Component, fetchData) => {
   return class extends React.Component {
-    constructor (props) {
-      super(props);
-      this.state = {
-        isFetching: true
-      };
-    }
+    state = {
+      isFetching: true
+    };
 
     componentWillUnmount () {
       this._isMounted = false;

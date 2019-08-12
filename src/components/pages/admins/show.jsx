@@ -11,6 +11,7 @@ import { showFields } from 'components/helpers/fields/admins';
 class Show extends React.Component {
   renderRecord () {
     const { record, backPath, match } = this.props;
+
     return (<Card>
       <CardHeader>{record.email}</CardHeader>
       <CardBody>

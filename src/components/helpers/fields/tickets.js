@@ -15,7 +15,7 @@ const showFields = (officers, statuses) => [
   { name: 'agency.phone', label: 'Agency Phone'},
   { name: 'officer.name', label: 'Officer Name'},
   { name: 'officer.email', label: 'Officer Email'}
-]
+];
 
 const filterFields = (officers, statuses) => [
   { name: 'tickets_id', label: 'Ticket ID'},

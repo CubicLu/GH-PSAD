@@ -20,7 +20,7 @@ class Edit extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      isFetching: true,
+      isSaving: true,
       roles: [],
       modal: false,
       formStateValues: {},
@@ -93,7 +93,7 @@ class Edit extends React.Component {
               backPath={path}
               values={this.values()}
               fields={this.fieldsForCommonForm()}
-              isFetching={this.state.isFetching}
+              isFetching={this.state.isSaving}
               submitForm={this.submitForm}/>
           </CardBody>
         </Card>

@@ -11,13 +11,13 @@ import { NavLink } from 'react-router-dom';
 
 function Header () {
   return (
-    <Navbar color='light' light expand className='mb-2'>
-      <NavbarBrand>
+    <Navbar color='primary' light expand className='mb-2'>
+      <NavbarBrand className='text-light'>
         LOGO
       </NavbarBrand>
       <Nav className='ml-auto' navbar>
         <UncontrolledDropdown nav inNavbar>
-          <DropdownToggle nav caret>
+          <DropdownToggle nav caret className="text-light">
             Admin Profile
           </DropdownToggle>
           <DropdownMenu right>

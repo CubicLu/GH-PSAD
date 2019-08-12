@@ -1,16 +1,15 @@
+import { Button, Col, FormGroup, Label, Row } from 'reactstrap';
 import React from 'react';
-import PropTypes from 'prop-types';
+import { labelFor } from 'components/helpers/forms';
+import * as FieldType from './field_types';
 import { Form, Text } from 'informed';
-import { Button, Col, FormGroup, Label } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import ImageInput from './fields/image';
+import CustomSelect from './fields/custom_select';
+import CustomMultiSelect from './fields/custom_select/multi';
 import { btnSpinner } from 'components/helpers';
-import {
-  CustomSelect,
-  CustomMultiSelect,
-  ImageInput,
-  Divider,
-  FieldType
-} from 'components/helpers/form_fields';
+import TextWithLink from './fields/text_with_link';
+import Increaser from './fields/increaser';
 
 const renderField = (field, props = {}) => {
   const { lSize = 2, iSize = 6 } = props;
@@ -25,10 +24,10 @@ const renderField = (field, props = {}) => {
   );
 };
 
-
 const renderInput = (field, props = {}) => {
   switch (field.type) {
     case FieldType.MULTISELECT_FIELD:
+      const { values = [] } = props;
       return <CustomMultiSelect field={field} values={values}/>;
     case FieldType.FILE_FIELD:
       return <ImageInput className="form-control" field={field.name}/>;
@@ -43,7 +42,6 @@ const renderInput = (field, props = {}) => {
   }
 };
 
-
 const renderFields = (fields, props = {}) => (
   fields.map((field, idx) => (
     <React.Fragment key={idx}>
@@ -53,7 +51,6 @@ const renderFields = (fields, props = {}) => (
     </React.Fragment>)
   )
 );
-
 
 const renderFieldsWithGrid = (fields, step, cols, props = {}) => {
   let fieldList = [];
@@ -69,7 +66,6 @@ const renderFieldsWithGrid = (fields, step, cols, props = {}) => {
   return fieldList;
 };
 
-
 const renderButtons = (formState, props = {}) => {
   const { backPath, isFetching } = props;
 
@@ -82,7 +78,6 @@ const renderButtons = (formState, props = {}) => {
     </React.Fragment>
   );
 };
-
 
 const renderForm = (props = {}) => {
   const { values, isFetching, submitForm, fields } = props;

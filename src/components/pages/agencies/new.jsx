@@ -16,7 +16,7 @@ class New extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      isFetching: true,
+      isSaving: true,
       dropdowns: {
         townManagers: [],
         managers: [],
@@ -45,7 +45,7 @@ class New extends React.Component {
             {...this.props}
             values={exampleData}
             fields={fields(officers, managers, townManagers)}
-            isFetching={this.state.isFetching}
+            isFetching={this.state.isSaving}
             submitForm={saveRecord.bind(this, create)} />
         </CardBody>
       </Card>

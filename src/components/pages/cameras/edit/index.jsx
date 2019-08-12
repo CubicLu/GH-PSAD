@@ -12,12 +12,9 @@ import updateRecord from 'components/modules/form_actions/update_record';
 import { fromJson as showErrors } from 'components/helpers/errors';
 
 class Edit extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      isFetching: false
-    };
-  }
+  state = {
+    isSaving: false
+  };
 
   values = () => {
     const { record } = this.props;
@@ -29,7 +26,6 @@ class Edit extends React.Component {
   renderRecord () {
     const { backPath, record } = this.props;
     const path = generatePath(backPath, { id: record.id });
-
     return (
       <Card>
         <CardHeader>Edit Camera</CardHeader>
@@ -40,7 +36,7 @@ class Edit extends React.Component {
             backPath={path}
             values={this.values()}
             fields={fields()}
-            isFetching={this.state.isFetching}
+            isFetching={this.state.isSaving}
             submitForm={updateRecord.bind(this, update, path)}/>
         </CardBody>
       </Card>

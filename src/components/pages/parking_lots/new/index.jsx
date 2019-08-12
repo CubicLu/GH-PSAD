@@ -5,22 +5,12 @@ class New extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      isFetching: false,
+      isSaving: false,
       errors: {}
     };
   }
 
-  // saveRecord = event => {
-  //   event.preventDefault();
-  //
-  //   const { name, stream, login, password, parking_lot_id } = this.state;
-  //
-  //   this.setState({ isFetching: true });
-  //   create({ name, stream, login, password, parking_lot_id })
-  //     .then(this.handleCreate);
-  // };
-
-  render () {
+  render() {
     return null;
   }
 }
