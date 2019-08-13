@@ -5,6 +5,8 @@ import AdminReducers from './admins';
 import AgencyReducers from './agencies';
 import CameraReducers from './cameras';
 import ParkingLotReducers from './parking_lots';
+import ServerErrorReducers from './server_errors';
+import VoiReducers from './voi';
 
 const reducers = combineReducers({
   user: UserReducers,
@@ -12,7 +14,9 @@ const reducers = combineReducers({
   agency: AgencyReducers,
   ticket: TicketReducers,
   camera: CameraReducers,
-  parking_lot: ParkingLotReducers
+  parking_lot: ParkingLotReducers,
+  voi: VoiReducers,
+  server: ServerErrorReducers
 });
 
 export default reducers;

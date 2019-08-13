@@ -12,7 +12,7 @@ class Pagination extends React.Component {
       const pageNumber = i + 1;
 
       pages.push(
-        <PaginationItem active={page == pageNumber} key={i}>
+        <PaginationItem active={page === pageNumber} key={i}>
           <PaginationLink onClick={() => this.open(pageNumber)}>
             {pageNumber}
           </PaginationLink>

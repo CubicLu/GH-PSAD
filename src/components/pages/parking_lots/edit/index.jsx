@@ -8,9 +8,10 @@ import { SET_RECORD } from 'actions/parking_lots';
 import { show, update } from 'api/parking_lots';
 import { NavLink } from 'react-router-dom';
 import updateRecord from 'components/modules/form_actions/update_record';
-import { renderFieldsWithGrid, renderButtons, renderField } from 'components/base/form';
+import { renderFieldsWithGrid, renderField } from 'components/base/form';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
-import SettingEdit from '../settings/edit';
+import SettingSection from './setting_section';
+import VoiSection from './voi_section';
 import { fromJson as showErrors } from 'components/helpers/errors';
 
 class Edit extends React.Component {
@@ -40,7 +41,7 @@ class Edit extends React.Component {
   }
 
   renderHeader() {
-    const { match, record } = this.props;
+    const { match } = this.props;
     const { isSaving } = this.state;
 
     return (<Row>
@@ -48,9 +49,6 @@ class Edit extends React.Component {
         <Button color="success" outline onClick={this.save}>
           {isSaving ? btnSpinner() : 'Save'}
         </Button>
-      </Col>
-      <Col md={2} className="align-self-center">
-        Edit {record.name}
       </Col>
       <Col md={8}>
         <Nav pills className="float-right">
@@ -76,14 +74,12 @@ class Edit extends React.Component {
     return (
       <fieldset disabled={isSaving}>
         <Form getApi={this.setFormApi} initialValues={this.values()}>
-          <React.Fragment>
-            <Row>
-              <Col md={6}>
-                {renderField({ name: 'image', type: 'file' }, fieldProps)}
-              </Col>
-            </Row>
-            {this.renderFields()}
-          </React.Fragment>
+          <Row>
+            <Col md={6}>
+              {renderField({ name: 'avatar', label: 'Image', type: 'file' }, fieldProps)}
+            </Col>
+          </Row>
+          {this.renderFields()}
         </Form>
       </fieldset>
     );
@@ -105,7 +101,12 @@ class Edit extends React.Component {
 
   renderSetting() {
     const { record } = this.props;
-    return <SettingEdit setFormApi={this.setSettingFormApi} record={record.setting} />
+    return <SettingSection setFormApi={this.setSettingFormApi} record={record.setting}/>
+  }
+
+  renderVoi() {
+    const { record } = this.props;
+    return <VoiSection match={{ params: { nestedParams: { lot_id: record.id } } }}/>
   }
 
   render() {
@@ -114,6 +115,8 @@ class Edit extends React.Component {
         {this.renderRecord()}
         <div className="mt-1"/>
         {this.renderSetting()}
+        <div className="mt-1"/>
+        {this.renderVoi()}
       </React.Fragment>
     );
   }
@@ -123,12 +126,16 @@ const fieldProps = { lSize: 6 };
 
 const showWithDropdowns = (wrapper, condition, callback) => {
   const { params } = wrapper.props.match;
+  let promises = [];
 
-  const promise1 = show(params).then(callback);
-  const promise2 = searchAdminByRoleName(['parking_admin', 'town_manager'])
-    .then(result => wrapper.setState({ dropdowns: { ...result } }));
+  if (condition) {
+    promises.push(show(params).then(callback));
+  }
 
-  Promise.all([promise1, promise2])
+  promises.push(searchAdminByRoleName(['parking_admin', 'town_manager'])
+    .then(result => wrapper.setState({ dropdowns: { ...result } })));
+
+  Promise.all(promises)
     .catch(err => console.error(err))
     .finally(wrapper.fetchFinished);
 };

@@ -1,5 +1,5 @@
 /*eslint default-case: "off"*/
-import {INIT, UserActions} from "actions";
+import { INIT, UserActions } from 'actions';
 
 const persistTokenMiddleware = _ => next => action => {
   switch (action.type) {
@@ -13,10 +13,10 @@ const persistTokenMiddleware = _ => next => action => {
         return next(action);
       }
     case UserActions.SET_TOKEN:
-      localStorage.setItem("TOKEN", action.payload);
+      localStorage.setItem('TOKEN', action.payload);
       break;
     case UserActions.CLEAR_TOKEN:
-      localStorage.removeItem("TOKEN");
+      localStorage.removeItem('TOKEN');
   }
 
   return next(action);
