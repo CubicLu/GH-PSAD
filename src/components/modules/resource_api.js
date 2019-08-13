@@ -1,34 +1,38 @@
 import fetchApi from 'components/modules/fetch_api';
+import { generatePath } from 'react-router';
 
 const resourceApi = resources => {
   const index = (params = {}) => {
-    const { page, perPage, query } = params;
-    return fetchApi(`dashboard/${resources}`, { method: 'GET', params: { page, perPage, ...query } });
+    const { page, perPage, query, nestedParams = {} } = params;
+    return fetchApi(
+      generatePath(`dashboard/${resources}`, nestedParams),
+      { method: 'GET', params: { page, perPage, ...query } }
+    );
   };
 
   const show = (params = {}) => {
-    const { id } = params;
-    return fetchApi(`dashboard/${resources}/${id}`, { method: 'GET' });
+    const { id, nestedParams = {} } = params;
+    return fetchApi(generatePath(`dashboard/${resources}/${id}`, nestedParams), { method: 'GET' });
   };
 
   const update = (params = {}) => {
-    const { id, data } = params;
-    return fetchApi(`dashboard/${resources}/${id}`, {
+    const { id, data, nestedParams = {} } = params;
+    return fetchApi(generatePath(`dashboard/${resources}/${id}`, nestedParams), {
       method: 'PUT',
       data
     })
   };
 
   const destroy = (params = {}) => {
-    const { id } = params;
-    return fetchApi(`dashboard/${resources}/${id}`, {
+    const { id, nestedParams = {} } = params;
+    return fetchApi(generatePath(`dashboard/${resources}/${id}`, nestedParams), {
       method: 'DELETE'
     })
   };
 
   const create = (params = {}) => {
-    const { data } = params;
-    return fetchApi(`dashboard/${resources}`, {
+    const { data, nestedParams = {} } = params;
+    return fetchApi(generatePath(`dashboard/${resources}`, nestedParams), {
       method: 'POST',
       data
     })

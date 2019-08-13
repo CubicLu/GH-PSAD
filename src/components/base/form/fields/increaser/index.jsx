@@ -3,18 +3,6 @@ import { useField } from 'informed';
 import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { isUndefined } from 'underscore';
 
-const validate = (fieldApi, min, max, renderValue, value) => {
-  if (fieldApi.getError()) return undefined;
-
-  if (!isUndefined(min) && value < min) {
-    fieldApi.setError(`${renderValue(value)} is less than ${renderValue(min)}`);
-  }
-
-  if (!isUndefined(max) && value > max) {
-    fieldApi.setError(`${renderValue(value)} is more than ${renderValue(max)}`);
-  }
-};
-
 const Increaser = props => {
   const { field } = props;
   const { fieldState, fieldApi } = useField({ field: field.name });
@@ -22,18 +10,38 @@ const Increaser = props => {
   const { setValue } = fieldApi;
   const { renderValue, step, min, max } = field;
 
-  validate(fieldApi, min, max, renderValue, value);
+  const onIncrease = () => {
+    const newValue = value + step;
+
+    if (!isUndefined(max) &&newValue > max) {
+      fieldApi.setError(`cannot be more than ${renderValue(max)}`);
+    } else {
+      fieldApi.setError(undefined);
+      setValue(newValue)
+    }
+  };
+
+  const onDecrease = () => {
+    const newValue = value - step;
+
+    if (!isUndefined(min) && newValue < min) {
+      fieldApi.setError(`cannot be less than ${renderValue(min)}`);
+    } else {
+      fieldApi.setError(undefined);
+      setValue(newValue);
+    }
+  };
 
   return (
     <InputGroup>
       <InputGroupAddon addonType="prepend">
-        <Button color="secondary" outline onClick={() => setValue(value - step)}>
+        <Button color="secondary" outline onClick={onDecrease}>
           -
         </Button>
       </InputGroupAddon>
       <Input className="text-center" value={renderValue(value)} readOnly plaintext/>
       <InputGroupAddon addonType="append">
-        <Button color="secondary" outline onClick={() => setValue(value + step)}>
+        <Button color="secondary" outline onClick={onIncrease}>
           +
         </Button>
       </InputGroupAddon>

@@ -1,5 +1,3 @@
-import React from 'react';
-
 const fields = (managers = [], admins = []) => (
   [
     { name: 'name' },
@@ -27,16 +25,12 @@ const fields = (managers = [], admins = []) => (
       props: { to: '/suspend', value: 'Suspend' },
       style: { maxWidth: 'inherit', display: 'inline' },
       label: 'Current status'
-    }
+    },
+    { name: 'location.city' },
+    { name: 'location.street' },
+    { name: 'location.country' },
+    { name: 'location.building' }
   ]
 );
-
-// TODO: move to separate helper
-const location = [
-  { name: 'location.city' },
-  { name: 'location.street' },
-  { name: 'location.country' },
-  { name: 'location.building' }
-];
 
 export { fields };

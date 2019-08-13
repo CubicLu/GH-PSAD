@@ -1,5 +1,5 @@
-import {UserActions} from 'actions';
-import {combineReducers} from 'redux';
+import { UserActions } from 'actions';
+import { combineReducers } from 'redux';
 
 function auth(state = { isAuthorized: false }, action) {
   switch (action.type) {
