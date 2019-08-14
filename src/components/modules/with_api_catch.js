@@ -13,6 +13,8 @@ const withApiCatch = promise => {
       case 404:
         store.dispatch(notFound(error));
         break;
+      case 422:
+        throw error;
       case 500:
         store.dispatch(internal(error));
         break;
