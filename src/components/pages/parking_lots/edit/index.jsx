@@ -106,7 +106,7 @@ class Edit extends React.Component {
 
   renderVoi() {
     const { record } = this.props;
-    return <VoiSection match={{ params: { nestedParams: { lot_id: record.id } } }}/>
+    return <VoiSection records={record.vehicle_rules}/>
   }
 
   render() {
