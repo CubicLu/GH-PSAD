@@ -39,7 +39,7 @@ class IndexTable extends React.Component {
   setQuery = (sortedAttr) => {
     const { paginationQuery } = this.props
     return sortedAttr ?
-        Object.assign({}, paginationQuery , { 'order[keyword]': sortedAttr.keyword, 'order[asc]': sortedAttr.asc })
+        Object.assign({}, paginationQuery , { 'order[keyword]': sortedAttr.keyword, 'order[direction]': sortedAttr.asc ? 'asc' : 'desc' })
         : paginationQuery
   }
 

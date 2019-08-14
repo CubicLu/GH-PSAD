@@ -28,14 +28,14 @@ class Index extends React.Component {
   };
 
   // TODO search method on back-end
-  filterFetcher = (values, query) => (
-    index({
-      query: { ...query },
-      name: values.name,
-      stream: values.stream,
-      parking_lot: values.parking_lot
+  filterFetcher = (values, query) => {
+    return index({
+      query: {
+        parking_lot: values.parking_lot,
+        ...query
+      },
     })
-  )
+  }
 
   render () {
     return (

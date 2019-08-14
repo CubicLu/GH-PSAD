@@ -33,7 +33,7 @@ const showFields = () => [
 
 const exampleData = () => process.env.NODE_ENV !== 'production' ? {
   'email': faker.internet.email(),
-  'name': 'My Best Agency',
+  'name': faker.company.companyName(),
   'phone': '+13583767678',
   'status': 'suspended',
   'location.zip': faker.address.zipCode(),

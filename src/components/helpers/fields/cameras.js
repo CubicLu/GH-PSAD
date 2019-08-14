@@ -33,8 +33,6 @@ const showFields = () => [
 ];
 
 const filterFields = () => [
-  { name: 'name', label: 'Name' },
-  { name: 'stream', label: 'Stream' },
   { name: 'parking_lot', label: 'Parking Lot' }
 ]
 
