@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardHeader, CardBody } from 'reactstrap';
+import { Button, Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
 import { generatePath } from 'react-router';
 import { show, update } from 'api/admins';
 import { fields } from 'components/helpers/fields/admins';
 import connectRecord from 'components/modules/connect_record';
 import { SET_RECORD } from 'actions/admins';
-import CommonForm from 'components/base/forms/common_form';
+import { CommonForm } from 'components/base/forms';
 import { search as dropdownsSearch } from 'api/dropdowns';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
 import resourceFetcher from 'components/modules/resource_fetcher';
@@ -14,30 +14,45 @@ import updateRecord from 'components/modules/form_actions/update_record';
 import PasswordConfirmationModal from 'components/helpers/modals/password_confirmation';
 import { fromJson as showErrors } from 'components/helpers/errors';
 import { FieldType } from 'components/helpers/form_fields';
-import { cloneDeep } from 'lodash';
+import { renderFieldsWithGrid, renderField } from 'components/base/forms/common_form';
+import { btnSpinner } from 'components/helpers';
+import { NavLink } from 'react-router-dom';
+import { Form } from 'informed';
+import { isEmpty } from 'underscore';
 
 class Edit extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      isSaving: true,
+  state = {
+    isSaving: false,
+    dropdowns: {
       roles: [],
-      modal: false,
-      formStateValues: {},
-      password_verification: ''
-    };
+    },
+    modal: false,
+    password_verification: ''
   }
 
-  componentDidMount () {
-    waitUntilFetched.call(this,
-      dropdownsSearch('role_id')
-        .then(response => this.setState({ roles: response.data }))
-    );
+  save = () => {
+    const { values } = this.formApi.getState();
+
+    if (document.querySelector('input[name="password"]').value) {
+      this.toggleModal();
+    } else {
+      const { backPath, record } = this.props;
+      const path = generatePath(backPath, { id: record.id });
+      updateRecord.bind(this, update, path)(values);
+    }
+  };
+
+  renderFields() {
+    const { officer, manager, townManager } = this.state.dropdowns;
+    return renderFieldsWithGrid(this.fieldsForCommonForm(), 2, 6, fieldProps)
   }
 
-  componentWillReceiveProps (nextProps, nextContext) {
-    const { record } = nextProps;
-    if (record) this.setState(record);
+  fieldsForCommonForm = () => {
+    const fieldsSet = fields(this.state.dropdowns.roles);
+    fieldsSet.push({
+      name: 'password', label: 'New Password', type: FieldType.PASSWORD_FIELD
+    });
+    return fieldsSet;
   }
 
   values = () => {
@@ -47,63 +62,97 @@ class Edit extends React.Component {
     });
   };
 
-  toggleModal = () => {
-    this.setState(prevState => ({
-      modal: !prevState.modal
-    }));
+
+  renderHeader() {
+    const { match, record } = this.props;
+    const { isSaving } = this.state;
+
+    return (<Row>
+      <Col md={2}>
+        <Button color="success" outline onClick={this.save}>
+          {isSaving ? btnSpinner() : 'Save'}
+        </Button>
+      </Col>
+      <Col md={2} className="align-self-center">
+        Edit {record ? record.username : '' }
+      </Col>
+      <Col md={8}>
+        <Nav pills className="float-right">
+          <NavLink to={match.url} className="nav-link">Information</NavLink>
+        </Nav>
+      </Col>
+    </Row>);
   }
 
-  fieldsForCommonForm = () => {
-    const fieldsSet = fields(this.state.roles);
-    fieldsSet.push({
-      name: 'password', label: 'New Password', type: FieldType.PASSWORD_FIELD
-    });
-    return fieldsSet;
+  setFormApi = formApi => {
+    this.formApi = formApi;
+  };
+
+
+ renderForm() {
+    const { isSaving } = this.state;
+
+    return (
+      <fieldset disabled={isSaving}>
+        <Form getApi={this.setFormApi} initialValues={this.values()}>
+          <React.Fragment>
+            {this.renderFields()}
+          </React.Fragment>
+        </Form>
+      </fieldset>
+    );
   }
 
-  submitForm = (values) => {
+  handlePasswordSuccess = () => {
+    const { values } = this.formApi.getState();
     const { backPath, record } = this.props;
     const path = generatePath(backPath, { id: record.id });
-    if (document.querySelector('input[name="password"]').value) {
-      this.toggleModal();
-      this.setState({
-        formStateValues: cloneDeep(values)
-      });
-    } else {
-      updateRecord.call(this, update, path, values);
-    }
+    updateRecord.call(this, update, path, values);
   }
 
-  renderRecord () {
-    const { backPath, record } = this.props;
-    const path = generatePath(backPath, { id: record.id });
+  renderRecord() {
     return (
       <React.Fragment>
         <PasswordConfirmationModal
           toggleModal={this.toggleModal}
           isOpen={this.state.modal}
-          handleSuccess={() => { updateRecord.call(this, update, path, this.state.formStateValues); }}
+          handleSuccess={this.handlePasswordSuccess}
         />
+
         <Card>
-          <CardHeader>Edit Admin</CardHeader>
+          <CardHeader>
+            {this.renderHeader()}
+          </CardHeader>
           <CardBody>
             {showErrors(this.state.errors)}
-            <CommonForm
-              {...this.props}
-              backPath={path}
-              values={this.values()}
-              fields={this.fieldsForCommonForm()}
-              isFetching={this.state.isSaving}
-              submitForm={this.submitForm}/>
+            {this.renderForm()}
           </CardBody>
         </Card>
       </React.Fragment>
     );
   }
 
-  render () {
-    return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
+  toggleModal = () => {
+    this.setState(prevState => ({
+      modal: !prevState.modal
+    }));
   }
+
+  componentDidMount () {
+    dropdownsSearch('role_id', { admin_id: 1 })
+      .then(response => this.setState({ dropdowns: { roles: response.data } }))
+
+  }
+
+  render() {
+    const { role_id } = this.state.dropdowns
+    return this.props.isFetching || !isEmpty(role_id) ? <div>Loading data...</div> : (
+      <React.Fragment>
+        {this.renderRecord()}
+      </React.Fragment>
+    );
+  }
+
 }
 
 Edit.propTypes = {
@@ -115,5 +164,7 @@ Edit.propTypes = {
     role: PropTypes.object.isRequired
   })
 };
+
+const fieldProps = { lSize: 6 };
 
 export default connectRecord('admin', SET_RECORD, resourceFetcher(show), Edit);

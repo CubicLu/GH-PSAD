@@ -1,16 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Form, Text } from 'informed';
-import { Button, Col, FormGroup, Label } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import { btnSpinner } from 'components/helpers';
+import { Button, Col, FormGroup, Label, Row } from 'reactstrap';
+import { labelFor } from 'components/helpers/forms';
 import {
+  ImageInput,
   CustomSelect,
   CustomMultiSelect,
-  ImageInput,
-  Divider,
+  TextWithLink,
+  Increaser,
   FieldType
-} from 'components/helpers/form_fields';
+} from 'components/helpers/form_fields'
+import { Form, Text } from 'informed';
+import { Link } from 'react-router-dom';
+import { btnSpinner } from 'components/helpers';
+
 
 const renderField = (field, props = {}) => {
   const { lSize = 2, iSize = 6 } = props;
@@ -29,14 +31,14 @@ const renderField = (field, props = {}) => {
 const renderInput = (field, props = {}) => {
   switch (field.type) {
     case FieldType.MULTISELECT_FIELD:
-      return <CustomMultiSelect field={field} values={values}/>;
+      return <CustomMultiSelect field={field} values={props.values}/>;
     case FieldType.FILE_FIELD:
       return <ImageInput className="form-control" field={field.name}/>;
     case FieldType.SELECT_FIELD:
       return <CustomSelect field={field}/>;
-    case FieldType.TEXT_LINK:
+    case FieldType.TEXT_LINK_FIELD:
       return <TextWithLink field={field}/>;
-    case FieldType.INCREASER:
+    case FieldType.INCREASER_FIELD:
       return <Increaser field={field}/>;
     default:
       return <Text className="form-control" field={field.name}/>;

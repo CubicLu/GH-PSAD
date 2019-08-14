@@ -27,14 +27,17 @@ class Index extends React.Component {
     });
   };
 
-  filterFetcher = (values) => (
-    search({
-      'query[agencies.email]': values.email,
-      'query[agencies.name]': values.name,
-      'query[agencies.phone]': values.phone,
-      'query[locations.full_address]': values.full_address
+  filterFetcher = (values, query) => {
+    return index({
+      query: {
+        ...query,
+        'query[agencies.email]': values.email,
+        'query[agencies.name]': values.name,
+        'query[agencies.phone]': values.phone,
+        'query[locations.full_address]': values.full_address
+      }
     })
-  )
+  }
 
   render () {
     return (
@@ -43,6 +46,7 @@ class Index extends React.Component {
         toolbar={ <BasicListToolbar {...this.props} fetcher={index} label="Create Agency"/> }
         filterFields={filterFields()}
         filterFetcher={this.filterFetcher}
+        fetcher={index}
         columns={
           <React.Fragment>
             <th attr="agencies.name">Agency Name</th>

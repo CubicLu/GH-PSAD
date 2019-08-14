@@ -1,14 +1,14 @@
 import { cloneDeep } from 'lodash'
 
-function saveRecord(create, values) {
+function saveRecord(create, backPath, values) {
   this.setState({ isFetching: true });
   create({ data: cloneDeep(values) })
-    .then(createSucceed.bind(this))
+    .then(createSucceed.bind(this, backPath))
     .catch(handleFailed.bind(this));
 };
 
-function createSucceed(res) {
-  const { backPath, history, setRecord } = this.props;
+function createSucceed(backPath, res) {
+  const { history, setRecord } = this.props;
   setRecord(res.data);
   this.setState({ isFetching: false });
   history.push(backPath);

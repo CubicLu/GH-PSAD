@@ -1,29 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardHeader, CardBody } from 'reactstrap';
-import { generatePath } from 'react-router';
 import { show, update } from 'api/agencies';
 import { fields } from 'components/helpers/fields/agencies';
-import connectRecord from 'components/modules/connect_record';
 import { SET_RECORD } from 'actions/agencies';
-import CommonForm from 'components/base/forms/common_form';
-import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
+import { btnSpinner } from 'components/helpers';
+import { Button, Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
+import { Form } from 'informed';
+import connectRecord from 'components/modules/connect_record';
+import { NavLink } from 'react-router-dom';
 import updateRecord from 'components/modules/form_actions/update_record';
+import { renderFieldsWithGrid, renderField } from 'components/base/forms/common_form';
+import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import { fromJson as showErrors } from 'components/helpers/errors';
+import resourceFetcher from 'components/modules/resource_fetcher';
+import waitUntilFetched from 'components/modules/wait_until_fetched';
+import { generatePath } from 'react-router';
+
 
 class Edit extends React.Component {
   state = {
-    isSaving: true,
+    isSaving: false,
     dropdowns: {
-      managers: [],
-      townManagers: [],
-      officers: []
+      manager: [],
+      townManager: [],
+      officer: []
     }
   }
 
-  componentWillReceiveProps (nextProps, nextContext) {
-    const { record } = nextProps;
-    if (record) this.setState(record);
+  save = () => {
+    const { values } = this.formApi.getState();
+    const { backPath, record } = this.props;
+    const path = generatePath(backPath, { id: record.id });
+    updateRecord.bind(this, update, path)(values);
+  };
+
+  renderFields() {
+    const { officer, manager, townManager } = this.state.dropdowns;
+    return renderFieldsWithGrid(fields(officer, manager, townManager), 2, 6, fieldProps)
   }
 
   values = () => {
@@ -35,40 +48,77 @@ class Edit extends React.Component {
     return values;
   };
 
-  componentDidMount () {
-    waitUntilFetched.call(this,
-      searchAdminByRoleName(['manager', 'officer', 'town_manager'])
-        .then((result) => this.setState({ dropdowns: { ...result, townManagers: result.town_managers  } }))
-        .catch(this.handleFailed)
+  renderHeader() {
+    const { match, record } = this.props;
+    const { isSaving } = this.state;
+
+    return (<Row>
+      <Col md={2}>
+        <Button color="success" outline onClick={this.save}>
+          {isSaving ? btnSpinner() : 'Save'}
+        </Button>
+      </Col>
+      <Col md={2} className="align-self-center">
+        Edit {record.name}
+      </Col>
+      <Col md={8}>
+        <Nav pills className="float-right">
+          <NavLink to={match.url} className="nav-link">Information</NavLink>
+        </Nav>
+      </Col>
+    </Row>);
+  }
+
+  setFormApi = formApi => {
+    this.formApi = formApi;
+  };
+
+  renderForm() {
+    const { isSaving } = this.state;
+
+    return (
+      <fieldset disabled={isSaving}>
+        <Form getApi={this.setFormApi} initialValues={this.values()}>
+          <React.Fragment>
+            {this.renderFields()}
+          </React.Fragment>
+        </Form>
+      </fieldset>
     );
   }
 
-  renderRecord () {
-    const { backPath, record } = this.props;
-    const { officers, managers, townManagers } = this.state.dropdowns;
-    const path = generatePath(backPath, { id: record.id });
-
+  renderRecord() {
     return (
       <Card>
-        <CardHeader>Edit Agency</CardHeader>
+        <CardHeader>
+          {this.renderHeader()}
+        </CardHeader>
         <CardBody>
           {showErrors(this.state.errors)}
-          <CommonForm
-            {...this.props}
-            backPath={path}
-            values={this.values()}
-            fields={fields(officers, managers, townManagers)}
-            isFetching={this.state.isSaving}
-            submitForm={updateRecord.bind(this, update, path)}/>
+          {this.renderForm()}
         </CardBody>
       </Card>
     );
   }
 
-  render () {
-    return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
+  componentDidMount () {
+    waitUntilFetched.call(this,
+      searchAdminByRoleName(['manager', 'officer', 'town_manager'])
+        .then((result) => this.setState({ dropdowns: { ...result, townManager: result.town_manager } }))
+        .catch(this.handleFailed)
+    );
+  }
+
+  render() {
+    return this.props.isFetching ? <div>Loading data...</div> : (
+      <React.Fragment>
+        {this.renderRecord()}
+      </React.Fragment>
+    );
   }
 }
+
+const fieldProps = { lSize: 6 };
 
 Edit.propTypes = {
   backPath: PropTypes.string.isRequired,

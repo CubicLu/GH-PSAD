@@ -10,7 +10,7 @@ function sendResetPasswordInstructionsRequest (username) {
 }
 
 function resetPasswordRequest (password, resetPasswordToken) {
-  return axios.put(`${env.backend_url}/dashboard/auth/reset_password`, { password, resetPasswordToken });
+  return axios.put(`${env.backend_url}/dashboard/auth/reset_password`, { password, reset_password_token: resetPasswordToken });
 }
 
 export {

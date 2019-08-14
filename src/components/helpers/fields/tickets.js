@@ -18,11 +18,26 @@ const showFields = (officers, statuses) => [
 ];
 
 const filterFields = (officers, statuses) => [
-  { name: 'tickets_id', label: 'Ticket ID'},
-  { name: 'admins_email', label: 'Officer email'},
-  { name: 'parking_lot_name', label: 'Parking Lot'},
-  { name: 'tickets_status', label: 'Ticket Status'},
-  { name: 'tickets_type', label: 'Ticket Type'}
+  { name: 'id', label: 'Ticket ID'},
+  { name: 'type', label: 'Ticket Type'},
+  { name: 'query', label: 'Parking Lot'},
+  {
+    name: 'admin_ids',
+    label: 'Admins email',
+    type: FieldType.MULTISELECT_FIELD,
+    options: officers.map(({label, value}) => {
+      return { value, label };
+    })
+  },
+  { name: 'range', label: 'Range Date'},
+  {
+    name: 'status',
+    label: 'Ticke Status',
+    type: FieldType.SELECT_FIELD,
+    options: statuses.map((value) => {
+      return { value, label: value };
+    })
+  }
 ]
 
 export { fields, showFields, filterFields };

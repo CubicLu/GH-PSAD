@@ -36,19 +36,22 @@ class Index extends React.Component {
     });
   };
 
-  filterFetcher = (values) => (
-    search({
-      role_names: values.role_names,
-      status: values.status,
-      'query[email]': values.email,
-      'query[username]': values.username,
-      'query[name]': values.name
-    })
-  )
+  filterFetcher = (values, query) => {
+    return (
+      search({
+        ...query,
+        role_names: values.role_names,
+        status: values.status,
+        'query[email]': values.email,
+        'query[username]': values.username,
+        'query[name]': values.name
+      })
+    )
+  }
 
   componentDidMount () {
     waitUntilFetched.call(this,
-      dropdownsSearch('role_names_filter')
+      dropdownsSearch('role_names_filter', { admin: { id: 1}})
         .then(response => this.setState({ filterRolesField: response.data }))
     );
   }

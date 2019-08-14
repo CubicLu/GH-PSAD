@@ -6,7 +6,7 @@ import { SET_RECORD } from 'actions/cameras';
 import { displayUnixTimestamp } from 'components/helpers';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import ShowForm from 'components/base/forms/show_form';
+import { ShowForm } from 'components/base/forms';
 import { showFields } from 'components/helpers/fields/cameras';
 
 class Show extends React.Component {

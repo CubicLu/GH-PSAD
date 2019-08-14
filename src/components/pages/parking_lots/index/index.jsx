@@ -45,6 +45,7 @@ class Index extends React.Component {
         toolbar={<BasicListToolbar {...this.props} fetcher={index} label="Create Parking Lot"/>}
         filterFields={filterFields()}
         filterFetcher={this.filterFetcher}
+        fetcher={index}
         columns={
           <React.Fragment>
             <th disableSort>Name</th>

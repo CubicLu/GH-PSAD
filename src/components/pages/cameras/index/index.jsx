@@ -28,11 +28,12 @@ class Index extends React.Component {
   };
 
   // TODO search method on back-end
-  filterFetcher = (values) => (
-    search({
-      'name': values.name,
-      'stream': values.stream,
-      'parking_lot': values.parking_lot
+  filterFetcher = (values, query) => (
+    index({
+      query: { ...query },
+      name: values.name,
+      stream: values.stream,
+      parking_lot: values.parking_lot
     })
   )
 
@@ -43,6 +44,7 @@ class Index extends React.Component {
         toolbar={ <BasicListToolbar {...this.props} fetcher={index} label="Create Camera"/> }
         filterFields={filterFields()}
         filterFetcher={this.filterFetcher}
+        fetcher={index}
         columns={
           <React.Fragment>
             <th attr="name">Name</th>

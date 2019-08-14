@@ -8,7 +8,7 @@ import { show } from 'api/parking/tickets';
 import { SET_RECORD } from 'actions/tickets';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import ShowForm from 'components/base/forms/show_form';
+import { ShowForm } from 'components/base/forms';
 import { showFields } from 'components/helpers/fields/tickets';
 
 class Show extends React.Component {

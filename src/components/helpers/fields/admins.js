@@ -3,7 +3,7 @@ import { FieldType } from 'components/helpers/form_fields'
 
 const fields = (roles) => [
   { name: 'username', label: 'Username *' },
-  { name: 'name', label: 'Name' },
+  { name: 'name', label: 'Name *' },
   { name: 'email', label: 'Email *' },
   { name: 'phone', label: 'Phone' },
   {
@@ -38,15 +38,9 @@ const showFields = () => [
 
 
 const filterFields = (roles) => [
+  { name: 'username', label: 'Username' },
   { name: 'name', label: 'Name' },
   { name: 'email', label: 'Email' },
-  { name: 'username', label: 'Username' },
-  {
-    name: 'status',
-    label: 'Status',
-    type: FieldType.SELECT_FIELD,
-    options: [{ value: 'active', label: 'Active' }, { value: 'suspended', label: 'Suspended' }]
-  },
   {
     name: 'role_names',
     label: 'Role',
@@ -55,14 +49,21 @@ const filterFields = (roles) => [
       return { value, label };
     })
   },
+  {
+    name: 'status',
+    label: 'Status',
+    type: FieldType.SELECT_FIELD,
+    options: [{ value: 'active', label: 'Active' }, { value: 'suspended', label: 'Suspended' }]
+  },
 ];
 
-const exampleData = process.env.NODE_ENV !== 'production' ? {
+const exampleData = (roles) => process.env.NODE_ENV !== 'production' ? {
   email: faker.internet.email(),
   username: faker.internet.userName(),
   name: `${faker.name.firstName()} ${faker.name.lastName()}`,
   phone: '+13583767678',
-  status: 'suspended'
+  status: 'suspended',
+  role_id: roles ? roles.value : ''
 } : {
   status: 'suspended'
 } // These are defaults values for each field

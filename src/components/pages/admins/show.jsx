@@ -5,7 +5,7 @@ import { show } from 'api/admins';
 import { SET_RECORD } from 'actions/admins';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import ShowForm from 'components/base/forms/show_form';
+import { ShowForm } from 'components/base/forms';
 import { showFields } from 'components/helpers/fields/admins';
 
 class Show extends React.Component {

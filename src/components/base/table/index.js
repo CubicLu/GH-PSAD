@@ -8,6 +8,7 @@ import './table.sass'
 class IndexTable extends React.Component {
   state = {
     sortedAttr: {},
+    filterQuery: {},
     filterModalOpen: false
   }
 
@@ -25,7 +26,9 @@ class IndexTable extends React.Component {
     return renderRecords()
   };
 
-  handleSortedClick = (attr) =>  this.setState({ sortedAttr: attr });
+  handleSortedClick = (attr) => this.setState({ sortedAttr: attr });
+
+  handleSubmitFilter = (values) => this.setState({ filterQuery: values });
 
   handleSortedTableFetched = () => this.props.fetchFinished();
 
@@ -35,12 +38,12 @@ class IndexTable extends React.Component {
 
   setQuery = (sortedAttr) => {
     const { paginationQuery } = this.props
-    return {
-      query: sortedAttr ?
+    return sortedAttr ?
         Object.assign({}, paginationQuery , { 'order[keyword]': sortedAttr.keyword, 'order[asc]': sortedAttr.asc })
         : paginationQuery
-    }
   }
+
+  paginationFetcher = (pagesQuery) => this.props.filterFetcher(this.state.filterQuery, Object.assign(pagesQuery, this.setQuery(this.state.sortedAttr)))
 
   render() {
     const { sortedAttr, filterModalOpen } = this.state
@@ -50,12 +53,14 @@ class IndexTable extends React.Component {
       onClickFilter: this.toggleModal
     })
     const query = this.setQuery(sortedAttr)
-
+    console.log(query)
     return (
       <React.Fragment>
         <ModalFilter
           isOpen={filterModalOpen}
           toggleModal={this.toggleModal}
+          handleSubmitFilter={this.handleSubmitFilter}
+          filterQuery={this.state.filterQuery}
           {...this.props}
         />
         <Row>
@@ -67,6 +72,7 @@ class IndexTable extends React.Component {
               <thead>
                 <TRSort
                   {...this.props}
+                  filterQuery={this.state.filterQuery}
                   handledFetched={this.handleSortedTableFetched}
                   handleClick={this.handleSortedClick}
                   sortedAttr={sortedAttr}
@@ -81,7 +87,7 @@ class IndexTable extends React.Component {
             </Table>
           </Col>
         </Row>
-        <Pagination {...this.props} query={query}/>
+        <Pagination {...this.props} query={query} fetcher={this.paginationFetcher} />
       </React.Fragment>
     );
   }

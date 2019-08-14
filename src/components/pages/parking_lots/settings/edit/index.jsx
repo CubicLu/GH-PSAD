@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardBody, CardHeader, Row } from 'reactstrap';
 import { fields } from 'components/helpers/fields/parking/settings';
 import { Form } from 'informed';
-import { renderFieldsWithGrid } from 'components/base/form';
+import { renderFieldsWithGrid } from 'components/base/forms/common_form';
 
 class Edit extends React.Component {
   render () {

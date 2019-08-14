@@ -25,9 +25,9 @@ class Pagination extends React.Component {
   };
 
   open = page => {
-    const { fetchStarted, fetchFinished, fetcher, perPage, query } = this.props;
+    const { fetchStarted, fetchFinished, fetcher, perPage } = this.props;
     fetchStarted();
-    fetcher({ page, perPage, ...query })
+    fetcher({ page, perPage })
       .then(this.openSucceed)
       .catch(this.openFailed)
       .finally(fetchFinished);

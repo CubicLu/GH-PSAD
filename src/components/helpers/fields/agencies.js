@@ -31,7 +31,7 @@ const showFields = () => [
   { name: 'location.full_address', label: 'Full Address' },
 ];
 
-const exampleData = process.env.NODE_ENV !== 'production' ? {
+const exampleData = () => process.env.NODE_ENV !== 'production' ? {
   'email': faker.internet.email(),
   'name': 'My Best Agency',
   'phone': '+13583767678',
