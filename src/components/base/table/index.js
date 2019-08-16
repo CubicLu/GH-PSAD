@@ -3,6 +3,7 @@ import { Col, Row, Table } from 'reactstrap';
 import Pagination from 'components/base/pagination';
 import TRSort from './tr_sort';
 import ModalFilter from 'components/helpers/modals/filter';
+import { isEmpty } from 'underscore';
 import './table.sass'
 
 class IndexTable extends React.Component {
@@ -38,7 +39,7 @@ class IndexTable extends React.Component {
 
   setQuery = (sortedAttr) => {
     const { paginationQuery } = this.props
-    return sortedAttr ?
+    return !isEmpty(sortedAttr) ?
         Object.assign({}, paginationQuery , { 'order[keyword]': sortedAttr.keyword, 'order[direction]': sortedAttr.asc ? 'asc' : 'desc' })
         : paginationQuery
   }
@@ -53,7 +54,6 @@ class IndexTable extends React.Component {
       onClickFilter: this.toggleModal
     })
     const query = this.setQuery(sortedAttr)
-    console.log(query)
     return (
       <React.Fragment>
         <ModalFilter

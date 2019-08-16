@@ -43,7 +43,8 @@ class Index extends React.Component {
         type: values.type,
         query: values.query,
         status: values.status,
-        range: values.range
+        'range[from]': values.range ? values.range.from : null,
+        'range[to]': values.range ? values.range.to : null
       }
     })
   }

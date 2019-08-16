@@ -29,7 +29,11 @@ const filterFields = (officers, statuses) => [
       return { value, label };
     })
   },
-  { name: 'range', label: 'Range Date'},
+  {
+    name: 'range',
+    type: FieldType.DATE_FIELD,
+    label: 'Range Date'
+  },
   {
     name: 'status',
     label: 'Ticke Status',

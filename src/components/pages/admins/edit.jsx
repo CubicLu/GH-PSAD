@@ -6,15 +6,13 @@ import { show, update } from 'api/admins';
 import { fields } from 'components/helpers/fields/admins';
 import connectRecord from 'components/modules/connect_record';
 import { SET_RECORD } from 'actions/admins';
-import { CommonForm } from 'components/base/forms';
 import { search as dropdownsSearch } from 'api/dropdowns';
-import waitUntilFetched from 'components/modules/wait_until_fetched';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
 import PasswordConfirmationModal from 'components/helpers/modals/password_confirmation';
 import { fromJson as showErrors } from 'components/helpers/errors';
 import { FieldType } from 'components/helpers/form_fields';
-import { renderFieldsWithGrid, renderField } from 'components/base/forms/common_form';
+import { renderFieldsWithGrid } from 'components/base/forms/common_form';
 import { btnSpinner } from 'components/helpers';
 import { NavLink } from 'react-router-dom';
 import { Form } from 'informed';
@@ -43,7 +41,6 @@ class Edit extends React.Component {
   };
 
   renderFields() {
-    const { officer, manager, townManager } = this.state.dropdowns;
     return renderFieldsWithGrid(this.fieldsForCommonForm(), 2, 6, fieldProps)
   }
 

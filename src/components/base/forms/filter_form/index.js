@@ -7,6 +7,7 @@ import {
  CustomMultiSelect,
  ImageInput,
  Divider,
+ DateRangeInput,
  FieldType
 } from 'components/helpers/form_fields'
 
@@ -23,12 +24,10 @@ class CommonForm extends React.Component {
 
   renderInput = field => {
     switch (field.type) {
+      case FieldType.DATE_FIELD:
+        return <DateRangeInput className="form-control" field={field.name} initialValues={this.props.values} />
       case FieldType.MULTISELECT_FIELD:
         return <CustomMultiSelect fieldName={field.name} options={field.options} values={this.props.values} />;
-      case FieldType.FILE_FIELD:
-        return <ImageInput className="form-control" {...field.props} field={field.name}/>;
-      case FieldType.PASSWORD_FIELD:
-        return <Text className="form-control" {...field.props} field={field.name} type="password" validate={field.validate}/>;
       case FieldType.SELECT_FIELD:
         return <CustomSelect field={field} />;
       default:

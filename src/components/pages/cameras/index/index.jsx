@@ -31,7 +31,7 @@ class Index extends React.Component {
   filterFetcher = (values, query) => {
     return index({
       query: {
-        parking_lot: values.parking_lot,
+        parking_lot_id: values.parking_lot_id,
         ...query
       },
     })

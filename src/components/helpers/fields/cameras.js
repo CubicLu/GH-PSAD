@@ -33,7 +33,7 @@ const showFields = () => [
 ];
 
 const filterFields = () => [
-  { name: 'parking_lot', label: 'Parking Lot' }
+  { name: 'parking_lot_id', label: 'Parking Lot' }
 ]
 
 const exampleData = () => process.env.NODE_ENV !== 'production' ? {
