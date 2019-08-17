@@ -11,10 +11,11 @@ import { fromJson as showErrors } from 'components/helpers/errors';
 import saveRecord from 'components/modules/form_actions/save_record';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
 import withFetching from 'components/modules/with_fetching';
-import { renderFieldsWithGrid } from 'components/base/forms/common_form';
+import { renderFieldsWithGrid, renderImageField} from 'components/base/forms/common_form';
 import { btnSpinner } from 'components/helpers';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { Form } from 'informed';
+import { FieldType } from 'components/helpers/form_fields';
 
 class New extends React.Component {
   state = {
@@ -31,46 +32,57 @@ class New extends React.Component {
   save = () => {
     const { values } = this.formApi.getState();
     const { backPath } = this.props;
-    saveRecord.call(this, create, backPath, values)
+    saveRecord.call(this, create, backPath, values);
   };
 
-  renderFields() {
+  renderFields () {
     const { roles } = this.state.dropdowns;
-    return renderFieldsWithGrid(fields(roles), 2, 6, fieldProps)
+    return renderFieldsWithGrid(fields(roles), 2, 6, fieldProps);
   }
 
-  renderHeader() {
-    const { match } = this.props;
+  renderHeader () {
+    const { match, backPath } = this.props;
     const { isSaving } = this.state;
 
     return (<Row>
       <Col md={2}>
-        <Button color="success" outline onClick={this.save}>
-          {isSaving ? btnSpinner() : 'Save'}
-        </Button>
-      </Col>
-      <Col md={8}>
-        <Nav pills className="float-right">
-          <NavLink to={match.url} className="nav-link">Information</NavLink>
-        </Nav>
+        <Link to={backPath} className="mr-2 back-button" >&#10094;</Link>
+        Create user account
       </Col>
     </Row>);
   }
 
-  renderForm() {
+  renderSaveButton = () => {
+    const { isSaving } = this.state;
+    return (
+      <Col>
+        <Button color="success float-right" outline onClick={this.save}>
+          {isSaving ? btnSpinner() : 'Save Changes'}
+        </Button>
+      </Col>
+    )
+  }
+
+  renderForm () {
     const { isSaving } = this.state;
     return (
       <fieldset disabled={isSaving}>
         <Form getApi={this.setFormApi} initialValues={exampleData()}>
-          <React.Fragment>
-            {this.renderFields()}
-          </React.Fragment>
+          <Row>
+            <Col sm={12} md={3}>
+              {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, fieldProps)}
+            </Col>
+            <Col sm={12} md={9}>
+              {this.renderFields()}
+            </Col>
+            { this.renderSaveButton()}
+          </Row>
         </Form>
       </fieldset>
     );
   }
 
-  renderRecord() {
+  renderRecord () {
     return (
       <Card>
         <CardHeader>
@@ -91,7 +103,7 @@ class New extends React.Component {
     );
   }
 
-  render() {
+  render () {
     return this.props.isFetching ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}

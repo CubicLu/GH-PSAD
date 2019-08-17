@@ -34,7 +34,7 @@ class SendResetPasswordInstructions extends React.Component {
       });
   };
 
-  setSuccessMessage() {
+  setSuccessMessage () {
     this.setState({
       isFetching: false,
       messages: setSuccessMessage('We have sent a recovery password to your email, please follow the instructions')

@@ -46,7 +46,7 @@ class Index extends React.Component {
         'range[from]': values.range ? values.range.from : null,
         'range[to]': values.range ? values.range.to : null
       }
-    })
+    });
   }
 
   componentDidMount () {
@@ -59,7 +59,7 @@ class Index extends React.Component {
               ...this.state.dropdowns,
               officers: response.data
             }
-          })
+          });
         })
         .catch(this.handleFailed),
       statuses()
@@ -75,10 +75,9 @@ class Index extends React.Component {
     );
   }
 
-
   render () {
     const { match, backPath } = this.props;
-    const { statuses, officers } = this.state.dropdowns
+    const { statuses, officers } = this.state.dropdowns;
     const agencyId = match.params.agency_id;
     const agency = this.props.list[0] && this.props.list[0].agency;
     return (

@@ -34,16 +34,15 @@ class New extends React.Component {
   save = () => {
     const { values } = this.formApi.getState();
     const { backPath } = this.props;
-    saveRecord.call(this, create, backPath, values)
+    saveRecord.call(this, create, backPath, values);
   };
 
-  renderFields() {
+  renderFields () {
     const { officers, managers, townManagers } = this.state.dropdowns;
-    return renderFieldsWithGrid(fields(officers, managers, townManagers), 2, 6, fieldProps)
+    return renderFieldsWithGrid(fields(officers, managers, townManagers), 2, 6, fieldProps);
   }
 
-
-  renderHeader() {
+  renderHeader () {
     const { match } = this.props;
     const { isSaving } = this.state;
 
@@ -61,7 +60,7 @@ class New extends React.Component {
     </Row>);
   }
 
-  renderForm() {
+  renderForm () {
     const { isSaving } = this.state;
     return (
       <fieldset disabled={isSaving}>
@@ -74,7 +73,7 @@ class New extends React.Component {
     );
   }
 
-  renderRecord() {
+  renderRecord () {
     return (
       <Card>
         <CardHeader>
@@ -96,13 +95,13 @@ class New extends React.Component {
             managers: result.manager,
             officers: result.officer,
             townManagers: result.town_manager }
-          })
+        })
         )
         .catch(this.handleFailed)
     );
   }
 
-  render() {
+  render () {
     return this.props.isFetching ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
@@ -120,4 +119,4 @@ const fieldProps = { lSize: 6 };
 export default connect(
   null,
   mapDispatch
-)(withFetching(New, ()=>{}));
+)(withFetching(New, () => {}));

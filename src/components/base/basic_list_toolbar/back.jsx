@@ -20,7 +20,7 @@ class BasicBackListToolbar extends React.Component {
   };
 
   refreshSucceed = (res) => {
-    this.props.setList(selectList(res))
+    this.props.setList(selectList(res));
   }
 
   render () {

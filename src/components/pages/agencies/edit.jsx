@@ -9,13 +9,16 @@ import { Form } from 'informed';
 import connectRecord from 'components/modules/connect_record';
 import { NavLink } from 'react-router-dom';
 import updateRecord from 'components/modules/form_actions/update_record';
-import { renderFieldsWithGrid, renderField } from 'components/base/forms/common_form';
+import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import { fromJson as showErrors } from 'components/helpers/errors';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
+import setFormApiFields from 'components/modules/set_form_api_fields';
 import { generatePath } from 'react-router';
-
+import { FieldType } from 'components/helpers/form_fields';
+import LocationEdit from './location/edit'
+import { fields as fieldsLocation } from 'components/helpers/fields/agencies/location';
 
 class Edit extends React.Component {
   state = {
@@ -28,15 +31,17 @@ class Edit extends React.Component {
   }
 
   save = () => {
-    const { values } = this.formApi.getState();
+    let values = setFormApiFields(fields([], [], []), this.formApi)
+    values.location = {}
+    values.location = setFormApiFields(fieldsLocation(), this.locationFormApi)
     const { backPath, record } = this.props;
     const path = generatePath(backPath, { id: record.id });
     updateRecord.bind(this, update, path)(values);
   };
 
-  renderFields() {
+  renderFields () {
     const { officer, manager, townManager } = this.state.dropdowns;
-    return renderFieldsWithGrid(fields(officer, manager, townManager), 2, 6, fieldProps)
+    return renderFieldsWithGrid(fields(officer, manager, townManager), 2, 6, fieldProps);
   }
 
   values = () => {
@@ -48,7 +53,18 @@ class Edit extends React.Component {
     return values;
   };
 
-  renderHeader() {
+  renderSaveButton = () => {
+    const { isSaving } = this.state;
+    return (
+      <Col>
+        <Button color="success float-right" outline onClick={this.save}>
+          {isSaving ? btnSpinner() : 'Save Changes'}
+        </Button>
+      </Col>
+    )
+  }
+
+  renderHeader () {
     const { match, record } = this.props;
     const { isSaving } = this.state;
 
@@ -73,21 +89,35 @@ class Edit extends React.Component {
     this.formApi = formApi;
   };
 
-  renderForm() {
+  setLocationFormApi = formApi => {
+    this.locationFormApi = formApi;
+  };
+
+  renderLocation () {
+    const { record } = this.props;
+    return <LocationEdit setFormApi={this.setLocationFormApi} record={record.location} />;
+  }
+
+  renderForm () {
     const { isSaving } = this.state;
 
     return (
       <fieldset disabled={isSaving}>
         <Form getApi={this.setFormApi} initialValues={this.values()}>
-          <React.Fragment>
-            {this.renderFields()}
-          </React.Fragment>
+          <Row>
+            <Col sm={12} md={3}>
+              {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, fieldProps)}
+            </Col>
+            <Col sm={12} md={9}>
+              {this.renderFields()}
+            </Col>
+          </Row>
         </Form>
       </fieldset>
     );
   }
 
-  renderRecord() {
+  renderRecord () {
     return (
       <Card>
         <CardHeader>
@@ -109,10 +139,14 @@ class Edit extends React.Component {
     );
   }
 
-  render() {
-    return this.props.isFetching ? <div>Loading data...</div> : (
+  render () {
+    const { isFetching, record } = this.props
+
+    return isFetching || !record ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
+        <div className="mt-1"/>
+        {this.renderLocation()}
       </React.Fragment>
     );
   }

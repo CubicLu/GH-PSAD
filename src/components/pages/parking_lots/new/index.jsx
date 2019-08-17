@@ -10,7 +10,7 @@ class New extends React.Component {
     };
   }
 
-  render() {
+  render () {
     return null;
   }
 }

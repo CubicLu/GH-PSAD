@@ -4,8 +4,8 @@ import { FieldType } from 'components/helpers/form_fields'
 const fields = (roles) => [
   { name: 'username', label: 'Username *' },
   { name: 'name', label: 'Name *' },
-  { name: 'email', label: 'Email *' },
   { name: 'phone', label: 'Phone' },
+  { name: 'email', label: 'Email *' },
   {
     name: 'role_id',
     label: 'Role *',
@@ -15,14 +15,12 @@ const fields = (roles) => [
       return { value, label, disabled };
     })
   },
-  { name: 'avatar', label: 'Profile Picture', type: FieldType.FILE_FIELD, },
   {
     name: 'status',
     label: 'Status *',
     type: FieldType.SELECT_FIELD,
     options: [{ value: 'active', label: 'Active' }, { value: 'suspended', label: 'Suspended' }]
-  },
-
+  }
 ];
 
 const showFields = () => [

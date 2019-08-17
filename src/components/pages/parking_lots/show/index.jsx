@@ -9,7 +9,7 @@ import { SET_RECORD } from 'actions/parking_lots';
 import { fields } from 'components/helpers/parking_lots';
 
 class Show extends React.Component {
-  render() {
+  render () {
     return null;
   }
 }

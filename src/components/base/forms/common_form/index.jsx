@@ -8,11 +8,10 @@ import {
   TextWithLink,
   Increaser,
   FieldType
-} from 'components/helpers/form_fields'
+} from 'components/helpers/form_fields';
 import { Form, Text } from 'informed';
 import { Link } from 'react-router-dom';
 import { btnSpinner } from 'components/helpers';
-
 
 const renderField = (field, props = {}) => {
   const { lSize = 2, iSize = 6 } = props;
@@ -27,24 +26,32 @@ const renderField = (field, props = {}) => {
   );
 };
 
+const renderImageField = (field, props = {}) => (
+  <FormGroup row>
+    <Col md={12}>
+      {field.render ? field.render(field, props) : renderInput(field, props)}
+    </Col>
+  </FormGroup>
+)
 
 const renderInput = (field, props = {}) => {
   switch (field.type) {
     case FieldType.MULTISELECT_FIELD:
-      return <CustomMultiSelect field={field} values={props.values}/>;
+      return <CustomMultiSelect field={field.name} options={field.options}/>;
     case FieldType.FILE_FIELD:
       return <ImageInput className="form-control" field={field.name}/>;
     case FieldType.SELECT_FIELD:
       return <CustomSelect field={field}/>;
     case FieldType.TEXT_LINK_FIELD:
       return <TextWithLink field={field}/>;
+    case FieldType.PASSWORD_FIELD:
+      return <Text className="form-control" field={field.name} type="password"/>;
     case FieldType.INCREASER_FIELD:
       return <Increaser field={field}/>;
     default:
       return <Text className="form-control" field={field.name}/>;
   }
 };
-
 
 const renderFields = (fields, props = {}) => (
   fields.map((field, idx) => (
@@ -55,7 +62,6 @@ const renderFields = (fields, props = {}) => (
     </React.Fragment>)
   )
 );
-
 
 const renderFieldsWithGrid = (fields, step, cols, props = {}) => {
   let fieldList = [];
@@ -71,7 +77,6 @@ const renderFieldsWithGrid = (fields, step, cols, props = {}) => {
   return fieldList;
 };
 
-
 const renderButtons = (formState, props = {}) => {
   const { backPath, isFetching } = props;
 
@@ -84,7 +89,6 @@ const renderButtons = (formState, props = {}) => {
     </React.Fragment>
   );
 };
-
 
 const renderForm = (props = {}) => {
   const { values, isFetching, submitForm, fields } = props;
@@ -103,4 +107,4 @@ const renderForm = (props = {}) => {
   );
 };
 
-export { renderField, renderFields, renderFieldsWithGrid, renderButtons, renderForm, renderInput };
+export { renderField, renderFields, renderFieldsWithGrid, renderButtons, renderForm, renderInput, renderImageField };

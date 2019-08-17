@@ -39,11 +39,11 @@ class Edit extends React.Component {
     return values;
   };
 
-  renderFields() {
-    return renderFieldsWithGrid(fields(), 2, 6, fieldProps)
+  renderFields () {
+    return renderFieldsWithGrid(fields(), 2, 6, fieldProps);
   }
 
-  renderForm() {
+  renderForm () {
     const { isSaving } = this.state;
 
     return (
@@ -57,7 +57,7 @@ class Edit extends React.Component {
     );
   }
 
- renderHeader() {
+  renderHeader () {
     const { match, record } = this.props;
     const { isSaving } = this.state;
 
@@ -78,8 +78,7 @@ class Edit extends React.Component {
     </Row>);
   }
 
-
-  renderRecord() {
+  renderRecord () {
     return (
       <Card>
         <CardHeader>

@@ -33,8 +33,8 @@ class Index extends React.Component {
       query: {
         parking_lot_id: values.parking_lot_id,
         ...query
-      },
-    })
+      }
+    });
   }
 
   render () {
@@ -44,7 +44,6 @@ class Index extends React.Component {
         toolbar={ <BasicListToolbar {...this.props} fetcher={index} label="Create Camera"/> }
         filterFields={filterFields()}
         filterFetcher={this.filterFetcher}
-        fetcher={index}
         columns={
           <React.Fragment>
             <th attr="name">Name</th>

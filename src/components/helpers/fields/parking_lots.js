@@ -3,7 +3,6 @@ import { FieldType } from 'components/helpers/form_fields'
 
 const fields = (managers = [], admins = []) => (
   [
-    { name: 'image', label: 'Image', type: FieldType.FILE_FIELD},
     { name: 'name' },
     {
       name: 'disputes_count',

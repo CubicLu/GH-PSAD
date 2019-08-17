@@ -26,14 +26,14 @@ class New extends React.Component {
   save = () => {
     const { values } = this.formApi.getState();
     const { backPath } = this.props;
-    saveRecord.call(this, create, backPath, values)
+    saveRecord.call(this, create, backPath, values);
   };
 
-  renderFields() {
-    return renderFieldsWithGrid(fields(), 2, 6, fieldProps)
+  renderFields () {
+    return renderFieldsWithGrid(fields(), 2, 6, fieldProps);
   }
 
-  renderForm() {
+  renderForm () {
     const { isSaving } = this.state;
     return (
       <fieldset disabled={isSaving}>
@@ -46,8 +46,7 @@ class New extends React.Component {
     );
   }
 
-
-  renderHeader() {
+  renderHeader () {
     const { match } = this.props;
     const { isSaving } = this.state;
 
@@ -65,7 +64,7 @@ class New extends React.Component {
     </Row>);
   }
 
-  renderRecord() {
+  renderRecord () {
     return (
       <Card>
         <CardHeader>
@@ -79,7 +78,7 @@ class New extends React.Component {
     );
   }
 
-  render() {
+  render () {
     return this.props.isFetching ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}

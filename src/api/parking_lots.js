@@ -2,6 +2,6 @@ import resourceApi from 'components/modules/resource_api';
 import searchApi from 'components/modules/search_api';
 
 const { index, show, update, destroy, create } = resourceApi('parking_lots');
-const search = searchApi('cameras')
+const search = searchApi('cameras');
 
 export { index, show, update, destroy, create, search };

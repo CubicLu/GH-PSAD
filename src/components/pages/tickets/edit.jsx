@@ -36,44 +36,44 @@ class Edit extends React.Component {
     updateRecord.bind(this, update, path)(values);
   };
 
-  renderFields() {
+  renderFields () {
     const { officers, statuses } = this.state.dropdowns;
-    return renderFieldsWithGrid(fields(officers, statuses), 2, 6, fieldProps)
+    return renderFieldsWithGrid(fields(officers, statuses), 2, 6, fieldProps);
   }
 
    values = () => {
-    const { record } = this.props;
-    const values = Object.assign({}, record);
-    values.admin_id = record.officer ? record.officer.id : null;
+     const { record } = this.props;
+     const values = Object.assign({}, record);
+     values.admin_id = record.officer ? record.officer.id : null;
 
-    return values;
-  };
+     return values;
+   };
 
-  renderHeader() {
-    const { match, record } = this.props;
-    const { isSaving } = this.state;
-    return (<Row>
-      <Col md={2}>
-        <Button color="success" outline onClick={this.save}>
-          {isSaving ? btnSpinner() : 'Save'}
-        </Button>
-      </Col>
-      <Col md={2} className="align-self-center">
+   renderHeader () {
+     const { match, record } = this.props;
+     const { isSaving } = this.state;
+     return (<Row>
+       <Col md={2}>
+         <Button color="success" outline onClick={this.save}>
+           {isSaving ? btnSpinner() : 'Save'}
+         </Button>
+       </Col>
+       <Col md={2} className="align-self-center">
         Edit {record.agency.name} Ticket number {record.id}
-      </Col>
-      <Col md={8}>
-        <Nav pills className="float-right">
-          <NavLink to={match.url} className="nav-link">Information</NavLink>
-        </Nav>
-      </Col>
-    </Row>);
-  }
+       </Col>
+       <Col md={8}>
+         <Nav pills className="float-right">
+           <NavLink to={match.url} className="nav-link">Information</NavLink>
+         </Nav>
+       </Col>
+     </Row>);
+   }
 
   setFormApi = formApi => {
     this.formApi = formApi;
   };
 
-  renderForm() {
+  renderForm () {
     const { isSaving } = this.state;
 
     return (
@@ -87,7 +87,7 @@ class Edit extends React.Component {
     );
   }
 
-  renderRecord() {
+  renderRecord () {
     return (
       <Card>
         <CardHeader>
@@ -126,14 +126,13 @@ class Edit extends React.Component {
     );
   }
 
-  render() {
+  render () {
     return this.props.isFetching ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
       </React.Fragment>
     );
   }
-
 }
 
 const fieldProps = { lSize: 6 };
