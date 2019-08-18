@@ -1,22 +1,26 @@
 import React from 'react';
+import { fields } from 'components/helpers/fields/parking_lots';
+import { SET_RECORD } from 'actions/parking_lots';
+import { show, update } from 'api/parking_lots';
 import { btnSpinner } from 'components/helpers';
 import { Button, Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
 import { Form } from 'informed';
-import { fields } from 'components/helpers/fields/parking_lots';
 import connectRecord from 'components/modules/connect_record';
-import { SET_RECORD } from 'actions/parking_lots';
-import { show, update } from 'api/parking_lots';
 import { NavLink } from 'react-router-dom';
 import updateRecord from 'components/modules/form_actions/update_record';
-import { renderFieldsWithGrid, renderField } from 'components/base/form';
+import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import SettingSection from './setting_section';
 import VoiSection from './voi_section';
 import { fromJson as showErrors } from 'components/helpers/errors';
+import resourceFetcher from 'components/modules/resource_fetcher';
+import { FieldType } from 'components/helpers/form_fields'
+import { isEmpty } from 'underscore';
 
 class Edit extends React.Component {
   state = {
-    isSaving: false
+    isSaving: false,
+    dropdowns: {}
   };
 
   save = () => {
@@ -26,12 +30,12 @@ class Edit extends React.Component {
     updateRecord.bind(this, update, '/dashboard/parking_lots')(values);
   };
 
-  renderFields() {
-    const { dropdowns } = this.props;
-    return renderFieldsWithGrid(fields(dropdowns.town_manager, dropdowns.parking_admin), 2, 6, fieldProps)
+  renderFields () {
+    const { dropdowns } = this.state;
+    return renderFieldsWithGrid(fields(dropdowns.townManagers, dropdowns.parkingAdmins), 2, 6, fieldProps);
   }
 
-  values() {
+  values () {
     const { record } = this.props;
     let values = Object.assign({}, record);
 
@@ -65,27 +69,29 @@ class Edit extends React.Component {
   };
 
   setSettingFormApi = formApi => {
-    this.settingFormApi = formApi
+    this.settingFormApi = formApi;
   };
 
-  renderForm() {
+  renderForm () {
     const { isSaving } = this.state;
 
     return (
       <fieldset disabled={isSaving}>
         <Form getApi={this.setFormApi} initialValues={this.values()}>
           <Row>
-            <Col md={6}>
-              {renderField({ name: 'avatar', label: 'Image', type: 'file' }, fieldProps)}
+            <Col sm={12} md={3}>
+              {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, fieldProps)}
+            </Col>
+            <Col sm={12} md={9}>
+              {this.renderFields()}
             </Col>
           </Row>
-          {this.renderFields()}
         </Form>
       </fieldset>
     );
   }
 
-  renderRecord() {
+  renderRecord () {
     return (
       <Card>
         <CardHeader>
@@ -99,7 +105,7 @@ class Edit extends React.Component {
     );
   }
 
-  renderSetting() {
+  renderSetting () {
     const { record } = this.props;
     return <SettingSection setFormApi={this.setSettingFormApi} record={record.setting}/>
   }
@@ -109,8 +115,21 @@ class Edit extends React.Component {
     return <VoiSection records={record.vehicle_rules}/>
   }
 
-  render() {
-    return this.props.isFetching ? <div>Loading data...</div> : (
+  componentDidMount () {
+    searchAdminByRoleName(['parking_admin', 'town_manager'])
+      .then((result) => {
+        this.setState({
+          dropdowns: {
+            parkingAdmins: result.parking_admin,
+            townManagers: result.town_manager
+          }
+        });
+      })
+      .catch(this.handleFailed)
+  }
+
+  render () {
+    return this.props.isFetching || isEmpty(this.state.dropdowns) ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
         <div className="mt-1"/>
@@ -124,20 +143,4 @@ class Edit extends React.Component {
 
 const fieldProps = { lSize: 6 };
 
-const showWithDropdowns = (wrapper, condition, callback) => {
-  const { params } = wrapper.props.match;
-  let promises = [];
-
-  if (condition) {
-    promises.push(show(params).then(callback));
-  }
-
-  promises.push(searchAdminByRoleName(['parking_admin', 'town_manager'])
-    .then(result => wrapper.setState({ dropdowns: { ...result } })));
-
-  Promise.all(promises)
-    .catch(err => console.error(err))
-    .finally(wrapper.fetchFinished);
-};
-
-export default connectRecord('parking_lot', SET_RECORD, showWithDropdowns, Edit);
+export default connectRecord('parking_lot', SET_RECORD, resourceFetcher(show), Edit);

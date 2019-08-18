@@ -1,4 +1,5 @@
 export default function (...promises) {
+  this.props.fetchStarted()
   Promise.all(promises)
-    .finally(() => this.setState({ isSaving: false }))
+    .finally(() => this.props.fetchFinished())
 }

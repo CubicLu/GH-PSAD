@@ -1,74 +1,57 @@
 import React from 'react';
-import { Button, ButtonGroup, ButtonToolbar, Input, InputGroup } from 'reactstrap';
-import { debounce } from 'underscore';
+import PropTypes from 'prop-types';
+import { Button, ButtonGroup, ButtonToolbar, InputGroup } from 'reactstrap';
 import { list as selectList } from 'selectors/list';
 
 class BasicListToolbar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      filter: ''
-    };
-    this.serverFilter = debounce(this.filter, 1000);
-  }
-
   newRecord = () => {
     const { match, history } = this.props;
     history.push(`${match.path}/new`);
   };
 
   refresh = () => {
-    const { fetchStarted, fetchFinished, fetcher } = this.props;
+    const { handleRefresh, fetchFinished, fetchStarted, fetcher } = this.props;
 
     fetchStarted();
+    handleRefresh();
     fetcher()
-      .then(this.filterSucceed)
-      .catch(this.filterFailed)
+      .then(this.refreshSucceed)
+      .catch((error) => { console.log(error); })
       .finally(fetchFinished);
   };
 
-  filter = event => {
-    const { fetchStarted, fetchFinished, fetcher } = this.props;
+  refreshSucceed = (res) => this.props.setList(selectList(res));
 
-    fetchStarted();
-    fetcher({ query: event.target.value })
-      .then(this.filterSucceed)
-      .catch(this.filterFailed)
-      .finally(fetchFinished);
-  };
-
-  filterSucceed = res => {
-    this.props.setList(selectList(res));
-  };
-
-  filterFailed = error => {
-    console.error(error.message);
-  };
-
-  onFilter = event => {
-    this.setState({ filter: event.target.value });
-    event.persist();
-    this.serverFilter(event);
-  };
-
-  render() {
-    const { label } = this.props;
+  render () {
+    const { label, onClickFilter } = this.props;
     return (
-      <ButtonToolbar className="pb-1 float-right">
-        { this.props.children }
-        <ButtonGroup className="mr-1">
-          <Button onClick={this.refresh}>Refresh</Button>
-        </ButtonGroup>
-        <InputGroup className="mr-1">
-          <Input value={this.state.filter} onChange={this.onFilter}/>
-        </InputGroup>
-        <ButtonGroup>
-          <Button onClick={this.newRecord}>{label}</Button>
-        </ButtonGroup>
-
-      </ButtonToolbar>
+      <React.Fragment>
+        <ButtonToolbar className="pb-1 float-right">
+          <ButtonGroup className="mr-1">
+            <Button onClick={this.refresh}>Refresh</Button>
+          </ButtonGroup>
+          <InputGroup className="mr-1">
+            <Button onClick={onClickFilter}>Filter</Button>
+          </InputGroup>
+          <ButtonGroup>
+            <Button onClick={this.newRecord}>{label}</Button>
+          </ButtonGroup>
+        </ButtonToolbar>
+      </React.Fragment>
     );
   }
 }
+
+BasicListToolbar.propTypes = {
+  match: PropTypes.object.isRequired,
+  history: PropTypes.array.isRequired,
+  handleRefresh: PropTypes.func,
+  onClickFilter: PropTypes.func,
+  fetchFinished: PropTypes.func.isRequired,
+  fetchStarted: PropTypes.func.isRequired,
+  fetcher: PropTypes.func.isRequired,
+  setList: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired
+};
 
 export default BasicListToolbar;

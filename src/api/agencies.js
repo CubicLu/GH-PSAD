@@ -1,3 +1,8 @@
 import resourceApi from 'components/modules/resource_api';
+import searchApi from 'components/modules/search_api';
+
 const { index, show, update, create } = resourceApi('agencies');
-export { index, show, update, create };
+
+const search = searchApi('agencies');
+
+export { index, show, update, create, search };

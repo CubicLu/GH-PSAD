@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
 import { sendResetPasswordInstructionsRequest } from 'api/users';
 import { Button, Input } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
@@ -9,7 +9,7 @@ import CardLayout from 'components/base/layout/card';
 import AuthLayout from 'components/base/layout/auth';
 
 class SendResetPasswordInstructions extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       username: '',
@@ -31,18 +31,17 @@ class SendResetPasswordInstructions extends React.Component {
           isFetching: false,
           messages: setErrorsMessages(error)
         });
-      })
-
+      });
   };
 
-  setSuccessMessage() {
+  setSuccessMessage () {
     this.setState({
       isFetching: false,
       messages: setSuccessMessage('We have sent a recovery password to your email, please follow the instructions')
     });
   }
 
-  render() {
+  render () {
     return (
       <AuthLayout>
         <CardLayout title="Reset Your Password" isFetching={this.state.isFetching} messages={this.state.messages}>
@@ -69,7 +68,7 @@ class SendResetPasswordInstructions extends React.Component {
   }
 }
 
-function mapDispatch(dispatch) {
+function mapDispatch (dispatch) {
   return bindActionCreators({}, dispatch);
 }
 

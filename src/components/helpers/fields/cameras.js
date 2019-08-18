@@ -1,5 +1,6 @@
 import React from 'react';
 import { Col, FormGroup, Input, Label } from 'reactstrap';
+import faker from 'faker'
 
 const parkingLot = lot => {
   if (!lot) return;
@@ -18,7 +19,7 @@ const fields = () => [
   { name: 'stream', mandatory: true },
   { name: 'login' },
   { name: 'password' },
-  { name: 'parking_lot_id',  mandatory: true }
+  { name: 'parking_lot_id', mandatory: true }
 ];
 
 const showFields = () => [
@@ -31,4 +32,16 @@ const showFields = () => [
   { name: 'updated_at', label: 'Updated At' }
 ];
 
-export { parkingLot, fields, showFields};
+const filterFields = () => [
+  { name: 'parking_lot_id', label: 'Parking Lot' }
+]
+
+const exampleData = () => process.env.NODE_ENV !== 'production' ? {
+  name: faker.lorem.words(),
+  stream: faker.internet.url(),
+  login:  faker.internet.userName(),
+  password:  faker.internet.password()
+} : {
+} // These are defaults values for each field
+
+export { parkingLot, fields, showFields, filterFields, exampleData };

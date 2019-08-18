@@ -23,17 +23,17 @@ const ImageInput = asField(({ fieldState, fieldApi }) => {
     setFilepath(URL.createObjectURL(data.fileList[0]));
     setFilename(data.fileList[0].name);
   };
-
   return (
     <ReactFileReader
       base64={true}
-      handleFiles={handleFiles}>
+      handleFiles={handleFiles}
+    >
       <React.Fragment>
-        <Media>
+        <Media className="justify-content-center">
           <Media left href="#">
             <Media object tag={() => (
               <img
-                data-src="holder.js/200x200?auto=yes"
+                data-src={filepath ? filepath : "holder.js/200x200?auto=yes"}
                 src={filepath}
                 alt={filename}
                 className="img-thumbnail"
@@ -41,7 +41,9 @@ const ImageInput = asField(({ fieldState, fieldApi }) => {
             )}/>
           </Media>
         </Media>
-        <Button type="button" color='primary' outline className="mt-1">Upload</Button>
+        <div className="text-center mt-2">
+          <Button type="button" color='primary' outline className="mt-1">Upload</Button>
+        </div>
       </React.Fragment>
     </ReactFileReader>
   )

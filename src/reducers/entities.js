@@ -1,5 +1,4 @@
 const reduceEntity = actions => {
-
   const index = (state = { list: [], total: 0, perPage: 10, page: 1 }, action) => {
     switch (action.type) {
       case actions.SET_LIST:

@@ -1,16 +1,14 @@
 import { search } from 'api/admins';
 
 const searchAdminByRoleName = roleNames => new Promise((resolve, reject) => {
-  search(roleNames)
+  search({role_names: roleNames})
     .then(({ data }) => {
       let container = {};
-
+      roleNames.forEach(roleName => container[roleName] = [])
       data.forEach(element => {
-        container[element.role.name] = container[element.role.name] ?
-          container[element.role.name].push(element) :
-          [element];
+        container[element.role.name] = container[element.role.name] || []
+        container[element.role.name].push(element)
       });
-
       resolve(container)
     })
     .catch(err => reject(err));

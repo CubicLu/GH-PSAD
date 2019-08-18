@@ -1,7 +1,7 @@
 import { UserActions } from 'actions';
 import { combineReducers } from 'redux';
 
-function auth(state = { isAuthorized: false }, action) {
+function auth (state = { isAuthorized: false }, action) {
   switch (action.type) {
     case UserActions.SET_TOKEN:
       return Object.assign({}, state, {

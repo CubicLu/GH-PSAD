@@ -1,9 +1,10 @@
-function updateRecord(update, backPath, state) {
+
+import { cloneDeep } from 'lodash'
+
+function updateRecord(update, backPath, values) {
   const { id } = this.props.match.params;
 
-  this.setState({ isSaving: true });
-
-  update({ id, data: state })
+  update({ id, data: cloneDeep(values) })
     .then(updateSucceed.bind(this, backPath))
     .catch(updateFailed.bind(this))
 }

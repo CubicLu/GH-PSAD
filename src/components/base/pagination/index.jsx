@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { times } from 'underscore';
 import { Pagination as Paggy, PaginationItem, PaginationLink } from 'reactstrap';
 import { list as selectList } from 'selectors/list';
@@ -6,7 +7,7 @@ import { list as selectList } from 'selectors/list';
 class Pagination extends React.Component {
   renderPages = () => {
     const { page, perPage, total } = this.props;
-    let pages = [];
+    const pages = [];
 
     times(Math.ceil(total / perPage), i => {
       const pageNumber = i + 1;
@@ -24,9 +25,9 @@ class Pagination extends React.Component {
   };
 
   open = page => {
-    const { fetchStarted, fetchFinished, fetcher, perPage, query } = this.props;
+    const { fetchStarted, fetchFinished, fetcher, perPage } = this.props;
     fetchStarted();
-    fetcher({ page, perPage, ...query })
+    fetcher({ page, perPage })
       .then(this.openSucceed)
       .catch(this.openFailed)
       .finally(fetchFinished);
@@ -67,7 +68,7 @@ class Pagination extends React.Component {
     this.open(lastPage);
   };
 
-  render() {
+  render () {
     const { total, perPage } = this.props;
 
     if (total < perPage) return null;
@@ -91,5 +92,16 @@ class Pagination extends React.Component {
     );
   }
 }
+
+Pagination.propTypes = {
+  total: PropTypes.number.isRequired,
+  perPage: PropTypes.number.isRequired,
+  page: PropTypes.number.isRequired,
+  fetchFinished: PropTypes.func.isRequired,
+  fetchStarted: PropTypes.func.isRequired,
+  fetcher: PropTypes.func.isRequired,
+  query: PropTypes.object,
+  setList: PropTypes.func.isRequired
+};
 
 export default Pagination;

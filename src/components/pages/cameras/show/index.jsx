@@ -1,42 +1,54 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardHeader, CardBody } from 'reactstrap';
 import { show } from 'api/cameras';
 import { SET_RECORD } from 'actions/cameras';
 import { displayUnixTimestamp } from 'components/helpers';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import ShowForm from 'components/base/show_form';
+import { ShowForm } from 'components/base/forms';
 import { showFields } from 'components/helpers/fields/cameras';
 
 class Show extends React.Component {
-
   values = () => {
     const { record } = this.props;
     return Object.assign({}, record, {
       created_at: displayUnixTimestamp(record.created_at),
       updated_at: displayUnixTimestamp(record.updated_at)
-    })
+    });
   };
 
-  renderRecord() {
+  renderRecord () {
     const { record, backPath, match } = this.props;
 
     return (<Card>
       <CardHeader>{record.name}</CardHeader>
       <CardBody>
-          <ShowForm
-            fields={showFields()}
-            values={this.values()}
-            backPath={backPath}
-            editURL={match.url}
-          />
+        <ShowForm
+          fields={showFields()}
+          values={this.values()}
+          backPath={backPath}
+          editURL={match.url}
+        />
       </CardBody>
     </Card>);
   }
 
-  render() {
+  render () {
     return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
   }
 }
+
+Show.propTypes = {
+  backPath: PropTypes.string.isRequired,
+  match: PropTypes.object.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  record: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    updated_at: PropTypes.number.isRequired,
+    created_at: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired
+  })
+};
 
 export default connectRecord('camera', SET_RECORD, resourceFetcher(show), Show);

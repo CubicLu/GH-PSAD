@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
 import { auth } from 'api/users';
 import { setToken } from 'actions/users';
 import { Link } from 'react-router-dom';
@@ -11,7 +12,7 @@ import CardLayout from 'components/base/layout/card';
 import AuthLayout from 'components/base/layout/auth';
 
 class Login extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       username: '',
@@ -34,10 +35,10 @@ class Login extends React.Component {
           isFetching: false,
           messages: setErrorsMessages(error)
         });
-      })
+      });
   };
 
-  setToken(data) {
+  setToken (data) {
     this.setState({
       isFetching: false,
       messages: []
@@ -47,7 +48,7 @@ class Login extends React.Component {
     this.props.history.push('/dashboard');
   }
 
-  render() {
+  render () {
     return (
       <AuthLayout>
         <CardLayout title="Sign In" isFetching={this.state.isFetching} messages={this.state.messages}>
@@ -94,9 +95,14 @@ class Login extends React.Component {
   }
 }
 
-function mapDispatch(dispatch) {
+function mapDispatch (dispatch) {
   return bindActionCreators({ setToken }, dispatch);
 }
+
+Login.propTypes = {
+  setToken: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
+};
 
 export default connect(
   null,

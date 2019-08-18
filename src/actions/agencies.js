@@ -1,7 +1,7 @@
 const SET_LIST = 'SET_AGENCY_LIST';
 const SET_RECORD = 'SET_AGENCY_RECORD';
 
-export { 
-  SET_LIST, 
-  SET_RECORD 
+export {
+  SET_LIST,
+  SET_RECORD
 };

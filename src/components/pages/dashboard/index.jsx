@@ -19,9 +19,9 @@ const Dashboard = props => {
   const { serverError } = props;
 
   return (
-    <div className="row">
-      <div className="col-2">
-        <SideNavigation/>
+    <div className='row'>
+      <div className='col-2'>
+        <SideNavigation />
       </div>
       <div className="col-10">
         {serverError ? renderError(serverError) : <MainContent/>}

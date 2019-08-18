@@ -4,10 +4,10 @@ import fetchApi from 'components/modules/fetch_api';
 const { index, show, update, destroy, create } = resourceApi('admins');
 
 const search = (query) => {
-  return fetchApi(`dashboard/admins/search`, { method: 'GET', params: { ...query } });
+  return fetchApi(`dashboard/admins/search`, { method: 'GET', params: { ...query, status: 'active' } });
 };
 
-function checkAdminPassword(password) {
+function checkAdminPassword (password) {
   return fetchApi(`dashboard/admins/check_password`, { method: 'POST', data: { password } });
 }
 

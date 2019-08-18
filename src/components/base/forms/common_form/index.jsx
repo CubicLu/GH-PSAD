@@ -1,15 +1,17 @@
 import React from 'react';
 import { Alert, Button, Col, FormGroup, Label, Row } from 'reactstrap';
 import { labelFor } from 'components/helpers/forms';
-import * as FieldType from './field_types';
+import {
+  ImageInput,
+  CustomSelect,
+  CustomMultiSelect,
+  TextWithLink,
+  Increaser,
+  FieldType
+} from 'components/helpers/form_fields';
 import { Form, Text } from 'informed';
 import { Link } from 'react-router-dom';
-import ImageInput from './fields/image';
-import CustomSelect from './fields/custom_select';
-import CustomMultiSelect from './fields/custom_select/multi';
 import { btnSpinner } from 'components/helpers';
-import TextWithLink from './fields/text_with_link';
-import Increaser from './fields/increaser';
 
 const renderField = (field, props = {}) => {
   const { lSize = 2, iSize = 6 } = props;
@@ -24,18 +26,27 @@ const renderField = (field, props = {}) => {
   );
 };
 
+const renderImageField = (field, props = {}) => (
+  <FormGroup row>
+    <Col md={12}>
+      {field.render ? field.render(field, props) : renderInput(field, props)}
+    </Col>
+  </FormGroup>
+)
+
 const renderInput = (field, props = {}) => {
   switch (field.type) {
     case FieldType.MULTISELECT_FIELD:
-      const { values = [] } = props;
-      return <CustomMultiSelect field={field} values={values}/>;
+      return <CustomMultiSelect field={field.name} options={field.options}/>;
     case FieldType.FILE_FIELD:
       return <ImageInput className="form-control" field={field.name}/>;
     case FieldType.SELECT_FIELD:
       return <CustomSelect field={field}/>;
-    case FieldType.TEXT_LINK:
+    case FieldType.TEXT_LINK_FIELD:
       return <TextWithLink field={field}/>;
-    case FieldType.INCREASER:
+    case FieldType.PASSWORD_FIELD:
+      return <Text className="form-control" field={field.name} type="password"/>;
+    case FieldType.INCREASER_FIELD:
       return <Increaser field={field}/>;
     default:
       return <Text className="form-control" field={field.name}/>;
@@ -111,4 +122,4 @@ const renderForm = (props = {}) => {
   );
 };
 
-export { renderField, renderFields, renderFieldsWithGrid, renderFormErrors, renderButtons, renderForm, renderInput };
+export { renderField, renderFields, renderFieldsWithGrid, renderFormErrors, renderButtons, renderForm, renderInput, renderImageField };

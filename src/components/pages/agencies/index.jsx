@@ -1,24 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { SET_LIST } from 'actions/agencies';
 import { index } from 'api/agencies';
-import { Col, Row, Table } from 'reactstrap';
+import { filterFields } from 'components/helpers/fields/agencies';
 import connectList from 'components/modules/connect_list';
-import Pagination from 'components/base/pagination';
-import BasicListToolbar from 'components/base/basic_list_toolbar';
 import resourceFetcher from 'components/modules/resource_fetcher';
+import BasicListToolbar from 'components/base/basic_list_toolbar';
+import IndexTable from 'components/base/table';
 
 class Index extends React.Component {
   renderRecords = () => {
     const { list, match } = this.props;
 
-    if (this.props.isFetching) {
-      return (<tr>
-        <td>
-          Loading data...
-        </td>
-      </tr>);
-    }
     return list.map((record, idx) => {
       return (
         <tr key={idx}>
@@ -33,35 +27,45 @@ class Index extends React.Component {
     });
   };
 
-  render() {
+  filterFetcher = (values, query) => {
+    return index({
+      query: {
+        ...query,
+        'query[agencies.email]': values.email,
+        'query[agencies.name]': values.name,
+        'query[agencies.phone]': values.phone,
+        'query[locations.full_address]': values.full_address
+      }
+    });
+  }
+
+  render () {
     return (
-      <React.Fragment>
-        <Row>
-          <Col xs="12">
-            <BasicListToolbar {...this.props} fetcher={index} label="Create Agency"/>
-          </Col>
-          <Col xs="12">
-            <Table>
-              <thead>
-              <tr>
-                <th>Agency Name</th>
-                <th>Agency ID</th>
-                <th>Location</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Enforcement Manager</th>
-              </tr>
-              </thead>
-              <tbody>
-              {this.renderRecords()}
-              </tbody>
-            </Table>
-          </Col>
-        </Row>
-        <Pagination {...this.props} fetcher={index}/>
-      </React.Fragment>
+      <IndexTable
+        {...this.props}
+        toolbar={ <BasicListToolbar {...this.props} fetcher={index} label="Create Agency"/> }
+        filterFields={filterFields()}
+        filterFetcher={this.filterFetcher}
+        columns={
+          <React.Fragment>
+            <th attr="agencies.name">Agency Name</th>
+            <th attr="agencies.id">Agency ID</th>
+            <th attr="locations.street">Location</th>
+            <th attr="agencies.email">Email</th>
+            <th attr="agencies.phone">Phone</th>
+            <th attr="admins.name">Enforcement Manager</th>
+          </React.Fragment>
+        }
+        renderRecords={this.renderRecords}
+      >
+      </IndexTable>
     );
   }
 }
+
+Index.propTypes = {
+  list: PropTypes.arrayOf(PropTypes.object).isRequired,
+  match: PropTypes.object.isRequired
+};
 
 export default connectList('agency', SET_LIST, resourceFetcher(index), Index);

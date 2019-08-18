@@ -7,8 +7,8 @@ function statuses() {
   return fetchApi(`dashboard/parking/tickets/statuses`, { method: 'GET', params: {  } });
 }
 const index = (params = {}) => {
-  const { page, perPage, agency_id } = params;
-  return fetchApi(`dashboard/${resources}`, { method: 'GET', params: { page, perPage, agency_id } });
+  const { page, perPage, agency_id, query } = params;
+  return fetchApi(`dashboard/${resources}`, { method: 'GET', params: { page, perPage, agency_id, ...query} });
 };
 
 export { index, show, update, statuses };

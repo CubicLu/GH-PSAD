@@ -1,25 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { SET_LIST } from 'actions/cameras';
 import { index } from 'api/cameras';
-import { displayUnixTimestamp } from 'components/helpers';
-import { Col, Row, Table } from 'reactstrap';
+import { filterFields } from 'components/helpers/fields/cameras';
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import Pagination from 'components/base/pagination';
 import BasicListToolbar from 'components/base/basic_list_toolbar';
+import { displayUnixTimestamp } from 'components/helpers';
+import IndexTable from 'components/base/table';
 
 class Index extends React.Component {
   renderRecords = () => {
     const { list, match } = this.props;
-
-    if (this.props.isFetching) {
-      return (<tr>
-        <td>
-          Loading data...
-        </td>
-      </tr>);
-    }
 
     return list.map((record, idx) => {
       return (
@@ -34,34 +27,42 @@ class Index extends React.Component {
     });
   };
 
-  render() {
+  // TODO search method on back-end
+  filterFetcher = (values, query) => {
+    return index({
+      query: {
+        parking_lot_id: values.parking_lot_id,
+        ...query
+      }
+    });
+  }
+
+  render () {
     return (
-      <React.Fragment>
-        <Row>
-          <Col xs="12">
-            <BasicListToolbar {...this.props} fetcher={index} label="Create Camera"/>
-          </Col>
-          <Col xs="12">
-            <Table>
-              <thead>
-              <tr>
-                <th>Name</th>
-                <th>Stream</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Parking Lot</th>
-              </tr>
-              </thead>
-              <tbody>
-              {this.renderRecords()}
-              </tbody>
-            </Table>
-          </Col>
-        </Row>
-        <Pagination {...this.props} fetcher={index}/>
-      </React.Fragment>
+      <IndexTable
+        {...this.props}
+        toolbar={ <BasicListToolbar {...this.props} fetcher={index} label="Create Camera"/> }
+        filterFields={filterFields()}
+        filterFetcher={this.filterFetcher}
+        columns={
+          <React.Fragment>
+            <th attr="name">Name</th>
+            <th attr="stream">Stream</th>
+            <th attr="created_at">Created At</th>
+            <th attr="updated_at">Updated At</th>
+            <th attr="parking_lot_id">Parking Lot</th>
+          </React.Fragment>
+        }
+        renderRecords={this.renderRecords}
+      >
+      </IndexTable>
     );
   }
 }
+
+Index.propTypes = {
+  list: PropTypes.arrayOf(PropTypes.object).isRequired,
+  match: PropTypes.object.isRequired
+};
 
 export default connectList('camera', SET_LIST, resourceFetcher(index), Index);

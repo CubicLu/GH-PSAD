@@ -1,7 +1,7 @@
 import React from 'react';
 import { fields } from 'components/helpers/fields/parking/settings';
 import { Form } from 'informed';
-import { renderFieldsWithGrid, renderFormErrors } from 'components/base/form';
+import { renderFieldsWithGrid, renderFormErrors } from 'components/base/forms/common_form';
 import CollapsableCard from 'components/base/collapsable_card';
 
 const fieldProps = { lSize: 6 };

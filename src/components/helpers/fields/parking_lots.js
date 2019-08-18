@@ -1,9 +1,11 @@
+import { FieldType } from 'components/helpers/form_fields'
+
 const fields = (managers = [], admins = []) => (
   [
     { name: 'name' },
     {
       name: 'disputes_count',
-      type: 'textlink',
+      type: FieldType.TEXT_LINK_FIELD,
       props: { to: '/disputes', value: 'Show list' },
       style: { maxWidth: 'inherit', display: 'inline' },
       label: 'Disputes received'
@@ -12,7 +14,7 @@ const fields = (managers = [], admins = []) => (
     { name: 'email' },
     {
       name: 'violations_count',
-      type: 'textlink',
+      type: FieldType.TEXT_LINK_FIELD,
       props: { to: '/violations', value: 'Show list' },
       style: { maxWidth: 'inherit', display: 'inline' },
       label: 'Violation records'
@@ -21,7 +23,7 @@ const fields = (managers = [], admins = []) => (
     { name: 'town_manager_id', type: 'select', options: managers.map(manager => { return {value: manager.id, label: manager.email}}) },
     {
       name: 'status',
-      type: 'textlink',
+      type: FieldType.TEXT_LINK_FIELD,
       props: { to: '/suspend', value: 'Suspend' },
       style: { maxWidth: 'inherit', display: 'inline' },
       label: 'Current status'
@@ -33,4 +35,12 @@ const fields = (managers = [], admins = []) => (
   ]
 );
 
-export { fields };
+const filterFields = () => [
+  { name: 'parking_lots.id', label: 'ID' },
+  { name: 'parking_lots.name', label: 'Name' },
+  { name: 'location.full_address', label: 'Location' },
+  { name: 'parking_lots.email', label: 'Email' },
+  { name: 'parking_lots.phone', label: 'Phone' },
+  { name: 'parking_lots.status', label: 'Status' }
+]
+export { fields, filterFields };

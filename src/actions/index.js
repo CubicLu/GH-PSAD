@@ -1,5 +1,5 @@
 import * as AdminActions from './admins';
-import * as TicketActions from './agencies/tickets';
+import * as TicketActions from './tickets';
 import * as AgencyActions from './agencies';
 import * as UserActions from './users';
 import * as CameraActions from './cameras';
@@ -18,11 +18,11 @@ const invoke = type => {
     return {
       type,
       payload
-    }
-  }
+    };
+  };
 };
 
-export { 
+export {
   UserActions,
   AdminActions,
   AgencyActions,

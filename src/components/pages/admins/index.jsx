@@ -1,24 +1,23 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { SET_LIST } from 'actions/admins';
 import { index } from 'api/admins';
-import { Col, Row, Table } from 'reactstrap';
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import Pagination from 'components/base/pagination';
 import BasicListToolbar from 'components/base/basic_list_toolbar';
+import IndexTable from 'components/base/table';
+import { filterFields } from 'components/helpers/fields/admins';
+import waitUntilFetched from 'components/modules/wait_until_fetched';
+import { search as dropdownsSearch } from 'api/dropdowns';
 
 class Index extends React.Component {
+  state = {
+    filterRolesField: []
+  }
+
   renderRecords = () => {
     const { list, match } = this.props;
-
-    if (this.props.isFetching) {
-      return (<tr>
-        <td>
-          Loading data...
-        </td>
-      </tr>);
-    }
 
     return list.map((record, idx) => {
       return (
@@ -29,7 +28,7 @@ class Index extends React.Component {
           <td>{record.role.name}</td>
           <td>
             <span className={`btn btn-${record.status === 'active' ? 'success' : 'danger'}`}>
-            {record.status}
+              {record.status}
             </span>
           </td>
         </tr>
@@ -37,34 +36,60 @@ class Index extends React.Component {
     });
   };
 
-  render() {
+  filterFetcher = (values, query) => {
     return (
-      <React.Fragment>
-        <Row>
-          <Col xs="12">
-            <BasicListToolbar {...this.props} fetcher={index} label="Create Admin"/>
-          </Col>
-          <Col xs="12">
-            <Table>
-              <thead>
-              <tr>
-                <th>Username</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Status</th>
-              </tr>
-              </thead>
-              <tbody>
-              {this.renderRecords()}
-              </tbody>
-            </Table>
-          </Col>
-        </Row>
-        <Pagination {...this.props} fetcher={index}/>
-      </React.Fragment>
+      index({
+        query: {
+          ...query,
+          role_names: values.role_names,
+          status: values.status,
+          'query[email]': values.email,
+          'query[username]': values.username,
+          'query[name]': values.name
+        }
+      })
+    );
+  }
+
+  componentDidMount () {
+    waitUntilFetched.call(this,
+      dropdownsSearch('role_names_filter', { admin: { id: 1 } })
+        .then(response => this.setState({ filterRolesField: response.data }))
+    );
+  }
+
+  render () {
+    return (
+      <IndexTable
+        {...this.props}
+        toolbar={
+          <BasicListToolbar
+            {...this.props}
+            fetcher={index}
+            label="Create Admin"
+          />
+        }
+        filterFields={filterFields(this.state.filterRolesField)}
+        filterFetcher={this.filterFetcher}
+        columns={
+          <React.Fragment>
+            <th attr="username">Username</th>
+            <th attr="name">Name</th>
+            <th attr="email">Email</th>
+            <th attr="roles.name">Role</th>
+            <th attr="status">Status</th>
+          </React.Fragment>
+        }
+        renderRecords={this.renderRecords}
+      >
+      </IndexTable>
     );
   }
 }
+
+Index.propTypes = {
+  list: PropTypes.arrayOf(PropTypes.object).isRequired,
+  match: PropTypes.object.isRequired
+};
 
 export default connectList('admin', SET_LIST, resourceFetcher(index), Index);
