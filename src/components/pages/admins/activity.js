@@ -1,12 +1,8 @@
 import React from 'react';
-import { Card, CardBody, CardHeader, Row, Table } from 'reactstrap';
-import { fields } from 'components/helpers/fields/parking/settings';
-import { Form } from 'informed';
+import { Card, CardBody, CardHeader, Table } from 'reactstrap';
 
 class ShowActivity extends React.Component {
   render () {
-    const { record, setFormApi } = this.props;
-
     return (
       <Card>
         <CardHeader>
@@ -27,7 +23,5 @@ class ShowActivity extends React.Component {
     );
   }
 }
-
-const fieldProps = { lSize: 6 };
 
 export default ShowActivity;

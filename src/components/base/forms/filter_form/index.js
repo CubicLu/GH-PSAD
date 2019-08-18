@@ -5,7 +5,6 @@ import { btnSpinner } from 'components/helpers';
 import {
  CustomSelect,
  CustomMultiSelect,
- ImageInput,
  DateRangeInput,
  FieldType
 } from 'components/helpers/form_fields'

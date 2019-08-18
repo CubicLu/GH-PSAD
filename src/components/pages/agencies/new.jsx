@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
+import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { create } from 'api/agencies';
@@ -8,12 +8,11 @@ import { SET_RECORD } from 'actions/agencies';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import { fields, exampleData, exampleLocationData } from 'components/helpers/fields/agencies';
 import { fromJson as showErrors } from 'components/helpers/errors';
-import { CommonForm } from 'components/base/forms';
 import saveRecord from 'components/modules/form_actions/save_record';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 import { btnSpinner } from 'components/helpers';
-import { NavLink, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Form } from 'informed';
 import withFetching from 'components/modules/with_fetching';
 import LocationNew from './location/new'
@@ -73,7 +72,6 @@ class New extends React.Component {
   }
 
   renderLocation () {
-    const { record } = this.props;
     return <LocationNew setFormApi={this.setLocationFormApi} record={{location: exampleLocationData()}} />;
   }
 

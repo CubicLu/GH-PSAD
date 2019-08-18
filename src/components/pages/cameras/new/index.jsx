@@ -8,7 +8,6 @@ import { SET_RECORD } from 'actions/cameras';
 import { fields, exampleData } from 'components/helpers/fields/cameras';
 import { fromJson as showErrors } from 'components/helpers/errors';
 import saveRecord from 'components/modules/form_actions/save_record';
-import { CommonForm } from 'components/base/forms';
 import { renderFieldsWithGrid } from 'components/base/forms/common_form';
 import { btnSpinner } from 'components/helpers';
 import { NavLink } from 'react-router-dom';

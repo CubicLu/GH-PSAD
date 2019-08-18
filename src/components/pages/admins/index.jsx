@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { SET_LIST } from 'actions/admins';
-import { index, search } from 'api/admins';
+import { index } from 'api/admins';
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import BasicListToolbar from 'components/base/basic_list_toolbar';

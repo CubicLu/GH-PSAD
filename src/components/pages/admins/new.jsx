@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
+import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { create } from 'api/admins';
@@ -13,7 +13,7 @@ import waitUntilFetched from 'components/modules/wait_until_fetched';
 import withFetching from 'components/modules/with_fetching';
 import { renderFieldsWithGrid, renderImageField} from 'components/base/forms/common_form';
 import { btnSpinner } from 'components/helpers';
-import { NavLink, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Form } from 'informed';
 import { FieldType } from 'components/helpers/form_fields';
 
@@ -41,8 +41,7 @@ class New extends React.Component {
   }
 
   renderHeader () {
-    const { match, backPath } = this.props;
-    const { isSaving } = this.state;
+    const { backPath } = this.props;
 
     return (<Row>
       <Col md={2}>

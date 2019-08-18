@@ -10,19 +10,17 @@ import { NavLink } from 'react-router-dom';
 import updateRecord from 'components/modules/form_actions/update_record';
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
-import SettingEdit from '../settings/edit';
+import SettingSection from './setting_section';
+import VoiSection from './voi_section';
 import { fromJson as showErrors } from 'components/helpers/errors';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import waitUntilFetched from 'components/modules/wait_until_fetched';
 import { FieldType } from 'components/helpers/form_fields'
+import { isEmpty } from 'underscore';
 
 class Edit extends React.Component {
   state = {
     isSaving: false,
-    dropdowns: {
-      parkingAdmins: [],
-      townManagers: []
-    }
+    dropdowns: {}
   };
 
   save = () => {
@@ -46,8 +44,8 @@ class Edit extends React.Component {
     return values;
   }
 
-  renderHeader () {
-    const { match, record } = this.props;
+  renderHeader() {
+    const { match } = this.props;
     const { isSaving } = this.state;
 
     return (<Row>
@@ -55,9 +53,6 @@ class Edit extends React.Component {
         <Button color="success" outline onClick={this.save}>
           {isSaving ? btnSpinner() : 'Save'}
         </Button>
-      </Col>
-      <Col md={2} className="align-self-center">
-        Edit {record.name}
       </Col>
       <Col md={8}>
         <Nav pills className="float-right">
@@ -112,34 +107,35 @@ class Edit extends React.Component {
 
   renderSetting () {
     const { record } = this.props;
-    return <SettingEdit setFormApi={this.setSettingFormApi} record={record.setting} />;
+    return <SettingSection setFormApi={this.setSettingFormApi} record={record.setting}/>
   }
 
-  handleFailed (error) {
-    console.log(error);
+  renderVoi() {
+    const { record } = this.props;
+    return <VoiSection records={record.vehicle_rules}/>
   }
 
   componentDidMount () {
-    waitUntilFetched.call(this,
-      searchAdminByRoleName(['parking_admin', 'town_manager'])
-        .then((result) => {
-          this.setState({
-            dropdowns: {
-              parkingAdmins: result.parking_admin,
-              townManagers: result.town_manager
-            }
-          });
-        })
-        .catch(this.handleFailed)
-    );
+    searchAdminByRoleName(['parking_admin', 'town_manager'])
+      .then((result) => {
+        this.setState({
+          dropdowns: {
+            parkingAdmins: result.parking_admin,
+            townManagers: result.town_manager
+          }
+        });
+      })
+      .catch(this.handleFailed)
   }
 
   render () {
-    return this.props.isFetching ? <div>Loading data...</div> : (
+    return this.props.isFetching || isEmpty(this.state.dropdowns) ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
         <div className="mt-1"/>
         {this.renderSetting()}
+        <div className="mt-1"/>
+        {this.renderVoi()}
       </React.Fragment>
     );
   }

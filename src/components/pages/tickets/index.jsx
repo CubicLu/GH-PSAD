@@ -9,7 +9,6 @@ import Ticket from 'components/base/agencies/tickets';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import IndexTable from 'components/base/table';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
-import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import { search as dropdownsSearch } from 'api/dropdowns';
 
 class Index extends React.Component {

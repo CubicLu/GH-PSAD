@@ -7,7 +7,7 @@ import { btnSpinner } from 'components/helpers';
 import { Button, Card, CardBody, CardHeader, Col, Nav, Row, Table, Collapse } from 'reactstrap';
 import { Form } from 'informed';
 import connectRecord from 'components/modules/connect_record';
-import { NavLink, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import updateRecord from 'components/modules/form_actions/update_record';
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
@@ -64,7 +64,6 @@ class Show extends React.Component {
 
   renderHeader () {
     const { backPath, record } = this.props;
-    const { isSaving } = this.state;
 
     return (<Row>
       <Col md={2} className="align-self-center">
@@ -152,7 +151,7 @@ class Show extends React.Component {
 
   render () {
 
-    const { isFetching, record, backPath, match } = this.props;
+    const { isFetching, record, match } = this.props;
     const ticketURL = `${match.url}/tickets`;
     return isFetching || !record || isEmpty(this.state.dropdowns) ? <div>Loading data...</div> : (
       <React.Fragment>

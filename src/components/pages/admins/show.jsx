@@ -14,7 +14,7 @@ import { fromJson as showErrors } from 'components/helpers/errors';
 import { FieldType } from 'components/helpers/form_fields';
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 import { btnSpinner } from 'components/helpers';
-import { NavLink, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Form } from 'informed';
 import { isEmpty } from 'underscore';
 import ShowActivity from './activity'
@@ -68,7 +68,6 @@ class Show extends React.Component {
 
   renderHeader () {
     const { backPath, record } = this.props;
-    const { isSaving, isEditing } = this.state;
 
     return (<Row>
       <Col md={2} className="align-self-center">
@@ -99,7 +98,7 @@ class Show extends React.Component {
   }
 
   renderForm () {
-    const { isSaving, isEditing } = this.state;
+    const { isSaving } = this.state;
 
     return (
       <fieldset disabled={isSaving}>

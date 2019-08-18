@@ -1,7 +1,7 @@
 import { search } from 'api/admins';
 
 const searchAdminByRoleName = roleNames => new Promise((resolve, reject) => {
-  search(roleNames)
+  search({role_names: roleNames})
     .then(({ data }) => {
       let container = {};
       roleNames.forEach(roleName => container[roleName] = [])

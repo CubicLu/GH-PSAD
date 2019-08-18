@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { SET_LIST } from 'actions/agencies';
-import { index, search } from 'api/agencies';
+import { index } from 'api/agencies';
 import { filterFields } from 'components/helpers/fields/agencies';
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';

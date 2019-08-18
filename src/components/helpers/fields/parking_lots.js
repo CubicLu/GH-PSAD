@@ -1,4 +1,3 @@
-import React from 'react';
 import { FieldType } from 'components/helpers/form_fields'
 
 const fields = (managers = [], admins = []) => (
@@ -28,17 +27,13 @@ const fields = (managers = [], admins = []) => (
       props: { to: '/suspend', value: 'Suspend' },
       style: { maxWidth: 'inherit', display: 'inline' },
       label: 'Current status'
-    }
+    },
+    { name: 'location.city' },
+    { name: 'location.street' },
+    { name: 'location.country' },
+    { name: 'location.building' }
   ]
 );
-
-// TODO: move to separate helper
-const location = [
-  { name: 'location.city' },
-  { name: 'location.street' },
-  { name: 'location.country' },
-  { name: 'location.building' }
-];
 
 const filterFields = () => [
   { name: 'parking_lots.id', label: 'ID' },
@@ -48,5 +43,4 @@ const filterFields = () => [
   { name: 'parking_lots.phone', label: 'Phone' },
   { name: 'parking_lots.status', label: 'Status' }
 ]
-
 export { fields, filterFields };

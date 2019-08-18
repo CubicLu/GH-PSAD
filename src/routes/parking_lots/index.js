@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, withRouter } from 'react-router';
+import { Route, withRouter } from 'react-router';
 import Index from 'components/pages/parking_lots/index';
 import Edit from 'components/pages/parking_lots/edit';
 import renderWithBackPath from 'components/modules/render_with_back_path';

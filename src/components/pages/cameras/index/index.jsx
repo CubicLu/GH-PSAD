@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { SET_LIST } from 'actions/cameras';
-import { index, search } from 'api/cameras';
+import { index } from 'api/cameras';
 import { filterFields } from 'components/helpers/fields/cameras';
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';

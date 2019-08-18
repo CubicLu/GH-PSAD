@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, asField } from 'informed';
+import { asField } from 'informed';
 import { Button, Col, Row, Label} from 'reactstrap';
 import { unixDatePicker } from 'components/helpers';
 

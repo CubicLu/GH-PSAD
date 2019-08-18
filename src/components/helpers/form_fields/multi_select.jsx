@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import MultiSelect from 'react-select';
 import { isEmpty, defaults } from 'underscore';
-import { Text, asField } from 'informed';
+import { asField } from 'informed';
 
 const CustomMultiSelect = asField(({field, fieldApi, fieldState, options}) => {
 

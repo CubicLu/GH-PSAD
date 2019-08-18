@@ -6,24 +6,20 @@ import { update, statuses, show } from 'api/parking/tickets';
 import { fields } from 'components/helpers/fields/tickets';
 import connectRecord from 'components/modules/connect_record';
 import { SET_RECORD } from 'actions/tickets';
-import { CommonForm } from 'components/base/forms';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
 import { fromJson as showErrors } from 'components/helpers/errors';
-import { renderFieldsWithGrid, renderField } from 'components/base/forms/common_form';
+import { renderFieldsWithGrid } from 'components/base/forms/common_form';
 import { btnSpinner, displayUnixTimestamp } from 'components/helpers';
-import { NavLink, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Form } from 'informed';
 
 class Edit extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      isSaving: false,
-      dropdowns: {}
-    };
+  state = {
+    isSaving: false,
+    dropdowns: {}
   }
 
   save = () => {
@@ -59,13 +55,11 @@ class Edit extends React.Component {
 
    renderHeader () {
      const { backPath, record } = this.props;
-     const { isSaving } = this.state;
     const backPathWithId = generatePath(backPath, { id: record.id })
 
      return (<Row>
        <Col md={2}>
         <Link to={backPathWithId} className="mr-2 back-button" >&#10094;</Link>
-
         {record.type} #{record.id}
        </Col>
        <Col md={2} className="align-self-center">

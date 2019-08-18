@@ -1,5 +1,4 @@
 import faker from 'faker'
-import { FieldType } from 'components/helpers/form_fields'
 
 const fields = (officers, managers, townManagers) => [
   { name: 'zip', label: 'Zip', mandatory: true },
