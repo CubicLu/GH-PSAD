@@ -34,6 +34,7 @@ class Index extends React.Component {
 
   filterFetcher = (values, query) => {
     const { match } = this.props;
+    debugger
     return index({
       agency_id: match.params.agency_id,
       query: {
@@ -90,12 +91,11 @@ class Index extends React.Component {
         columns={
           <React.Fragment>
             <th attr="parking_tickets.id">#</th>
+            <th attr="parking_rules.name">Violation Name</th>
+            <th attr="parking_lots.name">Parking Lot Name</th>
+            <th attr="parking_tickets.created_at">Date Commited</th>
             <th attr="admins.name">Officer</th>
-            <th attr="parking_lots.name">Parking Lot</th>
             <th attr="parking_tickets.status">Status</th>
-            <th attr="parking_rules.name">Type</th>
-            <th attr="parking_tickets.created_at">Created At</th>
-            <th disableSort>Actions</th>
           </React.Fragment>
         }
         renderRecords={this.renderRecords}

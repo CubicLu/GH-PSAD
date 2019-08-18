@@ -13,8 +13,8 @@ import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
 import { fromJson as showErrors } from 'components/helpers/errors';
 import { renderFieldsWithGrid, renderField } from 'components/base/forms/common_form';
-import { btnSpinner } from 'components/helpers';
-import { NavLink } from 'react-router-dom';
+import { btnSpinner, displayUnixTimestamp } from 'components/helpers';
+import { NavLink, Link } from 'react-router-dom';
 import { Form } from 'informed';
 
 class Edit extends React.Component {
@@ -22,10 +22,7 @@ class Edit extends React.Component {
     super(props);
     this.state = {
       isSaving: false,
-      dropdowns: {
-        statuses: [],
-        officers: []
-      }
+      dropdowns: {}
     };
   }
 
@@ -35,6 +32,17 @@ class Edit extends React.Component {
     const path = generatePath(backPath, { id: record.id });
     updateRecord.bind(this, update, path)(values);
   };
+
+  renderSaveButton = () => {
+    const { isSaving } = this.state;
+    return (
+      <Col>
+        <Button color="success float-right" outline onClick={this.save}>
+          {isSaving ? btnSpinner() : 'Save Changes'}
+        </Button>
+      </Col>
+    )
+  }
 
   renderFields () {
     const { officers, statuses } = this.state.dropdowns;
@@ -50,20 +58,25 @@ class Edit extends React.Component {
    };
 
    renderHeader () {
-     const { match, record } = this.props;
+     const { backPath, record } = this.props;
      const { isSaving } = this.state;
+    const backPathWithId = generatePath(backPath, { id: record.id })
+
      return (<Row>
        <Col md={2}>
-         <Button color="success" outline onClick={this.save}>
-           {isSaving ? btnSpinner() : 'Save'}
-         </Button>
+        <Link to={backPathWithId} className="mr-2 back-button" >&#10094;</Link>
+
+        {record.type} #{record.id}
        </Col>
        <Col md={2} className="align-self-center">
         Edit {record.agency.name} Ticket number {record.id}
        </Col>
        <Col md={8}>
          <Nav pills className="float-right">
-           <NavLink to={match.url} className="nav-link">Information</NavLink>
+
+            <span class="mr-2 text-muted">Updated: {displayUnixTimestamp(record.updated_at)}</span>
+
+            ID: {record.id}
          </Nav>
        </Col>
      </Row>);
@@ -81,6 +94,7 @@ class Edit extends React.Component {
         <Form getApi={this.setFormApi} initialValues={this.values()}>
           <React.Fragment>
             {this.renderFields()}
+            {this.renderSaveButton()}
           </React.Fragment>
         </Form>
       </fieldset>
@@ -127,7 +141,8 @@ class Edit extends React.Component {
   }
 
   render () {
-    return this.props.isFetching ? <div>Loading data...</div> : (
+    const { officers, statuses } = this.state.dropdowns
+    return this.props.isFetching || !officers || !statuses ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
       </React.Fragment>

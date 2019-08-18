@@ -19,7 +19,7 @@ const fields = () => [
   { name: 'stream', mandatory: true },
   { name: 'login' },
   { name: 'password' },
-  { name: 'parking_lot_id',  mandatory: true }
+  { name: 'parking_lot_id', mandatory: true }
 ];
 
 const showFields = () => [

@@ -7,17 +7,14 @@ const Tickets = props => {
   return (
      <tr>
       <th scope="row">{parkingTicket.id}</th>
-      <td>{parkingTicket.officer.email}</td>
+      <td><Link to={`${url}/${parkingTicket.id}`} className="mr-1">{parkingTicket.type}</Link></td>
       <td>{parkingTicket.lot.name}</td>
+      <td>{displayUnixTimestamp(parkingTicket.created_at)}</td>
+      <td>{parkingTicket.officer.email}</td>
       <td>
         <span className={`btn btn-${parkingTicket.status === 'opened' ? 'success' : 'warning'}`}>
           {parkingTicket.status}
         </span>
-      </td>
-      <td>{parkingTicket.type}</td>
-      <td>{displayUnixTimestamp(parkingTicket.created_at)}</td>
-      <td>
-        <Link to={`${url}/${parkingTicket.id}`} className="btn btn-info mr-1">Show</Link>
       </td>
     </tr>
   )

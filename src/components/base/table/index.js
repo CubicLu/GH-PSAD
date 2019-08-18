@@ -35,7 +35,7 @@ class IndexTable extends React.Component {
 
   toggleModal = event => this.setState((state) => ({ filterModalOpen: !state.filterModalOpen }));
 
-  handleRefresh = () => this.setState({sortedAttr: {}})
+  handleRefresh = () => this.setState({ sortedAttr: {}, filterQuery: {} })
 
   setQuery = (sortedAttr) => {
     const { paginationQuery } = this.props

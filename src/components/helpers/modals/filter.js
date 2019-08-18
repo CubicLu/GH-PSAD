@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { fromJson as showErrors } from 'components/helpers/errors';
 import { FilterForm } from 'components/base/forms';
@@ -15,7 +15,8 @@ const Filter = function (props) {
     fetchStarted,
     fetchFinished,
     handleSubmitFilter,
-    setList
+    setList,
+    filterQuery
   } = props
 
   const [errorMessage, setErrorMessage] = useState(null)
@@ -23,17 +24,21 @@ const Filter = function (props) {
 
   const submitForm = (values) => {
     const cloneValues  = cloneDeep(values)
-    fetchStarted()
-    setValues(cloneValues)
     handleSubmitFilter(cloneValues)
+
+    fetchStarted()
     filterFetcher(cloneValues)
-    .then((res) => {
-      setList(selectList(res));
-      toggleModal()
-    })
-    .catch(error => setErrorMessage(error))
-    .finally(fetchFinished)
+      .then((res) => {
+        setList(selectList(res));
+        toggleModal()
+      })
+      .catch(error => setErrorMessage(error))
+      .finally(fetchFinished)
   }
+
+  useEffect(() => {
+    setValues(filterQuery)
+  }, [filterQuery]);
 
   return (
     <Modal isOpen={isOpen} toggle={toggleModal} >

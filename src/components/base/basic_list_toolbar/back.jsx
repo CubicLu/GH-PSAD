@@ -11,7 +11,9 @@ class BasicBackListToolbar extends React.Component {
   };
 
   refresh = () => {
-    const { handleRefresh, fetchFinished, fetcher } = this.props;
+    const { handleRefresh, fetchFinished, fetchStarted, fetcher } = this.props;
+
+    fetchStarted();
     handleRefresh();
     fetcher()
       .then(this.refreshSucceed)

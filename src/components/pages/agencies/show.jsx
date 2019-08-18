@@ -35,6 +35,14 @@ class Show extends React.Component {
     }));
   }
 
+  setFormApi = formApi => {
+    this.formApi = formApi;
+  };
+
+  setLocationFormApi = formApi => {
+    this.locationFormApi = formApi;
+  };
+
   save = () => {
     let values = setFormApiFields(fields([], [], []), this.formApi)
     values.avatar = this.formApi.getValue('avatar')
@@ -70,14 +78,6 @@ class Show extends React.Component {
       </Col>
     </Row>);
   }
-
-  setFormApi = formApi => {
-    this.formApi = formApi;
-  };
-
-  setLocationFormApi = formApi => {
-    this.locationFormApi = formApi;
-  };
 
   renderSaveButton = () => {
     const { isSaving } = this.state;
@@ -159,7 +159,7 @@ class Show extends React.Component {
         {this.renderRecord()}
         <div className="mt-1"/>
         {this.renderLocation()}
-           <Card className="mt-5" onClick={() => this.openCollapsable('collapse')}>
+        <Card className="mt-5" onClick={() => this.openCollapsable('collapse')}>
           <CardHeader>
             Ticket Assignment ({record.parking_tickets_total})
             <span dangerouslySetInnerHTML={{ __html: this.state.collapse ? '&#9650;' : '&#9660;' }}></span>
@@ -171,12 +171,11 @@ class Show extends React.Component {
             <thead>
               <tr>
                 <th>#</th>
+                <th>Violation Name</th>
+                <th>Parking Lot Name</th>
+                <th>Date Commited</th>
                 <th>Officer</th>
-                <th>Parking Lot</th>
                 <th>Status</th>
-                <th>Type</th>
-                <th>Created At</th>
-                <th>Actions</th>
               </tr>
             </thead>
             <tbody>

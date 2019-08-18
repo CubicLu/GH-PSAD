@@ -38,13 +38,15 @@ class Index extends React.Component {
 
   filterFetcher = (values, query) => {
     return (
-      search({
-        ...query,
-        role_names: values.role_names,
-        status: values.status,
-        'query[email]': values.email,
-        'query[username]': values.username,
-        'query[name]': values.name
+      index({
+        query: {
+          ...query,
+          role_names: values.role_names,
+          status: values.status,
+          'query[email]': values.email,
+          'query[username]': values.username,
+          'query[name]': values.name
+        }
       })
     );
   }

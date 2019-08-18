@@ -6,7 +6,6 @@ import {
  CustomSelect,
  CustomMultiSelect,
  ImageInput,
- Divider,
  DateRangeInput,
  FieldType
 } from 'components/helpers/form_fields'
@@ -14,7 +13,6 @@ import {
 class CommonForm extends React.Component {
   renderField = (field, key) => (
     <FormGroup row key={key}>
-      { field.divider && <Divider info={field.divider}/> }
       <Label for={field.name} sm={2}>{field.label}</Label>
       <Col sm={10}>
         {this.renderInput(field)}
@@ -27,7 +25,7 @@ class CommonForm extends React.Component {
       case FieldType.DATE_FIELD:
         return <DateRangeInput className="form-control" field={field.name} initialValues={this.props.values} />
       case FieldType.MULTISELECT_FIELD:
-        return <CustomMultiSelect fieldName={field.name} options={field.options} values={this.props.values} />;
+        return <CustomMultiSelect field={field.name} options={field.options} values={this.props.values} />;
       case FieldType.SELECT_FIELD:
         return <CustomSelect field={field} />;
       default:
