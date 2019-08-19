@@ -1,5 +1,7 @@
 import React from 'react';
 import { list as selectList } from 'selectors/list';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSortDown, faSortUp, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 const TRSort = (props) => {
 
@@ -27,7 +29,7 @@ const TRSort = (props) => {
                 }
               }}>
                 {th.props.children}
-                <span dangerouslySetInnerHTML={{__html: arrowPosition(th.props, sortedAttr)}}></span>
+                <FontAwesomeIcon icon={arrowPosition(th.props, sortedAttr)}/>
               </span>
             </th>
           </React.Fragment>
@@ -43,9 +45,9 @@ const arrowPosition = (th, sortedAttr) => {
   }
 
   if(th.attr === sortedAttr.keyword) {
-    return sortedAttr.asc ? '&#9660;' : '&#9650;'
+    return sortedAttr.asc ? faSortDown : faSortUp
   } else {
-    return ' &ndash;'
+    return faMinus
   }
 }
 

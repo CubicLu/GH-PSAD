@@ -1,13 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardHeader, CardBody } from 'reactstrap';
-import { show } from 'api/cameras';
+/* Actions */
 import { SET_RECORD } from 'actions/cameras';
+/* API */
+import { show } from 'api/cameras';
+/* Base */
+import { ShowForm } from 'components/base/forms';
+/* Helpers */
 import { displayUnixTimestamp } from 'components/helpers';
+import { showFields } from 'components/helpers/fields/cameras';
+/* Modules */
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import { ShowForm } from 'components/base/forms';
-import { showFields } from 'components/helpers/fields/cameras';
 
 class Show extends React.Component {
   values = () => {

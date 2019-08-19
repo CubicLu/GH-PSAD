@@ -1,13 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+/* Actions */
 import { SET_LIST } from 'actions/parking_lots';
+/* API */
 import { index, search } from 'api/parking_lots';
-import { filterFields } from 'components/helpers/fields/parking_lots';
-import connectList from 'components/modules/connect_list';
-import resourceFetcher from 'components/modules/resource_fetcher';
+/* Base */
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';
+/* Helpers */
+import { filterFields } from 'components/helpers/fields/parking_lots';
+/* Modules */
+import resourceFetcher from 'components/modules/resource_fetcher';
+import connectList from 'components/modules/connect_list';
 
 class Index extends React.Component {
   renderRecords = () => {

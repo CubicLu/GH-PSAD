@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useField } from 'informed';
 import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { isUndefined } from 'underscore';
@@ -13,11 +14,11 @@ const Increaser = props => {
   const onIncrease = () => {
     const newValue = value + step;
 
-    if (!isUndefined(max) &&newValue > max) {
+    if (!isUndefined(max) && newValue > max) {
       fieldApi.setError(`cannot be more than ${renderValue(max)}`);
     } else {
       fieldApi.setError(undefined);
-      setValue(newValue)
+      setValue(newValue);
     }
   };
 
@@ -47,6 +48,10 @@ const Increaser = props => {
       </InputGroupAddon>
     </InputGroup>
   );
+};
+
+Increaser.propTypes = {
+  field: PropTypes.object.isRequired
 };
 
 export default Increaser;

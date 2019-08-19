@@ -1,15 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+/* Actions */
 import { SET_LIST } from 'actions/admins';
+/* API */
 import { index } from 'api/admins';
-import connectList from 'components/modules/connect_list';
-import resourceFetcher from 'components/modules/resource_fetcher';
+import { search as dropdownsSearch } from 'api/dropdowns';
+/* Base */
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';
+/* Helpers */
 import { filterFields } from 'components/helpers/fields/admins';
+/* Modules */
+import connectList from 'components/modules/connect_list';
+import resourceFetcher from 'components/modules/resource_fetcher';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
-import { search as dropdownsSearch } from 'api/dropdowns';
 
 class Index extends React.Component {
   state = {

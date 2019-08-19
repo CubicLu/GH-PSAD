@@ -2,19 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
 import { generatePath } from 'react-router';
-import { update, statuses, show } from 'api/parking/tickets';
-import { fields } from 'components/helpers/fields/tickets';
-import connectRecord from 'components/modules/connect_record';
-import { SET_RECORD } from 'actions/tickets';
-import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
-import waitUntilFetched from 'components/modules/wait_until_fetched';
-import resourceFetcher from 'components/modules/resource_fetcher';
-import updateRecord from 'components/modules/form_actions/update_record';
-import { fromJson as showErrors } from 'components/helpers/errors';
-import { renderFieldsWithGrid } from 'components/base/forms/common_form';
-import { btnSpinner, displayUnixTimestamp } from 'components/helpers';
 import { Link } from 'react-router-dom';
 import { Form } from 'informed';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+/* Actions */
+import { SET_RECORD } from 'actions/tickets';
+/* API */
+import { update, statuses, show } from 'api/parking/tickets';
+/* Base */
+import { renderFieldsWithGrid } from 'components/base/forms/common_form';
+/* Helpers */
+import { btnSpinner, displayUnixTimestamp } from 'components/helpers';
+import { fields } from 'components/helpers/fields/tickets';
+import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
+import { fromJson as showErrors } from 'components/helpers/errors';
+/* Modules */
+import connectRecord from 'components/modules/connect_record';
+import resourceFetcher from 'components/modules/resource_fetcher';
+import updateRecord from 'components/modules/form_actions/update_record';
 
 class Edit extends React.Component {
   state = {
@@ -37,7 +43,7 @@ class Edit extends React.Component {
           {isSaving ? btnSpinner() : 'Save Changes'}
         </Button>
       </Col>
-    )
+    );
   }
 
   renderFields () {
@@ -55,20 +61,21 @@ class Edit extends React.Component {
 
    renderHeader () {
      const { backPath, record } = this.props;
-    const backPathWithId = generatePath(backPath, { id: record.id })
-
+     const backPathWithId = generatePath(backPath, { id: record.id });
      return (<Row>
        <Col md={2}>
-        <Link to={backPathWithId} className="mr-2 back-button" >&#10094;</Link>
-        {record.type} #{record.id}
+         <Link to={backPathWithId} className="mr-2 back-button" >
+           <FontAwesomeIcon icon={faChevronLeft}/>
+         </Link>
+         {record.type} #{record.id}
        </Col>
        <Col md={2} className="align-self-center">
-        Edit {record.agency.name} Ticket number {record.id}
+        Edit {record.agency.name} Ticket
        </Col>
        <Col md={8}>
          <Nav pills className="float-right">
 
-            <span class="mr-2 text-muted">Updated: {displayUnixTimestamp(record.updated_at)}</span>
+           <span className="mr-2 text-muted">Updated: {displayUnixTimestamp(record.updated_at)}</span>
 
             ID: {record.id}
          </Nav>
@@ -110,37 +117,31 @@ class Edit extends React.Component {
   }
 
   componentDidMount () {
-    waitUntilFetched.call(this,
-      searchAdminByRoleName(['officer'])
-        .then((data) => {
-          this.setState({
-            dropdowns: {
-              ...this.state.dropdowns,
-              officers: data.officer
-            }
-          });
-        })
-        .catch(this.handleFailed),
-      statuses()
-        .then(({ data }) => {
-          this.setState({
-            dropdowns: {
-              ...this.state.dropdowns,
-              statuses: data.statuses
-            }
-          });
-        })
-        .catch(this.handleFailed)
-    );
+    searchAdminByRoleName(['officer'])
+      .then((data) => {
+        this.setState({
+          dropdowns: {
+            ...this.state.dropdowns,
+            officers: data.officer
+          }
+        });
+      })
+      .catch(this.handleFailed);
+    statuses()
+      .then(({ data }) => {
+        this.setState({
+          dropdowns: {
+            ...this.state.dropdowns,
+            statuses: data.statuses
+          }
+        });
+      })
+      .catch(this.handleFailed);
   }
 
   render () {
-    const { officers, statuses } = this.state.dropdowns
-    return this.props.isFetching || !officers || !statuses ? <div>Loading data...</div> : (
-      <React.Fragment>
-        {this.renderRecord()}
-      </React.Fragment>
-    );
+    const { officers, statuses } = this.state.dropdowns;
+    return !this.props.record || !officers || !statuses ? <div>Loading data...</div> : this.renderRecord();
   }
 }
 
@@ -152,7 +153,10 @@ Edit.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   record: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    officer: PropTypes.object
+    officer: PropTypes.object,
+    type: PropTypes.string.isRequired,
+    agency: PropTypes.object,
+    updated_at: PropTypes.number
   })
 };
 

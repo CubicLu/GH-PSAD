@@ -1,18 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
+import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
 import { generatePath } from 'react-router';
+import { Form } from 'informed';
+/* Actions */
+import { SET_RECORD } from 'actions/cameras';
+/* API */
 import { show, update } from 'api/cameras';
+/* Base */
+import { renderFieldsWithGrid } from 'components/base/forms/common_form';
+/* Helpers */
+import { btnSpinner } from 'components/helpers';
+import { fromJson as showErrors } from 'components/helpers/errors';
 import { fields } from 'components/helpers/fields/cameras';
+/* Modules */
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import { SET_RECORD } from 'actions/cameras';
 import updateRecord from 'components/modules/form_actions/update_record';
-import { fromJson as showErrors } from 'components/helpers/errors';
-import { renderFieldsWithGrid } from 'components/base/forms/common_form';
-import { Form } from 'informed';
-import { btnSpinner } from 'components/helpers';
-import { NavLink } from 'react-router-dom';
 
 class Edit extends React.Component {
   state = {
@@ -58,7 +62,7 @@ class Edit extends React.Component {
   }
 
   renderHeader () {
-    const { match, record } = this.props;
+    const { record } = this.props;
     const { isSaving } = this.state;
 
     return (<Row>
@@ -69,11 +73,6 @@ class Edit extends React.Component {
       </Col>
       <Col md={2} className="align-self-center">
         Edit {record.name}
-      </Col>
-      <Col md={8}>
-        <Nav pills className="float-right">
-          <NavLink to={match.url} className="nav-link">Information</NavLink>
-        </Nav>
       </Col>
     </Row>);
   }
@@ -108,7 +107,8 @@ Edit.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   record: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    parking_lot: PropTypes.object.isRequired
+    parking_lot: PropTypes.object.isRequired,
+    name: PropTypes.string.isRequired
   })
 };
 

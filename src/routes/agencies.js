@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, withRouter } from 'react-router';
-import Index from 'components/pages/agencies';
+import Index from 'components/pages/agencies/index';
 import Show from 'components/pages/agencies/show';
 import New from 'components/pages/agencies/new';
 import TicketsRoutes from './tickets';

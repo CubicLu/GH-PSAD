@@ -1,14 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+/* Actions */
 import { SET_LIST } from 'actions/cameras';
+/* API */
 import { index } from 'api/cameras';
+/* Base */
+import BasicListToolbar from 'components/base/basic_list_toolbar';
+import IndexTable from 'components/base/table';
+/* Helpers */
+import { displayUnixTimestamp } from 'components/helpers';
 import { filterFields } from 'components/helpers/fields/cameras';
+/* Modules */
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import BasicListToolbar from 'components/base/basic_list_toolbar';
-import { displayUnixTimestamp } from 'components/helpers';
-import IndexTable from 'components/base/table';
 
 class Index extends React.Component {
   renderRecords = () => {

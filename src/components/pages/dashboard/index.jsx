@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Alert } from 'reactstrap';
 import SideNavigation from '../side_navigation';
@@ -27,13 +28,17 @@ const Dashboard = props => {
         {serverError ? renderError(serverError) : <MainContent/>}
       </div>
     </div>
-  )
+  );
 };
 
 const mapState = state => {
   const { server } = state;
   const { error = {} } = server;
-  return { serverError: error.payload }
+  return { serverError: error.payload };
+};
+
+Dashboard.propTypes = {
+  serverError: PropTypes.bool
 };
 
 export default connect(mapState)(Dashboard);

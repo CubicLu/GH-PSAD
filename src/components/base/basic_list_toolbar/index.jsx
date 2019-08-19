@@ -44,7 +44,7 @@ class BasicListToolbar extends React.Component {
 
 BasicListToolbar.propTypes = {
   match: PropTypes.object.isRequired,
-  history: PropTypes.array.isRequired,
+  history: PropTypes.object.isRequired,
   handleRefresh: PropTypes.func,
   onClickFilter: PropTypes.func,
   fetchFinished: PropTypes.func.isRequired,

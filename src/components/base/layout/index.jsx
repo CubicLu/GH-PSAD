@@ -24,7 +24,7 @@ const mapState = state => {
 
 Layout.propTypes = {
   isAuthorized: PropTypes.bool.isRequired,
-  children: PropTypes.arrayOf(PropTypes.elementType).isRequired
+  children: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default connect(mapState)(Layout);
