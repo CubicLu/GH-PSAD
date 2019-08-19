@@ -6,8 +6,10 @@ const resourceFetcher = fetcher => {
     }
 
     const { params } = wrapper.props.match;
+    const query = (new URL(window.location.href)).searchParams;
+    const page = query.get('page')
 
-    fetcher(params)
+    fetcher({...params, page})
       .then(onResponse)
       .catch(err => console.error(err))
       .finally(wrapper.fetchFinished)
