@@ -24,9 +24,16 @@ class Pagination extends React.Component {
     return pages;
   };
 
+  updateQueryParams = (page) => {
+    this.props.history.push({
+      search: `?page=${page}`
+    })
+  }
+
   open = page => {
     const { fetchStarted, fetchFinished, fetcher, perPage } = this.props;
     fetchStarted();
+    this.updateQueryParams(page)
     fetcher({ page, perPage })
       .then(this.openSucceed)
       .catch(this.openFailed)
