@@ -1,15 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+/* Actions */
 import { SET_LIST } from 'actions/tickets';
+/* API */
 import { index, statuses } from 'api/parking/tickets';
-import { filterFields } from 'components/helpers/fields/tickets';
-import connectList from 'components/modules/connect_list';
+import { search as dropdownsSearch } from 'api/dropdowns';
+/* Base */
 import BasicBackListToolbar from 'components/base/basic_list_toolbar/back';
 import Ticket from 'components/base/agencies/tickets';
-import resourceFetcher from 'components/modules/resource_fetcher';
 import IndexTable from 'components/base/table';
+/* Helpers */
+import { filterFields } from 'components/helpers/fields/tickets';
+/* Modules */
+import connectList from 'components/modules/connect_list';
+import resourceFetcher from 'components/modules/resource_fetcher';
 import waitUntilFetched from 'components/modules/wait_until_fetched';
-import { search as dropdownsSearch } from 'api/dropdowns';
 
 class Index extends React.Component {
   state = {
@@ -33,7 +38,6 @@ class Index extends React.Component {
 
   filterFetcher = (values, query) => {
     const { match } = this.props;
-    debugger
     return index({
       agency_id: match.params.agency_id,
       query: {

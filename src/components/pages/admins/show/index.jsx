@@ -2,22 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
 import { generatePath } from 'react-router';
-import { show, update } from 'api/admins';
-import { fields } from 'components/helpers/fields/admins';
-import connectRecord from 'components/modules/connect_record';
-import { SET_RECORD } from 'actions/admins';
-import { search as dropdownsSearch } from 'api/dropdowns';
-import resourceFetcher from 'components/modules/resource_fetcher';
-import updateRecord from 'components/modules/form_actions/update_record';
-import PasswordConfirmationModal from 'components/helpers/modals/password_confirmation';
-import { fromJson as showErrors } from 'components/helpers/errors';
-import { FieldType } from 'components/helpers/form_fields';
-import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
-import { btnSpinner } from 'components/helpers';
 import { Link } from 'react-router-dom';
 import { Form } from 'informed';
 import { isEmpty } from 'underscore';
-import ShowActivity from './activity'
+import ActivityIndex from './activity/index';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+/* Actions */
+import { SET_RECORD } from 'actions/admins';
+/* API */
+import { show, update } from 'api/admins';
+import { search as dropdownsSearch } from 'api/dropdowns';
+/* Base */
+import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
+/* Helpers */
+import { fields } from 'components/helpers/fields/admins';
+import PasswordConfirmationModal from 'components/helpers/modals/password_confirmation';
+import { fromJson as showErrors } from 'components/helpers/errors';
+import { FieldType } from 'components/helpers/form_fields';
+import { btnSpinner } from 'components/helpers';
+/* Module */
+import connectRecord from 'components/modules/connect_record';
+import resourceFetcher from 'components/modules/resource_fetcher';
+import updateRecord from 'components/modules/form_actions/update_record';
 import setFormApiFields from 'components/modules/set_form_api_fields';
 
 class Show extends React.Component {
@@ -32,9 +39,8 @@ class Show extends React.Component {
   }
 
   save = () => {
-
-    let values = setFormApiFields(this.fieldsForCommonForm(), this.formApi)
-    values.avatar = this.formApi.getValue('avatar')
+    const values = setFormApiFields(this.fieldsForCommonForm(), this.formApi);
+    values.avatar = this.formApi.getValue('avatar');
 
     if (document.querySelector('input[name="password"]').value) {
       this.toggleModal();
@@ -64,14 +70,16 @@ class Show extends React.Component {
     });
   };
 
-  toggleEditing = () =>  this.setState((prevState) => ({ isEditing: !prevState }))
+  toggleEditing = () => this.setState((prevState) => ({ isEditing: !prevState }))
 
   renderHeader () {
     const { backPath, record } = this.props;
 
     return (<Row>
       <Col md={2} className="align-self-center">
-        <Link to={backPath} className="mr-2 back-button" >&#10094;</Link>
+        <Link to={backPath} className="mr-2 back-button" >
+          <FontAwesomeIcon icon={faChevronLeft}/>
+        </Link>
         {record ? record.username : '' }
       </Col>
       <Col md={10} >
@@ -94,7 +102,7 @@ class Show extends React.Component {
           {isSaving ? btnSpinner() : 'Save Changes'}
         </Button>
       </Col>
-    )
+    );
   }
 
   renderForm () {
@@ -147,7 +155,7 @@ class Show extends React.Component {
   }
 
   renderActivity () {
-    return <ShowActivity/>
+    return <ActivityIndex/>;
   }
 
   toggleModal = () => {
@@ -162,8 +170,8 @@ class Show extends React.Component {
   }
 
   render () {
-    const { role_id } = this.state.dropdowns;
-    return this.props.isFetching || !isEmpty(role_id) ? <div>Loading data...</div> : (
+    const { roles } = this.state.dropdowns;
+    return this.props.isFetching || isEmpty(roles) ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
         <div className="mt-1"/>
@@ -179,7 +187,8 @@ Show.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   record: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    role: PropTypes.object.isRequired
+    role: PropTypes.object.isRequired,
+    username: PropTypes.string.isRequired
   })
 };
 

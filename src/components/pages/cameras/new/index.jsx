@@ -1,17 +1,22 @@
 import React from 'react';
-import { Button, Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
 import { bindActionCreators } from 'redux';
-import { create } from 'api/cameras';
+import { connect } from 'react-redux';
+import { Form } from 'informed';
+/* Actions */
 import { invoke } from 'actions';
 import { SET_RECORD } from 'actions/cameras';
+/* API */
+import { create } from 'api/cameras';
+/* Base */
+import { renderFieldsWithGrid } from 'components/base/forms/common_form';
+/* Helpers */
+import { btnSpinner } from 'components/helpers';
 import { fields, exampleData } from 'components/helpers/fields/cameras';
 import { fromJson as showErrors } from 'components/helpers/errors';
+/* Modules */
 import saveRecord from 'components/modules/form_actions/save_record';
-import { renderFieldsWithGrid } from 'components/base/forms/common_form';
-import { btnSpinner } from 'components/helpers';
-import { NavLink } from 'react-router-dom';
-import { Form } from 'informed';
 
 class New extends React.Component {
   state = {
@@ -46,7 +51,6 @@ class New extends React.Component {
   }
 
   renderHeader () {
-    const { match } = this.props;
     const { isSaving } = this.state;
 
     return (<Row>
@@ -54,11 +58,6 @@ class New extends React.Component {
         <Button color="success" outline onClick={this.save}>
           {isSaving ? btnSpinner() : 'Save'}
         </Button>
-      </Col>
-      <Col md={8}>
-        <Nav pills className="float-right">
-          <NavLink to={match.url} className="nav-link">Information</NavLink>
-        </Nav>
       </Col>
     </Row>);
   }
@@ -91,6 +90,11 @@ function mapDispatch (dispatch) {
 }
 
 const fieldProps = { lSize: 6 };
+
+New.propTypes = {
+  backPath: PropTypes.string.isRequired,
+  isFetching: PropTypes.bool.isRequired
+};
 
 export default connect(
   null,

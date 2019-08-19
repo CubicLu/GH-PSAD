@@ -33,7 +33,7 @@ const ImageInput = asField(({ fieldState, fieldApi }) => {
           <Media left href="#">
             <Media object tag={() => (
               <img
-                data-src={filepath ? filepath : "holder.js/200x200?auto=yes"}
+                data-src={filepath || 'holder.js/200x200?auto=yes'}
                 src={filepath}
                 alt={filename}
                 className="img-thumbnail"
@@ -46,7 +46,7 @@ const ImageInput = asField(({ fieldState, fieldApi }) => {
         </div>
       </React.Fragment>
     </ReactFileReader>
-  )
+  );
 });
 
 export default ImageInput;

@@ -19,8 +19,14 @@ CustomSelect.propTypes = {
   field: PropTypes.shape({
     name: PropTypes.string,
     options: PropTypes.arrayOf(PropTypes.shape({
-      value: PropTypes.string,
-      label: PropTypes.string
+      value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+      ]),
+      label: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+      ])
     }))
   })
 };

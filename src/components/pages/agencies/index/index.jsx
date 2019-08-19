@@ -1,13 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+/* Actions */
 import { SET_LIST } from 'actions/agencies';
+/* API */
 import { index } from 'api/agencies';
-import { filterFields } from 'components/helpers/fields/agencies';
-import connectList from 'components/modules/connect_list';
-import resourceFetcher from 'components/modules/resource_fetcher';
+/* Base */
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';
+/* Helpers */
+import { filterFields } from 'components/helpers/fields/agencies';
+/* Modules */
+import connectList from 'components/modules/connect_list';
+import resourceFetcher from 'components/modules/resource_fetcher';
 
 class Index extends React.Component {
   renderRecords = () => {

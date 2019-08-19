@@ -1,13 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { resetPasswordRequest } from 'api/users';
 import { Link } from 'react-router-dom';
 import { Button, Input } from 'reactstrap';
-import { btnSpinner } from 'components/helpers';
-import { setErrorsMessages } from 'components/helpers/messages';
+/* Actions */
+/* API */
+import { resetPasswordRequest } from 'api/users';
+/* Base */
 import CardLayout from 'components/base/layout/card';
 import AuthLayout from 'components/base/layout/auth';
+/* Helpers */
+import { btnSpinner } from 'components/helpers';
+import { setErrorsMessages } from 'components/helpers/messages';
+/* Modules */
 
 class ResetPassword extends React.Component {
   constructor(props) {

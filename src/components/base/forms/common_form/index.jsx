@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Alert, Button, Col, FormGroup, Label, Row } from 'reactstrap';
 import { labelFor } from 'components/helpers/forms';
 import {
@@ -32,7 +33,7 @@ const renderImageField = (field, props = {}) => (
       {field.render ? field.render(field, props) : renderInput(field, props)}
     </Col>
   </FormGroup>
-)
+);
 
 const renderInput = (field, props = {}) => {
   switch (field.type) {
@@ -62,7 +63,7 @@ const renderFields = (fields, props = {}) => (
 );
 
 const renderFieldsWithGrid = (fields, step, cols, props = {}) => {
-  let fieldList = [];
+  const fieldList = [];
   let start = 0;
 
   while (start < fields.length) {
@@ -90,7 +91,7 @@ const renderButtons = (formState, props = {}) => {
 
 const renderFormErrors = (formState, fields) => {
   const { errors } = formState;
-  let alerts = [];
+  const alerts = [];
 
   fields.forEach((field, idx) => {
     if (!errors[field.name]) return;
@@ -120,6 +121,23 @@ const renderForm = (props = {}) => {
       </Form>
     </fieldset>
   );
+};
+
+renderField.propTypes = {
+  lSize: PropTypes.number,
+  iSize: PropTypes.number
+};
+
+renderButtons.propTypes = {
+  isFetching: PropTypes.bool.isRequired,
+  backPath: PropTypes.string.isRequired
+};
+
+renderForm.propTypes = {
+  values: PropTypes.object,
+  isFetching: PropTypes.bool.isRequired,
+  submitForm: PropTypes.func.isRequired,
+  fields: PropTypes.object.isRequired
 };
 
 export { renderField, renderFields, renderFieldsWithGrid, renderFormErrors, renderButtons, renderForm, renderInput, renderImageField };

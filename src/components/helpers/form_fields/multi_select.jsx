@@ -4,8 +4,7 @@ import MultiSelect from 'react-select';
 import { isEmpty, defaults } from 'underscore';
 import { asField } from 'informed';
 
-const CustomMultiSelect = asField(({field, fieldApi, fieldState, options}) => {
-
+const CustomMultiSelect = asField(({ field, fieldApi, fieldState, options }) => {
   let { value: values } = fieldState;
   const { setValue } = fieldApi;
   const [selectedOptions, setSelectedOptions] = useState({});
@@ -23,21 +22,21 @@ const CustomMultiSelect = asField(({field, fieldApi, fieldState, options}) => {
         isMulti
         value={selectedOptions[field]}
         onChange={(selectedOptions) => {
-          setValue( selectedOptions ? selectedOptions.map(element => element.value) : [])
+          setValue(selectedOptions ? selectedOptions.map(element => element.value) : []);
           setSelectedOptions({ [field]: selectedOptions });
         }}
         options={options}
       />
     </React.Fragment>
   );
-})
+});
 
 CustomMultiSelect.propTypes = {
   options: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.string,
     label: PropTypes.string
   })),
-  values: PropTypes.object.isRequired,
+  values: PropTypes.object,
   field: PropTypes.string.isRequired
 };
 
