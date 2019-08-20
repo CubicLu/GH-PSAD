@@ -13,7 +13,7 @@ import CardLayout from 'components/base/layout/card';
 import AuthLayout from 'components/base/layout/auth';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
-import { setErrorsMessages } from 'components/helpers/messages';
+import { setErrorsMessages, setSuccessMessage } from 'components/helpers/messages';
 /* Modules */
 
 class Login extends React.Component {
@@ -53,6 +53,16 @@ class Login extends React.Component {
     this.props.history.push('/dashboard');
   }
 
+  componentDidMount () {
+    const message = localStorage.LOGIN_MESSAGE;
+    if (message) {
+      this.setState({
+        messages: setSuccessMessage(message)
+      });
+      localStorage.removeItem('LOGIN_MESSAGE');
+    }
+  }
+
   render () {
     return (
       <AuthLayout>
@@ -61,7 +71,7 @@ class Login extends React.Component {
             <div className="form-label-group">
               <Input
                 id="email"
-                type="email"
+                type="text"
                 value={this.state.username}
                 name="username"
                 onChange={e => this.setState({ [e.target.name]: e.target.value })}

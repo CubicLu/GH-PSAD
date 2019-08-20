@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button, Input } from 'reactstrap';
 /* Actions */
 /* API */
-import { resetPasswordRequest } from 'api/users';
+import { resetPasswordRequest, checkPasswordToken } from 'api/users';
 /* Base */
 import CardLayout from 'components/base/layout/card';
 import AuthLayout from 'components/base/layout/auth';
@@ -15,26 +15,24 @@ import { setErrorsMessages } from 'components/helpers/messages';
 /* Modules */
 
 class ResetPassword extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      password: '',
-      password_confirmation: '',
-      reset_password_token: '',
-      messages: [],
-      isFetching: false
-    };
+  state = {
+    password: '',
+    passwordConfirmation: '',
+    resetPasswordToken: '',
+    messages: [],
+    isFetching: false,
+    passwordTokenInvalid: true
   }
 
   submitForm = (event) => {
     event.preventDefault();
 
-    if (this.state.password === this.state.password_confirmation) {
+    if (this.state.password === this.state.passwordConfirmation) {
       this.setState({
         isFetching: true,
       });
-      return resetPasswordRequest(this.state.password, this.state.reset_password_token)
-        .then(res => this.props.history.push('/login'))
+      return resetPasswordRequest(this.state.password, this.state.resetPasswordToken)
+        .then(res => this.redirectToLogin('Your password was successfully changed' ))
         .catch(error => {
           this.setState({
             isFetching: false,
@@ -47,13 +45,40 @@ class ResetPassword extends React.Component {
     });
   };
 
+  redirectToLogin = (message) => {
+    localStorage.setItem('LOGIN_MESSAGE', message);
+    this.props.history.push('/login')
+  }
+
+  verifyToken = () => {
+    const resetPasswordToken = this.props.match.params.reset_password_token
+    checkPasswordToken(resetPasswordToken)
+      .then(res => {
+        const { validToken } = res.data
+        if(validToken) {
+          this.setState({ passwordTokenInvalid: false })
+        } else {
+          debugger
+          this.setState({
+            messages: setErrorsMessages('This link is no longer valid')
+          });
+        }
+      })
+      .catch(err => {
+          console.log(err.message)
+          this.props.history.push('/login')
+      })
+  }
+
   componentDidMount() {
-    this.setState({
-      reset_password_token: this.props.match.params.reset_password_token
-    })
+    const resetPasswordToken = this.props.match.params.reset_password_token
+    this.setState({ resetPasswordToken })
+    this.verifyToken()
   }
 
   render() {
+
+
     return (
       <AuthLayout>
         <CardLayout title="Reset Your Password" isFetching={this.state.isFetching} messages={this.state.messages}>
@@ -61,6 +86,7 @@ class ResetPassword extends React.Component {
 
             <div className="form-label-group">
               <Input
+                disabled={this.state.passwordTokenInvalid}
                 id="password"
                 name="password"
                 type="password"
@@ -74,18 +100,19 @@ class ResetPassword extends React.Component {
 
             <div className="form-label-group">
               <Input
-                id="password_confirmation"
-                name="password_confirmation"
+                disabled={this.state.passwordTokenInvalid}
+                id="passwordConfirmation"
+                name="passwordConfirmation"
                 type="password"
-                value={this.state.password_confirmation}
+                value={this.state.passwordConfirmation}
                 onChange={e => this.setState({ [e.target.name]: e.target.value })}
                 placeholder="Password Confirmation"
                 required
               />
-              <label htmlFor="password_confirmation">Password Confirmation</label>
+              <label htmlFor="passwordConfirmation">Password Confirmation</label>
             </div>
 
-            <Button color="primary" className="text-uppercase btn-lg btn-block" type="submit">
+            <Button disabled={this.state.passwordTokenInvalid} color="primary" className="text-uppercase btn-lg btn-block" type="submit">
               {this.state.isFetching ? btnSpinner({ className: 'spinner-border' }) : 'Reset'}
             </Button>
             <Link to='/login' className="mr-1 mt-2 d-block">I Want To Sign In</Link>
