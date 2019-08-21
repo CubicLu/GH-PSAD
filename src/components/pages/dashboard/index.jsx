@@ -1,20 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Alert } from 'reactstrap';
 import SideNavigation from '../side_navigation';
 import MainContent from '../main_content';
-
-const renderError = error => {
-  const { url } = error.config;
-  const { response } = error;
-
-  return (
-    <Alert color="danger">
-      {`Request to ${url} returned ${response.status} status code`}
-    </Alert>
-  );
-};
+import ErrorBoundary from 'components/base/errors/error_boundary';
 
 const Dashboard = props => {
   const { serverError } = props;
@@ -25,7 +14,9 @@ const Dashboard = props => {
         <SideNavigation />
       </div>
       <div className="col-10">
-        {serverError ? renderError(serverError) : <MainContent/>}
+        <ErrorBoundary serverError={serverError}>
+          <MainContent/>
+        </ErrorBoundary>
       </div>
     </div>
   );
@@ -38,7 +29,7 @@ const mapState = state => {
 };
 
 Dashboard.propTypes = {
-  serverError: PropTypes.bool
+  serverError: PropTypes.object
 };
 
 export default connect(mapState)(Dashboard);

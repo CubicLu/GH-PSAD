@@ -18,8 +18,22 @@ function auth (state = { isAuthorized: false }, action) {
   }
 }
 
+function data (state = null, action) {
+  switch (action.type) {
+    case UserActions.SET_CURRENT_USER_DATA:
+      return Object.assign({}, state, {
+        ...action.payload
+      });
+    case UserActions.CLEAR_CURRENT_USER_DATA:
+      return {};
+    default:
+      return state;
+  }
+}
+
 const UserReducers = combineReducers({
-  auth
+  auth,
+  data
 });
 
 export default UserReducers;

@@ -7,6 +7,7 @@ import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Form } from 'informed';
+import { isEmpty } from 'underscore';
 /* Actions */
 import { invoke } from 'actions';
 import { SET_RECORD } from 'actions/admins';
@@ -22,14 +23,20 @@ import { fromJson as showErrors } from 'components/helpers/errors';
 import { FieldType } from 'components/helpers/form_fields';
 /* Modules */
 import saveRecord from 'components/modules/form_actions/save_record';
-import waitUntilFetched from 'components/modules/wait_until_fetched';
-import withFetching from 'components/modules/with_fetching';
+import withCurrentUser from 'components/modules/with_current_user';
 
 class New extends React.Component {
   state = {
     isSaving: false,
     dropdowns: {
       roles: []
+    }
+  }
+
+  componentWillReceiveProps (nextProps, nextContext) {
+    if (nextProps.currentUser) {
+      dropdownsSearch('role_id', { admin_id: nextProps.currentUser.id })
+        .then(response => this.setState({ dropdowns: { roles: response.data } }));
     }
   }
 
@@ -105,15 +112,10 @@ class New extends React.Component {
     );
   }
 
-  componentDidMount () {
-    waitUntilFetched.call(this,
-      dropdownsSearch('role_id', { admin_id: 1 })
-        .then(response => this.setState({ dropdowns: { roles: response.data } }))
-    );
-  }
-
   render () {
-    return this.props.isFetching ? <div>Loading data...</div> : (
+    const { roles } = this.state.dropdowns;
+
+    return isEmpty(roles) ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
       </React.Fragment>
@@ -129,10 +131,11 @@ const fieldProps = { lSize: 6 };
 
 New.propTypes = {
   isFetching: PropTypes.bool.isRequired,
-  backPath: PropTypes.string.isRequired
+  backPath: PropTypes.string.isRequired,
+  currentUser: PropTypes.object
 };
 
 export default connect(
   null,
   mapDispatch
-)(withFetching(New, () => {}));
+)(withCurrentUser(New));

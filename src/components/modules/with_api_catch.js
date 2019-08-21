@@ -1,9 +1,15 @@
 import store from 'index';
 import { clearToken } from 'actions/users';
-import { notFound, internal } from 'actions/server_errors';
+import { notFound, internal, critical } from 'actions/server_errors';
 
-const withApiCatch = promise => {
+const withApiCatch = (promise, isCritical = false) => {
   return promise.catch(error => {
+
+    if(isCritical) {
+      store.dispatch(critical(error));
+      return
+    }
+
     const { response } = error;
 
     switch (response.status) {
