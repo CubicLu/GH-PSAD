@@ -2,7 +2,7 @@ import env from '.env';
 import axios from 'axios';
 import withApiCatch from './with_api_catch';
 
-const fetchApi = (endpoint, data) => {
+const fetchApi = (endpoint, data, critical = false) => {
   return withApiCatch(
     axios(Object.assign({
         url: `${env.backend_url}/${endpoint}`,
@@ -11,7 +11,8 @@ const fetchApi = (endpoint, data) => {
           'Authorization': localStorage.TOKEN
         }
       }, data)
-    )
+    ),
+    critical
   );
 };
 

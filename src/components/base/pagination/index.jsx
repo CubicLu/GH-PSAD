@@ -27,13 +27,13 @@ class Pagination extends React.Component {
   updateQueryParams = (page) => {
     this.props.history.push({
       search: `?page=${page}`
-    })
+    });
   }
 
   open = page => {
     const { fetchStarted, fetchFinished, fetcher, perPage } = this.props;
     fetchStarted();
-    this.updateQueryParams(page)
+    this.updateQueryParams(page);
     fetcher({ page, perPage })
       .then(this.openSucceed)
       .catch(this.openFailed)
@@ -108,7 +108,8 @@ Pagination.propTypes = {
   fetchStarted: PropTypes.func.isRequired,
   fetcher: PropTypes.func.isRequired,
   query: PropTypes.object,
-  setList: PropTypes.func.isRequired
+  setList: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
 };
 
 export default Pagination;

@@ -4,10 +4,11 @@ import {createStore, applyMiddleware} from 'redux';
 import Root from 'routes';
 import thunkMiddleware from 'redux-thunk';
 import persistTokenMiddleware from 'middleware/persist_token';
+import persistCurrentUserMiddleware from 'middleware/persist_current_user';
 import {createLogger} from 'redux-logger';
 import * as serviceWorker from 'serviceWorker';
 import reducers from 'reducers';
-import { init } from "actions";
+import {  init_set_token, init_set_current_user } from "actions";
 import 'bootstrap/dist/css/bootstrap.css';
 import 'styles/global.sass';
 
@@ -16,13 +17,15 @@ const loggerMiddleware = createLogger();
 const store = createStore(
   reducers,
   applyMiddleware(
+    persistTokenMiddleware,
+    persistCurrentUserMiddleware,
     thunkMiddleware,
     loggerMiddleware,
-    persistTokenMiddleware
   )
 );
 
-store.dispatch(init);
+store.dispatch(init_set_token);
+store.dispatch(init_set_current_user);
 
 ReactDOM.render(
   <Root store={store} />,

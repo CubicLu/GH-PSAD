@@ -1,15 +1,22 @@
 import store from 'index';
 import { clearToken } from 'actions/users';
-import { notFound, internal } from 'actions/server_errors';
+import { notFound, internal, critical } from 'actions/server_errors';
 
-const withApiCatch = promise => {
+const withApiCatch = (promise, isCritical = false) => {
   return promise.catch(error => {
+
     const { response } = error;
+    if (response.status === 401) {
+      store.dispatch(clearToken);
+      return
+    }
+
+    if(isCritical) {
+      store.dispatch(critical(error));
+      return
+    }
 
     switch (response.status) {
-      case 401:
-        store.dispatch(clearToken);
-        break;
       case 404:
         store.dispatch(notFound(error));
         break;

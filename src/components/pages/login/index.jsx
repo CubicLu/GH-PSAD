@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 import { Button, Input } from 'reactstrap';
 /* Actions */
-import { setToken } from 'actions/users';
+import { setToken, setCurrentUserData } from 'actions/users';
 /* API */
 import { auth } from 'api/users';
 /* Base */
@@ -43,6 +43,16 @@ class Login extends React.Component {
       });
   };
 
+  setCurrentUserData = () => {
+    this.props.setCurrentUserData()
+      .catch(error => {
+        this.setState({
+          isFetching: false,
+          messages: setErrorsMessages(error)
+        });
+      });
+  }
+
   setToken (data) {
     this.setState({
       isFetching: false,
@@ -50,6 +60,7 @@ class Login extends React.Component {
     });
 
     this.props.setToken(data.token);
+    this.setCurrentUserData();
     this.props.history.push('/dashboard');
   }
 
@@ -111,11 +122,12 @@ class Login extends React.Component {
 }
 
 function mapDispatch (dispatch) {
-  return bindActionCreators({ setToken }, dispatch);
+  return { ...bindActionCreators({ setToken, setCurrentUserData }, dispatch) };
 }
 
 Login.propTypes = {
   setToken: PropTypes.func.isRequired,
+  setCurrentUserData: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired
 };
 

@@ -26,6 +26,7 @@ import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
 import setFormApiFields from 'components/modules/set_form_api_fields';
+import withCurrentUser from 'components/modules/with_current_user';
 
 class Show extends React.Component {
   state = {
@@ -36,6 +37,13 @@ class Show extends React.Component {
     },
     modal: false,
     password_verification: ''
+  }
+
+  componentWillReceiveProps (nextProps, nextContext) {
+    if (nextProps.currentUser) {
+      dropdownsSearch('role_id', { admin_id: nextProps.currentUser.id })
+        .then(response => this.setState({ dropdowns: { roles: response.data } }));
+    }
   }
 
   save = () => {
@@ -80,7 +88,7 @@ class Show extends React.Component {
         <Link to={backPath} className="mr-2 back-button" >
           <FontAwesomeIcon icon={faChevronLeft}/>
         </Link>
-        {record ? record.username : '' }
+        {record.username}
       </Col>
       <Col md={10} >
         <Nav pills className="float-right mx-auto">
@@ -164,14 +172,11 @@ class Show extends React.Component {
     }));
   }
 
-  componentDidMount () {
-    dropdownsSearch('role_id', { admin_id: 1 })
-      .then(response => this.setState({ dropdowns: { roles: response.data } }));
-  }
-
   render () {
+    const { record } = this.props;
     const { roles } = this.state.dropdowns;
-    return this.props.isFetching || isEmpty(roles) ? <div>Loading data...</div> : (
+
+    return this.props.isFetching || !record || isEmpty(roles) ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
         <div className="mt-1"/>
@@ -185,6 +190,7 @@ Show.propTypes = {
   backPath: PropTypes.string.isRequired,
   match: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
+  currentUser: PropTypes.object,
   record: PropTypes.shape({
     id: PropTypes.number.isRequired,
     role: PropTypes.object.isRequired,
@@ -194,4 +200,4 @@ Show.propTypes = {
 
 const fieldProps = { lSize: 6 };
 
-export default connectRecord('admin', SET_RECORD, resourceFetcher(show), Show);
+export default connectRecord('admin', SET_RECORD, resourceFetcher(show), withCurrentUser(Show));

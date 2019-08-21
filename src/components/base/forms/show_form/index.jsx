@@ -9,11 +9,10 @@ import {
   ListGroupItem
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { FieldType } from 'components/helpers/form_fields'
-import _ from 'lodash'
+import { FieldType } from 'components/helpers/form_fields';
+import _ from 'lodash';
 
 class ShowForm extends React.Component {
-
   renderField = (field, key) => (
     <FormGroup row key={key}>
       <Label for={field.name} sm={2}>{field.label}</Label>
@@ -24,22 +23,22 @@ class ShowForm extends React.Component {
   );
 
   listField = (list, innerLabel) => (<ListGroup>
-      {
-        list.map((element, index) => <ListGroupItem key={`${element[innerLabel]}${index}`}> #{index+1}: {element[innerLabel]}</ListGroupItem>)
-      }
-    </ListGroup>
+    {
+      list.map((element, index) => <ListGroupItem key={`${element[innerLabel]}${index}`}> #{index + 1}: {element[innerLabel]}</ListGroupItem>)
+    }
+  </ListGroup>
   )
 
   renderInput = field => {
-    const { values } = this.props
-    const value = _.get(values, field.name) || ''
+    const { values } = this.props;
+    const value = _.get(values, field.name) || '';
     switch (field.type) {
       case FieldType.MULTISELECT_FIELD:
-        return this.listField(value, field.innerLabel)
+        return this.listField(value, field.innerLabel);
       case FieldType.FILE_FIELD:
-        return <img src={value} alt={field.name}/>
+        return <img src={value} alt={field.name}/>;
       default:
-        return <Input id={field.name} plaintext readOnly value={value}/>
+        return <Input id={field.name} plaintext readOnly value={value}/>;
     }
   };
 
@@ -66,8 +65,8 @@ class ShowForm extends React.Component {
     </React.Fragment>
   );
 
-  render() {
-    return <Form> {this.renderForm()} </Form>
+  render () {
+    return <Form> {this.renderForm()} </Form>;
   }
 }
 
