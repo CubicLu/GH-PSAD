@@ -12,7 +12,7 @@ class ErrorBoundary extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate (prevProps) {
     if (this.props.location.pathname !== prevProps.location.pathname) {
       this.props.dispatch(clearErrors);
       this.setState({
@@ -24,7 +24,7 @@ class ErrorBoundary extends React.Component {
     }
   }
 
-  componentDidCatch(error, info) {
+  componentDidCatch (error, info) {
     this.setState({
       appErrors: {
         response: info,
@@ -34,22 +34,21 @@ class ErrorBoundary extends React.Component {
   }
 
   render () {
-    const { serverError } = this.props
-    const { appErrors } = this.state
+    const { serverError } = this.props;
+    const { appErrors } = this.state;
 
     if (serverError) {
       const { url } = serverError.config;
       const { response } = serverError;
-      return <AlertErrors response={serverError} message={`Request to ${url} returned ${response.status} status code`}  />
+      return <AlertErrors response={serverError} message={`Request to ${url} returned ${response.status} status code`} />;
     }
 
     if (appErrors.message) {
-      return <AlertErrors {...appErrors} />
+      return <AlertErrors {...appErrors} />;
     }
 
     return this.props.children;
   }
 }
-
 
 export default connect()(withRouter(ErrorBoundary));

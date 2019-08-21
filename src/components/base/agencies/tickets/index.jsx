@@ -3,9 +3,9 @@ import { displayUnixTimestamp } from 'components/helpers';
 import { Link } from 'react-router-dom';
 
 const Tickets = props => {
-  const { parkingTicket, url } = props
+  const { parkingTicket, url } = props;
   return (
-     <tr>
+    <tr>
       <th scope="row">{parkingTicket.id}</th>
       <td><Link to={`${url}/${parkingTicket.id}`} className="mr-1">{parkingTicket.type}</Link></td>
       <td>{parkingTicket.lot.name}</td>
@@ -17,7 +17,7 @@ const Tickets = props => {
         </span>
       </td>
     </tr>
-  )
-}
+  );
+};
 
 export default Tickets;

@@ -19,7 +19,7 @@ const TableRow = props => {
         {record.vehicle_type}
       </td>
     </tr>
-  )
+  );
 };
 
 export default TableRow;

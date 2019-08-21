@@ -5,17 +5,18 @@ import { notFound, internal, critical } from 'actions/server_errors';
 const withApiCatch = (promise, isCritical = false) => {
   return promise.catch(error => {
 
+    const { response } = error;
+    if (response.status === 401) {
+      store.dispatch(clearToken);
+      return
+    }
+
     if(isCritical) {
       store.dispatch(critical(error));
       return
     }
 
-    const { response } = error;
-
     switch (response.status) {
-      case 401:
-        store.dispatch(clearToken);
-        break;
       case 404:
         store.dispatch(notFound(error));
         break;

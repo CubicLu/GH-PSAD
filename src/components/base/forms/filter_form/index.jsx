@@ -3,11 +3,11 @@ import { Form, Text } from 'informed';
 import { Button, Col, FormGroup, Label } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
 import {
- CustomSelect,
- CustomMultiSelect,
- DateRangeInput,
- FieldType
-} from 'components/helpers/form_fields'
+  CustomSelect,
+  CustomMultiSelect,
+  DateRangeInput,
+  FieldType
+} from 'components/helpers/form_fields';
 
 class CommonForm extends React.Component {
   renderField = (field, key) => (
@@ -22,7 +22,7 @@ class CommonForm extends React.Component {
   renderInput = field => {
     switch (field.type) {
       case FieldType.DATE_FIELD:
-        return <DateRangeInput className="form-control" field={field.name} initialValues={this.props.values} />
+        return <DateRangeInput className="form-control" field={field.name} initialValues={this.props.values} />;
       case FieldType.MULTISELECT_FIELD:
         return <CustomMultiSelect field={field.name} options={field.options} values={this.props.values} />;
       case FieldType.SELECT_FIELD:
@@ -42,7 +42,7 @@ class CommonForm extends React.Component {
 
     return (
       <React.Fragment>
-         <Button onClick={cancelFilter} className="btn btn-default mr-1">
+        <Button onClick={cancelFilter} className="btn btn-default mr-1">
           Close
         </Button>
         <Button onClick={() => submitForm(formState.values)} color="primary" type="submit">
