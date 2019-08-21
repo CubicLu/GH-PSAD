@@ -7,6 +7,11 @@ module.exports = {
         "standard",
         'plugin:react/recommended'
     ],
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"

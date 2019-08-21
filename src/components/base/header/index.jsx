@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   DropdownItem,
   DropdownMenu,
@@ -8,8 +9,10 @@ import {
   UncontrolledDropdown
 } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
+import withCurrentUser from 'components/modules/with_current_user';
 
-function Header () {
+function Header (props) {
+  const { currentUser } = props;
   return (
     <Navbar color='primary' light expand className='mb-2'>
       <NavbarBrand className='text-light'>
@@ -18,7 +21,7 @@ function Header () {
       <Nav className='ml-auto' navbar>
         <UncontrolledDropdown nav inNavbar>
           <DropdownToggle nav caret className="text-light">
-            Admin Profile
+            { currentUser && currentUser.name }
           </DropdownToggle>
           <DropdownMenu right>
             <DropdownItem>
@@ -34,4 +37,8 @@ function Header () {
   );
 }
 
-export default Header;
+Header.propTypes = {
+  currentUser: PropTypes.object
+};
+
+export default withCurrentUser(Header);
