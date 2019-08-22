@@ -8,6 +8,7 @@ import {
   CustomMultiSelect,
   TextWithLink,
   Increaser,
+  Password,
   FieldType
 } from 'components/helpers/form_fields';
 import { Form, Text } from 'informed';
@@ -46,7 +47,7 @@ const renderInput = (field, props = {}) => {
     case FieldType.TEXT_LINK_FIELD:
       return <TextWithLink field={field}/>;
     case FieldType.PASSWORD_FIELD:
-      return <Text className="form-control" field={field.name} type="password"/>;
+      return <Password {...props} field={field} />;
     case FieldType.INCREASER_FIELD:
       return <Increaser field={field}/>;
     default:

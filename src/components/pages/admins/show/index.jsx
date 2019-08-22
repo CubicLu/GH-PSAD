@@ -66,7 +66,7 @@ class Show extends React.Component {
   fieldsForCommonForm = () => {
     const fieldsSet = fields(this.state.dropdowns.roles);
     fieldsSet.push({
-      name: 'password', label: 'New Password', type: FieldType.PASSWORD_FIELD
+      name: 'password', label: 'Password', type: FieldType.PASSWORD_FIELD, filled: true
     });
     return fieldsSet;
   }
