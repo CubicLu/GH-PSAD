@@ -4,7 +4,7 @@ import MultiSelect from 'react-select';
 import { isEmpty, defaults } from 'underscore';
 import { asField } from 'informed';
 
-const CustomMultiSelect = asField(({ field, fieldApi, fieldState, options }) => {
+const CustomMultiSelect = asField(({ field, fieldApi, fieldState, options, events }) => {
   let { value: values } = fieldState;
   const { setValue } = fieldApi;
   const [selectedOptions, setSelectedOptions] = useState({});
@@ -24,6 +24,7 @@ const CustomMultiSelect = asField(({ field, fieldApi, fieldState, options }) => 
         onChange={(selectedOptions) => {
           setValue(selectedOptions ? selectedOptions.map(element => element.value) : []);
           setSelectedOptions({ [field]: selectedOptions });
+          events.onChangeMutipleSelect()
         }}
         options={options}
       />

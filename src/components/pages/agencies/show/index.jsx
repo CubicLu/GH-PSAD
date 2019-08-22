@@ -34,8 +34,18 @@ class Show extends React.Component {
   state = {
     isSaving: false,
     collapse: false,
+    inputChanged: false,
     dropdowns: {}
   }
+
+  fieldProps = () => ({
+    lSize: 6,
+    events: {
+      onChangeMutipleSelect: () => this.setState({ inputChanged: true }),
+      onChangeFile: () => this.setState({ inputChanged: true }),
+      onChange: () => this.setState({ inputChanged: true })
+    }
+  })
 
   openCollapsable (attribute) {
     this.setState((state) => ({
@@ -101,7 +111,7 @@ class Show extends React.Component {
 
   renderFields () {
     const { officers, managers, townManagers } = this.state.dropdowns;
-    return renderFieldsWithGrid(fields(officers, managers, townManagers), 2, 6, fieldProps);
+    return renderFieldsWithGrid(fields(officers, managers, townManagers), 2, 6, this.fieldProps());
   }
 
   renderLocation () {
@@ -110,20 +120,20 @@ class Show extends React.Component {
   }
 
   renderForm () {
-    const { isSaving } = this.state;
+    const { isSaving, inputChanged } = this.state;
 
     return (
       <fieldset disabled={isSaving}>
         <Form getApi={this.setFormApi} initialValues={this.values()}>
           <Row>
             <Col sm={12} md={3}>
-              {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, fieldProps)}
+              {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, this.fieldProps())}
             </Col>
             <Col sm={12} md={9}>
               {this.renderFields()}
             </Col>
           </Row>
-          { this.renderSaveButton()}
+          { inputChanged && this.renderSaveButton()}
         </Form>
       </fieldset>
     );
@@ -212,8 +222,6 @@ class Show extends React.Component {
     );
   }
 }
-
-const fieldProps = { lSize: 6 };
 
 Show.propTypes = {
   backPath: PropTypes.string.isRequired,

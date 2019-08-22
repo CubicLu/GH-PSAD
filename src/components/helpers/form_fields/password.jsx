@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Text } from 'informed';
-import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Button, InputGroup, InputGroupAddon } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
 
@@ -20,7 +20,7 @@ class Password extends React.Component{
     const { type } = this.state
 
     return (
-      <InputGroup className="password">
+      <InputGroup>
         <Text {...events} className="form-control" field={field.name} type={type}/>
         <InputGroupAddon onClick={this.handleClick} addonType="append">
           <Button color="secondary">
