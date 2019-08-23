@@ -14,7 +14,6 @@ import { filterFields } from 'components/helpers/fields/admins';
 /* Modules */
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import waitUntilFetched from 'components/modules/wait_until_fetched';
 
 class Index extends React.Component {
   state = {
@@ -57,10 +56,9 @@ class Index extends React.Component {
   }
 
   componentDidMount () {
-    waitUntilFetched.call(this,
       dropdownsSearch('role_names_filter', { admin: { id: 1 } })
         .then(response => this.setState({ filterRolesField: response.data }))
-    );
+        .catch(err => console.err(err));
   }
 
   render () {
