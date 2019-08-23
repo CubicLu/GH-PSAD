@@ -6,6 +6,7 @@ import AgencyReducers from './agencies';
 import CameraReducers from './cameras';
 import ParkingLotReducers from './parking_lots';
 import ServerErrorReducers from './server_errors';
+import AlertMessagesReducers from './alert_messages';
 import VoiReducers from './voi';
 
 const reducers = combineReducers({
@@ -16,7 +17,8 @@ const reducers = combineReducers({
   camera: CameraReducers,
   parking_lot: ParkingLotReducers,
   voi: VoiReducers,
-  server: ServerErrorReducers
+  server: ServerErrorReducers,
+  alert_messages: AlertMessagesReducers
 });
 
 export default reducers;

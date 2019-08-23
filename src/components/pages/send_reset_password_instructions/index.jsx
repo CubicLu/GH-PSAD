@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button, Input } from 'reactstrap';
 /* Actions */
+import { setAlertMessages } from 'actions/alert_messages';
 /* API */
 import { sendResetPasswordInstructionsRequest } from 'api/users';
 /* Base */
@@ -19,7 +20,6 @@ class SendResetPasswordInstructions extends React.Component {
     super(props);
     this.state = {
       username: '',
-      successMessage: '',
       messages: {}
     };
   }
@@ -41,7 +41,10 @@ class SendResetPasswordInstructions extends React.Component {
   };
 
   redirectToLogin = () => {
-    localStorage.setItem('LOGIN_MESSAGE', 'We have sent a recovery password to your email, please follow the instructions');
+    this.props.setAlertMessages({
+      type: 'success',
+      text: 'We have sent a recovery password to your email, please follow the instructions'
+    })
     this.props.history.push('/login');
   }
 
@@ -73,7 +76,7 @@ class SendResetPasswordInstructions extends React.Component {
 }
 
 function mapDispatch (dispatch) {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators({ setAlertMessages }, dispatch);
 }
 
 SendResetPasswordInstructions.propTypes = {

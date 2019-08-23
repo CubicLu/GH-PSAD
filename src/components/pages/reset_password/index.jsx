@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux'
 import { Link } from 'react-router-dom';
 import { Button, Input } from 'reactstrap';
 /* Actions */
+import { setAlertMessages } from 'actions/alert_messages';
 /* API */
 import { resetPasswordRequest, checkPasswordToken } from 'api/users';
 /* Base */
@@ -45,8 +46,11 @@ class ResetPassword extends React.Component {
     });
   };
 
-  redirectToLogin = (message) => {
-    localStorage.setItem('LOGIN_MESSAGE', message);
+  redirectToLogin = (text) => {
+    this.props.setAlertMessages({
+      type: 'success',
+      text
+    })
     this.props.history.push('/login')
   }
 
@@ -58,7 +62,6 @@ class ResetPassword extends React.Component {
         if(validToken) {
           this.setState({ passwordTokenInvalid: false })
         } else {
-          debugger
           this.setState({
             messages: setErrorsMessages('This link is no longer valid')
           });
@@ -124,7 +127,7 @@ class ResetPassword extends React.Component {
 }
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators({ setAlertMessages }, dispatch);
 }
 
 export default connect(

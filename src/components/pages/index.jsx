@@ -9,6 +9,7 @@ import PrivateRoute from 'routes/private_route';
 import Layout from 'components/base/layout';
 import { clearToken } from 'actions/users';
 import { connect } from 'react-redux';
+import AlertMessages from 'components/helpers/alert_messages';
 
 class App extends React.Component {
   componentDidMount () {
@@ -37,6 +38,7 @@ class App extends React.Component {
         <Route path="/login" component={Login}/>
         <Route path="/forgot_password" component={SendResetPasswordInstructions}/>
         <Route path="/reset_password/:reset_password_token" component={ResetPassword}/>
+        <AlertMessages/>
       </React.Fragment>
     );
   }
