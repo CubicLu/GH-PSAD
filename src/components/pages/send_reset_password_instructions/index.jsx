@@ -43,7 +43,7 @@ class SendResetPasswordInstructions extends React.Component {
   redirectToLogin = () => {
     this.props.setAlertMessages({
       type: 'success',
-      text: 'We have sent a recovery password to your email, please follow the instructions'
+      text: 'Reset link has been successfully sent to his email address'
     })
     this.props.history.push('/login');
   }
