@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 /* Actions */
 import { SET_LIST } from 'actions/admins';
 /* API */
-import { index } from 'api/admins';
+import { filterFetcher } from 'api/admins';
 import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import BasicListToolbar from 'components/base/basic_list_toolbar';
@@ -27,6 +27,7 @@ class Index extends React.Component {
     return list.map((record, idx) => {
       return (
         <tr key={idx}>
+          <td><img src={record.avatar || 'https://i.stack.imgur.com/34AD2.jpg'} className="rounded-circle" width="50" height="50"/></td>
           <td><Link to={`${match.path}/${record.id}`}>{record.username}</Link></td>
           <td>{record.name}</td>
           <td>{record.email}</td>
@@ -41,21 +42,6 @@ class Index extends React.Component {
     });
   };
 
-  filterFetcher = (values, query) => {
-    return (
-      index({
-        query: {
-          ...query,
-          role_names: values.role_names,
-          status: values.status,
-          'query[email]': values.email,
-          'query[username]': values.username,
-          'query[name]': values.name
-        }
-      })
-    );
-  }
-
   componentDidMount () {
     waitUntilFetched.call(this,
       dropdownsSearch('role_names_filter', { admin: { id: 1 } })
@@ -67,17 +53,13 @@ class Index extends React.Component {
     return (
       <IndexTable
         {...this.props}
-        toolbar={
-          <BasicListToolbar
-            {...this.props}
-            fetcher={index}
-            label="Create Admin"
-          />
-        }
+        toolbar={ <BasicListToolbar {...this.props} title='User accounts' label="+ Create Account" /> }
         filterFields={filterFields(this.state.filterRolesField)}
-        filterFetcher={this.filterFetcher}
+        resource={resource}
+        filterFetcher={filterFetcher}
         columns={
           <React.Fragment>
+            <th disableSort>Photo</th>
             <th attr="username">Username</th>
             <th attr="name">Name</th>
             <th attr="email">Email</th>
@@ -97,4 +79,6 @@ Index.propTypes = {
   match: PropTypes.object.isRequired
 };
 
-export default connectList('admin', SET_LIST, resourceFetcher(index), Index);
+const resource = 'admin'
+
+export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), Index);

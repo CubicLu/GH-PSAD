@@ -1,4 +1,6 @@
-const resourceFetcher = fetcher => {
+import { retrieveFilters } from 'components/modules/retrieve_filters';
+
+const resourceFetcher = (fetcher, resource) => {
   return (wrapper, fetchCondition, onResponse) => {
     if (!fetchCondition) {
       wrapper.fetchFinished();
@@ -6,10 +8,11 @@ const resourceFetcher = fetcher => {
     }
 
     const { params } = wrapper.props.match;
-    const query = (new URL(window.location.href)).searchParams;
-    const page = query.get('page')
+    const queryURL = (new URL(window.location.href)).searchParams;
+    const page = queryURL.get('page')
+    let filters = retrieveFilters(resource)
 
-    fetcher({...params, page})
+    fetcher({filters, page, ...params})
       .then(onResponse)
       .catch(err => console.error(err))
       .finally(wrapper.fetchFinished)

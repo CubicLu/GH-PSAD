@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 /* Actions */
 import { SET_LIST } from 'actions/agencies';
 /* API */
-import { index } from 'api/agencies';
+import { filterFetcher } from 'api/agencies';
 /* Base */
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';
@@ -32,25 +32,14 @@ class Index extends React.Component {
     });
   };
 
-  filterFetcher = (values, query) => {
-    return index({
-      query: {
-        ...query,
-        'query[agencies.email]': values.email,
-        'query[agencies.name]': values.name,
-        'query[agencies.phone]': values.phone,
-        'query[locations.full_address]': values.full_address
-      }
-    });
-  }
-
   render () {
     return (
       <IndexTable
         {...this.props}
-        toolbar={ <BasicListToolbar {...this.props} fetcher={index} label="Create Agency"/> }
+        toolbar={ <BasicListToolbar {...this.props} label="+ Create Agency" title="Law agencies"/> }
         filterFields={filterFields()}
-        filterFetcher={this.filterFetcher}
+        filterFetcher={filterFetcher}
+        resource={resource}
         columns={
           <React.Fragment>
             <th attr="agencies.name">Agency Name</th>
@@ -73,4 +62,6 @@ Index.propTypes = {
   match: PropTypes.object.isRequired
 };
 
-export default connectList('agency', SET_LIST, resourceFetcher(index), Index);
+const resource = 'agency'
+
+export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), Index);

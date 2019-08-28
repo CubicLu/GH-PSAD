@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 /* Actions */
 import { SET_LIST } from 'actions/cameras';
 /* API */
-import { index } from 'api/cameras';
+import { filterFetcher } from 'api/cameras';
 /* Base */
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';
@@ -32,23 +32,14 @@ class Index extends React.Component {
     });
   };
 
-  // TODO search method on back-end
-  filterFetcher = (values, query) => {
-    return index({
-      query: {
-        parking_lot_id: values.parking_lot_id,
-        ...query
-      }
-    });
-  }
-
   render () {
     return (
       <IndexTable
         {...this.props}
-        toolbar={ <BasicListToolbar {...this.props} fetcher={index} label="Create Camera"/> }
+        toolbar={ <BasicListToolbar {...this.props} label="+ Add Camera" title="Cameras"/> }
         filterFields={filterFields()}
-        filterFetcher={this.filterFetcher}
+        filterFetcher={filterFetcher}
+        resource={resource}
         columns={
           <React.Fragment>
             <th attr="name">Name</th>
@@ -70,4 +61,6 @@ Index.propTypes = {
   match: PropTypes.object.isRequired
 };
 
-export default connectList('camera', SET_LIST, resourceFetcher(index), Index);
+const resource = 'camera'
+
+export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), Index);

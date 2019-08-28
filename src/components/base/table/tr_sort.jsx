@@ -19,7 +19,7 @@ const TRSort = (props) => {
                     asc: th.props.attr === sortedAttr.keyword ? !sortedAttr.asc : true
                   }
                   fetchStarted()
-                  filterFetcher(filterQuery, setQuery(newSortedAttr))
+                  filterFetcher({filters: filterQuery, query: setQuery(newSortedAttr)})
                     .then((res) => {
                       setList(selectList(res));
                       handledFetched()

@@ -76,12 +76,16 @@ class Pagination extends React.Component {
   };
 
   render () {
-    const { total, perPage } = this.props;
+    const { total, perPage, page, list } = this.props;
 
     if (total < perPage) return null;
-
+    const firstRangeElements = (perPage * page) - (perPage - 1)
+    const showingCounterElements = `${firstRangeElements} - ${firstRangeElements + list.length - 1}`
     return (
       <Paggy size="md" listClassName="justify-content-center">
+        <div className="mr-2 mt-1">
+          Displaying {showingCounterElements} of {total}
+        </div>
         <PaginationItem>
           <PaginationLink first onClick={this.first}/>
         </PaginationItem>
