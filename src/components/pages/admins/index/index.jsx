@@ -32,11 +32,7 @@ class Index extends React.Component {
           <td>{record.name}</td>
           <td>{record.email}</td>
           <td>{record.role.name}</td>
-          <td>
-            <span className={`btn btn-${record.status === 'active' ? 'success' : 'danger'}`}>
-              {record.status}
-            </span>
-          </td>
+          <td>{record.status}</td>
         </tr>
       );
     });
