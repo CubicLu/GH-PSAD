@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { isEmpty } from 'underscore';
 /* Actions */
 import { SET_LIST } from 'actions/admins';
 /* API */
@@ -14,10 +15,17 @@ import { filterFields } from 'components/helpers/fields/admins';
 /* Modules */
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
+import withCurrentUser from 'components/modules/with_current_user';
 
 class Index extends React.Component {
   state = {
     filterRolesField: []
+  }
+
+  isFetching = () => {
+    const { isResourceFetching } = this.props
+    const { filterRolesField } = this.state
+    return isResourceFetching || isEmpty(filterRolesField)
   }
 
   renderRecords = () => {
@@ -38,14 +46,14 @@ class Index extends React.Component {
   };
 
   componentDidMount () {
-      dropdownsSearch('role_names_filter', { admin: { id: 1 } })
-        .then(response => this.setState({ filterRolesField: response.data }))
-        .catch(err => console.err(err));
+    dropdownsSearch('role_names_filter', { admin: { id: this.props.currentUser.id } })
+      .then(response => this.setState({ filterRolesField: response.data }))
   }
 
   render () {
     return (
       <IndexTable
+        isFetching={this.isFetching}
         {...this.props}
         toolbar={ <BasicListToolbar {...this.props} title='User accounts' label="+ Create Account" /> }
         filterFields={filterFields(this.state.filterRolesField)}
@@ -75,4 +83,4 @@ Index.propTypes = {
 
 const resource = 'admin'
 
-export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), Index);
+export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), withCurrentUser(Index));

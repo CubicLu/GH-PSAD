@@ -49,11 +49,26 @@ class Show extends React.Component {
     }
   })
 
+  isFetching () {
+    const { isResourceFetching } = this.props
+    const { roles } = this.state.dropdowns;
+    return isResourceFetching || isEmpty(roles)
+  }
+
   setFormApi = formApi => {
     this.formApi = formApi;
   };
 
   toggleModal = () => this.setState(prevState => ({ modal: !prevState.modal }))
+
+  toggleEditing = () => this.setState((prevState) => ({ isEditing: !prevState }))
+
+  handlePasswordSuccess = () => {
+    const { values } = this.formApi.getState();
+    const { backPath, record } = this.props;
+    const path = generatePath(backPath, { id: record.id });
+    updateRecord.call(this, update, path, values);
+  }
 
   save = () => {
     const values = setFormApiFields(this.fieldsForCommonForm(), this.formApi);
@@ -92,7 +107,6 @@ class Show extends React.Component {
       </Col>
     </Row>);
   }
-
 
   renderSaveButton = () => {
     const { isSaving } = this.state;
@@ -137,7 +151,6 @@ class Show extends React.Component {
           isOpen={this.state.modal}
           handleSuccess={this.handlePasswordSuccess}
         />
-
         <Card>
           <CardHeader>
             {this.renderHeader()}
@@ -159,25 +172,13 @@ class Show extends React.Component {
     return fieldsSet;
   }
 
-  handlePasswordSuccess = () => {
-    const { values } = this.formApi.getState();
-    const { backPath, record } = this.props;
-    const path = generatePath(backPath, { id: record.id });
-    updateRecord.call(this, update, path, values);
-  }
-
-  componentWillReceiveProps (nextProps, nextContext) {
-    if (nextProps.currentUser) {
-      dropdownsSearch('role_id', { admin_id: nextProps.currentUser.id })
-        .then(response => this.setState({ dropdowns: { roles: response.data } }));
-    }
+  componentDidMount () {
+    dropdownsSearch('role_id', { admin_id: this.props.currentUser.id })
+      .then(response => this.setState({ dropdowns: { roles: response.data } }));
   }
 
   render () {
-    const { record } = this.props;
-    const { roles } = this.state.dropdowns;
-
-    return this.props.isFetching || !record || isEmpty(roles) ? <div>Loading data...</div> : (
+    return this.isFetching() ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
         <div className="mt-1"/>
@@ -190,7 +191,7 @@ class Show extends React.Component {
 Show.propTypes = {
   backPath: PropTypes.string.isRequired,
   match: PropTypes.object.isRequired,
-  isFetching: PropTypes.bool.isRequired,
+  isResourceFetching: PropTypes.bool.isRequired,
   currentUser: PropTypes.object,
   record: PropTypes.shape({
     id: PropTypes.number.isRequired,

@@ -4,6 +4,9 @@ import { isEmpty } from 'underscore';
 
 const withCurrentUser = (Component) => {
   const HOC = class extends React.Component {
+    state = {
+      currentUser: null
+    }
 
     componentWillUnmount() {
       this.setState({
@@ -27,7 +30,9 @@ const withCurrentUser = (Component) => {
 
     render() {
       const { currentUser, ...other_props} = this.props
-      return <Component {...this.state} {...other_props}/>
+      return this.state.currentUser ?
+            <Component currentUser={this.state.currentUser} {...other_props}/> :
+            null
     }
   }
 

@@ -27,7 +27,6 @@ import { fields as fieldsLocation } from 'components/helpers/fields/agencies/loc
 import connectRecord from 'components/modules/connect_record';
 import updateRecord from 'components/modules/form_actions/update_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import waitUntilFetched from 'components/modules/wait_until_fetched';
 import setFormApiFields from 'components/modules/set_form_api_fields';
 
 class Show extends React.Component {
@@ -46,6 +45,12 @@ class Show extends React.Component {
       onChange: () => this.setState({ inputChanged: true })
     }
   })
+
+  isFetching = () => {
+    const { isResourceFetching } = this.props
+    const { dropdowns } = this.state
+    return isResourceFetching || isEmpty(dropdowns)
+  }
 
   openCollapsable (attribute) {
     this.setState((state) => ({
@@ -154,25 +159,23 @@ class Show extends React.Component {
   }
 
   componentDidMount () {
-    waitUntilFetched.call(this,
-      searchAdminByRoleName(['manager', 'officer', 'town_manager'])
-        .then((result) => {
-          this.setState({
-            dropdowns: {
-              officers: result.officer,
-              managers: result.manager,
-              townManagers: result.town_manager
-            }
-          });
-        })
-        .catch(this.handleFailed)
-    );
+    searchAdminByRoleName(['manager', 'officer', 'town_manager'])
+      .then((result) => {
+        this.setState({
+          dropdowns: {
+            officers: result.officer,
+            managers: result.manager,
+            townManagers: result.town_manager
+          }
+        });
+      })
+      .catch(this.handleFailed)
   }
 
   render () {
-    const { isFetching, record, match } = this.props;
+    const { record, match } = this.props;
     const ticketURL = `${match.url}/tickets`;
-    return isFetching || !record || isEmpty(this.state.dropdowns) ? <div>Loading data...</div> : (
+    return this.isFetching() ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
         <div className="mt-1"/>
@@ -185,7 +188,7 @@ class Show extends React.Component {
 Show.propTypes = {
   backPath: PropTypes.string.isRequired,
   match: PropTypes.object.isRequired,
-  isFetching: PropTypes.bool.isRequired,
+  isResourceFetching: PropTypes.bool.isRequired,
   record: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,

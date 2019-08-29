@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import AlertErrors from './alert_errors';
 import { withRouter } from 'react-router-dom';
 import { clearErrors } from 'actions/server_errors';
@@ -49,6 +50,11 @@ class ErrorBoundary extends React.Component {
 
     return this.props.children;
   }
+}
+
+ErrorBoundary.propTypes = {
+  location: PropTypes.object.isRequired,
+  serverError: PropTypes.bool
 }
 
 export default connect()(withRouter(ErrorBoundary));

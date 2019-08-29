@@ -5,7 +5,7 @@ import { faSortDown, faSortUp, faMinus } from '@fortawesome/free-solid-svg-icons
 
 const TRSort = (props) => {
 
-  const { filterFetcher, fetchStarted, setList, handleClick, handledFetched, sortedAttr, setQuery, filterQuery } = props
+  const { filterFetcher, resourceFetchStarted, setList, handleClick, sortedAttr, setQuery, filterQuery } = props
   return (
     <tr>
       {
@@ -18,12 +18,12 @@ const TRSort = (props) => {
                     keyword: th.props.attr,
                     asc: th.props.attr === sortedAttr.keyword ? !sortedAttr.asc : true
                   }
-                  fetchStarted()
-                  filterFetcher({filters: filterQuery, query: setQuery(newSortedAttr)})
-                    .then((res) => {
-                      setList(selectList(res));
-                      handledFetched()
-                    })
+                  resourceFetchStarted(
+                    filterFetcher({filters: filterQuery, query: setQuery(newSortedAttr)})
+                      .then((res) => {
+                        setList(selectList(res));
+                      })
+                  )
 
                   handleClick(newSortedAttr)
                 }

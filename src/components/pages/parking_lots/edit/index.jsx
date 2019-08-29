@@ -29,6 +29,12 @@ class Edit extends React.Component {
     dropdowns: {}
   };
 
+  isFetching = () => {
+    const { isResourceFetching } = this.props
+    const { dropdowns } = this.state
+    return isResourceFetching || isEmpty(dropdowns)
+  }
+
   save = () => {
     const { values } = this.formApi.getState();
     const { values: settingValues } = this.settingFormApi.getState();
@@ -135,7 +141,7 @@ class Edit extends React.Component {
   }
 
   render () {
-    return this.props.isFetching || isEmpty(this.state.dropdowns) ? <div>Loading data...</div> : (
+    return this.isFetching() ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
         <div className="mt-1"/>
@@ -151,7 +157,7 @@ const fieldProps = { lSize: 6 };
 
 Edit.propTypes = {
   match: PropTypes.object.isRequired,
-  isFetching: PropTypes.bool.isRequired,
+  isResourceFetching: PropTypes.bool.isRequired,
   record: PropTypes.shape({
     town_manager: PropTypes.object,
     parking_admin: PropTypes.object,

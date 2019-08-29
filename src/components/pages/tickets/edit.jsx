@@ -28,6 +28,12 @@ class Edit extends React.Component {
     dropdowns: {}
   }
 
+  isFetching = () => {
+    const { isResourceFetching } = this.props;
+    const { officers, statuses } = this.state.dropdowns;
+    return isResourceFetching || !officers || !statuses
+  }
+
   save = () => {
     const { values } = this.formApi.getState();
     const { backPath, record } = this.props;
@@ -140,8 +146,7 @@ class Edit extends React.Component {
   }
 
   render () {
-    const { officers, statuses } = this.state.dropdowns;
-    return !this.props.record || !officers || !statuses ? <div>Loading data...</div> : this.renderRecord();
+    return this.isFetching() ? <div>Loading data...</div> : this.renderRecord();
   }
 }
 
@@ -150,7 +155,7 @@ const fieldProps = { lSize: 6 };
 Edit.propTypes = {
   backPath: PropTypes.string.isRequired,
   match: PropTypes.object.isRequired,
-  isFetching: PropTypes.bool.isRequired,
+  isResourceFetching: PropTypes.bool.isRequired,
   record: PropTypes.shape({
     id: PropTypes.number.isRequired,
     officer: PropTypes.object,

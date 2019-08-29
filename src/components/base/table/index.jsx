@@ -22,7 +22,7 @@ class IndexTable extends React.Component {
   renderRecords = () => {
     const { isFetching, renderRecords } = this.props;
 
-    if (isFetching) {
+    if (isFetching()) {
       return (<tr>
         <td>
           Loading data...
@@ -46,9 +46,7 @@ class IndexTable extends React.Component {
 
   setFilterQuery = (values) => this.setState({ filterQuery: values });
 
-  toggleModal = (event) => this.setState((state) => ({ filterModalOpen: !state.filterModalOpen }));
-
-  handleSortedTableFetched = () => this.props.fetchFinished();
+  toggleModal = event => this.setState((state) => ({ filterModalOpen: !state.filterModalOpen }));
 
   paginationFetcher = (pagesQuery) => this.props.filterFetcher({filters: this.state.filterQuery, query: this.setQuery(this.state.sortedAttr), ...pagesQuery})
 
@@ -65,18 +63,19 @@ class IndexTable extends React.Component {
   }
 
   submitForm = (values, setErrorMessage) => {
-    const { filterFetcher, fetchStarted, fetchFinished, setList } = this.props
+    const { filterFetcher, resourceFetchStarted, setList } = this.props
     const cloneValues = cloneDeep(values)
     this.setFilterQuery(cloneValues)
     this.generateLocalStorageFilter(cloneValues)
 
-    fetchStarted()
-    filterFetcher({filters: cloneValues})
+    resourceFetchStarted(
+    filterFetcher(cloneValues)
       .then((res) => {
         setList(selectList(res));
+        this.toggleModal()
       })
-      .catch(error => console.error(error))
-      .finally(fetchFinished)
+      .catch(error => setErrorMessage(error))
+    );
   }
 
   setQuery = (sortedAttr) => {
@@ -122,7 +121,6 @@ class IndexTable extends React.Component {
                 <TRSort
                   {...this.props}
                   filterQuery={filterQuery}
-                  handledFetched={this.handleSortedTableFetched}
                   handleClick={this.handleSortedClick}
                   sortedAttr={sortedAttr}
                   setQuery={this.setQuery}

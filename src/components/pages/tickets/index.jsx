@@ -14,7 +14,6 @@ import { filterFields } from 'components/helpers/fields/tickets';
 /* Modules */
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import waitUntilFetched from 'components/modules/wait_until_fetched';
 
 class Index extends React.Component {
   state = {
@@ -22,6 +21,12 @@ class Index extends React.Component {
       officers: [],
       statuses: []
     }
+  }
+
+  isFetching = () => {
+    const { isResourceFetching } = this.props;
+    const { officers, statuses } = this.state.dropdowns;
+    return isResourceFetching || !officers || !statuses
   }
 
   renderRecords = () => {
@@ -38,28 +43,26 @@ class Index extends React.Component {
 
   componentDidMount () {
     const { match } = this.props;
-    waitUntilFetched.call(this,
-      dropdownsSearch('tickets_officers_filter', { agency_id: match.params.agency_id })
-        .then(response => {
-          this.setState({
-            dropdowns: {
-              ...this.state.dropdowns,
-              officers: response.data
-            }
-          });
-        })
-        .catch(this.handleFailed),
-      statuses()
-        .then(({ data }) => {
-          this.setState({
-            dropdowns: {
-              ...this.state.dropdowns,
-              statuses: data.statuses
-            }
-          });
-        })
-        .catch(this.handleFailed)
-    );
+    dropdownsSearch('tickets_officers_filter', { agency_id: match.params.agency_id })
+      .then(response => {
+        this.setState({
+          dropdowns: {
+            ...this.state.dropdowns,
+            officers: response.data
+          }
+        });
+      })
+      .catch(this.handleFailed)
+    statuses()
+      .then(({ data }) => {
+        this.setState({
+          dropdowns: {
+            ...this.state.dropdowns,
+            statuses: data.statuses
+          }
+        });
+      })
+      .catch(this.handleFailed)
   }
 
   render () {
@@ -69,6 +72,7 @@ class Index extends React.Component {
     const agency = this.props.list[0] && this.props.list[0].agency;
     return (
       <IndexTable
+        isFetching={this.isFetching}
         {...this.props}
         paginationQuery={{ agency_id: agencyId }}
         toolbar={ <BasicBackListToolbar {...this.props} label={`${agency && agency.name} Tickets`} link={backPath}/>}
@@ -95,7 +99,8 @@ class Index extends React.Component {
 Index.propTypes = {
   list: PropTypes.arrayOf(PropTypes.object).isRequired,
   match: PropTypes.object.isRequired,
-  backPath: PropTypes.string.isRequired
+  backPath: PropTypes.string.isRequired,
+  isResourceFetching: PropTypes.bool.isRequired
 };
 
 const resource = 'ticket'

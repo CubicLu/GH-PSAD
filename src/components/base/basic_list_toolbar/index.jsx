@@ -48,8 +48,8 @@ BasicListToolbar.propTypes = {
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   onClickFilter: PropTypes.func,
-  fetchFinished: PropTypes.func.isRequired,
-  fetchStarted: PropTypes.func.isRequired,
+  resourceFetchStarted: PropTypes.func.isRequired,
+  fetcher: PropTypes.func.isRequired,
   setList: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired
 };

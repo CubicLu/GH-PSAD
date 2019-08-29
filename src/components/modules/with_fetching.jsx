@@ -17,16 +17,16 @@ import React from 'react';
 const withFetching = (Component, fetchData) => {
   return class extends React.Component {
     state = {
-      isFetching: true
+      isResourceFetching: true
     };
 
     componentWillUnmount () {
       this._isMounted = false;
     }
 
-    fetchFinished = () => {
+    resourceFetchFinished = () => {
       if (this._isMounted) {
-        this.setState({ isFetching: false });
+        this.setState({ isResourceFetching: false });
       }
     };
 
@@ -35,16 +35,17 @@ const withFetching = (Component, fetchData) => {
       fetchData(this);
     }
 
-    fetchStarted = () => {
-      this.setState({ isFetching: true });
+    resourceFetchStarted = promise => {
+      promise.finally(() => this.resourceFetchFinished())
+      this.setState({ isResourceFetching: true });
     };
 
     render () {
       return <Component
         {...this.props}
-        {...this.state}
-        fetchStarted={this.fetchStarted}
-        fetchFinished={this.fetchFinished} />;
+        isResourceFetching={this.state.isResourceFetching}
+        resourceFetchFinished={this.resourceFetchFinished}
+        resourceFetchStarted={this.resourceFetchStarted} />;
     }
   };
 };

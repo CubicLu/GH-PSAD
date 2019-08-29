@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash'
 
 function saveRecord(create, backPath, values) {
-  this.setState({ isFetching: true });
+  this.setState({ isSaving: true });
   create({ data: cloneDeep(values) })
     .then(createSucceed.bind(this, backPath))
     .catch(handleFailed.bind(this));
@@ -10,7 +10,7 @@ function saveRecord(create, backPath, values) {
 function createSucceed(backPath, res) {
   const { history, setRecord } = this.props;
   setRecord(res.data);
-  this.setState({ isFetching: false });
+  this.setState({ isSaving: false });
   history.push(backPath);
 };
 
@@ -20,7 +20,7 @@ function handleFailed(error) {
     this.setState({ errors: error.response.data.errors })
   }
 
-  this.setState({ isFetching: false });
+  this.setState({ isSaving: false });
 };
 
 

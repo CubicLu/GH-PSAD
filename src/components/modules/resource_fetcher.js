@@ -3,7 +3,7 @@ import { retrieveFilters } from 'components/modules/retrieve_filters';
 const resourceFetcher = (fetcher, resource) => {
   return (wrapper, fetchCondition, onResponse) => {
     if (!fetchCondition) {
-      wrapper.fetchFinished();
+      wrapper.resourceFetchFinished();
       return;
     }
 
@@ -12,10 +12,11 @@ const resourceFetcher = (fetcher, resource) => {
     const page = queryURL.get('page')
     let filters = retrieveFilters(resource)
 
-    fetcher({filters, page, ...params})
-      .then(onResponse)
-      .catch(err => console.error(err))
-      .finally(wrapper.fetchFinished)
+    wrapper.resourceFetchStarted(
+      fetcher({filters, page, ...params})
+        .then(onResponse)
+        .catch(err => console.error(err))
+    );
   };
 };
 

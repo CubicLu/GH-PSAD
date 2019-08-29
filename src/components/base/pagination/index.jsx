@@ -31,13 +31,13 @@ class Pagination extends React.Component {
   }
 
   open = page => {
-    const { fetchStarted, fetchFinished, fetcher, perPage } = this.props;
-    fetchStarted();
+    const { resourceFetchStarted, fetcher, perPage } = this.props;
+    resourceFetchStarted(
+      fetcher({ page, perPage })
+        .then(this.openSucceed)
+        .catch(this.openFailed)
+    );
     this.updateQueryParams(page);
-    fetcher({ page, perPage })
-      .then(this.openSucceed)
-      .catch(this.openFailed)
-      .finally(fetchFinished);
   };
 
   openSucceed = res => {
@@ -108,8 +108,7 @@ Pagination.propTypes = {
   total: PropTypes.number.isRequired,
   perPage: PropTypes.number.isRequired,
   page: PropTypes.number.isRequired,
-  fetchFinished: PropTypes.func.isRequired,
-  fetchStarted: PropTypes.func.isRequired,
+  resourceFetchStarted: PropTypes.func.isRequired,
   fetcher: PropTypes.func.isRequired,
   query: PropTypes.object,
   setList: PropTypes.func.isRequired,

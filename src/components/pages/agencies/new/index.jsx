@@ -24,13 +24,16 @@ import { fromJson as showErrors } from 'components/helpers/errors';
 import { FieldType } from 'components/helpers/form_fields';
 /* Modules */
 import saveRecord from 'components/modules/form_actions/save_record';
-import waitUntilFetched from 'components/modules/wait_until_fetched';
-import withFetching from 'components/modules/with_fetching';
 
 class New extends React.Component {
   state = {
     isSaving: false,
     dropdowns: {}
+  }
+
+  isFetching = () => {
+    const { dropdowns } = this.state
+    return isEmpty(dropdowns)
   }
 
   setFormApi = formApi => {
@@ -116,21 +119,19 @@ class New extends React.Component {
   }
 
   componentDidMount () {
-    waitUntilFetched.call(this,
-      searchAdminByRoleName(['manager', 'officer', 'town_manager'])
-        .then((result) => this.setState({
-          dropdowns: {
-            officers: result.officer,
-            managers: result.manager,
-            townManagers: result.town_manager }
-        })
-        )
-        .catch(this.handleFailed)
-    );
+    searchAdminByRoleName(['manager', 'officer', 'town_manager'])
+      .then((result) => this.setState({
+        dropdowns: {
+          officers: result.officer,
+          managers: result.manager,
+          townManagers: result.town_manager }
+      }))
+      .catch(this.handleFailed)
+
   }
 
   render () {
-    return this.props.isFetching || isEmpty(this.state.dropdowns) ? <div>Loading data...</div> : (
+    return this.isFetching() ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
         <div className="mt-1"/>
@@ -147,11 +148,10 @@ function mapDispatch (dispatch) {
 const fieldProps = { lSize: 6 };
 
 New.propTypes = {
-  backPath: PropTypes.string.isRequired,
-  isFetching: PropTypes.bool.isRequired
+  backPath: PropTypes.string.isRequired
 };
 
 export default connect(
   null,
   mapDispatch
-)(withFetching(New, () => {}));
+)(New);
