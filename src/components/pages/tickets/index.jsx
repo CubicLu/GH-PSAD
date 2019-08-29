@@ -88,7 +88,7 @@ class Index extends React.Component {
       <IndexTable
         {...this.props}
         paginationQuery={{ agency_id: agencyId }}
-        toolbar={ <BasicBackListToolbar {...this.props} label={`${agency && agency.name} Tickets`} link={backPath} fetcher={index.bind(this, { agency_id: agencyId })}/>}
+        toolbar={ <BasicBackListToolbar {...this.props} label={`Tickets`} link={backPath} fetcher={index.bind(this, { agency_id: agencyId })}/>}
         filterFields={filterFields(officers, statuses)}
         filterFetcher={this.filterFetcher}
         columns={
