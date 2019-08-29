@@ -36,7 +36,8 @@ class New extends React.Component {
   componentWillReceiveProps (nextProps, nextContext) {
     if (nextProps.currentUser) {
       dropdownsSearch('role_id', { admin_id: nextProps.currentUser.id })
-        .then(response => this.setState({ dropdowns: { roles: response.data } }));
+        .then(response => this.setState({ dropdowns: { roles: response.data } }))
+        .catch(err => console.err(err));
     }
   }
 

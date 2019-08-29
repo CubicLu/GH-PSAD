@@ -8,6 +8,7 @@ import {
   CustomMultiSelect,
   TextWithLink,
   Increaser,
+  Password,
   FieldType
 } from 'components/helpers/form_fields';
 import { Form, Text } from 'informed';
@@ -38,19 +39,19 @@ const renderImageField = (field, props = {}) => (
 const renderInput = (field, props = {}) => {
   switch (field.type) {
     case FieldType.MULTISELECT_FIELD:
-      return <CustomMultiSelect field={field.name} options={field.options}/>;
+      return <CustomMultiSelect {...props} field={field.name} options={field.options}/>;
     case FieldType.FILE_FIELD:
-      return <ImageInput className="form-control" field={field.name}/>;
+      return <ImageInput {...props} className="form-control" field={field.name}/>;
     case FieldType.SELECT_FIELD:
-      return <CustomSelect field={field}/>;
+      return <CustomSelect {...props} field={field}/>;
     case FieldType.TEXT_LINK_FIELD:
-      return <TextWithLink field={field}/>;
+      return <TextWithLink {...props} field={field}/>;
     case FieldType.PASSWORD_FIELD:
-      return <Text className="form-control" field={field.name} type="password"/>;
+      return <Password {...props} field={field} />;
     case FieldType.INCREASER_FIELD:
-      return <Increaser field={field}/>;
+      return <Increaser {...props} field={field}/>;
     default:
-      return <Text className="form-control" field={field.name}/>;
+      return <Text className="form-control" {...props.events} field={field.name}/>;
   }
 };
 
