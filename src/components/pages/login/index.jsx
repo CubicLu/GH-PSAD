@@ -64,16 +64,6 @@ class Login extends React.Component {
     this.props.history.push('/dashboard');
   }
 
-  componentDidMount () {
-    const message = localStorage.LOGIN_MESSAGE;
-    if (message) {
-      this.setState({
-        messages: setSuccessMessage(message)
-      });
-      localStorage.removeItem('LOGIN_MESSAGE');
-    }
-  }
-
   render () {
     return (
       <AuthLayout>
