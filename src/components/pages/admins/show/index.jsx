@@ -31,7 +31,8 @@ import withCurrentUser from 'components/modules/with_current_user';
 class Show extends React.Component {
   state = {
     isSaving: false,
-    isEditing: false,
+    defaultRecord: {},
+    inputChanged: false,
     dropdowns: {
       roles: []
     },
@@ -39,12 +40,20 @@ class Show extends React.Component {
     password_verification: ''
   }
 
-  componentWillReceiveProps (nextProps, nextContext) {
-    if (nextProps.currentUser) {
-      dropdownsSearch('role_id', { admin_id: nextProps.currentUser.id })
-        .then(response => this.setState({ dropdowns: { roles: response.data } }));
+  fieldProps = () => ({
+    lSize: 6,
+    events: {
+      onChangeMutipleSelect: () => this.setState({ inputChanged: true }),
+      onChangeFile: () => this.setState({ inputChanged: true }),
+      onChange: () => this.setState({ inputChanged: true })
     }
-  }
+  })
+
+  setFormApi = formApi => {
+    this.formApi = formApi;
+  };
+
+  toggleModal = () => this.setState(prevState => ({ modal: !prevState.modal }))
 
   save = () => {
     const values = setFormApiFields(this.fieldsForCommonForm(), this.formApi);
@@ -59,26 +68,12 @@ class Show extends React.Component {
     }
   };
 
-  renderFields () {
-    return renderFieldsWithGrid(this.fieldsForCommonForm(), 2, 6, fieldProps);
-  }
-
-  fieldsForCommonForm = () => {
-    const fieldsSet = fields(this.state.dropdowns.roles);
-    fieldsSet.push({
-      name: 'password', label: 'New Password', type: FieldType.PASSWORD_FIELD
-    });
-    return fieldsSet;
-  }
-
   values = () => {
     const { record } = this.props;
     return Object.assign({}, record, {
       role_id: record.role.id
     });
   };
-
-  toggleEditing = () => this.setState((prevState) => ({ isEditing: !prevState }))
 
   renderHeader () {
     const { backPath, record } = this.props;
@@ -98,9 +93,6 @@ class Show extends React.Component {
     </Row>);
   }
 
-  setFormApi = formApi => {
-    this.formApi = formApi;
-  };
 
   renderSaveButton = () => {
     const { isSaving } = this.state;
@@ -113,31 +105,28 @@ class Show extends React.Component {
     );
   }
 
+  renderFields () {
+    return renderFieldsWithGrid(this.fieldsForCommonForm(), 2, 6, this.fieldProps());
+  }
+
   renderForm () {
-    const { isSaving } = this.state;
+    const { isSaving, inputChanged } = this.state;
 
     return (
       <fieldset disabled={isSaving}>
         <Form getApi={this.setFormApi} initialValues={this.values()}>
           <Row>
             <Col sm={12} md={3}>
-              {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, fieldProps)}
+              {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, this.fieldProps())}
             </Col>
             <Col sm={12} md={9}>
               {this.renderFields()}
             </Col>
           </Row>
-          { this.renderSaveButton()}
+          { inputChanged && this.renderSaveButton()}
         </Form>
       </fieldset>
     );
-  }
-
-  handlePasswordSuccess = () => {
-    const { values } = this.formApi.getState();
-    const { backPath, record } = this.props;
-    const path = generatePath(backPath, { id: record.id });
-    updateRecord.call(this, update, path, values);
   }
 
   renderRecord () {
@@ -162,14 +151,26 @@ class Show extends React.Component {
     );
   }
 
-  renderActivity () {
-    return <ActivityIndex/>;
+  fieldsForCommonForm = () => {
+    const fieldsSet = fields(this.state.dropdowns.roles);
+    fieldsSet.push({
+      name: 'password', label: 'Password', type: FieldType.PASSWORD_FIELD, filled: true
+    });
+    return fieldsSet;
   }
 
-  toggleModal = () => {
-    this.setState(prevState => ({
-      modal: !prevState.modal
-    }));
+  handlePasswordSuccess = () => {
+    const { values } = this.formApi.getState();
+    const { backPath, record } = this.props;
+    const path = generatePath(backPath, { id: record.id });
+    updateRecord.call(this, update, path, values);
+  }
+
+  componentWillReceiveProps (nextProps, nextContext) {
+    if (nextProps.currentUser) {
+      dropdownsSearch('role_id', { admin_id: nextProps.currentUser.id })
+        .then(response => this.setState({ dropdowns: { roles: response.data } }));
+    }
   }
 
   render () {
@@ -180,7 +181,7 @@ class Show extends React.Component {
       <React.Fragment>
         {this.renderRecord()}
         <div className="mt-1"/>
-        {this.renderActivity()}
+        <ActivityIndex/>
       </React.Fragment>
     );
   }
@@ -197,7 +198,5 @@ Show.propTypes = {
     username: PropTypes.string.isRequired
   })
 };
-
-const fieldProps = { lSize: 6 };
 
 export default connectRecord('admin', SET_RECORD, resourceFetcher(show), withCurrentUser(Show));
