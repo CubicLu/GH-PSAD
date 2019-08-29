@@ -167,47 +167,6 @@ class Show extends React.Component {
         {this.renderRecord()}
         <div className="mt-1"/>
         {this.renderLocation()}
-        <Card className="mt-5" onClick={() => this.openCollapsable('collapse')}>
-          <CardHeader>
-            Ticket Assignment ({record.parking_tickets_total})
-            <FontAwesomeIcon className="ml-2" icon={ this.state.collapse ? faAngleUp : faAngleDown }/>
-          </CardHeader>
-        </Card>
-
-        <Collapse isOpen={this.state.collapse}>
-          <Table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Violation Name</th>
-                <th>Parking Lot Name</th>
-                <th>Date Commited</th>
-                <th>Officer</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                record.parking_tickets.map(parkingTicket => (
-                  <Ticket
-                    key={parkingTicket.id}
-                    parkingTicket={parkingTicket}
-                    url={ticketURL}
-                  />
-                ))
-              }
-            </tbody>
-          </Table>
-          <div className="text-center">
-            {
-              record.parking_tickets_total - record.parking_tickets.length > 0 &&
-              <Link to={ticketURL}>
-                View more ({record.parking_tickets_total - record.parking_tickets.length})
-                <FontAwesomeIcon className="ml-2" icon={faAngleDown}/>
-              </Link>
-            }
-          </div>
-        </Collapse>
       </React.Fragment>
     );
   }
@@ -224,9 +183,7 @@ Show.propTypes = {
     name: PropTypes.string.isRequired,
     town_manager: PropTypes.object,
     manager: PropTypes.object,
-    officers: PropTypes.arrayOf(PropTypes.object),
-    parking_tickets_total: PropTypes.number.isRequired,
-    parking_tickets: PropTypes.array.isRequired
+    officers: PropTypes.arrayOf(PropTypes.object)
   })
 };
 
