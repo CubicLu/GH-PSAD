@@ -7,7 +7,7 @@ import { asField } from 'informed';
 
 const convertValueObjectToString = (values) => cloneDeepWith(values, (val) => String(val))
 
-const CustomMultiSelect = asField(({ field, fieldApi, fieldState, options }) => {
+const CustomMultiSelect = asField(({ field, fieldApi, fieldState, options, events }) => {
   let { value: values } = fieldState;
   const { setValue } = fieldApi;
   const [selectedOptions, setSelectedOptions] = useState({});
@@ -27,6 +27,7 @@ const CustomMultiSelect = asField(({ field, fieldApi, fieldState, options }) => 
         onChange={(selectedOptions) => {
           setValue(selectedOptions ? selectedOptions.map(element => element.value) : []);
           setSelectedOptions({ [field]: selectedOptions });
+          events.onChangeMutipleSelect && events.onChangeMutipleSelect()
         }}
         options={options}
       />

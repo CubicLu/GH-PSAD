@@ -25,18 +25,6 @@ const fields = (roles) => [
   }
 ];
 
-const showFields = () => [
-  { name: 'username', label: 'Username' },
-  { name: 'avatar', label: 'Profile Picture', type: FieldType.FILE_FIELD },
-  { name: 'name', label: 'Name' },
-  { name: 'email', label: 'Email' },
-  { name: 'phone', label: 'Phone' },
-  { name: 'id', label: 'ID' },
-  { name: 'role.name', label: 'Role' },
-  { name: 'status', label: 'Status', },
-];
-
-
 const filterFields = (roles) => [
   { name: 'username', label: 'Username' },
   { name: 'name', label: 'Name' },
@@ -68,4 +56,4 @@ const exampleData = (roles) => process.env.NODE_ENV !== 'production' ? {
   status: 'suspended'
 } // These are defaults values for each field
 
-export { fields, showFields, exampleData, filterFields };
+export { fields, exampleData, filterFields };
