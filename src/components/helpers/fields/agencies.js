@@ -12,18 +12,6 @@ const fields = (officers, managers, townManagers) => [
   { name: 'officer_ids', label: 'Officers', type: FieldType.MULTISELECT_FIELD, options: officers.map(officer => { return { value: officer.id, label: officer.email }})  }
 ];
 
-const showFields = () => [
-  { name: 'avatar', label: 'Image', type: FieldType.FILE_FIELD},
-  { name: 'email', label: 'Email' },
-  { name: 'name', label: 'Name' },
-  { name: 'phone', label: 'Phone' },
-  { name: 'status', label: 'Status', },
-  { name: 'manager.name', label: 'Manager' },
-  { name: 'town_manager.name', label: 'Town Manager', },
-  { name: 'officers', label: 'Officers', type: FieldType.MULTISELECT_FIELD, innerLabel: 'name' },
-  { name: 'location.full_address', label: 'Full Address' }
-];
-
 const exampleData = () => process.env.NODE_ENV !== 'production' ? {
   'email': faker.internet.email(),
   'name': faker.company.companyName(),
@@ -50,4 +38,4 @@ const filterFields = (roles) => [
   { name: 'full_address', label: 'Full Address' }
 ];
 
-export { fields, showFields, exampleData, exampleLocationData, filterFields };
+export { fields, exampleData, exampleLocationData, filterFields };
