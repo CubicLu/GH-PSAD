@@ -6,14 +6,15 @@ import { SET_LIST } from 'actions/tickets';
 import { filterFetcher, statuses } from 'api/parking/tickets';
 import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
-import BasicBackListToolbar from 'components/base/basic_list_toolbar/back';
-import Ticket from 'components/base/agencies/tickets';
+import BasicListToolbar from 'components/base/basic_list_toolbar';
+import Ticket from 'components/base/tickets';
 import IndexTable from 'components/base/table';
 /* Helpers */
 import { filterFields } from 'components/helpers/fields/tickets';
 /* Modules */
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
+import withCurrentUser from 'components/modules/with_current_user';
 
 class Index extends React.Component {
   state = {
@@ -42,8 +43,8 @@ class Index extends React.Component {
   };
 
   componentDidMount () {
-    const { match } = this.props;
-    dropdownsSearch('tickets_officers_filter', { agency_id: match.params.agency_id })
+    const { currentUser } = this.props;
+    dropdownsSearch('tickets_officers_filter', { admin_id: currentUser.id })
       .then(response => {
         this.setState({
           dropdowns: {
@@ -66,25 +67,21 @@ class Index extends React.Component {
   }
 
   render () {
-    const { match, backPath } = this.props;
     const { statuses, officers } = this.state.dropdowns;
-    const agencyId = match.params.agency_id;
-    const agency = this.props.list[0] && this.props.list[0].agency;
     return (
       <IndexTable
         isFetching={this.isFetching}
         {...this.props}
-        paginationQuery={{ agency_id: agencyId }}
-        toolbar={ <BasicBackListToolbar {...this.props} label={`${agency && agency.name} Tickets`} link={backPath}/>}
+        toolbar={ <BasicListToolbar {...this.props} title="Tickets"/>}
         filterFields={filterFields(officers, statuses)}
-        filterFetcher={filterFetcher.bind(this, { agency_id: agencyId })}
+        filterFetcher={filterFetcher}
         resource={resource}
         columns={
           <React.Fragment>
             <th attr="parking_tickets.id">#</th>
             <th attr="parking_rules.name">Violation Name</th>
             <th attr="parking_lots.name">Parking Lot Name</th>
-            <th attr="parking_tickets.created_at">Date Commited</th>
+            <th attr="parking_tickets.created_at">Date</th>
             <th attr="admins.name">Officer</th>
             <th attr="parking_tickets.status">Status</th>
           </React.Fragment>
@@ -105,4 +102,4 @@ Index.propTypes = {
 
 const resource = 'ticket'
 
-export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), Index);
+export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), withCurrentUser(Index));

@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Button, Card, CardBody, CardHeader, Col, Nav, Row, Table, Collapse } from 'reactstrap';
+import { Button, Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
 import { Form } from 'informed';
 import { generatePath } from 'react-router';
 import { isEmpty } from 'underscore';
 import LocationEdit from '../location/edit';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown, faAngleUp, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 /* Actions */
 import { SET_RECORD } from 'actions/agencies';
@@ -15,7 +15,6 @@ import { SET_RECORD } from 'actions/agencies';
 import { show, update } from 'api/agencies';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
-import Ticket from 'components/base/agencies/tickets';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
 import { fields } from 'components/helpers/fields/agencies';
@@ -173,8 +172,6 @@ class Show extends React.Component {
   }
 
   render () {
-    const { record, match } = this.props;
-    const ticketURL = `${match.url}/tickets`;
     return this.isFetching() ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}

@@ -1,21 +1,26 @@
 import { FieldType } from 'components/helpers/form_fields'
 
 const fields = (officers, statuses) => [
-  { name: 'admin_id', label: 'Officer handled *', type: FieldType.SELECT_FIELD,  options: officers.map(officer => { return {value: officer.id, label: officer.email}})  },
-  { name: 'status', label: 'Current Status *', type: FieldType.SELECT_FIELD,  options: statuses.map(status => { return {value: status, label: status}})   },
+  {
+    name: 'status',
+    label: 'Current Status',
+    mandatory: true,
+    type: FieldType.SELECT_FIELD,
+    options: statuses.map(status => { return {value: status, label: status}})
+  },
+  {
+    name: 'reason',
+    label: 'Reason for status',
+     mandatory: true
+  },
+  {
+    name: 'admin_id',
+    mandatory: true,
+    label: 'Officer handled',
+    type: FieldType.SELECT_FIELD,
+    options: officers.map(officer => { return {value: officer.value, label: officer.label}})
+  }
 ]
-
-const showFields = (officers, statuses) => [
-  { name: 'admin', label: 'Officer'},
-  { name: 'status', label: 'Status'},
-  { name: 'type', label: 'Status'},
-  { name: 'agency.name', label: 'Agency Name'},
-  { name: 'agency.id', label: 'Agency ID'},
-  { name: 'agency.email', label: 'Agency Email'},
-  { name: 'agency.phone', label: 'Agency Phone'},
-  { name: 'officer.name', label: 'Officer Name'},
-  { name: 'officer.email', label: 'Officer Email'}
-];
 
 const filterFields = (officers, statuses) => [
   { name: 'ticket_id', label: 'Ticket ID'},
@@ -44,4 +49,4 @@ const filterFields = (officers, statuses) => [
   }
 ]
 
-export { fields, showFields, filterFields };
+export { fields, filterFields };

@@ -35,9 +35,13 @@ class BasicListToolbar extends React.Component {
               <FontAwesomeIcon icon={faFilter}/>
             </Button>
           </div>
-          <ButtonGroup >
-            <Button color="primary" onClick={this.newRecord}>{label}</Button>
-          </ButtonGroup>
+          {
+            label && (
+              <ButtonGroup >
+                <Button color="primary" onClick={this.newRecord}>{label}</Button>
+              </ButtonGroup>
+            )
+          }
         </ButtonToolbar>
       </React.Fragment>
     );

@@ -4,7 +4,6 @@ import { Route, Switch, withRouter } from 'react-router';
 import Index from 'components/pages/agencies/index';
 import Show from 'components/pages/agencies/show';
 import New from 'components/pages/agencies/new';
-import TicketsRoutes from './tickets';
 import renderWithBackPath from 'components/modules/render_with_back_path';
 
 const Routing = ({ match }) => (
