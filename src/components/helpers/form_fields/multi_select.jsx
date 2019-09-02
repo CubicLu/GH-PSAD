@@ -7,7 +7,7 @@ import { asField } from 'informed';
 
 const convertValueObjectToString = (values) => cloneDeepWith(values, (val) => String(val))
 
-const CustomMultiSelect = asField(({ field, fieldApi, fieldState, options, events }) => {
+const CustomMultiSelect = asField(({ field, fieldApi, fieldState, options, events = {}}) => {
   let { value: values } = fieldState;
   const { setValue } = fieldApi;
   const [selectedOptions, setSelectedOptions] = useState({});
@@ -19,6 +19,7 @@ const CustomMultiSelect = asField(({ field, fieldApi, fieldState, options, event
       [field]: options.filter(element => values.includes(element.value))
     });
   }
+
   return (
     <React.Fragment>
       <MultiSelect
