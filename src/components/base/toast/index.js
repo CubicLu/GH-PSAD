@@ -6,14 +6,14 @@ const Toast = (props) => {
   const [ isOpen, setIsOpen ] = useState(true)
 
   return (
-      <BootstrapToast isOpen={isOpen}>
-        <ToastHeader  icon={type} toggle={() => { setIsOpen(false)}}>
-          {type}
-        </ToastHeader>
-        <ToastBody>
-          {text}
-        </ToastBody>
-      </BootstrapToast>
+    <BootstrapToast isOpen={isOpen}>
+      <ToastHeader  icon={type} toggle={() => { setIsOpen(false)}}>
+        {type}
+      </ToastHeader>
+      <ToastBody>
+        {text}
+      </ToastBody>
+    </BootstrapToast>
   )
 }
 

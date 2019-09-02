@@ -1,10 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux'
 import { Link } from 'react-router-dom';
 import { Button, Input } from 'reactstrap';
 /* Actions */
-import { setAlertMessages } from 'actions/alert_messages';
 /* API */
 import { resetPasswordRequest, checkPasswordToken } from 'api/users';
 /* Base */
@@ -13,6 +10,7 @@ import AuthLayout from 'components/base/layout/auth';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
 import { setErrorsMessages } from 'components/helpers/messages';
+import { AlertMessagesContext } from 'components/helpers/alert_messages';
 /* Modules */
 
 class ResetPassword extends React.Component {
@@ -24,6 +22,8 @@ class ResetPassword extends React.Component {
     isFetching: false,
     passwordTokenInvalid: true
   }
+
+  static contextType = AlertMessagesContext
 
   submitForm = (event) => {
     event.preventDefault();
@@ -47,10 +47,10 @@ class ResetPassword extends React.Component {
   };
 
   redirectToLogin = (text) => {
-    this.props.setAlertMessages({
+    this.context.addAlertMessages([{
       type: 'success',
       text
-    })
+    }])
     this.props.history.push('/login')
   }
 
@@ -126,11 +126,4 @@ class ResetPassword extends React.Component {
   }
 }
 
-function mapDispatch(dispatch) {
-  return bindActionCreators({ setAlertMessages }, dispatch);
-}
-
-export default connect(
-  null,
-  mapDispatch
-)(ResetPassword);
+export default ResetPassword;

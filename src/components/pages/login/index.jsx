@@ -13,7 +13,7 @@ import CardLayout from 'components/base/layout/card';
 import AuthLayout from 'components/base/layout/auth';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
-import { setErrorsMessages, setSuccessMessage } from 'components/helpers/messages';
+import { setErrorsMessages } from 'components/helpers/messages';
 /* Modules */
 
 class Login extends React.Component {

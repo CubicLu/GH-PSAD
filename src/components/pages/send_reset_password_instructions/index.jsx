@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Button, Input } from 'reactstrap';
 /* Actions */
-import { setAlertMessages } from 'actions/alert_messages';
 /* API */
 import { sendResetPasswordInstructionsRequest } from 'api/users';
 /* Base */
@@ -12,6 +9,7 @@ import CardLayout from 'components/base/layout/card';
 import AuthLayout from 'components/base/layout/auth';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
+import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import { setErrorsMessages } from 'components/helpers/messages';
 /* Modules */
 
@@ -23,6 +21,8 @@ class SendResetPasswordInstructions extends React.Component {
       messages: {}
     };
   }
+
+  static contextType = AlertMessagesContext
 
   submitForm = (event) => {
     event.preventDefault();
@@ -41,11 +41,13 @@ class SendResetPasswordInstructions extends React.Component {
   };
 
   redirectToLogin = () => {
-    this.props.setAlertMessages({
-      type: 'success',
-      text: 'Reset link has been successfully sent to his email address'
-    })
-    this.props.history.push('/login');
+    this.context.addAlertMessages([
+      {
+        text: 'Reset link has been successfully sent to his email address',
+        type: 'success'
+      }
+    ])
+    return this.props.history.push('/login')
   }
 
   render () {
@@ -75,15 +77,8 @@ class SendResetPasswordInstructions extends React.Component {
   }
 }
 
-function mapDispatch (dispatch) {
-  return bindActionCreators({ setAlertMessages }, dispatch);
-}
-
 SendResetPasswordInstructions.propTypes = {
   history: PropTypes.object.isRequired
 };
 
-export default connect(
-  null,
-  mapDispatch
-)(SendResetPasswordInstructions);
+export default SendResetPasswordInstructions;
