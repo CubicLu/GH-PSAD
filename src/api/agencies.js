@@ -12,10 +12,12 @@ const filterFetcher = (params = {}) => {
     page,
     perPage,
     query: Object.assign({}, query, {
-      'query[agencies.email]': filters.email,
-      'query[agencies.name]': filters.name,
-      'query[agencies.phone]': filters.phone,
-      'query[locations.full_address]': filters.full_address
+      query: {
+        'agencies.email': filters.email,
+        'agencies.name': filters.name,
+        'agencies.phone': filters.phone,
+        'locations.full_address': filters.full_address
+      }
     })
   });
 }

@@ -20,9 +20,11 @@ const filterFetcher = (params = {}) => {
       query: Object.assign({}, query, {
         role_names: filters.role_names,
         status: filters.status,
-        'query[email]': filters.email,
-        'query[username]': filters.username,
-        'query[name]': filters.name
+        query: {
+          email: filters.email,
+          username: filters.username,
+          name: filters.name
+        }
       })
     })
   );

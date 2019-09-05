@@ -9,6 +9,7 @@ import {createLogger} from 'redux-logger';
 import * as serviceWorker from 'serviceWorker';
 import reducers from 'reducers';
 import {  init_set_token, init_set_current_user } from "actions";
+import 'config/axios'
 import 'bootstrap/dist/css/bootstrap.css';
 import 'styles/global.sass';
 
