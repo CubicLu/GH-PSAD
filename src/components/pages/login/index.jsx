@@ -72,7 +72,7 @@ class Login extends React.Component {
             <div className="form-label-group">
               <Input
                 id="email"
-                type="email"
+                type="text"
                 value={this.state.username}
                 name="username"
                 onChange={e => this.setState({ [e.target.name]: e.target.value })}
