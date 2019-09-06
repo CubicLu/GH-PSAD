@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 /* Actions */
 import { SET_LIST } from 'actions/tickets';
 /* API */
-import { filterFetcher, statuses } from 'api/parking/tickets';
+import { filterFetcher } from 'api/parking/tickets';
 import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import BasicListToolbar from 'components/base/basic_list_toolbar';
@@ -20,7 +20,8 @@ class Index extends React.Component {
   state = {
     dropdowns: {
       officers: [],
-      statuses: []
+      statuses: [],
+      types: []
     }
   }
 
@@ -42,38 +43,29 @@ class Index extends React.Component {
     ));
   };
 
+  setDropdowns = (key, data) => this.setState({dropdowns: {...this.state.dropdowns, [key]: data}})
+
   componentDidMount () {
     const { currentUser } = this.props;
-    dropdownsSearch('tickets_officers_filter', { admin_id: currentUser.id })
-      .then(response => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            officers: response.data
-          }
-        });
-      })
-      .catch(this.handleFailed)
-    statuses()
-      .then(({ data }) => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            statuses: data.statuses
-          }
-        });
-      })
-      .catch(this.handleFailed)
+    Promise.all([
+      dropdownsSearch('tickets_officers_filter', { admin_id: currentUser.id })
+        .then(response => this.setDropdowns('officers', response.data)),
+      dropdownsSearch('tickets_statuses_field' )
+        .then(response => this.setDropdowns('statuses', response.data)),
+      dropdownsSearch('tickets_types_field')
+        .then(response => this.setDropdowns('types', response.data))
+    ])
+    .catch(this.handleFailed)
   }
 
   render () {
-    const { statuses, officers } = this.state.dropdowns;
+    const { statuses, officers, types } = this.state.dropdowns;
     return (
       <IndexTable
         isFetching={this.isFetching}
         {...this.props}
         toolbar={ <BasicListToolbar {...this.props} title="Tickets"/>}
-        filterFields={filterFields(officers, statuses)}
+        filterFields={filterFields(officers, statuses, types)}
         filterFetcher={filterFetcher}
         resource={resource}
         columns={
@@ -96,7 +88,6 @@ class Index extends React.Component {
 Index.propTypes = {
   list: PropTypes.arrayOf(PropTypes.object).isRequired,
   match: PropTypes.object.isRequired,
-  backPath: PropTypes.string.isRequired,
   isResourceFetching: PropTypes.bool.isRequired
 };
 

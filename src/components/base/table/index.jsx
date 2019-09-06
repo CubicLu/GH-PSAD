@@ -69,12 +69,11 @@ class IndexTable extends React.Component {
     this.generateLocalStorageFilter(cloneValues)
 
     resourceFetchStarted(
-    filterFetcher(cloneValues)
-      .then((res) => {
-        setList(selectList(res));
-        this.toggleModal()
-      })
-      .catch(error => setErrorMessage(error))
+      filterFetcher(Object.assign({}, { filters: cloneValues }, this.setQuery(this.state.sortedAttr)))
+        .then((res) => {
+          setList(selectList(res));
+        })
+        .catch(error => setErrorMessage(error))
     );
   }
 

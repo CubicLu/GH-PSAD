@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter, NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Navbar, NavItem, Collapse } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
@@ -19,14 +19,14 @@ function DropdownNavigation (props) {
 
   return (
     <Navbar>
-      <NavLink onClick={() => setIsOpen(!isOpen)} >
+      <div className="text-primary" onClick={() => setIsOpen(!isOpen)} >
         <span className="mr-1">{props.title}</span>
         <FontAwesomeIcon icon={isOpen ? faAngleUp : faAngleDown}/>
-      </NavLink>
+      </div>
       <Collapse isOpen={isOpen}>
         {props.children.map((element, index) => {
           return (
-            <NavItem className="ml-3" key={element}>
+            <NavItem className="ml-3" key={element.props.to}>
               {element}
             </NavItem>
           )

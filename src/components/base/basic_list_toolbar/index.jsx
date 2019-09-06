@@ -34,7 +34,7 @@ class BasicListToolbar extends React.Component {
             <Button color="dark" onClick={onClickFilter}>
               <FontAwesomeIcon icon={faFilter}/>
             </Button>
-          </div>
+         </div>
           {
             label && (
               <ButtonGroup >
@@ -53,7 +53,7 @@ BasicListToolbar.propTypes = {
   history: PropTypes.object.isRequired,
   onClickFilter: PropTypes.func,
   resourceFetchStarted: PropTypes.func.isRequired,
-  fetcher: PropTypes.func.isRequired,
+  fetcher: PropTypes.func,
   setList: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired
 };

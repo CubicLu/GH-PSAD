@@ -1,4 +1,5 @@
 import { FieldType } from 'components/helpers/form_fields';
+import { displayUnixTimestamp, dateToUnix } from 'components/helpers';
 
 const generateBadgesFilter = (filterQuery, filterFields) => {
   let badgesFilter = []
@@ -16,6 +17,21 @@ const generateBadgesFilter = (filterQuery, filterFields) => {
               })
             }
           });
+        } else if(field.type === FieldType.DATE_FIELD) {
+          const from = filterQuery[key].from
+          const to = filterQuery[key].to
+          const format = 'MMM Do YYYY'
+          const formattedFrom = from ? displayUnixTimestamp(dateToUnix(new Date(from)), format) : null
+
+          if (formattedFrom) {
+            const formattedTo = to ? `${displayUnixTimestamp(dateToUnix(new Date(filterQuery[key].to)), format)}` : ''
+
+            badgesFilter.push({
+              label: `${field.label}: ${formattedFrom} - ${formattedTo}`,
+              value: filterQuery[key],
+              key
+            })
+          }
         } else {
           badgesFilter.push({
             label: `${field.label}: ${filterQuery[key]}`,

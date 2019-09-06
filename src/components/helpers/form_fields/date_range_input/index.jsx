@@ -44,10 +44,12 @@ const DateRangeInput = asField(({ fieldState, fieldApi, ...props }) => {
   }
 
   const formatDate = (date) => {
-    var day = date.getDate();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
-    return `${year}-${month}-${day}`
+    if (date) {
+      var day = date.getDate();
+      var month = date.getMonth() + 1;
+      var year = date.getFullYear();
+      return `${year}-${month}-${day}`
+    }
   }
 
   return (
@@ -61,9 +63,11 @@ const DateRangeInput = asField(({ fieldState, fieldApi, ...props }) => {
                 selected: startDate,
                 onChange: date => {
                   setValue({
-                    from: formatDate(date)
+                    from: formatDate(date),
+                    to: date ? endDate : null
                   })
                   setStartDate(date);
+                  setEndDate(date ? endDate : null)
                 }
               })
             }
@@ -82,7 +86,7 @@ const DateRangeInput = asField(({ fieldState, fieldApi, ...props }) => {
                   })
                   setEndDate(date);
                 }
-              })
+              }, !startDate)
             }
         </Col>
         <Col sm={4} className="mt-2 mb-2">

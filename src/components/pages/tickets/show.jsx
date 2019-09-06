@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, CardBody, CardHeader, Col, Nav, Row, FormGroup, Label } from 'reactstrap';
+import { Button, Card, CardBody, CardHeader, Col, Nav, Row, FormGroup, Label, Table } from 'reactstrap';
 import { generatePath } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Form } from 'informed';
@@ -9,7 +9,7 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 /* Actions */
 import { SET_RECORD } from 'actions/tickets';
 /* API */
-import { update, statuses, show } from 'api/parking/tickets';
+import { update, show } from 'api/parking/tickets';
 import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
@@ -22,11 +22,13 @@ import { FieldType } from 'components/helpers/form_fields';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
+import setFormApiFields from 'components/modules/set_form_api_fields';
 
 class Show extends React.Component {
   state = {
     isSaving: false,
     inputChanged: false,
+    officersFetched: false,
     dropdowns: {}
   }
 
@@ -45,7 +47,10 @@ class Show extends React.Component {
   }
 
   save = () => {
-    const { values } = this.formApi.getState();
+    const { officers, statuses } = this.state.dropdowns;
+    const values = setFormApiFields(fields(officers, statuses), this.formApi);
+    values.photo_resolution = this.formApi.getValue('photo_resolution');
+
     const { backPath, record } = this.props;
     const path = generatePath(backPath, { id: record.id });
     updateRecord.bind(this, update, path)(values);
@@ -96,6 +101,51 @@ class Show extends React.Component {
     this.formApi = formApi;
   };
 
+  renderUpdatedTable = () => {
+    const { record } = this.props
+    return (
+      <Row>
+        <Col xs="12">
+          <Table className="index-table">
+            <thead className="bg-dark text-white">
+              <tr>
+                <td>Updated at</td>
+                <td>Status</td>
+                <td>officer</td>
+                <td>reason for status</td>
+                <td>who did it</td>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                record.updated_trail.map(element => (
+                  <tr>
+                    <td>
+                      {displayUnixTimestamp(element.object.updated_at)}
+                    </td>
+                    <td>
+                      {element.object.status}
+                    </td>
+                    <td>
+                      {element.object.officer}
+                    </td>
+                    <td>
+                      {element.object.reason}
+                    </td>
+                    <td>
+                      {element.responsible}
+
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </Table>
+        </Col>
+      </Row>
+    )
+  }
+
   renderForm () {
     const { record } = this.props
     const { isSaving, inputChanged } = this.state;
@@ -133,36 +183,32 @@ class Show extends React.Component {
     );
   }
 
+  setDropdowns = (key, data) => this.setState({dropdowns: {...this.state.dropdowns, [key]: data}})
+
   componentWillReceiveProps(nextProps, nextContext) {
-    if (nextProps.record) {
+    const { officersFetched } = this.state
+    if (nextProps.record && !officersFetched) {
+      this.setState({officersFetched: true})
       dropdownsSearch('agency_officers_list', { agency_id: nextProps.record.agency.id })
-        .then((res) => {
-          this.setState({
-            dropdowns: {
-              ...this.state.dropdowns,
-              officers: res.data
-            }
-          });
-        })
+        .then((response) => this.setDropdowns('officers', response.data))
         .catch(this.handleFailed);
     }
   }
 
   componentDidMount () {
-    statuses()
-      .then(({ data }) => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            statuses: data.statuses
-          }
-        });
-      })
-      .catch(this.handleFailed);
+    dropdownsSearch('tickets_statuses_field')
+      .then(response => this.setDropdowns('statuses', response.data))
+      .catch(this.handleFailed)
   }
 
   render () {
-    return this.isFetching() ? <div>Loading data...</div> : this.renderRecord();
+    return this.isFetching() ? <div>Loading data...</div> : (
+      <React.Fragment>
+        {this.renderRecord()}
+        <div className="mt-4"/>
+        {this.renderUpdatedTable()}
+      </React.Fragment>
+    );
   }
 }
 

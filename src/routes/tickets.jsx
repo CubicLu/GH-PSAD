@@ -18,8 +18,7 @@ const Routing = (props) => {
 };
 
 Routing.propTypes = {
-  match: PropTypes.object.isRequired,
-  parent: PropTypes.object.isRequired
+  match: PropTypes.object.isRequired
 };
 
 export default withRouter(Routing);

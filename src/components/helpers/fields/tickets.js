@@ -6,7 +6,9 @@ const fields = (officers, statuses) => [
     label: 'Current Status',
     mandatory: true,
     type: FieldType.SELECT_FIELD,
-    options: statuses.map(status => { return {value: status, label: status}})
+    options: statuses.map(({label, value}) => {
+      return { value, label};
+    })
   },
   {
     name: 'reason',
@@ -22,9 +24,16 @@ const fields = (officers, statuses) => [
   }
 ]
 
-const filterFields = (officers, statuses) => [
+const filterFields = (officers, statuses, types) => [
   { name: 'ticket_id', label: 'Ticket ID'},
-  { name: 'type', label: 'Violation Name'},
+  {
+    name: 'type',
+    label: 'Violation Name',
+    type: FieldType.SELECT_FIELD,
+    options: types.map(({label, value}) => {
+      return { value, label };
+    })
+  },
   { name: 'query', label: 'Parking Lot Name'},
   {
     name: 'range',
@@ -43,8 +52,8 @@ const filterFields = (officers, statuses) => [
     name: 'status',
     label: 'Ticke Status',
     type: FieldType.SELECT_FIELD,
-    options: statuses.map((value) => {
-      return { value, label: value };
+    options: statuses.map(({label, value}) => {
+      return { value, label};
     })
   }
 ]

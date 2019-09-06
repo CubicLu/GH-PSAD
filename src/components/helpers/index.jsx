@@ -8,13 +8,13 @@ const momentUnix = timestamp => {
   return moment.unix(timestamp);
 };
 
-const displayUnixTimestamp = timestamp => {
-  return momentUnix(timestamp).format('ddd, MMM Do YYYY, h:mm:ss a');
+const displayUnixTimestamp = (timestamp, format = 'ddd, MMM Do YYYY, h:mm:ss a' ) => {
+  return momentUnix(timestamp).format(format);
 };
 
-const unixDatePicker = (timestamp, inputProps, pickerProps) => {
+const unixDatePicker = (timestamp, inputProps, pickerProps, readOnly = false) => {
   return (
-    <DatePicker selected={momentUnix(timestamp).toDate()} customInput={<Input {...inputProps}/>} {...pickerProps}/>
+    <DatePicker readOnly={readOnly} selected={momentUnix(timestamp).toDate()} customInput={<Input {...inputProps}/>} {...pickerProps}/>
   )
 };
 
