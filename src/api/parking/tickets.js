@@ -18,6 +18,7 @@ const filterFetcher = (params = {}) => {
       ...query,
       ticket_id: filters.ticket_id,
       admin_ids: filters.admin_ids,
+      agency_ids: filters.agency_ids,
       type: filters.type,
       query: filters.query,
       status: filters.status,

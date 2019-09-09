@@ -24,7 +24,7 @@ const fields = (officers, statuses) => [
   }
 ]
 
-const filterFields = (officers, statuses, types) => [
+const filterFields = (officers, statuses, types, agencies) => [
   { name: 'ticket_id', label: 'Ticket ID'},
   {
     name: 'type',
@@ -45,6 +45,14 @@ const filterFields = (officers, statuses, types) => [
     label: 'Officers',
     type: FieldType.MULTISELECT_FIELD,
     options: officers.map(({label, value}) => {
+      return { value, label };
+    })
+  },
+  {
+    name: 'agency_ids',
+    label: 'Agencies',
+    type: FieldType.MULTISELECT_FIELD,
+    options: agencies.map(({label, value}) => {
       return { value, label };
     })
   },

@@ -21,7 +21,8 @@ class Index extends React.Component {
     dropdowns: {
       officers: [],
       statuses: [],
-      types: []
+      types: [],
+      agencies: []
     }
   }
 
@@ -48,24 +49,27 @@ class Index extends React.Component {
   componentDidMount () {
     const { currentUser } = this.props;
     Promise.all([
-      dropdownsSearch('tickets_officers_filter', { admin_id: currentUser.id })
-        .then(response => this.setDropdowns('officers', response.data)),
-      dropdownsSearch('tickets_statuses_field' )
-        .then(response => this.setDropdowns('statuses', response.data)),
-      dropdownsSearch('tickets_types_field')
-        .then(response => this.setDropdowns('types', response.data))
-    ])
-    .catch(this.handleFailed)
+        dropdownsSearch('tickets_officers_filter', { admin_id: currentUser.id })
+          .then(response => this.setDropdowns('officers', response.data)),
+        dropdownsSearch('tickets_statuses_field' )
+          .then(response => this.setDropdowns('statuses', response.data)),
+        dropdownsSearch('tickets_types_field')
+          .then(response => this.setDropdowns('types', response.data)),
+        dropdownsSearch('agencies_list', { admin_id: currentUser.id })
+         .then(response => this.setDropdowns('agencies', response.data))
+
+      ])
+      .catch(this.handleFailed)
   }
 
   render () {
-    const { statuses, officers, types } = this.state.dropdowns;
+    const { statuses, officers, types, agencies } = this.state.dropdowns;
     return (
       <IndexTable
         isFetching={this.isFetching}
         {...this.props}
         toolbar={ <BasicListToolbar {...this.props} title="Tickets"/>}
-        filterFields={filterFields(officers, statuses, types)}
+        filterFields={filterFields(officers, statuses, types, agencies)}
         filterFetcher={filterFetcher}
         resource={resource}
         columns={
