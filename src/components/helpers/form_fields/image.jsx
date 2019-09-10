@@ -4,7 +4,7 @@ import ReactFileReader from 'react-file-reader';
 import { Button, Media } from 'reactstrap';
 import Holder from 'holderjs';
 
-const ImageInput = asField(({ fieldState, fieldApi, events}) => {
+const ImageInput = asField(({ fieldState, fieldApi, events = {}}) => {
   const { value } = fieldState;
   const { setValue } = fieldApi;
 
@@ -22,8 +22,9 @@ const ImageInput = asField(({ fieldState, fieldApi, events}) => {
     setValue(data.base64);
     setFilepath(URL.createObjectURL(data.fileList[0]));
     setFilename(data.fileList[0].name);
-    events.onChangeFile()
+    events.onChange && events.onChange()
   };
+
   return (
     <ReactFileReader
       base64={true}
