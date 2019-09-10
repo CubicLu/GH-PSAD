@@ -8,6 +8,7 @@
     "@fortawesome/react-fontawesome": "^0.1.4",
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
+    "google-maps-react": "^2.0.2",
     "holderjs": "^2.9.6",
     "informed": "^2.11.6",
     "moment": "^2.24.0",

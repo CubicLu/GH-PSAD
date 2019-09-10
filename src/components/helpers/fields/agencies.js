@@ -1,7 +1,13 @@
 import faker from 'faker'
 import { FieldType } from 'components/helpers/form_fields'
 
-const fields = (officers, managers, townManagers) => [
+const fields = (officers, managers, townManagers, renderLocationModal) => [
+  {
+    name: 'location',
+    label: 'Location',
+    mandatory: true,
+    render: renderLocationModal
+  },
   { name: 'email', label: 'Email', mandatory: true },
   { name: 'name', label: 'Name', mandatory: true },
   { name: 'phone', label: 'Phone' },
@@ -21,16 +27,6 @@ const exampleData = () => process.env.NODE_ENV !== 'production' ? {
   'status': 'active'
 }
 
-const exampleLocationData = () => process.env.NODE_ENV !== 'production' ? {
-  'zip': faker.address.zipCode(),
-  'building': 'A12',
-  'street': faker.address.streetName(),
-  'city': faker.address.city(),
-  'country': faker.address.country(),
-  'ltd': faker.address.latitude(),
-  'lng': faker.address.longitude()
-} : {}
-
 const filterFields = (roles) => [
   { name: 'name', label: 'Agency Name' },
   { name: 'email', label: 'Agency Email' },
@@ -38,4 +34,4 @@ const filterFields = (roles) => [
   { name: 'full_address', label: 'Full Address' }
 ];
 
-export { fields, exampleData, exampleLocationData, filterFields };
+export { fields, exampleData, filterFields };

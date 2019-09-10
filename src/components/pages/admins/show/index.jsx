@@ -43,8 +43,6 @@ class Show extends React.Component {
   fieldProps = () => ({
     lSize: 6,
     events: {
-      onChangeMutipleSelect: () => this.setState({ inputChanged: true }),
-      onChangeFile: () => this.setState({ inputChanged: true }),
       onChange: () => this.setState({ inputChanged: true })
     }
   })

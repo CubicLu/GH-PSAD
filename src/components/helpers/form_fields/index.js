@@ -5,6 +5,7 @@ import Increaser from './increaser'
 import Password from './password'
 import TextWithLink from './text_with_link'
 import DateRangeInput from './date_range_input'
+import GoogleMaps from './google_maps'
 import * as FieldType from './field_types'
 
 export {
@@ -15,5 +16,6 @@ export {
   Password,
   TextWithLink,
   DateRangeInput,
+  GoogleMaps,
   FieldType
 }
