@@ -49,6 +49,7 @@ class Show extends React.Component {
   save = () => {
     const { officers, statuses } = this.state.dropdowns;
     const values = setFormApiFields(fields(officers, statuses), this.formApi);
+    values.admin_id = values.admin_id > 0 ? values.admin_id : null
     values.photo_resolution = this.formApi.getValue('photo_resolution');
 
     const { backPath, record } = this.props;
@@ -75,7 +76,7 @@ class Show extends React.Component {
    values = () => {
      const { record } = this.props;
      const values = Object.assign({}, record);
-     values.admin_id = record.officer ? record.officer.id : null;
+     values.admin_id = record.officer ? record.officer.id : '0';
      return values;
    };
 
@@ -110,10 +111,8 @@ class Show extends React.Component {
             <thead className="bg-dark text-white">
               <tr>
                 <td>Updated at</td>
-                <td>Status</td>
-                <td>officer</td>
-                <td>reason for status</td>
-                <td>who did it</td>
+                <td>Changes</td>
+                <td>Responsible</td>
               </tr>
             </thead>
             <tbody>
@@ -121,20 +120,13 @@ class Show extends React.Component {
                 record.updated_trail.map(element => (
                   <tr>
                     <td>
-                      {displayUnixTimestamp(element.object.updated_at)}
+                      {displayUnixTimestamp(element.updated_at)}
                     </td>
                     <td>
-                      {element.object.status}
-                    </td>
-                    <td>
-                      {element.object.officer}
-                    </td>
-                    <td>
-                      {element.object.reason}
+                      {element.comment}
                     </td>
                     <td>
                       {element.responsible}
-
                     </td>
                   </tr>
                 ))
