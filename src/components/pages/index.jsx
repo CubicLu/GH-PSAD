@@ -29,6 +29,7 @@ class App extends React.Component {
       <React.Fragment>
         <Layout>
           <Route path='/sign_out' render={() => {
+            removeFilters()
             this.props.dispatch(clearToken);
             return <Redirect to='/login' />;
           }} />
@@ -40,6 +41,14 @@ class App extends React.Component {
       </React.Fragment>
     );
   }
+}
+
+const removeFilters = () => {
+  Object.keys(localStorage).forEach(function(key){
+      if (/^FILTERS_/.test(key)) {
+          localStorage.removeItem(key);
+      }
+  });
 }
 
 App.propTypes = {
