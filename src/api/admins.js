@@ -12,7 +12,7 @@ function checkAdminPassword (password) {
 }
 
 const filterFetcher = (params = {}) => {
-  const { page, perPage, query, filters = {} } = params
+  const { page, perPage, query, filters = {} } = params;
   return (
     index({
       page,
@@ -27,6 +27,6 @@ const filterFetcher = (params = {}) => {
       }
     })
   );
-}
+};
 
 export { filterFetcher, show, update, destroy, create, search, checkAdminPassword };

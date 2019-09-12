@@ -11,9 +11,8 @@ const fields = (officers, statuses) => [
     })
   },
   {
-    name: 'reason',
-    label: 'Reason for status',
-     mandatory: true
+    name: 'remark',
+    label: 'Remark'
   },
   {
     name: 'admin_id',

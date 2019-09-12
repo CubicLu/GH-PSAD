@@ -5,7 +5,7 @@ const { index, show, update, destroy, create } = resourceApi('cameras');
 const search = searchApi('cameras');
 
 const filterFetcher = (params = {}) => {
-  const { page, perPage, query, filters = {} } = params
+  const { page, perPage, query, filters = {} } = params;
   return index({
     page,
     perPage,
@@ -14,6 +14,6 @@ const filterFetcher = (params = {}) => {
       parking_lot_id: filters.parking_lot_id
     }
   });
-}
+};
 
 export { filterFetcher, show, update, destroy, create, search };

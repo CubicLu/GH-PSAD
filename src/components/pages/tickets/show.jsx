@@ -110,9 +110,12 @@ class Show extends React.Component {
           <Table className="index-table">
             <thead className="bg-dark text-white">
               <tr>
-                <td>Updated at</td>
-                <td>Changes</td>
-                <td>Responsible</td>
+                <td>Type of change</td>
+                <td>Old Value</td>
+                <td>New Value</td>
+                <td>Performed by</td>
+                <td>Date Occurred</td>
+                <td>Remark</td>
               </tr>
             </thead>
             <tbody>
@@ -120,13 +123,22 @@ class Show extends React.Component {
                 record.updated_trail.map(element => (
                   <tr>
                     <td>
+                      {element.type_of_change}
+                    </td>
+                    <td>
+                      {element.old_value}
+                    </td>
+                    <td>
+                      {element.new_value}
+                    </td>
+                    <td>
+                      {element.performed_by}
+                    </td>
+                    <td>
                       {displayUnixTimestamp(element.updated_at)}
                     </td>
                     <td>
-                      {element.comment}
-                    </td>
-                    <td>
-                      {element.responsible}
+                      {element.remark}
                     </td>
                   </tr>
                 ))
