@@ -6,9 +6,10 @@ import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 import { Form } from 'informed';
 import { isEmpty } from 'underscore';
-import LocationNew from '../location/new';
+import LocationForm from '../location/form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { cloneDeep } from 'lodash'
 /* Actions */
 import { invoke } from 'actions';
 import { SET_RECORD } from 'actions/agencies';
@@ -19,7 +20,8 @@ import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/co
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
-import { fields, exampleData, exampleLocationData } from 'components/helpers/fields/agencies';
+import { fields, exampleData } from 'components/helpers/fields/agencies';
+import { exampleData as exampleLocationData } from 'components/helpers/fields/agencies/location';
 import { fromJson as showErrors } from 'components/helpers/errors';
 import { FieldType } from 'components/helpers/form_fields';
 /* Modules */
@@ -30,21 +32,22 @@ import withFetching from 'components/modules/with_fetching';
 class New extends React.Component {
   state = {
     isSaving: false,
-    dropdowns: {}
+    modal: false,
+    dropdowns: {},
+    currentLocation: exampleLocationData()
   }
 
   setFormApi = formApi => {
     this.formApi = formApi;
   };
 
-  setLocationFormApi = formApi => {
-    this.locationFormApi = formApi;
+  setCurrentLocation = currentLocation => {
+    this.setState({currentLocation})
   };
 
   save = () => {
     const { values } = this.formApi.getState();
-    values.location = this.locationFormApi.getState().values;
-
+    values.location = cloneDeep(this.state.currentLocation)
     const { backPath } = this.props;
     saveRecord.call(this, create, backPath, values);
   };
@@ -75,11 +78,15 @@ class New extends React.Component {
 
   renderFields () {
     const { officers, managers, townManagers } = this.state.dropdowns;
-    return renderFieldsWithGrid(fields(officers, managers, townManagers), 2, 6, fieldProps);
+    return renderFieldsWithGrid(fields(officers, managers, townManagers, this.renderLocationModal.bind(this)), 2, 6, fieldProps);
   }
 
-  renderLocation () {
-    return <LocationNew setFormApi={this.setLocationFormApi} record={{ location: exampleLocationData() }} />;
+  renderLocationModal (field, props) {
+    return (
+      <LocationForm
+        setCurrentLocation={this.setCurrentLocation}
+        currentLocation={this.state.currentLocation}
+      />);
   }
 
   renderForm () {
@@ -133,8 +140,6 @@ class New extends React.Component {
     return this.props.isFetching || isEmpty(this.state.dropdowns) ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
-        <div className="mt-1"/>
-        {this.renderLocation()}
       </React.Fragment>
     );
   }

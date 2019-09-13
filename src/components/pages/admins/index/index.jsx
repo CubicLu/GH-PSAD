@@ -38,9 +38,9 @@ class Index extends React.Component {
   };
 
   componentDidMount () {
-      dropdownsSearch('role_names_filter', { admin: { id: 1 } })
-        .then(response => this.setState({ filterRolesField: response.data }))
-        .catch(err => console.err(err));
+    dropdownsSearch('role_names_filter', { admin: { id: 1 } })
+      .then(response => this.setState({ filterRolesField: response.data }))
+      .catch(err => console.err(err));
   }
 
   render () {

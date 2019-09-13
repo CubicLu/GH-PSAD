@@ -43,8 +43,6 @@ class Show extends React.Component {
   fieldProps = () => ({
     lSize: 6,
     events: {
-      onChangeMutipleSelect: () => this.setState({ inputChanged: true }),
-      onChangeFile: () => this.setState({ inputChanged: true }),
       onChange: () => this.setState({ inputChanged: true })
     }
   })
@@ -59,7 +57,7 @@ class Show extends React.Component {
     const values = setFormApiFields(this.fieldsForCommonForm(), this.formApi);
     values.avatar = this.formApi.getValue('avatar');
 
-    if (document.querySelector('input[name="password"]').value) {
+    if (this.formApi.getValue('password')) {
       this.toggleModal();
     } else {
       const { backPath, record } = this.props;
