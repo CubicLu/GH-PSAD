@@ -16,6 +16,11 @@ import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
 
 class Index extends React.Component {
+  isFetching = () => {
+    const { isResourceFetching } = this.props
+    return isResourceFetching
+  }
+
   renderRecords = () => {
     const { list, match } = this.props;
 
@@ -36,6 +41,7 @@ class Index extends React.Component {
     return (
       <IndexTable
         {...this.props}
+        isFetching={this.isFetching}
         toolbar={ <BasicListToolbar {...this.props} label="+ Add Camera" title="Cameras"/> }
         filterFields={filterFields()}
         filterFetcher={filterFetcher}

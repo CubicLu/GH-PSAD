@@ -14,37 +14,32 @@ import React from 'react';
  NOTE: `fetchData` will be always called in WrapperComponent's context, so, feel free to use
  `props`, `state` or whatever else related to WrapperComponent's context
  */
-const withFetching = (Component, fetchData) => {
+const withFetching = (Component) => {
   return class extends React.Component {
-    state = {
-      isFetching: true
-    };
 
     componentWillUnmount () {
       this._isMounted = false;
     }
 
-    fetchFinished = () => {
-      if (this._isMounted) {
-        this.setState({ isFetching: false });
-      }
-    };
-
     componentDidMount () {
       this._isMounted = true;
-      fetchData(this);
     }
 
-    fetchStarted = () => {
-      this.setState({ isFetching: true });
+    startFetching = promise => {
+      return new Promise((resolve, reject) => {
+        promise.then((response) => {
+          if(!this._isMounted) {
+            return reject()
+          }
+          return resolve(response)
+        })
+      })
     };
 
     render () {
       return <Component
         {...this.props}
-        {...this.state}
-        fetchStarted={this.fetchStarted}
-        fetchFinished={this.fetchFinished} />;
+        startFetching={this.startFetching} />;
     }
   };
 };

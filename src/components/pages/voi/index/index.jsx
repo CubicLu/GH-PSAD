@@ -12,13 +12,13 @@ import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
 
 const Index = props => {
-  const { list, isFetching } = props;
-  return isFetching ? <div>Loading data...</div> : <List list={list} />;
+  const { list, isResourceFetching } = props;
+  return isResourceFetching ? <div>Loading data...</div> : <List list={list} />;
 };
 
 Index.propTypes = {
   list: PropTypes.arrayOf(PropTypes.object),
-  isFetching: PropTypes.bool
+  isResourceFetching: PropTypes.bool
 };
 
 export default connectList('voi', SET_LIST, resourceFetcher(index), Index);

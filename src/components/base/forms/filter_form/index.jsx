@@ -9,7 +9,7 @@ import {
   FieldType
 } from 'components/helpers/form_fields';
 
-class CommonForm extends React.Component {
+class FilterForm extends React.Component {
   renderField = (field, key) => (
     <FormGroup row key={key}>
       <Label for={field.name} sm={2}>{field.label}</Label>
@@ -45,8 +45,8 @@ class CommonForm extends React.Component {
         <Button onClick={cancelFilter} className="btn btn-danger mr-1">
           Cancel
         </Button>
-        <Button onClick={() => submitForm(formState.values)} color="secondary" type="submit">
-          {isFetching ? btnSpinner() : 'Apply'}
+        <Button onClick={() => submitForm(formState.values)} color="primary" type="submit">
+          { isFetching() ? btnSpinner() : 'Filter'}
         </Button>
       </div>
     );
@@ -62,9 +62,9 @@ class CommonForm extends React.Component {
   render () {
     const { values, isFetching } = this.props;
     return (
-      isFetching ? <div>Loading data...</div> : <Form initialValues={values} component={this.renderForm}/>
+      isFetching() ? <div>Loading data...</div> : <Form initialValues={values} component={this.renderForm}/>
     );
   }
 }
 
-export default CommonForm;
+export default FilterForm;

@@ -15,16 +15,14 @@ import AuthLayout from 'components/base/layout/auth';
 import { btnSpinner } from 'components/helpers';
 import { setErrorsMessages } from 'components/helpers/messages';
 /* Modules */
+import RedirectIfAuthorized from 'components/modules/redirect_if_authorized';
 
 class Login extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      username: '',
-      password: '',
-      messages: [],
-      isFetching: false
-    };
+  state = {
+    username: '',
+    password: '',
+    messages: [],
+    isFetching: false
   }
 
   submitForm = (event) => {
@@ -124,4 +122,4 @@ Login.propTypes = {
 export default connect(
   null,
   mapDispatch
-)(Login);
+)(RedirectIfAuthorized(Login));

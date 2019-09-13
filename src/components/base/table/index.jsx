@@ -9,6 +9,7 @@ import ModalFilter from 'components/helpers/modals/filter';
 import generateBadgesFilter from 'components/modules/badges_filter/generate'
 import deleteBadgesFilter from 'components/modules/badges_filter/delete'
 import { retrieveFilters } from 'components/modules/retrieve_filters';
+import withFetching from 'components/modules/with_fetching';
 
 import './table.sass'
 
@@ -22,7 +23,7 @@ class IndexTable extends React.Component {
   renderRecords = () => {
     const { isFetching, renderRecords } = this.props;
 
-    if (isFetching) {
+    if (isFetching()) {
       return (<tr>
         <td>
           Loading data...
@@ -48,8 +49,6 @@ class IndexTable extends React.Component {
 
   toggleModal = (event) => this.setState((state) => ({ filterModalOpen: !state.filterModalOpen }));
 
-  handleSortedTableFetched = () => this.props.fetchFinished();
-
   paginationFetcher = (pagesQuery) => this.props.filterFetcher({filters: this.state.filterQuery, query: this.setQuery(this.state.sortedAttr), ...pagesQuery})
 
   badgesDelete = (badgeInfo) => {
@@ -65,18 +64,17 @@ class IndexTable extends React.Component {
   }
 
   submitForm = (values, setErrorMessage) => {
-    const { filterFetcher, fetchStarted, fetchFinished, setList } = this.props
+    const { filterFetcher, startFetching, setList } = this.props
     const cloneValues = cloneDeep(values)
     this.setFilterQuery(cloneValues)
     this.generateLocalStorageFilter(cloneValues)
 
-    fetchStarted()
-    filterFetcher({filters: cloneValues})
+
+    startFetching(filterFetcher({filters: cloneValues}))
       .then((res) => {
         setList(selectList(res));
       })
       .catch(error => console.error(error))
-      .finally(fetchFinished)
   }
 
   setQuery = (sortedAttr) => {
@@ -121,8 +119,7 @@ class IndexTable extends React.Component {
               <thead className="bg-dark text-white">
                 <TRSort
                   {...this.props}
-                  filterQuery={filterQuery}
-                  handledFetched={this.handleSortedTableFetched}
+                  filterQuery={this.state.filterQuery}
                   handleClick={this.handleSortedClick}
                   sortedAttr={sortedAttr}
                   setQuery={this.setQuery}
@@ -142,4 +139,4 @@ class IndexTable extends React.Component {
   }
 }
 
-export default IndexTable;
+export default withFetching(IndexTable);

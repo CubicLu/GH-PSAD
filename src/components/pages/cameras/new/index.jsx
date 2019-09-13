@@ -23,6 +23,11 @@ class New extends React.Component {
     isSaving: false
   }
 
+  isFetching = () => {
+    const { isResourceFetching } = this.props
+    return isResourceFetching
+  }
+
   setFormApi = formApi => {
     this.formApi = formApi;
   };
@@ -77,7 +82,7 @@ class New extends React.Component {
   }
 
   render () {
-    return this.props.isFetching ? <div>Loading data...</div> : (
+    return this.isFetching() ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
       </React.Fragment>
@@ -93,7 +98,7 @@ const fieldProps = { lSize: 6 };
 
 New.propTypes = {
   backPath: PropTypes.string.isRequired,
-  isFetching: PropTypes.bool.isRequired
+  isResourceFetching: PropTypes.bool.isRequired
 };
 
 export default connect(

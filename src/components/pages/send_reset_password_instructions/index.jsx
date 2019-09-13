@@ -12,6 +12,7 @@ import { btnSpinner } from 'components/helpers';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import { setErrorsMessages } from 'components/helpers/messages';
 /* Modules */
+import RedirectIfAuthorized from 'components/modules/redirect_if_authorized';
 
 class SendResetPasswordInstructions extends React.Component {
   constructor (props) {
@@ -81,4 +82,4 @@ SendResetPasswordInstructions.propTypes = {
   history: PropTypes.object.isRequired
 };
 
-export default SendResetPasswordInstructions;
+export default RedirectIfAuthorized(SendResetPasswordInstructions);

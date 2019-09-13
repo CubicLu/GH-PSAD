@@ -11,14 +11,14 @@ class BasicBackListToolbar extends React.Component {
   };
 
   refresh = () => {
-    const { handleRefresh, fetchFinished, fetchStarted, fetcher } = this.props;
+    const { handleRefresh, resourceFetchStarted, fetcher } = this.props;
 
-    fetchStarted();
     handleRefresh();
-    fetcher()
-      .then(this.refreshSucceed)
-      .catch((error) => { console.log(error); })
-      .finally(fetchFinished);
+    resourceFetchStarted(
+      fetcher()
+        .then(this.refreshSucceed)
+        .catch((error) => { console.log(error); })
+    );
   };
 
   refreshSucceed = (res) => {
@@ -55,8 +55,7 @@ BasicBackListToolbar.propTypes = {
   history: PropTypes.object.isRequired,
   handleRefresh: PropTypes.func,
   onClickFilter: PropTypes.func,
-  fetchFinished: PropTypes.func.isRequired,
-  fetchStarted: PropTypes.func.isRequired,
+  resourceFetchStarted: PropTypes.func.isRequired,
   fetcher: PropTypes.func.isRequired,
   setList: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,

@@ -23,6 +23,11 @@ class Edit extends React.Component {
     isSaving: false
   };
 
+  isFetching = () => {
+    const { isResourceFetching } = this.props
+    return isResourceFetching
+  }
+
   save = () => {
     const { values } = this.formApi.getState();
 
@@ -92,7 +97,7 @@ class Edit extends React.Component {
   }
 
   render () {
-    return this.props.isFetching ? <div>Loading data...</div> : (
+    return this.isFetching() ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
       </React.Fragment>
@@ -104,7 +109,7 @@ const fieldProps = { lSize: 6 };
 
 Edit.propTypes = {
   backPath: PropTypes.string.isRequired,
-  isFetching: PropTypes.bool.isRequired,
+  isResourceFetching: PropTypes.bool.isRequired,
   record: PropTypes.shape({
     id: PropTypes.number.isRequired,
     parking_lot: PropTypes.object.isRequired,
