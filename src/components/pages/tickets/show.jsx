@@ -18,6 +18,11 @@ import resourceFetcher from 'components/modules/resource_fetcher';
 
 class Show extends React.Component {
 
+  isFetching = () => {
+    const { isResourceFetching } = this.props
+    return isResourceFetching
+  }
+
   renderRecord() {
     const { record, backPath, match } = this.props;
 
@@ -39,7 +44,7 @@ class Show extends React.Component {
   }
 
   render() {
-    return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
+    return this.isFetching() ? <div>Loading data...</div> : this.renderRecord();
   }
 }
 

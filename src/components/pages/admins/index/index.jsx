@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { isEmpty } from 'underscore';
+import  { CREATE_ADMIN } from 'config/permissions'
 /* Actions */
 import { SET_LIST } from 'actions/admins';
 /* API */
@@ -14,10 +16,18 @@ import { filterFields } from 'components/helpers/fields/admins';
 /* Modules */
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
+import withFetching from 'components/modules/with_fetching';
+import withCurrentUser from 'components/modules/with_current_user';
 
 class Index extends React.Component {
   state = {
     filterRolesField: []
+  }
+
+  isFetching = () => {
+    const { isResourceFetching } = this.props
+    const { filterRolesField } = this.state
+    return isResourceFetching || isEmpty(filterRolesField)
   }
 
   renderRecords = () => {
@@ -38,16 +48,17 @@ class Index extends React.Component {
   };
 
   componentDidMount () {
-    dropdownsSearch('role_names_filter', { admin: { id: 1 } })
+    const { startFetching, currentUser } = this.props
+    startFetching(dropdownsSearch('role_names_filter', { admin: { id: currentUser.id } }))
       .then(response => this.setState({ filterRolesField: response.data }))
-      .catch(err => console.err(err));
   }
 
   render () {
     return (
       <IndexTable
+        isFetching={this.isFetching}
         {...this.props}
-        toolbar={ <BasicListToolbar {...this.props} title='User accounts' label="+ Create Account" /> }
+        toolbar={ <BasicListToolbar {...this.props} createRequiredPermissions={[CREATE_ADMIN]} title='User accounts' label="+ Create Account" /> }
         filterFields={filterFields(this.state.filterRolesField)}
         resource={resource}
         filterFetcher={filterFetcher}
@@ -75,4 +86,10 @@ Index.propTypes = {
 
 const resource = 'admin'
 
-export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), Index);
+export default connectList(
+  resource,
+  SET_LIST,
+  resourceFetcher(filterFetcher, resource),
+  withFetching(
+    withCurrentUser(Index)
+  ));

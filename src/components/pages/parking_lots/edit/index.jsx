@@ -22,12 +22,19 @@ import { fields } from 'components/helpers/fields/parking_lots';
 import connectRecord from 'components/modules/connect_record';
 import updateRecord from 'components/modules/form_actions/update_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
+import withFetching from 'components/modules/with_fetching';
 
 class Edit extends React.Component {
   state = {
     isSaving: false,
     dropdowns: {}
   };
+
+  isFetching = () => {
+    const { isResourceFetching } = this.props
+    const { dropdowns } = this.state
+    return isResourceFetching || isEmpty(dropdowns)
+  }
 
   save = () => {
     const { values } = this.formApi.getState();
@@ -122,7 +129,9 @@ class Edit extends React.Component {
   }
 
   componentDidMount () {
-    searchAdminByRoleName(['parking_admin', 'town_manager'])
+      const { startFetching } = this.props
+
+    startFetching(searchAdminByRoleName(['parking_admin', 'town_manager']))
       .then((result) => {
         this.setState({
           dropdowns: {
@@ -135,7 +144,7 @@ class Edit extends React.Component {
   }
 
   render () {
-    return this.props.isFetching || isEmpty(this.state.dropdowns) ? <div>Loading data...</div> : (
+    return this.isFetching() ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
         <div className="mt-1"/>
@@ -151,7 +160,7 @@ const fieldProps = { lSize: 6 };
 
 Edit.propTypes = {
   match: PropTypes.object.isRequired,
-  isFetching: PropTypes.bool.isRequired,
+  isResourceFetching: PropTypes.bool.isRequired,
   record: PropTypes.shape({
     town_manager: PropTypes.object,
     parking_admin: PropTypes.object,
@@ -160,4 +169,4 @@ Edit.propTypes = {
   })
 };
 
-export default connectRecord('parking_lot', SET_RECORD, resourceFetcher(show), Edit);
+export default connectRecord('parking_lot', SET_RECORD, resourceFetcher(show), withFetching(Edit));

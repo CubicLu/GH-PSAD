@@ -2,10 +2,11 @@ import React from 'react';
 import { list as selectList } from 'selectors/list';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown, faSortUp, faMinus } from '@fortawesome/free-solid-svg-icons';
+import withFetching from 'components/modules/with_fetching';
 
 const TRSort = (props) => {
 
-  const { filterFetcher, fetchStarted, setList, handleClick, handledFetched, sortedAttr, setQuery, filterQuery } = props
+  const { filterFetcher, startFetching, setList, handleClick, sortedAttr, setQuery, filterQuery } = props
   return (
     <tr>
       {
@@ -18,12 +19,12 @@ const TRSort = (props) => {
                     keyword: th.props.attr,
                     asc: th.props.attr === sortedAttr.keyword ? !sortedAttr.asc : true
                   }
-                  fetchStarted()
-                  filterFetcher({filters: filterQuery, query: setQuery(newSortedAttr)})
-                    .then((res) => {
-                      setList(selectList(res));
-                      handledFetched()
-                    })
+                  startFetching(
+                    filterFetcher({filters: filterQuery, query: setQuery(newSortedAttr)})
+                      .then((res) => {
+                        setList(selectList(res));
+                      })
+                  )
 
                   handleClick(newSortedAttr)
                 }
@@ -51,4 +52,4 @@ const arrowPosition = (th, sortedAttr) => {
   }
 }
 
-export default TRSort;
+export default withFetching(TRSort);

@@ -15,6 +15,11 @@ import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
 
 class Index extends React.Component {
+  isFetching = () => {
+    const { isResourceFetching } = this.props
+    return isResourceFetching
+  }
+
   renderRecords = () => {
     const { list, match } = this.props;
 
@@ -35,6 +40,7 @@ class Index extends React.Component {
   render () {
     return (
       <IndexTable
+        isFetching={this.isFetching}
         {...this.props}
         toolbar={ <BasicListToolbar {...this.props} label="+ Create Agency" title="Law agencies"/> }
         filterFields={filterFields()}
@@ -59,7 +65,8 @@ class Index extends React.Component {
 
 Index.propTypes = {
   list: PropTypes.arrayOf(PropTypes.object).isRequired,
-  match: PropTypes.object.isRequired
+  match: PropTypes.object.isRequired,
+  isResourceFetching: PropTypes.bool.isRequired
 };
 
 const resource = 'agency'

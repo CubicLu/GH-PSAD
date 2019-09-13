@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom';
 import { Button, Input } from 'reactstrap';
 /* Actions */
@@ -12,12 +13,12 @@ import { btnSpinner } from 'components/helpers';
 import { setErrorsMessages } from 'components/helpers/messages';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 /* Modules */
+import RedirectIfAuthorized from 'components/modules/redirect_if_authorized';
 
 class ResetPassword extends React.Component {
   state = {
     password: '',
     passwordConfirmation: '',
-    resetPasswordToken: '',
     messages: [],
     isFetching: false,
     passwordTokenInvalid: true
@@ -27,12 +28,12 @@ class ResetPassword extends React.Component {
 
   submitForm = (event) => {
     event.preventDefault();
-
+    const resetPasswordToken = this.props.match.params.reset_password_token
     if (this.state.password === this.state.passwordConfirmation) {
       this.setState({
         isFetching: true,
       });
-      return resetPasswordRequest(this.state.password, this.state.resetPasswordToken)
+      return resetPasswordRequest(this.state.password, resetPasswordToken)
         .then(res => this.redirectToLogin('Your password was successfully changed' ))
         .catch(error => {
           this.setState({
@@ -74,13 +75,10 @@ class ResetPassword extends React.Component {
   }
 
   componentDidMount() {
-    const resetPasswordToken = this.props.match.params.reset_password_token
-    this.setState({ resetPasswordToken })
     this.verifyToken()
   }
 
   render() {
-
 
     return (
       <AuthLayout>
@@ -126,4 +124,9 @@ class ResetPassword extends React.Component {
   }
 }
 
-export default ResetPassword;
+ResetPassword.propTypes = {
+  history: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired
+};
+
+export default RedirectIfAuthorized(ResetPassword);

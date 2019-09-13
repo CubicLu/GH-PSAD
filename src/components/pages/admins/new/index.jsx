@@ -33,12 +33,9 @@ class New extends React.Component {
     }
   }
 
-  componentWillReceiveProps (nextProps, nextContext) {
-    if (nextProps.currentUser) {
-      dropdownsSearch('role_id', { admin_id: nextProps.currentUser.id })
-        .then(response => this.setState({ dropdowns: { roles: response.data } }))
-        .catch(err => console.err(err));
-    }
+  isFetching () {
+    const { roles } = this.state.dropdowns;
+    return isEmpty(roles)
   }
 
   setFormApi = formApi => {
@@ -113,10 +110,13 @@ class New extends React.Component {
     );
   }
 
-  render () {
-    const { roles } = this.state.dropdowns;
+  componentDidMount () {
+    dropdownsSearch('role_id', { admin_id: this.props.currentUser.id })
+      .then(response => this.setState({ dropdowns: { roles: response.data } }));
+  }
 
-    return isEmpty(roles) ? <div>Loading data...</div> : (
+  render () {
+    return this.isFetching() ? <div>Loading data...</div> : (
       <React.Fragment>
         {this.renderRecord()}
       </React.Fragment>
@@ -131,7 +131,6 @@ function mapDispatch (dispatch) {
 const fieldProps = { lSize: 6 };
 
 New.propTypes = {
-  isFetching: PropTypes.bool.isRequired,
   backPath: PropTypes.string.isRequired,
   currentUser: PropTypes.object
 };

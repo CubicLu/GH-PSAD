@@ -25,8 +25,8 @@ import { FieldType } from 'components/helpers/form_fields';
 import connectRecord from 'components/modules/connect_record';
 import updateRecord from 'components/modules/form_actions/update_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import waitUntilFetched from 'components/modules/wait_until_fetched';
 import setFormApiFields from 'components/modules/set_form_api_fields';
+import withFetching from 'components/modules/with_fetching';
 
 class Show extends React.Component {
   state = {
@@ -35,6 +35,13 @@ class Show extends React.Component {
     inputChanged: false,
     currentLocation: null,
     dropdowns: {}
+  }
+
+  isFetching = () => {
+    const { isResourceFetching } = this.props
+    const { currentLocation, dropdowns } = this.state
+
+    return isResourceFetching || !currentLocation || isEmpty(dropdowns)
   }
 
   fieldProps = () => ({
@@ -156,25 +163,23 @@ class Show extends React.Component {
   }
 
   componentDidMount () {
-    waitUntilFetched.call(this,
-      searchAdminByRoleName(['manager', 'officer', 'town_manager'])
-        .then((result) => {
-          this.setState({
-            dropdowns: {
-              officers: result.officer,
-              managers: result.manager,
-              townManagers: result.town_manager
-            }
-          });
-        })
-        .catch(this.handleFailed)
-    );
+    const { startFetching } = this.props
+
+    startFetching(searchAdminByRoleName(['manager', 'officer', 'town_manager']))
+      .then((result) => {
+        this.setState({
+          dropdowns: {
+            officers: result.officer,
+            managers: result.manager,
+            townManagers: result.town_manager
+          }
+        });
+      })
+      .catch(this.handleFailed)
   }
 
   render () {
-    const { isFetching, record } = this.props;
-    const { currentLocation } = this.state;
-    return isFetching || !record || !currentLocation || isEmpty(this.state.dropdowns) ? <div>Loading data...</div> : (
+    return this.isFetching() ? <div>Loading data...</div> : (
       this.renderRecord()
     );
   }
@@ -183,7 +188,7 @@ class Show extends React.Component {
 Show.propTypes = {
   backPath: PropTypes.string.isRequired,
   match: PropTypes.object.isRequired,
-  isFetching: PropTypes.bool.isRequired,
+  isResourceFetching: PropTypes.bool.isRequired,
   record: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
@@ -195,4 +200,4 @@ Show.propTypes = {
   })
 };
 
-export default connectRecord('agency', SET_RECORD, resourceFetcher(show), Show);
+export default connectRecord('agency', SET_RECORD, resourceFetcher(show), withFetching(Show));

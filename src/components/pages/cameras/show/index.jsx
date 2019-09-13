@@ -15,6 +15,11 @@ import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
 
 class Show extends React.Component {
+  isFetching = () => {
+    const { isResourceFetching } = this.props
+    return isResourceFetching
+  }
+
   values = () => {
     const { record } = this.props;
     return Object.assign({}, record, {
@@ -40,14 +45,14 @@ class Show extends React.Component {
   }
 
   render () {
-    return this.props.isFetching ? <div>Loading data...</div> : this.renderRecord();
+    return this.isFetching() ? <div>Loading data...</div> : this.renderRecord();
   }
 }
 
 Show.propTypes = {
   backPath: PropTypes.string.isRequired,
   match: PropTypes.object.isRequired,
-  isFetching: PropTypes.bool.isRequired,
+  isResourceFetching: PropTypes.bool.isRequired,
   record: PropTypes.shape({
     id: PropTypes.number.isRequired,
     updated_at: PropTypes.number.isRequired,

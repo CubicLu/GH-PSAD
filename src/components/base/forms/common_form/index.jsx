@@ -87,7 +87,7 @@ const renderButtons = (formState, props = {}) => {
     <React.Fragment>
       <Link to={backPath} className="btn btn-primary mr-1">Back</Link>
       <Button color="success" type="submit">
-        {isFetching ? btnSpinner() : 'Save'}
+        {isFetching() ? btnSpinner() : 'Save'}
       </Button>
     </React.Fragment>
   );
@@ -114,7 +114,7 @@ const renderForm = (props = {}) => {
   const { values, isFetching, submitForm, fields } = props;
 
   return (
-    <fieldset disabled={isFetching}>
+    <fieldset disabled={isFetching()}>
       <Form onSubmit={submitForm} initialValues={values}>
         {({ formState }) => (
           <React.Fragment>
@@ -133,13 +133,13 @@ renderField.propTypes = {
 };
 
 renderButtons.propTypes = {
-  isFetching: PropTypes.bool.isRequired,
+  isFetching: PropTypes.func.isRequired,
   backPath: PropTypes.string.isRequired
 };
 
 renderForm.propTypes = {
   values: PropTypes.object,
-  isFetching: PropTypes.bool.isRequired,
+  isFetching: PropTypes.func.isRequired,
   submitForm: PropTypes.func.isRequired,
   fields: PropTypes.object.isRequired
 };
