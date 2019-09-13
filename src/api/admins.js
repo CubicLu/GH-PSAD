@@ -11,4 +11,23 @@ const checkAdminPassword = (password) => {
   return fetchApi(`dashboard/admins/check_password`, { method: 'POST', data: { password } });
 };
 
-export { index, show, update, destroy, create, search, checkAdminPassword };
+const filterFetcher = (params = {}) => {
+  const { page, perPage, query, filters = {} } = params
+  return (
+    index({
+      page,
+      perPage,
+      query: Object.assign({}, query, {
+        role_names: filters.role_names,
+        status: filters.status,
+        query: {
+          email: filters.email,
+          username: filters.username,
+          name: filters.name
+        }
+      })
+    })
+  );
+}
+
+export { filterFetcher, show, update, destroy, create, search, checkAdminPassword };

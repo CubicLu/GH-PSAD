@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import { fromJson as showErrors } from 'components/helpers/errors';
 import { FilterForm } from 'components/base/forms';
-import { cloneDeep } from 'lodash'
-import { list as selectList } from 'selectors/list';
 
 const Filter = function (props) {
   const {
@@ -11,30 +8,11 @@ const Filter = function (props) {
     isOpen,
     filterFields,
     isFetching,
-    filterFetcher,
-    fetchStarted,
-    fetchFinished,
-    handleSubmitFilter,
-    setList,
+    submitForm,
     filterQuery
   } = props
 
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [values, setValues] = useState({})
-
-  const submitForm = (values) => {
-    const cloneValues  = cloneDeep(values)
-    handleSubmitFilter(cloneValues)
-
-    fetchStarted()
-    filterFetcher(cloneValues)
-      .then((res) => {
-        setList(selectList(res));
-        toggleModal()
-      })
-      .catch(error => setErrorMessage(error))
-      .finally(fetchFinished)
-  }
+  const [values, setValues] = useState(null)
 
   useEffect(() => {
     setValues(filterQuery)
@@ -42,15 +20,17 @@ const Filter = function (props) {
 
   return (
     <Modal isOpen={isOpen} toggle={toggleModal} >
-      <ModalHeader>Filter by</ModalHeader>
+      <ModalHeader className="justify-content-center">Filter by</ModalHeader>
       <ModalBody>
-        {showErrors(errorMessage)}
         <FilterForm
           {...props}
           values={values}
           fields={filterFields}
           isFetching={isFetching}
-          submitForm={submitForm}
+          submitForm={(values) => {
+            submitForm(values)
+            toggleModal()
+          }}
           cancelFilter={toggleModal}/>
       </ModalBody>
 

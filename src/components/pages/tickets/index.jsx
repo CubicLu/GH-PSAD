@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 /* Actions */
 import { SET_LIST } from 'actions/tickets';
 /* API */
-import { index, statuses } from 'api/parking/tickets';
+import { filterFetcher, statuses } from 'api/parking/tickets';
 import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import BasicBackListToolbar from 'components/base/basic_list_toolbar/back';
@@ -35,23 +35,6 @@ class Index extends React.Component {
       />
     ));
   };
-
-  filterFetcher = (values, query) => {
-    const { match } = this.props;
-    return index({
-      agency_id: match.params.agency_id,
-      query: {
-        ...query,
-        ticket_id: values.ticket_id,
-        admin_ids: values.admin_ids,
-        type: values.type,
-        query: values.query,
-        status: values.status,
-        'range[from]': values.range ? values.range.from : null,
-        'range[to]': values.range ? values.range.to : null
-      }
-    });
-  }
 
   componentDidMount () {
     const { match } = this.props;
@@ -88,9 +71,10 @@ class Index extends React.Component {
       <IndexTable
         {...this.props}
         paginationQuery={{ agency_id: agencyId }}
-        toolbar={ <BasicBackListToolbar {...this.props} label={`${agency && agency.name} Tickets`} link={backPath} fetcher={index.bind(this, { agency_id: agencyId })}/>}
+        toolbar={ <BasicBackListToolbar {...this.props} label={`${agency && agency.name} Tickets`} link={backPath}/>}
         filterFields={filterFields(officers, statuses)}
-        filterFetcher={this.filterFetcher}
+        filterFetcher={filterFetcher.bind(this, { agency_id: agencyId })}
+        resource={resource}
         columns={
           <React.Fragment>
             <th attr="parking_tickets.id">#</th>
@@ -114,4 +98,6 @@ Index.propTypes = {
   backPath: PropTypes.string.isRequired
 };
 
-export default connectList('ticket', SET_LIST, resourceFetcher(index), Index);
+const resource = 'ticket'
+
+export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), Index);

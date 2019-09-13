@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 /* Actions */
 import { SET_LIST } from 'actions/parking_lots';
 /* API */
-import { index, search } from 'api/parking_lots';
+import { filterFetcher } from 'api/parking_lots';
 /* Base */
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';
@@ -34,21 +34,14 @@ class Index extends React.Component {
     });
   };
 
-  filterFetcher = (values) => (
-    search({
-      name: values.name,
-      stream: values.stream,
-      parking_lot: values.parking_lot
-    })
-  )
-
   render () {
     return (
       <IndexTable
         {...this.props}
-        toolbar={<BasicListToolbar {...this.props} fetcher={index} label="Create Parking Lot"/>}
+        toolbar={<BasicListToolbar {...this.props} label="+ Create Parking Lot" title="Parking Lots"/>}
         filterFields={filterFields()}
-        filterFetcher={this.filterFetcher}
+        filterFetcher={filterFetcher}
+        resource={resource}
         columns={
           <React.Fragment>
             <th disableSort>Name</th>
@@ -73,4 +66,6 @@ Index.propTypes = {
   match: PropTypes.object.isRequired
 };
 
-export default connectList('parking_lot', SET_LIST, resourceFetcher(index), Index);
+const resource = 'parking_lot'
+
+export default connectList('parking_lot', SET_LIST, resourceFetcher(filterFetcher, resource), Index);

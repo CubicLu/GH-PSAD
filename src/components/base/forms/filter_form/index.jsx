@@ -41,14 +41,14 @@ class CommonForm extends React.Component {
     const { cancelFilter, submitForm, isFetching } = this.props;
 
     return (
-      <React.Fragment>
-        <Button onClick={cancelFilter} className="btn btn-default mr-1">
-          Close
+      <div className="text-center">
+        <Button onClick={cancelFilter} className="btn btn-danger mr-1">
+          Cancel
         </Button>
-        <Button onClick={() => submitForm(formState.values)} color="primary" type="submit">
-          {isFetching ? btnSpinner() : 'Filter'}
+        <Button onClick={() => submitForm(formState.values)} color="secondary" type="submit">
+          {isFetching ? btnSpinner() : 'Apply'}
         </Button>
-      </React.Fragment>
+      </div>
     );
   };
 

@@ -1,9 +1,15 @@
 import React from 'react';
 import { Col, Row, Table } from 'reactstrap';
-import Pagination from 'components/base/pagination';
-import TRSort from './tr_sort';
-import ModalFilter from 'components/helpers/modals/filter';
 import { isEmpty } from 'underscore';
+import { cloneDeep } from 'lodash'
+import TRSort from './tr_sort';
+import { list as selectList } from 'selectors/list';
+import Pagination from 'components/base/pagination';
+import ModalFilter from 'components/helpers/modals/filter';
+import generateBadgesFilter from 'components/modules/badges_filter/generate'
+import deleteBadgesFilter from 'components/modules/badges_filter/delete'
+import { retrieveFilters } from 'components/modules/retrieve_filters';
+
 import './table.sass'
 
 class IndexTable extends React.Component {
@@ -27,15 +33,51 @@ class IndexTable extends React.Component {
     return renderRecords()
   };
 
+  generateLocalStorageFilter = (values) => {
+    const { resource } = this.props
+    let queryFilter = {}
+    Object.keys(values).forEach(key => {
+      queryFilter[key] = values[key]
+    })
+    localStorage.setItem(`FILTERS_${resource}`, JSON.stringify(queryFilter));
+  }
+
   handleSortedClick = (attr) => this.setState({ sortedAttr: attr });
 
-  handleSubmitFilter = (values) => this.setState({ filterQuery: values });
+  setFilterQuery = (values) => this.setState({ filterQuery: values });
+
+  toggleModal = (event) => this.setState((state) => ({ filterModalOpen: !state.filterModalOpen }));
 
   handleSortedTableFetched = () => this.props.fetchFinished();
 
-  toggleModal = event => this.setState((state) => ({ filterModalOpen: !state.filterModalOpen }));
+  paginationFetcher = (pagesQuery) => this.props.filterFetcher({filters: this.state.filterQuery, query: this.setQuery(this.state.sortedAttr), ...pagesQuery})
 
-  handleRefresh = () => this.setState({ sortedAttr: {}, filterQuery: {} })
+  badgesDelete = (badgeInfo) => {
+    const { filterQuery } = this.state
+    const { filterFields } = this.props
+    this.submitForm(deleteBadgesFilter(filterQuery, filterFields, badgeInfo))
+  }
+
+  badgesFilter = () => {
+    const { filterQuery } = this.state
+    const { filterFields } = this.props
+    return generateBadgesFilter(filterQuery, filterFields)
+  }
+
+  submitForm = (values, setErrorMessage) => {
+    const { filterFetcher, fetchStarted, fetchFinished, setList } = this.props
+    const cloneValues = cloneDeep(values)
+    this.setFilterQuery(cloneValues)
+    this.generateLocalStorageFilter(cloneValues)
+
+    fetchStarted()
+    filterFetcher({filters: cloneValues})
+      .then((res) => {
+        setList(selectList(res));
+      })
+      .catch(error => console.error(error))
+      .finally(fetchFinished)
+  }
 
   setQuery = (sortedAttr) => {
     const { paginationQuery } = this.props
@@ -44,23 +86,30 @@ class IndexTable extends React.Component {
         : paginationQuery
   }
 
-  paginationFetcher = (pagesQuery) => this.props.filterFetcher(this.state.filterQuery, Object.assign(pagesQuery, this.setQuery(this.state.sortedAttr)))
+  componentDidMount() {
+    const { resource } = this.props
+    this.setFilterQuery(retrieveFilters(resource))
+  }
 
   render() {
-    const { sortedAttr, filterModalOpen } = this.state
-    const { toolbar, columns } = this.props
+    const { sortedAttr, filterModalOpen, filterQuery } = this.state
+    const { toolbar, columns, total: totalRecords, filterFetcher } = this.props
     const toolbarWithProps = React.cloneElement(toolbar, {
-      handleRefresh: this.handleRefresh,
-      onClickFilter: this.toggleModal
+      fetcher: filterFetcher,
+      onClickFilter: this.toggleModal,
+      title: `${toolbar.props.title} (${totalRecords})`,
+      badgesFilter: this.badgesFilter,
+      badgesDelete: this.badgesDelete
     })
     const query = this.setQuery(sortedAttr)
+
     return (
       <React.Fragment>
         <ModalFilter
           isOpen={filterModalOpen}
           toggleModal={this.toggleModal}
-          handleSubmitFilter={this.handleSubmitFilter}
           filterQuery={this.state.filterQuery}
+          submitForm={this.submitForm}
           {...this.props}
         />
         <Row>
@@ -69,10 +118,10 @@ class IndexTable extends React.Component {
           </Col>
           <Col xs="12">
             <Table className="index-table">
-              <thead>
+              <thead className="bg-dark text-white">
                 <TRSort
                   {...this.props}
-                  filterQuery={this.state.filterQuery}
+                  filterQuery={filterQuery}
                   handledFetched={this.handleSortedTableFetched}
                   handleClick={this.handleSortedClick}
                   sortedAttr={sortedAttr}

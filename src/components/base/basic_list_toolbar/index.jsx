@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup, ButtonToolbar, InputGroup } from 'reactstrap';
-import { list as selectList } from 'selectors/list';
+import { Button, ButtonGroup, ButtonToolbar, Badge } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+
+import './back_list_toolbar.sass'
 
 class BasicListToolbar extends React.Component {
   newRecord = () => {
@@ -9,32 +12,31 @@ class BasicListToolbar extends React.Component {
     history.push(`${match.path}/new`);
   };
 
-  refresh = () => {
-    const { handleRefresh, fetchFinished, fetchStarted, fetcher } = this.props;
-
-    fetchStarted();
-    handleRefresh();
-    fetcher()
-      .then(this.refreshSucceed)
-      .catch((error) => { console.log(error); })
-      .finally(fetchFinished);
-  };
-
-  refreshSucceed = (res) => this.props.setList(selectList(res));
-
   render () {
-    const { label, onClickFilter } = this.props;
+    const { label, title, badgesFilter, badgesDelete, onClickFilter } = this.props;
     return (
       <React.Fragment>
+        <ButtonToolbar className="pb-1 float-left">
+          <h4>
+            { title }
+          </h4>
+        </ButtonToolbar>
         <ButtonToolbar className="pb-1 float-right">
-          <ButtonGroup className="mr-1">
-            <Button onClick={this.refresh}>Refresh</Button>
-          </ButtonGroup>
-          <InputGroup className="mr-1">
-            <Button onClick={onClickFilter}>Filter</Button>
-          </InputGroup>
-          <ButtonGroup>
-            <Button onClick={this.newRecord}>{label}</Button>
+          <div className="filter-box shadow">
+            <span className="text-muted mr-3">Filter By</span>
+            {
+              badgesFilter().map(element => (
+                <Button onClick={() => badgesDelete(element)} key={element} color="secondary" className="mr-3" >
+                  {element.label} <Badge color="secondary"> <FontAwesomeIcon icon={faTimes}/> </Badge>
+                </Button>
+              ))
+            }
+            <Button color="dark" onClick={onClickFilter}>
+              <FontAwesomeIcon icon={faFilter}/>
+            </Button>
+          </div>
+          <ButtonGroup >
+            <Button color="primary" onClick={this.newRecord}>{label}</Button>
           </ButtonGroup>
         </ButtonToolbar>
       </React.Fragment>
@@ -45,11 +47,9 @@ class BasicListToolbar extends React.Component {
 BasicListToolbar.propTypes = {
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-  handleRefresh: PropTypes.func,
   onClickFilter: PropTypes.func,
   fetchFinished: PropTypes.func.isRequired,
   fetchStarted: PropTypes.func.isRequired,
-  fetcher: PropTypes.func.isRequired,
   setList: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired
 };

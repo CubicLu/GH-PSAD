@@ -5,4 +5,25 @@ const { index, show, update, create } = resourceApi('agencies');
 
 const search = searchApi('agencies');
 
-export { index, show, update, create, search };
+const filterFetcher = (params = {}) => {
+  const { page, perPage, query, filters = {} } = params
+
+  return index({
+    page,
+    perPage,
+    query: Object.assign({}, query, {
+      query: {
+        agencies: {
+          email: filters.email,
+          name: filters.name,
+          phone: filters.phone
+        },
+        location: {
+          full_address: filters.full_address
+        }
+      }
+    })
+  });
+}
+
+export { filterFetcher, show, update, create, search };

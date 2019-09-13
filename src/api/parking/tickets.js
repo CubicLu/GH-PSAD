@@ -11,4 +11,31 @@ const index = (params = {}) => {
   return fetchApi(`dashboard/${resources}`, { method: 'GET', params: { page, perPage, agency_id, ...query} });
 };
 
-export { index, show, update, statuses };
+const filterFetcher = (params = {}) => {
+  const { page, perPage, query, filters = {}, agency_id } = params
+
+  if (filters.range) {
+    var from = filters.range.from
+    var to = filters.range.to
+  }
+
+  return index({
+    page,
+    perPage,
+    agency_id: agency_id,
+    query: Object.assign({}, query, {
+      ticket_id: filters.ticket_id,
+      admin_ids: filters.admin_ids,
+      type: filters.type,
+      query: filters.query,
+      status: filters.status,
+      range: {
+        from,
+        to
+      }
+    })
+  });
+}
+
+
+export { filterFetcher, show, update, statuses };
