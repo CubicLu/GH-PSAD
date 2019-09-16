@@ -8,7 +8,7 @@ function SideNavigation () {
       <NavLink className='nav-link' to='/dashboard/admins'>Admins</NavLink>
       <NavLink className='nav-link' to='/dashboard/agencies'>Agencies</NavLink>
       <NavLink className='nav-link' to='/dashboard/cameras'>Cameras</NavLink>
-      <NavLink className='nav-link' to='/dashboard/parking_lots'>Parking Lots</NavLink>
+      <NavLink className='nav-link' to='/dashboard/parking_lots'>Parking lot accounts</NavLink>
     </Nav>
   );
 }

@@ -1,7 +1,7 @@
 const fields = [
   {
     name: 'rate',
-    label: 'Hourly Rate',
+    label: 'Hourly Rate $',
     type: 'increaser',
     step: 1,
     min: 1,

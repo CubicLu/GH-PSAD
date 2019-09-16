@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 
 const CollapsableCard = props => {
-  const { header, body, defaultState = false } = props;
+  const { header, defaultState = false } = props;
   const [show, toggle] = useState(defaultState);
 
   return (
@@ -16,7 +16,7 @@ const CollapsableCard = props => {
       </CardHeader>
       <Collapse isOpen={show}>
         <CardBody>
-          {body}
+          {props.children}
         </CardBody>
       </Collapse>
     </Card>
@@ -25,7 +25,6 @@ const CollapsableCard = props => {
 
 CollapsableCard.propTypes = {
   header: PropTypes.string.isRequired,
-  body: PropTypes.elementType.isRequired,
   defaultState: PropTypes.bool
 };
 

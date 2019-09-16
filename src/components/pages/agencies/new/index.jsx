@@ -21,7 +21,7 @@ import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/co
 import { btnSpinner } from 'components/helpers';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import { fields, exampleData } from 'components/helpers/fields/agencies';
-import { exampleData as exampleLocationData } from 'components/helpers/fields/agencies/location';
+import { exampleData as exampleLocationData } from 'components/helpers/fields/location';
 import { fromJson as showErrors } from 'components/helpers/errors';
 import { FieldType } from 'components/helpers/form_fields';
 /* Modules */

@@ -16,6 +16,7 @@ const renderLabelInput = (field, props) => {
 const fields = [
   { name: 'location.zip', label: 'Zip', mandatory: true },
   { name: 'location.street', label: 'Street', mandatory: true },
+  { name: 'location.state', label: 'State', mandatory: true },
   { name: 'location.country', label: 'Country', mandatory: true },
   { name: 'location.building', label: 'Building', mandatory: true },
   { name: 'location.city', label: 'City', mandatory: true },

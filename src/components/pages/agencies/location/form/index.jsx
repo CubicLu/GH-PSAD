@@ -7,7 +7,7 @@ import { cloneDeep } from 'lodash'
 /* Base */
 import { renderFieldsWithGrid } from 'components/base/forms/common_form';
 /* Helpers */
-import { fields } from 'components/helpers/fields/agencies/location';
+import { fields } from 'components/helpers/fields/location';
 import { FieldType } from 'components/helpers/form_fields';
 /* Modules */
 
