@@ -3,6 +3,12 @@ const reduceEntity = actions => {
     switch (action.type) {
       case actions.SET_LIST:
         return Object.assign({}, state, action.payload);
+      case actions.SET_LIST_ELEMENT:
+        return Object.assign({}, state, {
+          list: state.list.map(element => (
+            action.payload.id !== element.id ? element : action.payload
+          ))
+        });
       default:
         return state;
     }

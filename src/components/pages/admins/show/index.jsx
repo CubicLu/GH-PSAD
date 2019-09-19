@@ -25,7 +25,7 @@ import { btnSpinner } from 'components/helpers';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
-import setFormApiFields from 'components/modules/set_form_api_fields';
+import setEmptyFields from 'components/modules/set_empty_fields';
 import withCurrentUser from 'components/modules/with_current_user';
 
 class Show extends React.Component {
@@ -69,7 +69,7 @@ class Show extends React.Component {
   }
 
   save = () => {
-    const values = setFormApiFields(this.fieldsForCommonForm(), this.formApi);
+    const values = setEmptyFields(this.fieldsForCommonForm(), this.formApi);
     values.avatar = this.formApi.getValue('avatar');
 
     if (this.formApi.getValue('password')) {

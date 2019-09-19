@@ -53,6 +53,8 @@ const renderInput = (field, props = {}) => {
       return <GoogleMaps {...props.events} {...field.options}/>;
     case FieldType.INCREASER_FIELD:
       return <Increaser {...props} field={field}/>;
+    case FieldType.NUMBER_FIELD:
+      return <Text className="form-control" {...props.events} type="number" field={field.name}/>;
     default:
       return <Text className="form-control" {...props.events} field={field.name}/>;
   }

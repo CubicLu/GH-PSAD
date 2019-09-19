@@ -106,7 +106,7 @@ class IndexTable extends React.Component {
         <ModalFilter
           isOpen={filterModalOpen}
           toggleModal={this.toggleModal}
-          filterQuery={this.state.filterQuery}
+          filterQuery={filterQuery}
           submitForm={this.submitForm}
           {...this.props}
         />

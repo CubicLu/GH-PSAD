@@ -7,6 +7,7 @@ const TEXT_LINK_FIELD = 'text_link';
 const INCREASER_FIELD = 'increaser';
 const LABEL_TEXT_FIELD = 'label_text'
 const GOOGLE_MAPS_FIELD = 'google_maps'
+const NUMBER_FIELD = 'number'
 
 export {
   SELECT_FIELD,
@@ -17,5 +18,6 @@ export {
   INCREASER_FIELD,
   DATE_FIELD,
   LABEL_TEXT_FIELD,
+  NUMBER_FIELD,
   GOOGLE_MAPS_FIELD
 };

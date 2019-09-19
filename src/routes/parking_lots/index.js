@@ -10,7 +10,7 @@ function Routing(props) {
   return (
     <React.Fragment>
       <Route exact path={match.path} component={Index}/>
-      <Route exact path={`${match.path}/:id/`} render={renderWithBackPath(Show, `${match.url}/:id`)}/>
+      <Route exact path={`${match.path}/:id/`} render={renderWithBackPath(Show, `${match.url}/`)}/>
     </React.Fragment>
   );
 }

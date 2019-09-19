@@ -1,8 +1,7 @@
 import { FieldType } from 'components/helpers/form_fields'
 
-const fields = (managers = [], admins = []) => (
+const fields = (managers = [], admins = [], renderLocationModal) => (
   [
-    { name: 'name' },
     {
       name: 'disputes_count',
       type: FieldType.TEXT_LINK_FIELD,
@@ -10,8 +9,6 @@ const fields = (managers = [], admins = []) => (
       style: { maxWidth: 'inherit', display: 'inline' },
       label: 'Disputes received'
     },
-    { name: 'phone', label: 'Contact' },
-    { name: 'email' },
     {
       name: 'violations_count',
       type: FieldType.TEXT_LINK_FIELD,
@@ -19,23 +16,26 @@ const fields = (managers = [], admins = []) => (
       style: { maxWidth: 'inherit', display: 'inline' },
       label: 'Violation records'
     },
-    { name: 'parking_admin_id', type: 'select', options: admins.map(admin => { return {value: admin.id, label: admin.email}}) },
-    { name: 'town_manager_id', type: 'select', options: managers.map(manager => { return {value: manager.id, label: manager.email}}) },
     {
-      name: 'status',
-      type: FieldType.TEXT_LINK_FIELD,
-      props: { to: '/suspend', value: 'Suspend' },
-      style: { maxWidth: 'inherit', display: 'inline' },
-      label: 'Current status'
+      name: 'location',
+      label: 'Location',
+      mandatory: true,
+      render: renderLocationModal
     },
-    { name: 'location.city' },
-    { name: 'location.street' },
-    { name: 'location.country' },
-    { name: 'location.building' }
+    { name: 'name', label: 'Name', mandatory: true },
+    { name: 'phone', label: 'Contact' },
+    { name: 'parking_admin_id', label: 'Parking Admin', type: 'select', options: admins.map(admin => { return {value: admin.id, label: admin.email}}) },
+    { name: 'email', label: 'Email' },
+    { name: 'town_manager_id', label: 'Town Manager', mandatory: true, type: 'select', options: managers.map(manager => { return {value: manager.id, label: manager.email}}) },
+    { name: 'status', label: 'Status', mandatory: true, type: FieldType.SELECT_FIELD, options: [{value: 'active', label: 'Active'}, { value: 'suspended', label: 'Suspended' }], defaultValue: 'active' }
   ]
 );
 
 const filterFields = () => [
 ]
 
-export { fields, filterFields };
+const exampleData = {
+  'status': 'active'
+}
+
+export { fields, filterFields, exampleData };

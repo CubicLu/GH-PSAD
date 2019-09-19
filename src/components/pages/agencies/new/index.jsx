@@ -31,7 +31,6 @@ import withFetching from 'components/modules/with_fetching';
 class New extends React.Component {
   state = {
     isSaving: false,
-    modal: false,
     dropdowns: {},
     currentLocation: exampleLocationData()
   }
@@ -136,7 +135,6 @@ class New extends React.Component {
           managers: result.manager,
           townManagers: result.town_manager }
       }))
-      .catch(this.handleFailed)
 
   }
 
