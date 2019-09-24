@@ -28,19 +28,23 @@ const extractMessage = error => {
 };
 
 const setErrorsMessages = error => {
-    switch (error.status) {
-      case 404:
-        return [{ text: error.statusText, color: 'danger' }];
-      case 500:
-        return [{ text: 'Unexpected error', color: 'danger' }];
-      default:
-        return extractMessage(error);
-    }
+  if( typeof error === 'string') {
+    return [{ text: error, color: 'danger' }];
+  }
+
+  switch (error.status) {
+    case 404:
+      return [{ text: error.statusText, color: 'danger' }];
+    case 500:
+      return [{ text: 'Unexpected error', color: 'danger' }];
+    default:
+      return extractMessage(error);
+  }
 };
 
 const setSuccessMessage = message => [{ text: message, color: "success"}];
 
-export { 
+export {
   showMessages,
   setErrorsMessages,
   setSuccessMessage

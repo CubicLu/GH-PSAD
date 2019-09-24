@@ -15,6 +15,11 @@ import resourceFetcher from 'components/modules/resource_fetcher';
 import connectList from 'components/modules/connect_list';
 
 class Index extends React.Component {
+  isFetching = () => {
+    const { isResourceFetching } = this.props
+    return isResourceFetching
+  }
+
   renderRecords = () => {
     const { list, match } = this.props;
 
@@ -27,7 +32,7 @@ class Index extends React.Component {
           <td>{record.email}</td>
           <td>{record.phone}</td>
           <td>{record.parking_admin ? record.parking_admin.name : null}</td>
-          <td>{record.parking_admin ? record.town_manager.name : null}</td>
+          <td>{record.town_manager ? record.town_manager.name : null}</td>
           <td>{record.status}</td>
         </tr>
       );
@@ -38,6 +43,7 @@ class Index extends React.Component {
     return (
       <IndexTable
         {...this.props}
+        isFetching={this.isFetching}
         toolbar={<BasicListToolbar {...this.props} label="+ Create Parking Lot" title="Parking Lots"/>}
         filterFields={filterFields()}
         filterFetcher={filterFetcher}

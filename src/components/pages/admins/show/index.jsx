@@ -40,28 +40,26 @@ class Show extends React.Component {
     password_verification: ''
   }
 
-  fieldProps = () => ({
-    lSize: 6,
-    events: {
-      onChangeMutipleSelect: () => this.setState({ inputChanged: true }),
-      onChangeFile: () => this.setState({ inputChanged: true }),
-      onChange: () => this.setState({ inputChanged: true })
-    }
-  })
-
   isFetching () {
     const { isResourceFetching } = this.props
     const { roles } = this.state.dropdowns;
     return isResourceFetching || isEmpty(roles)
   }
 
+  fieldProps = () => ({
+    lSize: 6,
+    events: {
+      onChange: () => this.setState({ inputChanged: true })
+    }
+  })
+
   setFormApi = formApi => {
     this.formApi = formApi;
   };
 
-  toggleModal = () => this.setState(prevState => ({ modal: !prevState.modal }))
+  toggleEditing = () => this.setState((prevState) => ({ isEditing: !prevState.isEditing }))
 
-  toggleEditing = () => this.setState((prevState) => ({ isEditing: !prevState }))
+  toggleModal = () => this.setState(prevState => ({ modal: !prevState.modal }))
 
   handlePasswordSuccess = () => {
     const { values } = this.formApi.getState();
@@ -74,7 +72,7 @@ class Show extends React.Component {
     const values = setFormApiFields(this.fieldsForCommonForm(), this.formApi);
     values.avatar = this.formApi.getValue('avatar');
 
-    if (document.querySelector('input[name="password"]').value) {
+    if (this.formApi.getValue('password')) {
       this.toggleModal();
     } else {
       const { backPath, record } = this.props;
@@ -124,10 +122,11 @@ class Show extends React.Component {
   }
 
   renderForm () {
+    const { record } = this.props;
     const { isSaving, inputChanged } = this.state;
 
     return (
-      <fieldset disabled={isSaving}>
+      <fieldset disabled={isSaving || !record.actions.update}>
         <Form getApi={this.setFormApi} initialValues={this.values()}>
           <Row>
             <Col sm={12} md={3}>
@@ -172,9 +171,26 @@ class Show extends React.Component {
     return fieldsSet;
   }
 
-  componentDidMount () {
-    dropdownsSearch('role_id', { admin_id: this.props.currentUser.id })
-      .then(response => this.setState({ dropdowns: { roles: response.data } }));
+  handlePasswordSuccess = () => {
+    const { values } = this.formApi.getState();
+    const { backPath, record } = this.props;
+    const path = generatePath(backPath, { id: record.id });
+    updateRecord.call(this, update, path, values);
+  }
+
+  componentWillReceiveProps (nextProps, nextContext) {
+    const { currentUser } = nextProps
+    if (currentUser) {
+      dropdownsSearch('role_id', { admin_id: currentUser.id })
+        .then(response => {
+          if (!isEmpty(response.data)) {
+            this.setState({ dropdowns: { roles: response.data } })
+          } else {
+            // This happens when the user is not allowed to update
+            this.setState({ dropdowns: { roles: [{value: currentUser.role.id, label: currentUser.role.name}] } })
+          }
+        });
+    }
   }
 
   render () {

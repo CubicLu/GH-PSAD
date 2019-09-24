@@ -7,9 +7,9 @@ const search = (query) => {
   return fetchApi(`dashboard/admins/search`, { method: 'GET', params: { ...query, status: 'active' } });
 };
 
-function checkAdminPassword (password) {
+const checkAdminPassword = (password) => {
   return fetchApi(`dashboard/admins/check_password`, { method: 'POST', data: { password } });
-}
+};
 
 const filterFetcher = (params = {}) => {
   const { page, perPage, query, filters = {} } = params;
@@ -17,14 +17,15 @@ const filterFetcher = (params = {}) => {
     index({
       page,
       perPage,
-      query: {
-        ...query,
+      query: Object.assign({}, query, {
         role_names: filters.role_names,
         status: filters.status,
-        'query[email]': filters.email,
-        'query[username]': filters.username,
-        'query[name]': filters.name
-      }
+        query: {
+          email: filters.email,
+          username: filters.username,
+          name: filters.name
+        }
+      })
     })
   );
 };

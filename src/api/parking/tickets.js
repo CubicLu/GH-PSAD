@@ -10,21 +10,28 @@ const index = (params = {}) => {
 
 const filterFetcher = (params = {}) => {
   const { page, perPage, query, filters = {}, agency_id } = params
+
+  if (filters.range) {
+    var from = filters.range.from
+    var to = filters.range.to
+  }
+
   return index({
     page,
     perPage,
     agency_id: agency_id,
-    query: {
-      ...query,
+    query: Object.assign({}, query, {
       ticket_id: filters.ticket_id,
       admin_ids: filters.admin_ids,
       agency_ids: filters.agency_ids,
       type: filters.type,
       query: filters.query,
       status: filters.status,
-      'range[from]': filters.range ? filters.range.from : null,
-      'range[to]': filters.range ? filters.range.to : null
-    }
+      range: {
+        from,
+        to
+      }
+    })
   });
 }
 

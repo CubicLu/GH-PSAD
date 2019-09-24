@@ -2,6 +2,8 @@ import { camelize } from './index';
 import { last } from 'underscore';
 
 const labelFor = field => {
+  if(!field.label) return
+
   if (field.label) return withAsterisk(field.mandatory, field.label);
 
   let label = field.name;

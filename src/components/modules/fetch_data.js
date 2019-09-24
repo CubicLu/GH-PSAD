@@ -2,7 +2,7 @@ import { bindActionCreators } from 'redux';
 import { isEmpty } from 'underscore';
 import { connect } from 'react-redux';
 import { invoke } from 'actions';
-import withFetching from 'components/modules/with_fetching';
+import withResourceFetching from 'components/modules/with_resource_fetching';
 
 const defaultProcessor = res => res.data;
 const defaultDispatch = (action, actionType) => dispatch => (
@@ -29,7 +29,7 @@ const fetchData = props => {
   return connect(
     mapState,
     mapDispatch
-  )(withFetching(Component, fetch));
+  )(withResourceFetching(Component, fetch));
 };
 
 export default fetchData;

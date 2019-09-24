@@ -1,6 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import { Button, Input } from 'reactstrap';
 /* Actions */
 /* API */
@@ -10,18 +9,21 @@ import CardLayout from 'components/base/layout/card';
 import AuthLayout from 'components/base/layout/auth';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
-import { setErrorsMessages, setSuccessMessage } from 'components/helpers/messages';
+import { AlertMessagesContext } from 'components/helpers/alert_messages';
+import { setErrorsMessages } from 'components/helpers/messages';
 /* Modules */
+import RedirectIfAuthorized from 'components/modules/redirect_if_authorized';
 
 class SendResetPasswordInstructions extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
       username: '',
-      successMessage: '',
       messages: {}
     };
   }
+
+  static contextType = AlertMessagesContext
 
   submitForm = (event) => {
     event.preventDefault();
@@ -30,7 +32,7 @@ class SendResetPasswordInstructions extends React.Component {
     });
 
     sendResetPasswordInstructionsRequest(this.state.username)
-      .then(res => this.setSuccessMessage())
+      .then(res => this.redirectToLogin())
       .catch(error => {
         this.setState({
           isFetching: false,
@@ -39,11 +41,14 @@ class SendResetPasswordInstructions extends React.Component {
       });
   };
 
-  setSuccessMessage () {
-    this.setState({
-      isFetching: false,
-      messages: setSuccessMessage('We have sent a recovery password to your email, please follow the instructions')
-    });
+  redirectToLogin = () => {
+    this.context.addAlertMessages([
+      {
+        text: 'Reset link has been successfully sent to his email address',
+        type: 'success'
+      }
+    ])
+    return this.props.history.push('/login')
   }
 
   render () {
@@ -53,7 +58,7 @@ class SendResetPasswordInstructions extends React.Component {
           <form onSubmit={this.submitForm}>
             <div className="form-label-group">
               <Input
-                type="email"
+                type="text"
                 value={this.state.username}
                 name="username"
                 onChange={e => this.setState({ [e.target.name]: e.target.value })}
@@ -73,11 +78,8 @@ class SendResetPasswordInstructions extends React.Component {
   }
 }
 
-function mapDispatch (dispatch) {
-  return bindActionCreators({}, dispatch);
-}
+SendResetPasswordInstructions.propTypes = {
+  history: PropTypes.object.isRequired
+};
 
-export default connect(
-  null,
-  mapDispatch
-)(SendResetPasswordInstructions);
+export default RedirectIfAuthorized(SendResetPasswordInstructions);

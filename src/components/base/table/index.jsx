@@ -9,6 +9,7 @@ import ModalFilter from 'components/helpers/modals/filter';
 import generateBadgesFilter from 'components/modules/badges_filter/generate'
 import deleteBadgesFilter from 'components/modules/badges_filter/delete'
 import { retrieveFilters } from 'components/modules/retrieve_filters';
+import withFetching from 'components/modules/with_fetching';
 
 import './table.sass'
 
@@ -46,7 +47,7 @@ class IndexTable extends React.Component {
 
   setFilterQuery = (values) => this.setState({ filterQuery: values });
 
-  toggleModal = event => this.setState((state) => ({ filterModalOpen: !state.filterModalOpen }));
+  toggleModal = (event) => this.setState((state) => ({ filterModalOpen: !state.filterModalOpen }));
 
   paginationFetcher = (pagesQuery) => this.props.filterFetcher({filters: this.state.filterQuery, query: this.setQuery(this.state.sortedAttr), ...pagesQuery})
 
@@ -63,18 +64,17 @@ class IndexTable extends React.Component {
   }
 
   submitForm = (values, setErrorMessage) => {
-    const { filterFetcher, resourceFetchStarted, setList } = this.props
+    const { filterFetcher, startFetching, setList } = this.props
     const cloneValues = cloneDeep(values)
     this.setFilterQuery(cloneValues)
     this.generateLocalStorageFilter(cloneValues)
 
-    resourceFetchStarted(
-      filterFetcher(Object.assign({}, { filters: cloneValues }, this.setQuery(this.state.sortedAttr)))
-        .then((res) => {
-          setList(selectList(res));
-        })
-        .catch(error => setErrorMessage(error))
-    );
+
+    startFetching(filterFetcher(Object.assign({}, { filters: cloneValues }, this.setQuery(this.state.sortedAttr))))
+      .then((res) => {
+        setList(selectList(res));
+      })
+      .catch(error => console.log(error))
   }
 
   setQuery = (sortedAttr) => {
@@ -139,4 +139,4 @@ class IndexTable extends React.Component {
   }
 }
 
-export default IndexTable;
+export default withFetching(IndexTable);

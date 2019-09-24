@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import MultiSelect from 'react-select';
-import { cloneDeepWith } from 'lodash';
 import { isEmpty, defaults } from 'underscore';
 import { asField } from 'informed';
 
-const convertValueObjectToString = (values) => cloneDeepWith(values, (val) => String(val))
+const convertValueObjectToString = (values) => values.map(val => String(val))
 
-const CustomMultiSelect = asField(({ field, fieldApi, fieldState, options, events = {} }) => {
+  const CustomMultiSelect = asField(({ field, fieldApi, fieldState, options, events = {} }) => {
   let { value: values } = fieldState;
   const { setValue } = fieldApi;
   const [selectedOptions, setSelectedOptions] = useState({});
-  values = defaults(convertValueObjectToString(values), {});
+  values = defaults(convertValueObjectToString(values || []), {});
 
   if (isEmpty(selectedOptions) && !isEmpty(values)) {
     setSelectedOptions({
       [field]: options.filter(element => values.includes(element.value))
     });
   }
+
   return (
     <React.Fragment>
       <MultiSelect

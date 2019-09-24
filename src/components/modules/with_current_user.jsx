@@ -10,28 +10,31 @@ const withCurrentUser = (Component) => {
 
     componentWillUnmount() {
       this.setState({
-        currentUser: null
+        currentUser: null,
+        currentUserRoleName: null
       })
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
       if (!isEmpty(nextProps.currentUser)) {
         this.setState({
-          currentUser: nextProps.currentUser
+          currentUser: nextProps.currentUser,
+          currentUserRoleName: nextProps.currentUser.role.name
         })
       }
     }
 
     componentDidMount() {
       this.setState({
-        currentUser: this.props.currentUser
+        currentUser: this.props.currentUser,
+        currentUserRoleName: this.props.currentUser ? this.props.currentUser.role.name : null
       })
     }
 
     render() {
-      const { currentUser, ...other_props} = this.props
+      const { currentUser, currentUserRoleName, ...other_props} = this.props
       return this.state.currentUser ?
-            <Component currentUser={this.state.currentUser} {...other_props}/> :
+            <Component {...this.state} {...other_props}/> :
             null
     }
   }

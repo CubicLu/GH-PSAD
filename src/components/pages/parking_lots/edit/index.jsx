@@ -22,6 +22,7 @@ import { fields } from 'components/helpers/fields/parking_lots';
 import connectRecord from 'components/modules/connect_record';
 import updateRecord from 'components/modules/form_actions/update_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
+import withFetching from 'components/modules/with_fetching';
 
 class Edit extends React.Component {
   state = {
@@ -128,7 +129,9 @@ class Edit extends React.Component {
   }
 
   componentDidMount () {
-    searchAdminByRoleName(['parking_admin', 'town_manager'])
+      const { startFetching } = this.props
+
+    startFetching(searchAdminByRoleName(['parking_admin', 'town_manager']))
       .then((result) => {
         this.setState({
           dropdowns: {
@@ -166,4 +169,4 @@ Edit.propTypes = {
   })
 };
 
-export default connectRecord('parking_lot', SET_RECORD, resourceFetcher(show), Edit);
+export default connectRecord('parking_lot', SET_RECORD, resourceFetcher(show), withFetching(Edit));

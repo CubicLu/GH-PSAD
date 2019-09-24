@@ -4,7 +4,7 @@ import ReactFileReader from 'react-file-reader';
 import { Button } from 'reactstrap';
 import Media from './media';
 
-const ImageInput = asField(({ fieldState, fieldApi, events}) => {
+const ImageInput = asField(({ fieldState, fieldApi, events = {}}) => {
   const { value } = fieldState;
   const { setValue } = fieldApi;
 
@@ -22,7 +22,7 @@ const ImageInput = asField(({ fieldState, fieldApi, events}) => {
     setValue(data.base64);
     setFilepath(URL.createObjectURL(data.fileList[0]));
     setFilename(data.fileList[0].name);
-    events.onChangeFile()
+    events.onChange && events.onChange()
   };
   return (
     <ReactFileReader

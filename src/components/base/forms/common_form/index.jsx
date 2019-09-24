@@ -9,6 +9,7 @@ import {
   TextWithLink,
   Increaser,
   Password,
+  GoogleMaps,
   FieldType
 } from 'components/helpers/form_fields';
 import { Form, Text } from 'informed';
@@ -20,7 +21,7 @@ const renderField = (field, props = {}) => {
 
   return (
     <FormGroup row>
-      <Label for={field.name} md={lSize}>{labelFor(field)}</Label>
+      { field.label && <Label for={field.name} md={lSize}>{labelFor(field)}</Label> }
       <Col md={iSize}>
         {field.render ? field.render(field, props) : renderInput(field, props)}
       </Col>
@@ -48,6 +49,8 @@ const renderInput = (field, props = {}) => {
       return <TextWithLink {...props} field={field}/>;
     case FieldType.PASSWORD_FIELD:
       return <Password {...props} field={field} />;
+    case FieldType.GOOGLE_MAPS_FIELD:
+      return <GoogleMaps {...props.events} {...field.options}/>;
     case FieldType.INCREASER_FIELD:
       return <Increaser {...props} field={field}/>;
     default:
