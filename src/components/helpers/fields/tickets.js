@@ -12,6 +12,7 @@ const fields = (officers, statuses) => [
   },
   {
     name: 'remark',
+    mandatory: true,
     label: 'Remark'
   },
   {
