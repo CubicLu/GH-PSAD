@@ -3,16 +3,23 @@ import { FieldType } from 'components/helpers/form_fields'
 const fields = (officers, statuses) => [
   {
     name: 'status',
-    label: 'Current Status',
+    innerLabel: 'Current Status:',
     mandatory: true,
-    type: FieldType.SELECT_FIELD,
-    options: statuses.map(({label, value}) => {
-      return { value, label};
-    })
+    type: FieldType.TOGGLER_FIELD,
+    options: {
+      on: {
+        value: statuses[0].value,
+        labelButton:  statuses[0].label
+      },
+      off: {
+        value:  statuses[1].value,
+        labelButton:  statuses[1].label
+      }
+    },
+    defaultValue: 'inactive'
   },
   {
     name: 'remark',
-    mandatory: true,
     label: 'Remark'
   },
   {
@@ -64,6 +71,7 @@ const filterFields = (officers, statuses, types, agencies) => [
       return { value, label};
     })
   }
+
 ]
 
 export { fields, filterFields };

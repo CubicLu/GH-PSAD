@@ -9,6 +9,7 @@ import {
   TextWithLink,
   Increaser,
   Password,
+  Toggler,
   GoogleMaps,
   FieldType
 } from 'components/helpers/form_fields';
@@ -45,6 +46,8 @@ const renderInput = (field, props = {}) => {
       return <ImageInput {...props} className="form-control" field={field.name}/>;
     case FieldType.SELECT_FIELD:
       return <CustomSelect {...props} field={field}/>;
+    case FieldType.TOGGLER_FIELD:
+      return <Toggler {...props} field={field.name} label={field.innerLabel} options={field.options}/>;
     case FieldType.TEXT_LINK_FIELD:
       return <TextWithLink {...props} field={field}/>;
     case FieldType.PASSWORD_FIELD:
