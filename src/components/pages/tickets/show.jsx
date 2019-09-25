@@ -35,7 +35,6 @@ class Show extends React.Component {
   fieldProps = () => ({
     lSize: 6,
     events: {
-      onChangeFile: () => this.setState({ inputChanged: true }),
       onChange: () => this.setState({ inputChanged: true })
     }
   })
