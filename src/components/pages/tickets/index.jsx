@@ -55,7 +55,7 @@ class Index extends React.Component {
           .then(response => this.setDropdowns('statuses', response.data)),
         dropdownsSearch('tickets_types_field')
           .then(response => this.setDropdowns('types', response.data)),
-        dropdownsSearch('agencies_list', { admin_id: currentUser.id })
+        dropdownsSearch('tickets_agencies_list', { admin_id: currentUser.id })
          .then(response => this.setDropdowns('agencies', response.data))
 
       ])
