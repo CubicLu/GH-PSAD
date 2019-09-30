@@ -178,8 +178,8 @@ class Show extends React.Component {
     updateRecord.call(this, update, path, values);
   }
 
-  componentWillReceiveProps (nextProps, nextContext) {
-    const { currentUser } = nextProps
+  componentDidMount () {
+    const { currentUser } = this.props
     if (currentUser) {
       dropdownsSearch('role_id', { admin_id: currentUser.id })
         .then(response => {

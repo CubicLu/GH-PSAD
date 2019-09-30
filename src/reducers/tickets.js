@@ -1,6 +1,6 @@
 import { TicketActions } from 'actions';
 import { combineReducers } from 'redux';
-import reduceEntity from '../entities';
+import reduceEntity from './entities';
 
 const { index, records } = reduceEntity(TicketActions);
 

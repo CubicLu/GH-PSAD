@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { asField } from 'informed';
 import ReactFileReader from 'react-file-reader';
-import { Button, Media } from 'reactstrap';
-import Holder from 'holderjs';
+import { Button } from 'reactstrap';
+import Media from './media';
 
 const ImageInput = asField(({ fieldState, fieldApi, events = {}}) => {
   const { value } = fieldState;
@@ -24,25 +24,17 @@ const ImageInput = asField(({ fieldState, fieldApi, events = {}}) => {
     setFilename(data.fileList[0].name);
     events.onChange && events.onChange()
   };
-
   return (
     <ReactFileReader
       base64={true}
       handleFiles={handleFiles}
     >
       <React.Fragment>
-        <Media className="justify-content-center">
-          <Media left>
-            <Media object tag={() => (
-              <img
-                data-src={filepath || 'holder.js/200x200?auto=yes'}
-                src={filepath}
-                alt={filename}
-                className="img-thumbnail"
-                ref={ref => Holder.run({ images: ref })}/>
-            )}/>
-          </Media>
-        </Media>
+        <Media
+          filepath={filepath}
+          filename={filename}
+        />
+
         <div className="text-center mt-2">
           <Button type="button" color='primary' outline className="mt-1">Upload</Button>
         </div>

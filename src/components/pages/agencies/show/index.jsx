@@ -194,9 +194,7 @@ Show.propTypes = {
     name: PropTypes.string.isRequired,
     town_manager: PropTypes.object,
     manager: PropTypes.object,
-    officers: PropTypes.arrayOf(PropTypes.object),
-    parking_tickets_total: PropTypes.number.isRequired,
-    parking_tickets: PropTypes.array.isRequired
+    officers: PropTypes.arrayOf(PropTypes.object)
   })
 };
 

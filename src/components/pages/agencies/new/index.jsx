@@ -41,6 +41,11 @@ class New extends React.Component {
     return isEmpty(dropdowns)
   }
 
+  isFetching = () => {
+    const { dropdowns } = this.state
+    return isEmpty(dropdowns)
+  }
+
   setFormApi = formApi => {
     this.formApi = formApi;
   };

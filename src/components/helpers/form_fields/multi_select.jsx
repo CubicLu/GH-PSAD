@@ -6,11 +6,10 @@ import { asField } from 'informed';
 
 const convertValueObjectToString = (values) => values.map(val => String(val))
 
-const CustomMultiSelect = asField(({ field, fieldApi, fieldState, options, events = {}}) => {
+  const CustomMultiSelect = asField(({ field, fieldApi, fieldState, options, events = {} }) => {
   let { value: values } = fieldState;
   const { setValue } = fieldApi;
   const [selectedOptions, setSelectedOptions] = useState({});
-
   values = defaults(convertValueObjectToString(values || []), {});
 
   if (isEmpty(selectedOptions) && !isEmpty(values)) {

@@ -6,7 +6,7 @@ const { index, show, update, create } = resourceApi('agencies');
 const search = searchApi('agencies');
 
 const filterFetcher = (params = {}) => {
-  const { page, perPage, query, filters = {} } = params
+  const { page, perPage, query, filters = {} } = params;
 
   return index({
     page,
@@ -24,6 +24,6 @@ const filterFetcher = (params = {}) => {
       }
     })
   });
-}
+};
 
 export { filterFetcher, show, update, create, search };

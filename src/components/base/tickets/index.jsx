@@ -10,12 +10,8 @@ const Tickets = props => {
       <td><Link to={`${url}/${parkingTicket.id}`} className="mr-1">{parkingTicket.type}</Link></td>
       <td>{parkingTicket.lot.name}</td>
       <td>{displayUnixTimestamp(parkingTicket.created_at)}</td>
-      <td>{parkingTicket.officer.email}</td>
-      <td>
-        <span className={`btn btn-${parkingTicket.status === 'opened' ? 'success' : 'warning'}`}>
-          {parkingTicket.status}
-        </span>
-      </td>
+      <td>{parkingTicket.officer ? parkingTicket.officer.email : 'Unassigned'}</td>
+      <td>{parkingTicket.status}</td>
     </tr>
   );
 };

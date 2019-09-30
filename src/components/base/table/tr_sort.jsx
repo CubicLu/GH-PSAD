@@ -10,8 +10,8 @@ const TRSort = (props) => {
   return (
     <tr>
       {
-        props.children.map(th => (
-          <React.Fragment key={th.props.attr}>
+        props.children.map((th, index) => (
+          <React.Fragment key={th.props.attr || index}>
             <th>
               <span className={th.props.disableSort ? 'non-sortable' : 'sortable'} onClick={() => {
                 if(!th.props.disableSort) {

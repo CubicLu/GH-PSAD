@@ -5,14 +5,15 @@ const { index, show, update, destroy, create } = resourceApi('parking_lots');
 const search = searchApi('cameras');
 
 const filterFetcher = (params = {}) => {
-  const { page, perPage, query, filters = {} } = params
+  const { page, perPage, query, filters = {} } = params;
   return index({
     page,
     perPage,
     query: {
-      ...query
+      ...query,
+      ...filters
     }
-  })
-}
+  });
+};
 
 export { filterFetcher, show, update, destroy, create, search };

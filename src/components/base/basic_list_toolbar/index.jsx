@@ -47,16 +47,19 @@ class BasicListToolbar extends React.Component {
             <Button color="dark" onClick={onClickFilter}>
               <FontAwesomeIcon icon={faFilter}/>
             </Button>
-          </div>
-          <PermissibleRender
-            userPermissions={permissions[currentUserRoleName]}
-            requiredPermissions={createRequiredPermissions || permissions[currentUserRoleName]}
-          >
-            <ButtonGroup >
-              <Button color="primary" onClick={this.newRecord}>{label}</Button>
-            </ButtonGroup>
-          </PermissibleRender>
-
+         </div>
+          {
+            label && (
+              <PermissibleRender
+                userPermissions={permissions[currentUserRoleName]}
+                requiredPermissions={createRequiredPermissions || permissions[currentUserRoleName]}
+              >
+                <ButtonGroup >
+                  <Button color="primary" onClick={this.newRecord}>{label}</Button>
+                </ButtonGroup>
+              </PermissibleRender>
+            )
+          }
         </ButtonToolbar>
       </React.Fragment>
     );

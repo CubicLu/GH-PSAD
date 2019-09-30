@@ -36,7 +36,7 @@ class Index extends React.Component {
     return list.map((record, idx) => {
       return (
         <tr key={idx}>
-          <td><img src={record.avatar || 'https://i.stack.imgur.com/34AD2.jpg'} className="rounded-circle" width="50" height="50"/></td>
+          <td><img src={record.avatar || 'https://i.stack.imgur.com/34AD2.jpg'} alt="avatar" className="rounded-circle" width="50" height="50"/></td>
           <td><Link to={`${match.path}/${record.id}`}>{record.username}</Link></td>
           <td>{record.name}</td>
           <td>{record.email}</td>

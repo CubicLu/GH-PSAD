@@ -1,25 +1,46 @@
 import { FieldType } from 'components/helpers/form_fields'
 
 const fields = (officers, statuses) => [
-  { name: 'admin_id', label: 'Officer handled *', type: FieldType.SELECT_FIELD,  options: officers.map(officer => { return {value: officer.id, label: officer.email}})  },
-  { name: 'status', label: 'Current Status *', type: FieldType.SELECT_FIELD,  options: statuses.map(status => { return {value: status, label: status}})   },
+  {
+    name: 'status',
+    innerLabel: 'Current Status:',
+    mandatory: true,
+    type: FieldType.TOGGLER_FIELD,
+    options: {
+      on: {
+        value: statuses[0].value,
+        labelButton:  statuses[0].label
+      },
+      off: {
+        value:  statuses[1].value,
+        labelButton:  statuses[1].label
+      }
+    },
+    defaultValue: 'inactive'
+  },
+  {
+    name: 'remark',
+    label: 'Remark'
+  },
+  {
+    name: 'admin_id',
+    mandatory: true,
+    label: 'Officer handled',
+    type: FieldType.SELECT_FIELD,
+    options: officers.map(officer => { return {value: officer.value, label: officer.label}})
+  }
 ]
 
-const showFields = (officers, statuses) => [
-  { name: 'admin', label: 'Officer'},
-  { name: 'status', label: 'Status'},
-  { name: 'type', label: 'Status'},
-  { name: 'agency.name', label: 'Agency Name'},
-  { name: 'agency.id', label: 'Agency ID'},
-  { name: 'agency.email', label: 'Agency Email'},
-  { name: 'agency.phone', label: 'Agency Phone'},
-  { name: 'officer.name', label: 'Officer Name'},
-  { name: 'officer.email', label: 'Officer Email'}
-];
-
-const filterFields = (officers, statuses) => [
+const filterFields = (officers, statuses, types, agencies) => [
   { name: 'ticket_id', label: 'Ticket ID'},
-  { name: 'type', label: 'Violation Name'},
+  {
+    name: 'type',
+    label: 'Violation Name',
+    type: FieldType.SELECT_FIELD,
+    options: types.map(({label, value}) => {
+      return { value, label };
+    })
+  },
   { name: 'query', label: 'Parking Lot Name'},
   {
     name: 'range',
@@ -35,13 +56,22 @@ const filterFields = (officers, statuses) => [
     })
   },
   {
+    name: 'agency_ids',
+    label: 'Agencies',
+    type: FieldType.MULTISELECT_FIELD,
+    options: agencies.map(({label, value}) => {
+      return { value, label };
+    })
+  },
+  {
     name: 'status',
     label: 'Ticke Status',
     type: FieldType.SELECT_FIELD,
-    options: statuses.map((value) => {
-      return { value, label: value };
+    options: statuses.map(({label, value}) => {
+      return { value, label};
     })
   }
+
 ]
 
-export { fields, showFields, filterFields };
+export { fields, filterFields };

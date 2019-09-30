@@ -45,8 +45,8 @@ class FilterForm extends React.Component {
         <Button onClick={cancelFilter} className="btn btn-danger mr-1">
           Cancel
         </Button>
-        <Button onClick={() => submitForm(formState.values)} color="primary" type="submit">
-          { isFetching() ? btnSpinner() : 'Filter'}
+        <Button onClick={() => submitForm(formState.values)} color="secondary" type="submit">
+          { isFetching() ? btnSpinner() : 'Apply'}
         </Button>
       </div>
     );

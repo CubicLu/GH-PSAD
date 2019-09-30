@@ -3,9 +3,6 @@ import fetchApi from 'components/modules/fetch_api';
 const resources = 'parking/tickets'
 const { show, update } = resourceApi(resources);
 
-function statuses() {
-  return fetchApi(`dashboard/parking/tickets/statuses`, { method: 'GET', params: {  } });
-}
 const index = (params = {}) => {
   const { page, perPage, agency_id, query } = params;
   return fetchApi(`dashboard/${resources}`, { method: 'GET', params: { page, perPage, agency_id, ...query} });
@@ -26,6 +23,7 @@ const filterFetcher = (params = {}) => {
     query: Object.assign({}, query, {
       ticket_id: filters.ticket_id,
       admin_ids: filters.admin_ids,
+      agency_ids: filters.agency_ids,
       type: filters.type,
       query: filters.query,
       status: filters.status,
@@ -38,4 +36,4 @@ const filterFetcher = (params = {}) => {
 }
 
 
-export { filterFetcher, show, update, statuses };
+export { filterFetcher, show, update };

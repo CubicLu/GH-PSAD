@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import TicketReducers from './agencies/tickets';
+import TicketReducers from './tickets';
 import UserReducers from './users';
 import AdminReducers from './admins';
 import AgencyReducers from './agencies';

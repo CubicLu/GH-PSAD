@@ -14,7 +14,7 @@ const resourceFetcher = (fetcher, resource) => {
 
     wrapper.resourceFetchStarted(
       fetcher({filters, page, ...params})
-      .then(onResponse)
+        .then(onResponse)
         .catch(err => console.error(err))
     );
   };
