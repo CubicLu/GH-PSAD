@@ -7,7 +7,7 @@ import CollapsableCard from 'components/base/collapsable_card';
 
 const fieldProps = { lSize: 6 };
 
-const renderForm = props => {
+const FormSetting = props => {
   const { record, isSaving, setFormApi } = props;
 
   return (
@@ -25,7 +25,9 @@ const renderForm = props => {
 };
 
 const SettingSection = props => (
-  <CollapsableCard header="Parking Lot Parameters" body={renderForm(props)}/>
+  <CollapsableCard header="Parking Lot Settings">
+    <FormSetting {...props}/>
+  </CollapsableCard>
 );
 
 SettingSection.propTypes = {
@@ -34,7 +36,7 @@ SettingSection.propTypes = {
   setFormApi: PropTypes.func.isRequired
 };
 
-renderForm.propTypes = {
+FormSetting.propTypes = {
   record: PropTypes.object,
   isSaving: PropTypes.bool.isRequired,
   setFormApi: PropTypes.func.isRequired

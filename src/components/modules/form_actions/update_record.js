@@ -10,8 +10,8 @@ function updateRecord(update, backPath, values) {
 }
 
 function updateSucceed(backPath, res) {
-  const { history, setRecord } = this.props;
-
+  const { history, setRecord, setListElement } = this.props;
+  setListElement(res.data)
   setRecord(res.data);
   this.setState({ isSaving: false });
   history.push(backPath);

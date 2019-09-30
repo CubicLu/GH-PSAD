@@ -75,7 +75,7 @@ const LocationForm = (props) => {
             {
               type: FieldType.GOOGLE_MAPS_FIELD,
               options: {
-                markerName: 'Your agency location',
+                markerName: 'Your parking lot location',
                 ltd: currentLocation.ltd || defaultCenter.ltd,
                 lng: currentLocation.lng || defaultCenter.lng
               }

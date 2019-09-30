@@ -25,7 +25,7 @@ import { FieldType } from 'components/helpers/form_fields';
 import connectRecord from 'components/modules/connect_record';
 import updateRecord from 'components/modules/form_actions/update_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
-import setFormApiFields from 'components/modules/set_form_api_fields';
+import setEmptyFields from 'components/modules/set_empty_fields';
 import withFetching from 'components/modules/with_fetching';
 
 class Show extends React.Component {
@@ -63,7 +63,7 @@ class Show extends React.Component {
   };
 
   save = () => {
-    const values = setFormApiFields(fields([], [], []), this.formApi);
+    const values = setEmptyFields(fields([], [], []), this.formApi);
     values.avatar = this.formApi.getValue('avatar');
     values.location = cloneDeep(this.state.currentLocation)
     const { backPath, record } = this.props;
@@ -175,7 +175,6 @@ class Show extends React.Component {
           }
         });
       })
-      .catch(this.handleFailed)
   }
 
   render () {

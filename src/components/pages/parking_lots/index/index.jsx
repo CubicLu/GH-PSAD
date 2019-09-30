@@ -26,9 +26,9 @@ class Index extends React.Component {
     return list.map((record, idx) => {
       return (
         <tr key={idx}>
-          <td><Link to={`${match.path}/${record.id}/edit`}>{record.name}</Link></td>
+          <td><Link to={`${match.path}/${record.id}/`}>{record.name}</Link></td>
           <td>{record.id}</td>
-          <td>{record.address}</td>
+          <td>{record.location.full_address}</td>
           <td>{record.email}</td>
           <td>{record.phone}</td>
           <td>{record.parking_admin ? record.parking_admin.name : null}</td>
@@ -74,4 +74,4 @@ Index.propTypes = {
 
 const resource = 'parking_lot'
 
-export default connectList('parking_lot', SET_LIST, resourceFetcher(filterFetcher, resource), Index);
+export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), Index);

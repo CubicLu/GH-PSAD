@@ -13,7 +13,7 @@ function SideNavigation () {
         <NavLink className='nav-link' to='/dashboard/tickets-reports'>Tickets Handling Reports</NavLink>
       </DropdownNavigation>
       <NavLink className='nav-link' to='/dashboard/cameras'>Cameras</NavLink>
-      <NavLink className='nav-link' to='/dashboard/parking_lots'>Parking Lots</NavLink>
+      <NavLink className='nav-link' to='/dashboard/parking_lots'>Parking lot accounts</NavLink>
     </Nav>
   );
 }
