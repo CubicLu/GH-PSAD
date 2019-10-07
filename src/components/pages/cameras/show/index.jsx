@@ -10,6 +10,7 @@ import { ShowForm } from 'components/base/forms';
 /* Helpers */
 import { displayUnixTimestamp } from 'components/helpers';
 import { showFields } from 'components/helpers/fields/cameras';
+import Loader from 'components/helpers/loader';
 /* Modules */
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
@@ -45,7 +46,7 @@ class Show extends React.Component {
   }
 
   render () {
-    return this.isFetching() ? <div>Loading data...</div> : this.renderRecord();
+    return this.isFetching() ? <Loader/> : this.renderRecord();
   }
 }
 

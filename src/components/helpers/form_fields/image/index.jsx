@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { asField } from 'informed';
 import ReactFileReader from 'react-file-reader';
-import { Button } from 'reactstrap';
 import Media from './media';
 
 const ImageInput = asField(({ fieldState, fieldApi, events = {}}) => {
@@ -34,10 +33,6 @@ const ImageInput = asField(({ fieldState, fieldApi, events = {}}) => {
           filepath={filepath}
           filename={filename}
         />
-
-        <div className="text-center mt-2">
-          <Button type="button" color='primary' outline className="mt-1">Upload</Button>
-        </div>
       </React.Fragment>
     </ReactFileReader>
   );

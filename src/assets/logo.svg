@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="43" viewBox="0 0 150 43">
+  <g id="logo" transform="translate(-16.119 3.174)">
+    <path id="Path_111" data-name="Path 111" d="M15.188.2A15.194,15.194,0,0,1,30.376,15.388c0,5.411-3.182,9.963-6.851,13.678l-.557.557-4.25-5.109.116-.093c2.3-2.322,4.947-5.574,4.947-9.034a8.569,8.569,0,0,0-17.139,0c0,2.949,2.624,7.13,4.621,9.173L14.979,28.3l4.947,4.366-4.97,5.016-8.407-8.5C3.2,25.838,0,20.149,0,15.365A15.189,15.189,0,0,1,15.188.2Z" transform="translate(16.119 -0.374)" fill="#fff" fill-rule="evenodd"/>
+    <text id="SMART_PARKING" data-name="SMART
+PARKING" transform="translate(54.498 14.826)" fill="#fff" font-size="19" font-family="SFUIDisplay-Medium, SF UI Display" font-weight="500" letter-spacing="0.03em"><tspan x="0" y="0">SMART</tspan><tspan x="0" y="20">PARKING</tspan></text>
+  </g>
+</svg>

@@ -1,13 +1,19 @@
 import React from 'react';
 import { isEmpty } from 'underscore';
-import { UncontrolledAlert } from 'reactstrap';
 import { map } from 'underscore';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
 const showMessages = messages => {
   if (isEmpty(messages)) return;
 
   return map(messages, (message, idx) => {
-     return <UncontrolledAlert key={idx} color={message.color}>{message.text}</UncontrolledAlert>
+     return (
+      <div className="text-center general-error">
+        <FontAwesomeIcon icon={faExclamationTriangle} className="mr-2 mt-3"/>
+        {message.text}
+      </div>
+     )
   }).flat();
 };
 

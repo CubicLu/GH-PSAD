@@ -4,16 +4,17 @@ import { connect } from 'react-redux';
 import SideNavigation from '../side_navigation';
 import MainContent from '../main_content';
 import ErrorBoundary from 'components/base/errors/error_boundary';
+import styles from './dashboard.module.sass'
 
 const Dashboard = props => {
   const { serverError } = props;
 
   return (
-    <div className='row'>
-      <div className='col-2'>
+    <div className='d-flex justify-content-between'>
+      <div className={styles.SideNavigationContainer}>
         <SideNavigation />
       </div>
-      <div className="col-10">
+      <div className={`${styles.contentContainer} shadow-sm bg-white`}>
         <ErrorBoundary serverError={serverError}>
           <MainContent/>
         </ErrorBoundary>

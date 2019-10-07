@@ -6,6 +6,7 @@ import TRSort from './tr_sort';
 import { list as selectList } from 'selectors/list';
 import Pagination from 'components/base/pagination';
 import ModalFilter from 'components/helpers/modals/filter';
+import Loader from 'components/helpers/loader';
 import generateBadgesFilter from 'components/modules/badges_filter/generate'
 import deleteBadgesFilter from 'components/modules/badges_filter/delete'
 import { retrieveFilters } from 'components/modules/retrieve_filters';
@@ -13,7 +14,7 @@ import withFetching from 'components/modules/with_fetching';
 
 import './table.sass'
 
-class IndexTable extends React.Component {
+export class IndexTable extends React.Component {
   state = {
     sortedAttr: {},
     filterQuery: {},
@@ -24,11 +25,7 @@ class IndexTable extends React.Component {
     const { isFetching, renderRecords } = this.props;
 
     if (isFetching()) {
-      return (<tr>
-        <td>
-          Loading data...
-        </td>
-      </tr>);
+      return (<Loader/>);
     }
 
     return renderRecords()
@@ -100,7 +97,6 @@ class IndexTable extends React.Component {
       badgesDelete: this.badgesDelete
     })
     const query = this.setQuery(sortedAttr)
-
     return (
       <React.Fragment>
         <ModalFilter
@@ -111,11 +107,11 @@ class IndexTable extends React.Component {
           {...this.props}
         />
         <Row>
-          <Col xs="12">
+          <Col xs="12" className="my-3 d-flex justify-content-between">
             {toolbarWithProps}
           </Col>
           <Col xs="12">
-            <Table className="index-table">
+            <Table className="index-table table-responsive-md">
               <thead className="bg-dark text-white">
                 <TRSort
                   {...this.props}

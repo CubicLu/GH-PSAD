@@ -8,6 +8,7 @@ import {
   DateRangeInput,
   FieldType
 } from 'components/helpers/form_fields';
+import Loader from 'components/helpers/loader';
 
 class FilterForm extends React.Component {
   renderField = (field, key) => (
@@ -62,7 +63,7 @@ class FilterForm extends React.Component {
   render () {
     const { values, isFetching } = this.props;
     return (
-      isFetching() ? <div>Loading data...</div> : <Form initialValues={values} component={this.renderForm}/>
+      isFetching() ? <Loader/> : <Form initialValues={values} component={this.renderForm}/>
     );
   }
 }

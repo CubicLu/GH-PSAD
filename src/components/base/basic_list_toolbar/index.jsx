@@ -29,17 +29,17 @@ class BasicListToolbar extends React.Component {
 
     return (
       <React.Fragment>
-        <ButtonToolbar className="pb-1 float-left">
+        <ButtonToolbar className="pb-1 ml-4">
           <h4>
             { title }
           </h4>
         </ButtonToolbar>
-        <ButtonToolbar className="pb-1 float-right">
+        <ButtonToolbar className="pb-1 mr-4">
           <div className="filter-box shadow">
-            <span className="text-muted mr-3">Filter By</span>
+            <span className="general-text-3 mr-3">Filter By</span>
             {
               badgesFilter().map(element => (
-                <Button onClick={() => badgesDelete(element)} key={element} color="secondary" className="mr-3" >
+                <Button onClick={() => badgesDelete(element)} key={element} color="secondary" className=" mr-3 general-text-1 btn-badge" >
                   {element.label} <Badge color="secondary"> <FontAwesomeIcon icon={faTimes}/> </Badge>
                 </Button>
               ))
@@ -55,7 +55,7 @@ class BasicListToolbar extends React.Component {
                 requiredPermissions={createRequiredPermissions || permissions[currentUserRoleName]}
               >
                 <ButtonGroup >
-                  <Button color="primary" onClick={this.newRecord}>{label}</Button>
+                  <Button color="primary-lg" className="btn-md px-4 text-uppercase" onClick={this.newRecord}>{label}</Button>
                 </ButtonGroup>
               </PermissibleRender>
             )

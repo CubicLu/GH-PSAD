@@ -8,8 +8,9 @@ function saveRecord(create, backPath, values) {
 };
 
 function createSucceed(backPath, res) {
-  const { history, setRecord } = this.props;
+  const { history, setRecord, setListElement } = this.props;
   setRecord(res.data);
+  setListElement(res.data)
   this.setState({ isSaving: false });
   history.push(backPath);
 };

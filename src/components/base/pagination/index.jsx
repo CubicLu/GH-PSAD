@@ -13,7 +13,7 @@ class Pagination extends React.Component {
       const pageNumber = i + 1;
 
       pages.push(
-        <PaginationItem active={page === pageNumber} key={i}>
+        <PaginationItem className="mr-1 general-text-1" active={page === pageNumber} key={i}>
           <PaginationLink onClick={() => this.open(pageNumber)}>
             {pageNumber}
           </PaginationLink>
@@ -81,20 +81,20 @@ class Pagination extends React.Component {
     const showingCounterElements = `${firstRangeElements} - ${firstRangeElements + list.length - 1}`
     return (
       <Paggy size="md" listClassName="justify-content-center">
-        <div className="mr-2 mt-1">
+        <div className="mr-2 mt-1 general-text-3 d-flex align-items-center">
           Displaying {showingCounterElements} of {total}
         </div>
-        <PaginationItem>
+        <PaginationItem className="mr-1 general-text-1">
           <PaginationLink first onClick={this.first}/>
         </PaginationItem>
-        <PaginationItem>
+        <PaginationItem className="mr-1 general-text-1">
           <PaginationLink previous onClick={this.prev}/>
         </PaginationItem>
         {this.renderPages()}
-        <PaginationItem>
+        <PaginationItem className="mr-1 general-text-1">
           <PaginationLink next onClick={this.next}/>
         </PaginationItem>
-        <PaginationItem>
+        <PaginationItem className="mr-1 general-text-1">
           <PaginationLink last onClick={this.last}/>
         </PaginationItem>
       </Paggy>

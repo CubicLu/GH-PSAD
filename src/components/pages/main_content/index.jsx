@@ -12,7 +12,7 @@ function MainContent (props) {
   const { match } = props;
 
   return (
-    <div className='tab-content'>
+    <div className=''>
       <PrivateRoute path={`${match.path}/admins`} component={AdminRoute} />
       <PrivateRoute path={`${match.path}/agencies`} component={AgencyRoute} />
       <PrivateRoute path={`${match.path}/tickets`} component={TicketRoute} />

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 /* Actions */
 import { SET_LIST } from 'actions/parking_lots';
 /* API */
@@ -21,12 +20,12 @@ class Index extends React.Component {
   }
 
   renderRecords = () => {
-    const { list, match } = this.props;
+    const { list, match, history } = this.props;
 
     return list.map((record, idx) => {
       return (
-        <tr key={idx}>
-          <td><Link to={`${match.path}/${record.id}/`}>{record.name}</Link></td>
+        <tr key={idx} onClick={() => history.push(`${match.path}/${record.id}/`)}>
+          <td>{record.name}</td>
           <td>{record.id}</td>
           <td>{record.location.full_address}</td>
           <td>{record.email}</td>
@@ -44,7 +43,7 @@ class Index extends React.Component {
       <IndexTable
         {...this.props}
         isFetching={this.isFetching}
-        toolbar={<BasicListToolbar {...this.props} label="+ Create Parking Lot" title="Parking Lots"/>}
+        toolbar={<BasicListToolbar {...this.props} label="+ Create New" title="Parking lot accounts"/>}
         filterFields={filterFields()}
         filterFetcher={filterFetcher}
         resource={resource}

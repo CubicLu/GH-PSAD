@@ -37,7 +37,7 @@ const PasswordConfirmation = function (props) {
                 handleSuccess()
                 toggleModal()
               } else {
-                setErrorMessage({password: ['Password is incorrect, please try a new one']})
+                setErrorMessage({password: ['Password is incorrect, please try again']})
               }
               setPasswordVerification('')
             })

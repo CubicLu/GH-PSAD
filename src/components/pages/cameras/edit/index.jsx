@@ -13,6 +13,7 @@ import { renderFieldsWithGrid } from 'components/base/forms/common_form';
 import { btnSpinner } from 'components/helpers';
 import { fromJson as showErrors } from 'components/helpers/errors';
 import { fields } from 'components/helpers/fields/cameras';
+import Loader from 'components/helpers/loader';
 /* Modules */
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
@@ -97,7 +98,7 @@ class Edit extends React.Component {
   }
 
   render () {
-    return this.isFetching() ? <div>Loading data...</div> : (
+    return this.isFetching() ? <Loader/> : (
       <React.Fragment>
         {this.renderRecord()}
       </React.Fragment>

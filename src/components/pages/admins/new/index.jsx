@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Form } from 'informed';
 import { isEmpty } from 'underscore';
 /* Actions */
 import { invoke } from 'actions';
-import { SET_RECORD } from 'actions/admins';
+import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/admins';
 /* API */
 import { create } from 'api/admins';
 import { search as dropdownsSearch } from 'api/dropdowns';
@@ -20,6 +20,7 @@ import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/co
 import { btnSpinner } from 'components/helpers';
 import { fields, exampleData } from 'components/helpers/fields/admins';
 import { fromJson as showErrors } from 'components/helpers/errors';
+import Loader from 'components/helpers/loader';
 import { FieldType } from 'components/helpers/form_fields';
 /* Modules */
 import saveRecord from 'components/modules/form_actions/save_record';
@@ -57,9 +58,9 @@ class New extends React.Component {
     const { backPath } = this.props;
 
     return (<Row>
-      <Col md={2}>
-        <Link to={backPath} className="mr-2 back-button" >
-          <FontAwesomeIcon icon={faChevronLeft}/>
+      <Col sm={12}>
+        <Link to={backPath} className="mr-2" >
+          <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
         </Link>
         Create user account
       </Col>
@@ -70,7 +71,7 @@ class New extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success float-right" outline onClick={this.save}>
+        <Button color="success" className="px-5 py-2 float-right"  onClick={this.save}>
           {isSaving ? btnSpinner() : 'Save Changes'}
         </Button>
       </Col>
@@ -98,15 +99,15 @@ class New extends React.Component {
 
   renderRecord () {
     return (
-      <Card>
-        <CardHeader>
+      <Row className="m-0">
+        <Col xs={12} className="mb-4 bg-white">
           {this.renderHeader()}
-        </CardHeader>
-        <CardBody>
+        </Col>
+        <Col xs={12}>
           {showErrors(this.state.errors)}
           {this.renderForm()}
-        </CardBody>
-      </Card>
+        </Col>
+      </Row>
     );
   }
 
@@ -116,7 +117,7 @@ class New extends React.Component {
   }
 
   render () {
-    return this.isFetching() ? <div>Loading data...</div> : (
+    return this.isFetching() ? <Loader/> : (
       <React.Fragment>
         {this.renderRecord()}
       </React.Fragment>
@@ -125,7 +126,7 @@ class New extends React.Component {
 }
 
 function mapDispatch (dispatch) {
-  return bindActionCreators({ setRecord: invoke(SET_RECORD) }, dispatch);
+  return {...bindActionCreators({ setRecord: invoke(SET_RECORD), setListElement: invoke(SET_LIST_ELEMENT) }, dispatch)};
 }
 
 const fieldProps = { lSize: 6 };

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 /* Actions */
 import { SET_LIST } from 'actions/agencies';
 /* API */
@@ -21,12 +20,12 @@ class Index extends React.Component {
   }
 
   renderRecords = () => {
-    const { list, match } = this.props;
+    const { list, match, history } = this.props;
 
     return list.map((record, idx) => {
       return (
-        <tr key={idx}>
-          <td><Link to={`${match.path}/${record.id}`}>{record.name}</Link></td>
+        <tr key={idx} onClick={(() => history.push(`${match.path}/${record.id}`))}>
+          <td>{record.name}</td>
           <td>{record.id}</td>
           <td>{record.location.full_address}</td>
           <td>{record.email}</td>
@@ -51,7 +50,7 @@ class Index extends React.Component {
             <th attr="agencies.name">Agency Name</th>
             <th attr="agencies.id">Agency ID</th>
             <th attr="locations.street">Location</th>
-            <th attr="agencies.email">Email</th>
+            <th attr="agencies.email">E-mail</th>
             <th attr="agencies.phone">Phone</th>
             <th attr="admins.name">Enforcement Manager</th>
           </React.Fragment>

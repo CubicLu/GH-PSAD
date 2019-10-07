@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom';
-import { Button, Input } from 'reactstrap';
+import { Button } from 'reactstrap';
+import { isEmpty } from 'underscore';
+
 /* Actions */
 /* API */
 import { resetPasswordRequest, checkPasswordToken } from 'api/users';
@@ -12,6 +13,7 @@ import AuthLayout from 'components/base/layout/auth';
 import { btnSpinner } from 'components/helpers';
 import { setErrorsMessages } from 'components/helpers/messages';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
+import Password from 'components/helpers/form_fields/password'
 /* Modules */
 import RedirectIfAuthorized from 'components/modules/redirect_if_authorized';
 
@@ -49,7 +51,7 @@ class ResetPassword extends React.Component {
 
   redirectToLogin = (text) => {
     this.context.addAlertMessages([{
-      type: 'success',
+      type: 'Success',
       text
     }])
     this.props.history.push('/login')
@@ -78,45 +80,54 @@ class ResetPassword extends React.Component {
     this.verifyToken()
   }
 
+  validInputs () {
+    const { password, passwordConfirmation, passwordTokenInvalid } = this.state
+    if (passwordTokenInvalid) {
+      return false
+    }
+
+    return password ? passwordConfirmation === password : false
+  }
+
   render() {
+    const { messages } = this.state
 
     return (
       <AuthLayout>
-        <CardLayout title="Reset Your Password" isFetching={this.state.isFetching} messages={this.state.messages}>
+        <CardLayout title="Reset Your Password" isFetching={this.state.isFetching} messages={messages}>
           <form onSubmit={this.submitForm}>
-
+            <h1 className="h1-title-black mb-4 text-center">New password</h1>
             <div className="form-label-group">
-              <Input
-                disabled={this.state.passwordTokenInvalid}
-                id="password"
-                name="password"
-                type="password"
-                value={this.state.password}
-                onChange={e => this.setState({ [e.target.name]: e.target.value })}
-                placeholder="Password"
-                required
+              <label className="general-text-3" htmlFor="password">Password</label>
+              <Password
+                field={{
+                  name: "password"
+                }}
+                customAttr={{
+                  onChange: e => this.setState({ [e.target.name]: e.target.value }),
+                  className: `position-relative form-control-lg form-control ${!isEmpty(messages) ? 'input-error' : ''}`,
+                  placeholder: "Enter your password"
+                }}
               />
-              <label htmlFor="password">Password</label>
             </div>
 
-            <div className="form-label-group">
-              <Input
-                disabled={this.state.passwordTokenInvalid}
-                id="passwordConfirmation"
-                name="passwordConfirmation"
-                type="password"
-                value={this.state.passwordConfirmation}
-                onChange={e => this.setState({ [e.target.name]: e.target.value })}
-                placeholder="Password Confirmation"
-                required
+            <div className="form-label-group mt-2">
+              <label className="general-text-3" htmlFor="passwordConfirmation">Password Confirmation</label>
+               <Password
+                field={{
+                  name: "passwordConfirmation"
+                }}
+                customAttr={{
+                  onChange: e => this.setState({ [e.target.name]: e.target.value }),
+                  className: `position-relative form-control-lg form-control ${!isEmpty(messages) ? 'input-error' : ''}`,
+                  placeholder: "Enter your password"
+                }}
               />
-              <label htmlFor="passwordConfirmation">Password Confirmation</label>
             </div>
 
-            <Button disabled={this.state.passwordTokenInvalid} color="primary" className="text-uppercase btn-lg btn-block" type="submit">
-              {this.state.isFetching ? btnSpinner({ className: 'spinner-border' }) : 'Reset'}
+            <Button disabled={this.state.passwordTokenInvalid}  color={this.validInputs() ? 'primary-lg' : 'disabled-lg' } className="mt-4 p-3 text-uppercase btn-lg btn-block" type="submit">
+              {this.state.isFetching ? btnSpinner({ className: 'spinner-border' }) : 'Save'}
             </Button>
-            <Link to='/login' className="mr-1 mt-2 d-block">I Want To Sign In</Link>
           </form>
         </CardLayout>
       </AuthLayout>
