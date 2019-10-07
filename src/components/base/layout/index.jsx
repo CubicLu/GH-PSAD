@@ -9,7 +9,7 @@ class Layout extends React.Component {
     return (
       <React.Fragment>
         {this.props.isAuthorized ? <Header /> : null}
-        <Container fluid>
+        <Container fluid className="p-0">
           {this.props.children}
         </Container>
       </React.Fragment>

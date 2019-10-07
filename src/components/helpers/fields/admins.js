@@ -2,10 +2,9 @@ import faker from 'faker'
 import { FieldType } from 'components/helpers/form_fields'
 
 const fields = (roles) => [
-  { name: 'username', label: 'Username', mandatory: true },
   { name: 'name', label: 'Name', mandatory: true },
-  { name: 'phone', label: 'Phone' },
   { name: 'email', label: 'Email', mandatory: true },
+  { name: 'username', label: 'Username', mandatory: true },
   {
     name: 'role_id',
     label: 'Role',
@@ -16,6 +15,7 @@ const fields = (roles) => [
       return { value, label, disabled };
     })
   },
+  { name: 'phone', label: 'Phone' },
   {
     name: 'status',
     label: 'Status',

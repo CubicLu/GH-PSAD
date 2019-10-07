@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { isEmpty } from 'underscore';
 import  { CREATE_ADMIN } from 'config/permissions'
 /* Actions */
@@ -31,13 +30,13 @@ class Index extends React.Component {
   }
 
   renderRecords = () => {
-    const { list, match } = this.props;
+    const { list, match, history } = this.props;
 
     return list.map((record, idx) => {
       return (
-        <tr key={idx}>
+        <tr key={idx} onClick={() => history.push(`${match.path}/${record.id}`) }>
           <td><img src={record.avatar || 'https://i.stack.imgur.com/34AD2.jpg'} alt="avatar" className="rounded-circle" width="50" height="50"/></td>
-          <td><Link to={`${match.path}/${record.id}`}>{record.username}</Link></td>
+          <td>{record.username}</td>
           <td>{record.name}</td>
           <td>{record.email}</td>
           <td>{record.role.name}</td>
@@ -56,11 +55,11 @@ class Index extends React.Component {
   render () {
     return (
       <IndexTable
-        isFetching={this.isFetching}
         {...this.props}
+        isFetching={this.isFetching}
         toolbar={ <BasicListToolbar {...this.props} createRequiredPermissions={[CREATE_ADMIN]} title='User accounts' label="+ Create Account" /> }
-        filterFields={filterFields(this.state.filterRolesField)}
         resource={resource}
+        filterFields={filterFields(this.state.filterRolesField)}
         filterFetcher={filterFetcher}
         columns={
           <React.Fragment>
@@ -92,4 +91,5 @@ export default connectList(
   resourceFetcher(filterFetcher, resource),
   withFetching(
     withCurrentUser(Index)
-  ));
+  )
+);

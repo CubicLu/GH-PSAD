@@ -19,7 +19,7 @@ export class AlertMessages extends React.Component {
           return ({
             alertMessages: prevState.alertMessages
         })})
-        }, transitionTimeMs)
+      }, transitionTimeMs)
     })
     this.setState({
       alertMessages: this.state.alertMessages.concat(newMessages)

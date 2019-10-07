@@ -70,8 +70,8 @@ class Edit extends React.Component {
      const backPathWithId = generatePath(backPath, { id: record.id });
      return (<Row>
        <Col md={2}>
-         <Link to={backPathWithId} className="mr-2 back-button" >
-           <FontAwesomeIcon icon={faChevronLeft}/>
+         <Link to={backPathWithId} className="mr-2" >
+           <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
          </Link>
          {record.type} #{record.id}
        </Col>

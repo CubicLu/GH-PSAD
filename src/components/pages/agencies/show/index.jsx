@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Button, Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
+import { Button, Col, Nav, Row } from 'reactstrap';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { Form } from 'informed';
 import { generatePath } from 'react-router';
 import { isEmpty } from 'underscore';
@@ -10,7 +12,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { cloneDeep } from 'lodash'
 /* Actions */
-import { SET_RECORD } from 'actions/agencies';
+import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/agencies';
+import { invoke } from 'actions';
 /* API */
 import { show, update } from 'api/agencies';
 /* Base */
@@ -27,6 +30,7 @@ import updateRecord from 'components/modules/form_actions/update_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import setEmptyFields from 'components/modules/set_empty_fields';
 import withFetching from 'components/modules/with_fetching';
+import Loader from 'components/helpers/loader';
 
 class Show extends React.Component {
   state = {
@@ -85,14 +89,16 @@ class Show extends React.Component {
 
     return (<Row>
       <Col md={2} className="align-self-center">
-        <Link to={backPath} className="mr-2 back-button" >
-          <FontAwesomeIcon icon={faChevronLeft}/>
+        <Link to={backPath} className="mr-2" >
+          <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
         </Link>
         {record.name}
       </Col>
       <Col md={10}>
-        <Nav pills className="float-right">
-          ID: {record.id}
+        <Nav pills className="float-right general-text-3">
+          <h6>
+            ID: {record.id}
+          </h6>
         </Nav>
       </Col>
     </Row>);
@@ -102,7 +108,7 @@ class Show extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success float-right" outline onClick={this.save}>
+        <Button color="success" className="px-5 py-2 float-right" onClick={this.save}>
           {isSaving ? btnSpinner() : 'Save Changes'}
         </Button>
       </Col>
@@ -144,15 +150,15 @@ class Show extends React.Component {
 
   renderRecord () {
     return (
-      <Card>
-        <CardHeader>
+      <Row className="m-0">
+        <Col xs={12} className="mb-4 bg-white">
           {this.renderHeader()}
-        </CardHeader>
-        <CardBody>
+        </Col>
+        <Col xs={12}>
           {showErrors(this.state.errors)}
           {this.renderForm()}
-        </CardBody>
-      </Card>
+        </Col>
+      </Row>
     );
   }
 
@@ -178,7 +184,7 @@ class Show extends React.Component {
   }
 
   render () {
-    return this.isFetching() ? <div>Loading data...</div> : (
+    return this.isFetching() ? <Loader/> : (
       this.renderRecord()
     );
   }
@@ -197,4 +203,8 @@ Show.propTypes = {
   })
 };
 
-export default connectRecord('agency', SET_RECORD, resourceFetcher(show), withFetching(Show));
+function mapDispatch (dispatch) {
+  return bindActionCreators({ setListElement: invoke(SET_LIST_ELEMENT) }, dispatch);
+}
+
+export default connectRecord('agency', SET_RECORD, resourceFetcher(show), connect(null, mapDispatch)(withFetching(Show)));

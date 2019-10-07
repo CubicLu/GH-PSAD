@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
+import { Button, Col, Nav, Row } from 'reactstrap';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { generatePath } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Form } from 'informed';
@@ -9,7 +11,8 @@ import ActivityIndex from './activity/index';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 /* Actions */
-import { SET_RECORD } from 'actions/admins';
+import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/admins';
+import { invoke } from 'actions';
 /* API */
 import { show, update } from 'api/admins';
 import { search as dropdownsSearch } from 'api/dropdowns';
@@ -27,6 +30,7 @@ import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
 import setEmptyFields from 'components/modules/set_empty_fields';
 import withCurrentUser from 'components/modules/with_current_user';
+import Loader from 'components/helpers/loader';
 
 class Show extends React.Component {
   state = {
@@ -48,6 +52,9 @@ class Show extends React.Component {
 
   fieldProps = () => ({
     lSize: 6,
+    customAttr: {
+      onChange: () => this.setState({ inputChanged: true })
+    },
     events: {
       onChange: () => this.setState({ inputChanged: true })
     }
@@ -93,8 +100,8 @@ class Show extends React.Component {
 
     return (<Row>
       <Col md={2} className="align-self-center">
-        <Link to={backPath} className="mr-2 back-button" >
-          <FontAwesomeIcon icon={faChevronLeft}/>
+        <Link to={backPath} className="mr-2" >
+          <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
         </Link>
         {record.username}
       </Col>
@@ -110,7 +117,7 @@ class Show extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success float-right" outline onClick={this.save}>
+        <Button color="success" className="px-5 py-2 float-right"  onClick={this.save}>
           {isSaving ? btnSpinner() : 'Save Changes'}
         </Button>
       </Col>
@@ -144,22 +151,20 @@ class Show extends React.Component {
 
   renderRecord () {
     return (
-      <React.Fragment>
+      <Row className="m-0">
         <PasswordConfirmationModal
           toggleModal={this.toggleModal}
           isOpen={this.state.modal}
           handleSuccess={this.handlePasswordSuccess}
         />
-        <Card>
-          <CardHeader>
-            {this.renderHeader()}
-          </CardHeader>
-          <CardBody>
-            {showErrors(this.state.errors)}
-            {this.renderForm()}
-          </CardBody>
-        </Card>
-      </React.Fragment>
+        <Col xs={12} className="mb-4 bg-white">
+          {this.renderHeader()}
+        </Col>
+        <Col xs={12}>
+          {showErrors(this.state.errors)}
+          {this.renderForm()}
+        </Col>
+      </Row>
     );
   }
 
@@ -194,7 +199,7 @@ class Show extends React.Component {
   }
 
   render () {
-    return this.isFetching() ? <div>Loading data...</div> : (
+    return this.isFetching() ? <Loader/> : (
       <React.Fragment>
         {this.renderRecord()}
         <div className="mt-1"/>
@@ -216,4 +221,8 @@ Show.propTypes = {
   })
 };
 
-export default connectRecord('admin', SET_RECORD, resourceFetcher(show), withCurrentUser(Show));
+function mapDispatch (dispatch) {
+  return bindActionCreators({ setListElement: invoke(SET_LIST_ELEMENT) }, dispatch);
+}
+
+export default connectRecord('admin', SET_RECORD, resourceFetcher(show), connect(null, mapDispatch)(withCurrentUser(Show)));

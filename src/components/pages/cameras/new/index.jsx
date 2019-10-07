@@ -14,6 +14,7 @@ import { renderFieldsWithGrid } from 'components/base/forms/common_form';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
 import { fields, exampleData } from 'components/helpers/fields/cameras';
+import Loader from 'components/helpers/loader';
 import { fromJson as showErrors } from 'components/helpers/errors';
 /* Modules */
 import saveRecord from 'components/modules/form_actions/save_record';
@@ -82,7 +83,7 @@ class New extends React.Component {
   }
 
   render () {
-    return this.isFetching() ? <div>Loading data...</div> : (
+    return this.isFetching() ? <Loader/> : (
       <React.Fragment>
         {this.renderRecord()}
       </React.Fragment>

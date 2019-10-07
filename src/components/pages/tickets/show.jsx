@@ -22,7 +22,7 @@ import { FieldType } from 'components/helpers/form_fields';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
-import setFormApiFields from 'components/modules/set_form_api_fields';
+import setFormApiFields from 'components/modules/set_empty_fields';
 
 class Show extends React.Component {
   state = {
@@ -60,7 +60,7 @@ class Show extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success float-right" outline onClick={this.save}>
+        <Button color="success" className="px-5 py-2 float-right"  onClick={this.save}>
           {isSaving ? btnSpinner() : 'Save Changes'}
         </Button>
       </Col>
@@ -84,8 +84,8 @@ class Show extends React.Component {
      const backPathWithId = generatePath(backPath, { id: record.id });
      return (<Row>
        <Col md={2}>
-         <Link to={backPathWithId} className="mr-2 back-button" >
-           <FontAwesomeIcon icon={faChevronLeft}/>
+         <Link to={backPathWithId} className="mr-2" >
+           <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
          </Link>
          {record.type}
        </Col>

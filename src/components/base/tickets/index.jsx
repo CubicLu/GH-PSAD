@@ -1,13 +1,13 @@
 import React from 'react';
 import { displayUnixTimestamp } from 'components/helpers';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 const Tickets = props => {
-  const { parkingTicket, url } = props;
+  const { parkingTicket, url, history } = props;
   return (
-    <tr>
+    <tr onClick={() => history.push(`${url}/${parkingTicket.id}`)}>
       <th scope="row">{parkingTicket.id}</th>
-      <td><Link to={`${url}/${parkingTicket.id}`} className="mr-1">{parkingTicket.type}</Link></td>
+      <td>{parkingTicket.type}</td>
       <td>{parkingTicket.lot.name}</td>
       <td>{displayUnixTimestamp(parkingTicket.created_at)}</td>
       <td>{parkingTicket.officer ? parkingTicket.officer.email : 'Unassigned'}</td>
@@ -16,4 +16,4 @@ const Tickets = props => {
   );
 };
 
-export default Tickets;
+export default withRouter(Tickets);

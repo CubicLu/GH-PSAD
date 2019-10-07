@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { withFormApi } from 'informed';
 import ModalForm from 'components/helpers/modals/form';
+import { InputGroup } from 'reactstrap';
+import { ReactComponent as LocationIcon } from 'assets/location_icon.svg'
+import styles from './location.module.sass'
 import { cloneDeep } from 'lodash'
 /* Actions */
 /* API */
@@ -82,7 +85,10 @@ const LocationForm = (props) => {
             }], 2, 12, { iSize: 12, events: googleMapEvents })
           }
       </ModalForm>
-      <input readOnly onClick={() => setIsOpen(true)} className="form-control" value={currentLocation.full_address}/>
+       <InputGroup>
+        <input readOnly value={currentLocation.full_address} className="pr-4 bg-white form-control" onClick={() => setIsOpen(true)} />
+        <LocationIcon className={styles.LocationIcon} />
+      </InputGroup>
     </React.Fragment>
   );
 }

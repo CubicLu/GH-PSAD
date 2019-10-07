@@ -4,31 +4,53 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  Nav, Navbar,
-  NavbarBrand,
+  Nav,
+  Navbar,
   UncontrolledDropdown
 } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter, Link } from 'react-router-dom';
 import withCurrentUser from 'components/modules/with_current_user';
+import {ReactComponent as Logo } from 'assets/logo.svg'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPencilAlt, faSignOutAlt, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 function Header (props) {
   const { currentUser } = props;
   return (
-    <Navbar color='primary' light expand className='mb-2'>
-      <NavbarBrand className='text-light'>
-        LOGO
-      </NavbarBrand>
+    <Navbar color='primary' light expand className="shadow-sm" >
+      <Link  to='/dashboard' className='ml-4 btn-default text-light'>
+        <Logo/>
+      </Link>
       <Nav className='ml-auto' navbar>
-        <UncontrolledDropdown nav inNavbar>
-          <DropdownToggle nav caret className="text-light">
-            { currentUser && currentUser.name }
+        <UncontrolledDropdown nav inNavbar className="d-flex align-items-center">
+          <DropdownToggle nav  className="float-left text-light">
+            <FontAwesomeIcon className="d-none d-lg-block d-xl-block" icon={faAngleDown}/>
+          </DropdownToggle>
+          <DropdownToggle nav className="text-light float-right pr-3">
+            {  currentUser ? (
+                <span>
+                  {currentUser.name}
+                  <img src ={ currentUser.avatar || 'https://i.stack.imgur.com/ 34AD2.jpg'} alt="profile" className="rounded-circle d-none d-sm-inline ml-3" width="40" height="40"/>
+                </span>
+              ) : (
+                <span>
+                  Loading...
+                </span>
+              )
+            }
           </DropdownToggle>
           <DropdownMenu right>
             <DropdownItem>
-              <NavLink className='nav-link' to='/user/settings'>Settings</NavLink>
+              <NavLink className='nav-link menu-points' to='/user/settings'>
+                <FontAwesomeIcon size="xs" icon={faPencilAlt} className="mr-2"/>
+                Edit account
+              </NavLink>
             </DropdownItem>
             <DropdownItem>
-              <NavLink className='nav-link' to='/sign_out'>Sign Out</NavLink>
+              <NavLink className='nav-link menu-points' to='/sign_out'>
+                <FontAwesomeIcon size="xs" icon={faSignOutAlt} className="mr-2"/>
+                Log out
+              </NavLink>
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>
@@ -41,4 +63,6 @@ Header.propTypes = {
   currentUser: PropTypes.object
 };
 
-export default withCurrentUser(Header);
+export default withRouter(
+  withCurrentUser(Header, Header)
+);

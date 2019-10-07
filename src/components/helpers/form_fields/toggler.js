@@ -21,7 +21,7 @@ const Toggler = asField(({ fieldState, fieldApi, options, label, events }) => {
       <Label sm={12} md={6}>{label}</Label>
       <Label className={currentOption().color } sm={12} md={6}>{value}</Label>
       <Col xs={12}>
-        <Button className="btn-block" onClick={onClick} >
+        <Button className="btn-block " color="primary" outline onClick={onClick} >
           { currentOption().labelButton }
         </Button>
       </Col>

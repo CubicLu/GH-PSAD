@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { isEmpty } from 'underscore';
-import { Button, Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
+import { Button, Col, Nav, Row } from 'reactstrap';
 import { Form } from 'informed';
 import { Link } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
 import LocationForm from '../shared/location/form';
 import SettingSection from '../shared/setting_section';
 import NearbyPlaces from '../shared/nearby_places';
@@ -114,12 +113,12 @@ class Show extends React.Component {
   }
 
   renderHeader () {
-    const { backPath, record, match } = this.props;
+    const { backPath, record, match, history } = this.props;
 
     return (<Row>
       <Col md={2}>
-        <Link to={backPath} className="mr-2 back-button" >
-          <FontAwesomeIcon icon={faChevronLeft}/>
+        <Link to={backPath} className="mr-2" >
+          <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
         </Link>
         {record.name}
       </Col>
@@ -128,9 +127,15 @@ class Show extends React.Component {
           <span className="mr-4">
             ID: {record.id}
           </span>
-          <NavLink to={match.url} className="nav-link">Information</NavLink>
-          <NavLink to={`${match.url}/rules`} className="nav-link">Parking Rules</NavLink>
-          <NavLink to={`${match.url}/spaces`} className="nav-link">Parking Spaces</NavLink>
+          <Button className="mr-1" onClick={() => history.push(match.url)} color="primary-lg">
+            Information
+          </Button>
+          <Button className="mr-1" onClick={() => history.push(`${match.url}rules`)} color="disabled-lg">
+            Parking Rules
+          </Button>
+          <Button className="mr-1" onClick={() => history.push(`${match.url}spaces`)} color="disabled-lg">
+            Parking Spaces
+          </Button>
         </Nav>
       </Col>
     </Row>);
@@ -140,7 +145,7 @@ class Show extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success float-right" outline onClick={this.save}>
+        <Button color="success" className="px-5 py-2 float-right"  onClick={this.save}>
           {isSaving ? btnSpinner() : 'Save Changes'}
         </Button>
       </Col>
@@ -168,15 +173,15 @@ class Show extends React.Component {
 
   renderRecord () {
     return (
-      <Card>
-        <CardHeader>
+       <Row className="m-0">
+        <Col xs={12} className="mb-4 bg-white">
           {this.renderHeader()}
-        </CardHeader>
-        <CardBody>
+        </Col>
+        <Col xs={12}>
           {showErrors(this.state.errors)}
           {this.renderForm()}
-        </CardBody>
-      </Card>
+        </Col>
+      </Row>
     );
   }
 
