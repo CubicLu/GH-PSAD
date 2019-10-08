@@ -35,7 +35,6 @@ class Index extends React.Component {
     return list.map((record, idx) => {
       return (
         <tr key={idx} onClick={() => history.push(`${match.path}/${record.id}`) }>
-          <td><img src={record.avatar || 'https://i.stack.imgur.com/34AD2.jpg'} alt="avatar" className="rounded-circle" width="50" height="50"/></td>
           <td>{record.username}</td>
           <td>{record.name}</td>
           <td>{record.email}</td>
@@ -63,7 +62,6 @@ class Index extends React.Component {
         filterFetcher={filterFetcher}
         columns={
           <React.Fragment>
-            <th disableSort>Photo</th>
             <th attr="username">Username</th>
             <th attr="name">Name</th>
             <th attr="email">Email</th>
