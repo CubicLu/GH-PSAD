@@ -12,7 +12,7 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { cloneDeep } from 'lodash'
 /* Actions */
 import { invoke } from 'actions';
-import { SET_RECORD } from 'actions/agencies';
+import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/agencies';
 /* API */
 import { create } from 'api/agencies';
 /* Base */
@@ -22,7 +22,7 @@ import { btnSpinner } from 'components/helpers';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import { fields, exampleData } from 'components/helpers/fields/agencies';
 import { exampleData as exampleLocationData } from 'components/helpers/fields/location';
-import { fromJson as showErrors } from 'components/helpers/errors';
+import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import { FieldType } from 'components/helpers/form_fields';
 import Loader from 'components/helpers/loader';
 /* Modules */
@@ -33,8 +33,10 @@ class New extends React.Component {
   state = {
     isSaving: false,
     dropdowns: {},
-    currentLocation: exampleLocationData()
+    currentLocation: exampleLocationData(),
+    errors: {}
   }
+  static contextType = AlertMessagesContext
 
   isFetching = () => {
     const { dropdowns } = this.state
@@ -64,7 +66,7 @@ class New extends React.Component {
   renderHeader () {
     const { backPath } = this.props;
 
-    return (<Row>
+    return (<Row className="p-4">
       <Col md={2}>
         <Link to={backPath} className="mr-2" >
           <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
@@ -78,7 +80,7 @@ class New extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success" className="px-5 py-2 float-right" onClick={this.save}>
+        <Button color="success" className="px-5 py-2 mb-4 float-right" onClick={this.save}>
           {isSaving ? btnSpinner() : 'Save Changes'}
         </Button>
       </Col>
@@ -87,12 +89,13 @@ class New extends React.Component {
 
   renderFields () {
     const { officers, managers, townManagers } = this.state.dropdowns;
-    return renderFieldsWithGrid(fields(officers, managers, townManagers, this.renderLocationModal.bind(this)), 2, 6, fieldProps);
+    return renderFieldsWithGrid(fields(officers, managers, townManagers, this.renderLocationModal.bind(this)), 2, 6, {...fieldProps, errors: this.state.errors});
   }
 
   renderLocationModal (field, props) {
     return (
       <LocationForm
+        errors={props.errors}
         setCurrentLocation={this.setCurrentLocation}
         currentLocation={this.state.currentLocation}
       />);
@@ -124,7 +127,6 @@ class New extends React.Component {
           {this.renderHeader()}
         </Col>
         <Col xs={12}>
-          {showErrors(this.state.errors)}
           {this.renderForm()}
         </Col>
       </Row>
@@ -154,7 +156,7 @@ class New extends React.Component {
 }
 
 function mapDispatch (dispatch) {
-  return bindActionCreators({ setRecord: invoke(SET_RECORD) }, dispatch);
+  return {...bindActionCreators({ setRecord: invoke(SET_RECORD), setListElement: invoke(SET_LIST_ELEMENT) }, dispatch)};
 }
 
 const fieldProps = { lSize: 6 };

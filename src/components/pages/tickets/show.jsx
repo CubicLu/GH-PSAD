@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, CardBody, CardHeader, Col, Nav, Row, FormGroup, Label, Table } from 'reactstrap';
+import { Button, Col, Nav, Row, FormGroup, Label, Table } from 'reactstrap';
 import { generatePath } from 'react-router';
 import { Link } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { Form } from 'informed';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 /* Actions */
-import { SET_RECORD } from 'actions/tickets';
+import { SET_RECORD, SET_LIST_ELEMENT} from 'actions/tickets';
+import { invoke } from 'actions';
 /* API */
 import { update, show } from 'api/parking/tickets';
 import { search as dropdownsSearch } from 'api/dropdowns';
@@ -16,7 +19,7 @@ import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/co
 /* Helpers */
 import { btnSpinner, displayUnixTimestamp } from 'components/helpers';
 import { fields } from 'components/helpers/fields/tickets';
-import { fromJson as showErrors } from 'components/helpers/errors';
+import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import { FieldType } from 'components/helpers/form_fields';
 /* Modules */
 import connectRecord from 'components/modules/connect_record';
@@ -29,8 +32,11 @@ class Show extends React.Component {
     isSaving: false,
     inputChanged: false,
     officersFetched: false,
-    dropdowns: {}
+    dropdowns: {},
+    errors: {}
   }
+
+  static contextType = AlertMessagesContext
 
   fieldProps = () => ({
     lSize: 6,
@@ -47,13 +53,13 @@ class Show extends React.Component {
 
   save = () => {
     const { officers, statuses } = this.state.dropdowns;
+    const { backPath } = this.props;
+
     const values = setFormApiFields(fields(officers, statuses), this.formApi);
     values.admin_id = values.admin_id > 0 ? values.admin_id : null
     values.photo_resolution = this.formApi.getValue('photo_resolution');
 
-    const { backPath, record } = this.props;
-    const path = generatePath(backPath, { id: record.id });
-    updateRecord.bind(this, update, path)(values);
+    updateRecord.bind(this, update, backPath)(values);
   };
 
   renderSaveButton = () => {
@@ -69,7 +75,7 @@ class Show extends React.Component {
 
   renderFields () {
     const { officers, statuses } = this.state.dropdowns;
-    return renderFieldsWithGrid(fields(officers, statuses), 2, 6, this.fieldProps());
+    return renderFieldsWithGrid(fields(officers, statuses), 2, 6, {...this.fieldProps(), errors: this.state.errors});
   }
 
    values = () => {
@@ -82,7 +88,7 @@ class Show extends React.Component {
    renderHeader () {
      const { backPath, record } = this.props;
      const backPathWithId = generatePath(backPath, { id: record.id });
-     return (<Row>
+     return (<Row className="p-4">
        <Col md={2}>
          <Link to={backPathWithId} className="mr-2" >
            <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
@@ -174,15 +180,14 @@ class Show extends React.Component {
 
   renderRecord () {
     return (
-      <Card>
-        <CardHeader>
+       <Row className="m-0">
+        <Col xs={12} className="mb-4 bg-white">
           {this.renderHeader()}
-        </CardHeader>
-        <CardBody>
-          {showErrors(this.state.errors)}
+        </Col>
+        <Col xs={12}>
           {this.renderForm()}
-        </CardBody>
-      </Card>
+        </Col>
+      </Row>
     );
   }
 
@@ -228,4 +233,10 @@ Show.propTypes = {
   })
 };
 
-export default connectRecord('ticket', SET_RECORD, resourceFetcher(show), Show);
+
+function mapDispatch (dispatch) {
+  return bindActionCreators({ setListElement: invoke(SET_LIST_ELEMENT) }, dispatch);
+}
+
+
+export default connectRecord('ticket', SET_RECORD, resourceFetcher(show), connect(null, mapDispatch)(Show));

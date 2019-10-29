@@ -21,9 +21,9 @@ import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/co
 /* Helpers */
 import { fields } from 'components/helpers/fields/admins';
 import PasswordConfirmationModal from 'components/helpers/modals/password_confirmation';
-import { fromJson as showErrors } from 'components/helpers/errors';
 import { FieldType } from 'components/helpers/form_fields';
 import { btnSpinner } from 'components/helpers';
+import { AlertMessagesContext } from 'components/helpers/alert_messages';
 /* Module */
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
@@ -41,8 +41,11 @@ class Show extends React.Component {
       roles: []
     },
     modal: false,
-    password_verification: ''
+    password_verification: '',
+    errors: {}
   }
+
+  static contextType = AlertMessagesContext
 
   isFetching () {
     const { isResourceFetching } = this.props
@@ -98,8 +101,8 @@ class Show extends React.Component {
   renderHeader () {
     const { backPath, record } = this.props;
 
-    return (<Row>
-      <Col md={2} className="align-self-center">
+    return (<Row className="p-4">
+      <Col md={2} className="align-self-center ">
         <Link to={backPath} className="mr-2" >
           <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
         </Link>
@@ -125,7 +128,7 @@ class Show extends React.Component {
   }
 
   renderFields () {
-    return renderFieldsWithGrid(this.fieldsForCommonForm(), 2, 6, this.fieldProps());
+    return renderFieldsWithGrid(this.fieldsForCommonForm(), 2, 6, {...this.fieldProps(), errors: this.state.errors});
   }
 
   renderForm () {
@@ -161,7 +164,6 @@ class Show extends React.Component {
           {this.renderHeader()}
         </Col>
         <Col xs={12}>
-          {showErrors(this.state.errors)}
           {this.renderForm()}
         </Col>
       </Row>

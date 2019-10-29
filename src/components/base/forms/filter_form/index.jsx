@@ -42,11 +42,11 @@ class FilterForm extends React.Component {
     const { cancelFilter, submitForm, isFetching } = this.props;
 
     return (
-      <div className="text-center">
+      <div className="text-center mt-4">
         <Button onClick={cancelFilter} className="btn btn-danger mr-1">
           Cancel
         </Button>
-        <Button onClick={() => submitForm(formState.values)} color="secondary" type="submit">
+        <Button onClick={() => submitForm(formState.values)} color="info" type="submit">
           { isFetching() ? btnSpinner() : 'Apply'}
         </Button>
       </div>

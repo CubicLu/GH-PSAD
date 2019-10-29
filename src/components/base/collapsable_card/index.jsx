@@ -11,9 +11,9 @@ const CollapsableCard = props => {
 
   return (
     <Card className={style.Card}>
-      <CardHeader className="shadow-sm" onClick={() => toggle(!show)}>
+      <CardHeader className={`${style.CardHeader} shadow-sm`} onClick={() => toggle(!show)}>
         <span className="mr-1">{header}</span>
-        <FontAwesomeIcon icon={show ? faAngleUp : faAngleDown}/>
+        <FontAwesomeIcon className="float-right" size="lg" icon={show ? faAngleUp : faAngleDown}/>
       </CardHeader>
       <Collapse isOpen={show}>
         <CardBody>

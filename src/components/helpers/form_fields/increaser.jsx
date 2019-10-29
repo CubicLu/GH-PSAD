@@ -5,7 +5,7 @@ import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { isUndefined } from 'underscore';
 
 const Increaser = props => {
-  const { field } = props;
+  const { field, events } = props;
   const { fieldState, fieldApi } = useField({ field: field.name });
   const { value } = fieldState;
   const { setValue } = fieldApi;
@@ -18,6 +18,7 @@ const Increaser = props => {
       fieldApi.setError(`cannot be more than ${renderValue(max)}`);
     } else {
       fieldApi.setError(undefined);
+      events.onChange();
       setValue(newValue);
     }
   };
@@ -29,6 +30,7 @@ const Increaser = props => {
       fieldApi.setError(`cannot be less than ${renderValue(min)}`);
     } else {
       fieldApi.setError(undefined);
+      events.onChange();
       setValue(newValue);
     }
   };
