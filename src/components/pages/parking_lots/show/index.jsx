@@ -24,9 +24,10 @@ import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/co
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
-import { fromJson as showErrors } from 'components/helpers/errors';
+import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import { FieldType } from 'components/helpers/form_fields';
-import { fields } from 'components/helpers/fields/parking_lots';
+import { fieldsShow } from 'components/helpers/fields/parking_lots';
+import Loader from 'components/helpers/loader';
 /* Modules */
 import connectRecord from 'components/modules/connect_record';
 import updateRecord from 'components/modules/form_actions/update_record';
@@ -39,8 +40,11 @@ class Show extends React.Component {
     isSaving: false,
     currentLocation: null,
     inputChanged: false,
-    dropdowns: {}
+    dropdowns: {},
+    errors: {}
   };
+
+  static contextType = AlertMessagesContext
 
   isFetching = () => {
     const { isResourceFetching } = this.props
@@ -79,7 +83,7 @@ class Show extends React.Component {
   };
 
   save = () => {
-    const values = setEmptyFields(fields(), this.formApi);
+    const values = setEmptyFields(fieldsShow(), this.formApi);
     const { values: settingValues } = this.settingFormApi.getState();
     const { values: nearbyPlacesValues } = this.nearbyPlacesFormApi.getState();
     values.setting = settingValues;
@@ -92,7 +96,7 @@ class Show extends React.Component {
 
   renderFields () {
     const { dropdowns } = this.state;
-    return renderFieldsWithGrid(fields(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this)), 2, 6, this.fieldProps());
+    return renderFieldsWithGrid(fieldsShow(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this)), 2, 6, {...this.fieldProps(), errors: this.state.errors });
   }
 
   values () {
@@ -107,6 +111,7 @@ class Show extends React.Component {
   renderLocationModal (field, props) {
     return (
       <LocationForm
+        errors={props.errors}
         setCurrentLocation={this.setCurrentLocation}
         currentLocation={this.state.currentLocation}
       />);
@@ -115,7 +120,7 @@ class Show extends React.Component {
   renderHeader () {
     const { backPath, record, match, history } = this.props;
 
-    return (<Row>
+    return (<Row className="p-4">
       <Col md={2}>
         <Link to={backPath} className="mr-2" >
           <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
@@ -130,10 +135,10 @@ class Show extends React.Component {
           <Button className="mr-1" onClick={() => history.push(match.url)} color="primary-lg">
             Information
           </Button>
-          <Button className="mr-1" onClick={() => history.push(`${match.url}rules`)} color="disabled-lg">
+          <Button className="mr-1" onClick={() => history.push(`${match.url}/rules`)} color="disabled-lg">
             Parking Rules
           </Button>
-          <Button className="mr-1" onClick={() => history.push(`${match.url}spaces`)} color="disabled-lg">
+          <Button className="mr-1" onClick={() => history.push(`${match.url}/spaces`)} color="disabled-lg">
             Parking Spaces
           </Button>
         </Nav>
@@ -145,7 +150,7 @@ class Show extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success" className="px-5 py-2 float-right"  onClick={this.save}>
+        <Button color="success" className="px-5 py-2 mb-4 float-right"  onClick={this.save}>
           {isSaving ? btnSpinner() : 'Save Changes'}
         </Button>
       </Col>
@@ -178,7 +183,6 @@ class Show extends React.Component {
           {this.renderHeader()}
         </Col>
         <Col xs={12}>
-          {showErrors(this.state.errors)}
           {this.renderForm()}
         </Col>
       </Row>
@@ -187,7 +191,14 @@ class Show extends React.Component {
 
   renderSetting () {
     const { record } = this.props;
-    return <SettingSection isSaving={this.state.isSaving} setFormApi={this.setSettingFormApi} record={record.setting}/>;
+    return (
+      <SettingSection
+        fieldProps={this.fieldProps()}
+        isSaving={this.state.isSaving}
+        setFormApi={this.setSettingFormApi}
+        record={record.setting}
+      />
+      );
   }
 
   renderVoi () {
@@ -207,7 +218,6 @@ class Show extends React.Component {
         categoriesDropdown={categoriesPlace}
         setInputChanged={this.setInputChanged}
       />
-
     )
   }
 
@@ -244,7 +254,7 @@ class Show extends React.Component {
   render () {
     const { inputChanged } = this.state;
 
-    return this.isFetching() ? <div>Loading data...</div> : (
+    return this.isFetching() ?  <Loader/> : (
       <React.Fragment>
         {this.renderRecord()}
         <div className="mt-1"/>

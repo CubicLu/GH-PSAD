@@ -33,6 +33,9 @@ const ImageInput = asField(({ fieldState, fieldApi, events = {}}) => {
           filepath={filepath}
           filename={filename}
         />
+        <p className="general-text-3 pt-1 text-center">
+          Format for image:  Jpeg, Png
+        </p>
       </React.Fragment>
     </ReactFileReader>
   );

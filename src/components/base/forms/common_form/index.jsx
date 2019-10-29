@@ -16,6 +16,7 @@ import {
 import { Form, Text } from 'informed';
 import { Link } from 'react-router-dom';
 import { btnSpinner } from 'components/helpers';
+import ErrorWrapper from './error'
 
 const renderField = (field, props = {}) => {
   const { lSize = 2, iSize = 6 } = props;
@@ -24,7 +25,9 @@ const renderField = (field, props = {}) => {
     <FormGroup row>
       { field.label && <Label for={field.name} md={lSize}>{labelFor(field)}</Label> }
       <Col md={iSize}>
-        {field.render ? field.render(field, props) : renderInput(field, props)}
+        <ErrorWrapper errors={props.errors} field={field}>
+          {field.render ? field.render(field, props) : renderInput(field, props)}
+        </ErrorWrapper>
       </Col>
     </FormGroup>
   );

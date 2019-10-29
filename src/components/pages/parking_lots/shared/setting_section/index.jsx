@@ -5,10 +5,8 @@ import { Form } from 'informed';
 import { renderFieldsWithGrid, renderFormErrors } from 'components/base/forms/common_form';
 import CollapsableCard from 'components/base/collapsable_card';
 
-const fieldProps = { lSize: 6 };
-
 const FormSetting = props => {
-  const { record, isSaving, setFormApi } = props;
+  const { record, isSaving, setFormApi, fieldProps } = props;
 
   return (
     <fieldset disabled={isSaving}>

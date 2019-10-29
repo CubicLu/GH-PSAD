@@ -2,6 +2,17 @@ import { FieldType } from 'components/helpers/form_fields'
 
 const fields = (officers, statuses) => [
   {
+    name: 'admin_id',
+    mandatory: true,
+    label: 'Officer handled',
+    type: FieldType.SELECT_FIELD,
+    options: officers.map(officer => { return {value: officer.value, label: officer.label}})
+  },
+  {
+    name: 'remark',
+    label: 'Remark'
+  },
+  {
     name: 'status',
     innerLabel: 'Current Status:',
     mandatory: true,
@@ -17,17 +28,6 @@ const fields = (officers, statuses) => [
       }
     },
     defaultValue: 'inactive'
-  },
-  {
-    name: 'remark',
-    label: 'Remark'
-  },
-  {
-    name: 'admin_id',
-    mandatory: true,
-    label: 'Officer handled',
-    type: FieldType.SELECT_FIELD,
-    options: officers.map(officer => { return {value: officer.value, label: officer.label}})
   }
 ]
 

@@ -13,6 +13,17 @@ const renderLabelInput = (field, props) => {
   return <LabelInput {...props} field={field.name} />;
 }
 
+const fieldsName = [
+  'zip',
+  'street',
+  'state',
+  'country',
+  'building',
+  'city',
+  'ltd',
+  'lng'
+]
+
 const fields = [
   { name: 'location.zip', label: 'Zip', mandatory: true },
   { name: 'location.street', label: 'Street', mandatory: true },
@@ -20,8 +31,8 @@ const fields = [
   { name: 'location.country', label: 'Country', mandatory: true },
   { name: 'location.building', label: 'Building', mandatory: true },
   { name: 'location.city', label: 'City', mandatory: true },
-  { name: 'location.ltd', label: 'ltd', type: FieldType.LABEL_TEXT_FIELD, render: renderLabelInput },
-  { name: 'location.lng', label: 'lng', type: FieldType.LABEL_TEXT_FIELD, render: renderLabelInput },
+  { name: 'location.ltd', label: 'ltd', mandatory: true, type: FieldType.LABEL_TEXT_FIELD, render: renderLabelInput },
+  { name: 'location.lng', label: 'lng', mandatory: true, type: FieldType.LABEL_TEXT_FIELD, render: renderLabelInput },
 ];
 
 const exampleData = () => process.env.NODE_ENV !== 'production' ? {
@@ -37,4 +48,4 @@ const exampleData = () => process.env.NODE_ENV !== 'production' ? {
 
 
 
-export { fields, exampleData };
+export { fields, exampleData, fieldsName };
