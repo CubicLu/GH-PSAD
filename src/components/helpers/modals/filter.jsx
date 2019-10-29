@@ -19,7 +19,7 @@ const Filter = function (props) {
   }, [filterQuery]);
 
   return (
-    <Modal isOpen={isOpen} toggle={toggleModal} >
+    <Modal isOpen={isOpen} toggle={toggleModal} size="lg" >
       <ModalHeader className="justify-content-center">Filter by</ModalHeader>
       <ModalBody>
         <FilterForm

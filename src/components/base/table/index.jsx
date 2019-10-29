@@ -21,11 +21,23 @@ export class IndexTable extends React.Component {
     filterModalOpen: false
   }
 
+  customLoader = () => {
+    return (
+       <React.Fragment>
+        <div className="w-100 position-absolute">
+          <Loader/>
+        </div>
+        <td height="60">
+        </td>
+      </React.Fragment>
+    )
+  }
+
   renderRecords = () => {
     const { isFetching, renderRecords } = this.props;
 
     if (isFetching()) {
-      return (<Loader/>);
+      return this.customLoader();
     }
 
     return renderRecords()
@@ -88,14 +100,18 @@ export class IndexTable extends React.Component {
 
   render() {
     const { sortedAttr, filterModalOpen, filterQuery } = this.state
-    const { toolbar, columns, total: totalRecords, filterFetcher } = this.props
-    const toolbarWithProps = React.cloneElement(toolbar, {
-      fetcher: filterFetcher,
-      onClickFilter: this.toggleModal,
-      title: `${toolbar.props.title} (${totalRecords})`,
-      badgesFilter: this.badgesFilter,
-      badgesDelete: this.badgesDelete
-    })
+    const { toolbar, filterFields, columns, total: totalRecords, filterFetcher } = this.props
+    let toolbarWithProps = null
+    if (toolbar) {
+      toolbarWithProps = React.cloneElement(toolbar, {
+        fetcher: filterFetcher,
+        onClickFilter: this.toggleModal,
+        title: `${toolbar.props.title} (${totalRecords})`,
+        filterFields,
+        badgesFilter: this.badgesFilter(),
+        badgesDelete: this.badgesDelete
+      })
+    }
     const query = this.setQuery(sortedAttr)
     return (
       <React.Fragment>

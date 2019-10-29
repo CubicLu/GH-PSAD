@@ -22,7 +22,7 @@ import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/co
 import { btnSpinner } from 'components/helpers';
 import { fields } from 'components/helpers/fields/agencies';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
-import { fromJson as showErrors } from 'components/helpers/errors';
+import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import { FieldType } from 'components/helpers/form_fields';
 /* Modules */
 import connectRecord from 'components/modules/connect_record';
@@ -38,8 +38,11 @@ class Show extends React.Component {
     collapse: false,
     inputChanged: false,
     currentLocation: null,
-    dropdowns: {}
+    dropdowns: {},
+    errors: {}
   }
+
+  static contextType = AlertMessagesContext
 
   isFetching = () => {
     const { isResourceFetching } = this.props
@@ -87,7 +90,7 @@ class Show extends React.Component {
   renderHeader () {
     const { backPath, record } = this.props;
 
-    return (<Row>
+    return (<Row className="p-4">
       <Col md={2} className="align-self-center">
         <Link to={backPath} className="mr-2" >
           <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
@@ -108,7 +111,7 @@ class Show extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success" className="px-5 py-2 float-right" onClick={this.save}>
+        <Button color="success" className="px-5 py-2 mb-4 float-right" onClick={this.save}>
           {isSaving ? btnSpinner() : 'Save Changes'}
         </Button>
       </Col>
@@ -117,12 +120,13 @@ class Show extends React.Component {
 
   renderFields () {
     const { officers, managers, townManagers } = this.state.dropdowns;
-    return renderFieldsWithGrid(fields(officers, managers, townManagers, this.renderLocationModal.bind(this)), 2, 6, this.fieldProps());
+    return renderFieldsWithGrid(fields(officers, managers, townManagers, this.renderLocationModal.bind(this)), 2, 6, {...this.fieldProps(), errors: this.state.errors});
   }
 
   renderLocationModal (field, props) {
     return (
       <LocationForm
+        errors={props.errors}
         setCurrentLocation={this.setCurrentLocation}
         currentLocation={this.state.currentLocation}
       />);
@@ -155,7 +159,6 @@ class Show extends React.Component {
           {this.renderHeader()}
         </Col>
         <Col xs={12}>
-          {showErrors(this.state.errors)}
           {this.renderForm()}
         </Col>
       </Row>

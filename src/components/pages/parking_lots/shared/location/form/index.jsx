@@ -5,6 +5,7 @@ import { InputGroup } from 'reactstrap';
 import { ReactComponent as LocationIcon } from 'assets/location_icon.svg'
 import styles from './location.module.sass'
 import { cloneDeep } from 'lodash'
+import { fieldsName as fieldsNameLocation } from 'components/helpers/fields/location';
 /* Actions */
 /* API */
 /* Base */
@@ -15,7 +16,7 @@ import { FieldType } from 'components/helpers/form_fields';
 /* Modules */
 
 const LocationForm = (props) => {
-  const { currentLocation, setCurrentLocation, formApi } = props
+  const { currentLocation, setCurrentLocation, formApi, errors = {} } = props
   const [ isOpen, setIsOpen] = useState(false)
   const [ isSaved, setIsSaved] = useState(null)
   const [ showSaveButton, setShowSaveButton] = useState(null)
@@ -61,6 +62,8 @@ const LocationForm = (props) => {
     }
   }
 
+  const hasError = Object.keys(errors).some(key => fieldsNameLocation.includes(key))
+
   return (
     <React.Fragment>
       <ModalForm
@@ -86,8 +89,13 @@ const LocationForm = (props) => {
           }
       </ModalForm>
        <InputGroup>
-        <input readOnly value={currentLocation.full_address} className="pr-4 bg-white form-control" onClick={() => setIsOpen(true)} />
-        <LocationIcon className={styles.LocationIcon} />
+        <div className={`position-relative ${hasError ? 'input-error' : ''}`}>
+          <input readOnly value={currentLocation.full_address} className="pr-4 bg-white form-control" onClick={() => setIsOpen(true)} />
+          <LocationIcon className={styles.LocationIcon} />
+          <div className="text-left general-error general-text-1 pt-1">
+            {hasError ? 'Some required data is missing' : ''}
+          </div>
+        </div>
       </InputGroup>
     </React.Fragment>
   );
@@ -103,5 +111,6 @@ const defaultCenter = {
     ltd: 38.77,
     lng: -76.07
 } // Easton, USA coordinates
+
 
 export default withFormApi(LocationForm);

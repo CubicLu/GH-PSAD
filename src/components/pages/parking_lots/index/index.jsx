@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { isEmpty } from 'underscore';
 /* Actions */
 import { SET_LIST } from 'actions/parking_lots';
 /* API */
 import { filterFetcher } from 'api/parking_lots';
+import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';
@@ -12,11 +14,21 @@ import { filterFields } from 'components/helpers/fields/parking_lots';
 /* Modules */
 import resourceFetcher from 'components/modules/resource_fetcher';
 import connectList from 'components/modules/connect_list';
+import withFetching from 'components/modules/with_fetching';
+import withCurrentUser from 'components/modules/with_current_user';
 
 class Index extends React.Component {
+  state = {
+    dropdowns: {
+      townManagers: [],
+      parkingAdmins: []
+    }
+  }
+
   isFetching = () => {
     const { isResourceFetching } = this.props
-    return isResourceFetching
+    const { dropdowns: { townManagers, parkingAdmins } } = this.state
+    return isResourceFetching && (isEmpty(townManagers) || isEmpty(parkingAdmins))
   }
 
   renderRecords = () => {
@@ -24,12 +36,12 @@ class Index extends React.Component {
 
     return list.map((record, idx) => {
       return (
-        <tr key={idx} onClick={() => history.push(`${match.path}/${record.id}/`)}>
-          <td>{record.name}</td>
+        <tr key={idx} onClick={() => history.push(`${match.path}/${record.id}`)}>
           <td>{record.id}</td>
+          <td>{record.name}</td>
           <td>{record.location.full_address}</td>
-          <td>{record.email}</td>
           <td>{record.phone}</td>
+          <td>{record.email}</td>
           <td>{record.parking_admin ? record.parking_admin.name : null}</td>
           <td>{record.town_manager ? record.town_manager.name : null}</td>
           <td>{record.status}</td>
@@ -38,22 +50,46 @@ class Index extends React.Component {
     });
   };
 
+  componentDidMount () {
+    const { startFetching, currentUser } = this.props
+    startFetching(dropdownsSearch('parking_lot_parking_admins_filter', { admin_id: currentUser.id }))
+      .then(res => {
+        this.setState({
+          dropdowns: {
+            ...this.state.dropdowns,
+            parkingAdmins: res.data
+          }
+        })
+      })
+    startFetching(dropdownsSearch('parking_lot_town_managers_filter', { admin_id: currentUser.id }))
+      .then(res => {
+        this.setState({
+          dropdowns: {
+            ...this.state.dropdowns,
+            townManagers: res.data
+          }
+        })
+      })
+  }
+
   render () {
+    const { dropdowns: { townManagers, parkingAdmins } } = this.state
+
     return (
       <IndexTable
         {...this.props}
         isFetching={this.isFetching}
         toolbar={<BasicListToolbar {...this.props} label="+ Create New" title="Parking lot accounts"/>}
-        filterFields={filterFields()}
+        filterFields={filterFields(parkingAdmins, townManagers)}
         filterFetcher={filterFetcher}
         resource={resource}
         columns={
           <React.Fragment>
-            <th disableSort>Name</th>
             <th disableSort>Lot ID</th>
+            <th disableSort>Name</th>
             <th disableSort>Location</th>
-            <th disableSort>Email</th>
             <th disableSort>Phone</th>
+            <th disableSort>Email</th>
             <th disableSort>Parking Admin</th>
             <th disableSort>Town Manager</th>
             <th disableSort>Status</th>
@@ -73,4 +109,11 @@ Index.propTypes = {
 
 const resource = 'parking_lot'
 
-export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), Index);
+export default connectList(
+  resource,
+  SET_LIST,
+  resourceFetcher(filterFetcher, resource),
+  withFetching(
+    withCurrentUser(Index)
+  )
+);

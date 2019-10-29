@@ -18,7 +18,7 @@ const filterFetcher = (params = {}) => {
           name: filters.name,
           phone: filters.phone
         },
-        location: {
+        locations: {
           full_address: filters.full_address
         }
       }

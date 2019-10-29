@@ -19,9 +19,9 @@ import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/co
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
 import { fields, exampleData } from 'components/helpers/fields/admins';
-import { fromJson as showErrors } from 'components/helpers/errors';
 import Loader from 'components/helpers/loader';
 import { FieldType } from 'components/helpers/form_fields';
+import { AlertMessagesContext } from 'components/helpers/alert_messages';
 /* Modules */
 import saveRecord from 'components/modules/form_actions/save_record';
 import withCurrentUser from 'components/modules/with_current_user';
@@ -33,6 +33,8 @@ class New extends React.Component {
       roles: []
     }
   }
+
+  static contextType = AlertMessagesContext
 
   isFetching () {
     const { roles } = this.state.dropdowns;
@@ -51,14 +53,14 @@ class New extends React.Component {
 
   renderFields () {
     const { roles } = this.state.dropdowns;
-    return renderFieldsWithGrid(fields(roles), 2, 6, fieldProps);
+    return renderFieldsWithGrid(fields(roles), 2, 6, {...fieldProps, errors: this.state.errors });
   }
 
   renderHeader () {
     const { backPath } = this.props;
 
     return (<Row>
-      <Col sm={12}>
+      <Col sm={12} className="p-4">
         <Link to={backPath} className="mr-2" >
           <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
         </Link>
@@ -71,7 +73,7 @@ class New extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success" className="px-5 py-2 float-right"  onClick={this.save}>
+        <Button color="success" className="px-5 py-2 mb-4 float-right"  onClick={this.save}>
           {isSaving ? btnSpinner() : 'Save Changes'}
         </Button>
       </Col>
@@ -104,7 +106,6 @@ class New extends React.Component {
           {this.renderHeader()}
         </Col>
         <Col xs={12}>
-          {showErrors(this.state.errors)}
           {this.renderForm()}
         </Col>
       </Row>
