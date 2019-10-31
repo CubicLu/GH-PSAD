@@ -7,7 +7,6 @@ import ResetPassword from './reset_password';
 import Dashboard from './dashboard';
 import PrivateRoute from 'routes/private_route';
 import Layout from 'components/base/layout';
-import { clearToken } from 'actions/users';
 import { connect } from 'react-redux';
 import { AlertMessages } from 'components/helpers/alert_messages';
 import { logOut } from 'actions/users';
