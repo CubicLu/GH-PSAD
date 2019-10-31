@@ -1,28 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { times } from 'underscore';
-import { Pagination as Paggy, PaginationItem, PaginationLink } from 'reactstrap';
+import Paggy from "react-js-pagination";
+import { Col } from 'reactstrap'
 import { list as selectList } from 'selectors/list';
 
 class Pagination extends React.Component {
-  renderPages = () => {
-    const { page, perPage, total } = this.props;
-    const pages = [];
-
-    times(Math.ceil(total / perPage), i => {
-      const pageNumber = i + 1;
-
-      pages.push(
-        <PaginationItem className="mr-1 general-text-1" active={page === pageNumber} key={i}>
-          <PaginationLink onClick={() => this.open(pageNumber)}>
-            {pageNumber}
-          </PaginationLink>
-        </PaginationItem>
-      );
-    });
-
-    return pages;
-  };
 
   updateQueryParams = (page) => {
     this.props.history.push({
@@ -46,59 +29,28 @@ class Pagination extends React.Component {
     console.error(error.message);
   };
 
-  first = () => {
-    return this.open(1);
-  };
-
-  prev = () => {
-    const { page } = this.props;
-
-    if (page > 1) {
-      this.open(page - 1);
-    }
-  };
-
-  next = () => {
-    const { page, total, perPage } = this.props;
-    const lastPage = Math.round(total / perPage);
-
-    if (page < lastPage) {
-      this.open(page + 1);
-    }
-  };
-
-  last = () => {
-    const { total, perPage } = this.props;
-    const lastPage = Math.round(total / perPage);
-    this.open(lastPage);
-  };
 
   render () {
     const { total, perPage, page, list } = this.props;
 
     if (total < perPage) return null;
-    const firstRangeElements = (perPage * page) - (perPage - 1)
-    const showingCounterElements = `${firstRangeElements} - ${firstRangeElements + list.length - 1}`
+
+debugger
     return (
-      <Paggy size="md" listClassName="justify-content-center">
-        <div className="mr-2 mt-1 general-text-3 d-flex align-items-center">
-          Displaying {showingCounterElements} of {total}
-        </div>
-        <PaginationItem className="mr-1 general-text-1">
-          <PaginationLink first onClick={this.first}/>
-        </PaginationItem>
-        <PaginationItem className="mr-1 general-text-1">
-          <PaginationLink previous onClick={this.prev}/>
-        </PaginationItem>
-        {this.renderPages()}
-        <PaginationItem className="mr-1 general-text-1">
-          <PaginationLink next onClick={this.next}/>
-        </PaginationItem>
-        <PaginationItem className="mr-1 general-text-1">
-          <PaginationLink last onClick={this.last}/>
-        </PaginationItem>
-      </Paggy>
-    );
+       <Paggy
+          prevPageText='Prev'
+          nextPageText='Next'
+          activePage={page}
+          itemsCountPerPage={perPage}
+          totalItemsCount={total}
+          pageRangeDisplayed={10}
+          onChange={this.open}
+          itemClass={"mr-1 general-text-1 page-item"}
+          innerClass={'pagination justify-content-center'}
+          linkClass={"page-link"}
+        />
+    )
+
   }
 }
 
