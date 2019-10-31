@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, Table, Button } from 'reactstrap';
 import MultiSelect from 'react-select';
-import { filterFetcher } from 'api/admins';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { search as dropdownsSearch } from 'api/dropdowns';
 
 let time = null
 
@@ -41,17 +41,14 @@ const Recipients = function (props) {
             }
             setOptions([{value: 0, label: 'Loading...'}])
             time = setTimeout(function () {
-              filterFetcher({
-                filters: {
-                  email: inputRef.current.state.inputValue,
-                  status: 'active'
-                }
+              dropdownsSearch('parking_rule-recipient',{
+                  email: inputRef.current.state.inputValue
               })
                 .then(result => {
-                  setAdmins(result.data)
+                  setAdmins(result.data.map(admin => admin.label))
                   setOptions(result.data.map(admin => ({
-                    label: admin.email,
-                    value: admin.id
+                    label: admin.label.email,
+                    value: admin.label.id
                   })))
                 })
             }, 800)
