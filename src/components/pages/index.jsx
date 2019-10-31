@@ -10,6 +10,7 @@ import Layout from 'components/base/layout';
 import { clearToken } from 'actions/users';
 import { connect } from 'react-redux';
 import { AlertMessages } from 'components/helpers/alert_messages';
+import { logOut } from 'actions/users';
 
 class App extends React.Component {
   componentDidMount () {
@@ -31,8 +32,7 @@ class App extends React.Component {
         <AlertMessages>
           <Layout>
             <Route path='/sign_out' render={() => {
-              removeFilters()
-              this.props.dispatch(clearToken);
+              RemoveData.call(this);
               return <Redirect to='/login' />;
             }} />
             <PrivateRoute path='/dashboard' component={Dashboard} />
@@ -44,6 +44,11 @@ class App extends React.Component {
       </React.Fragment>
     );
   }
+}
+
+function RemoveData() {
+  removeFilters()
+  this.props.dispatch(logOut);
 }
 
 const removeFilters = () => {
