@@ -13,6 +13,7 @@ import VoiSection from '../shared/voi_section';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { cloneDeep } from 'lodash'
+import  { permissions } from 'config/permissions/forms_fields/parking_lots/show'
 /* Actions */
 import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/parking_lots';
 import { invoke } from 'actions';
@@ -23,7 +24,6 @@ import { show, update } from 'api/parking_lots';
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
-import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import { FieldType } from 'components/helpers/form_fields';
 import { fieldsShow } from 'components/helpers/fields/parking_lots';
@@ -34,6 +34,7 @@ import updateRecord from 'components/modules/form_actions/update_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import withFetching from 'components/modules/with_fetching';
 import setEmptyFields from 'components/modules/set_empty_fields';
+import withCurrentUser from 'components/modules/with_current_user';
 
 class Show extends React.Component {
   state = {
@@ -96,7 +97,15 @@ class Show extends React.Component {
 
   renderFields () {
     const { dropdowns } = this.state;
-    return renderFieldsWithGrid(fieldsShow(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this)), 2, 6, {...this.fieldProps(), errors: this.state.errors });
+    const { currentUserRoleName } = this.props;
+
+    return (
+      renderFieldsWithGrid(
+        fieldsShow(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this), permissions[currentUserRoleName]),
+        2,
+        6,
+        {...this.fieldProps(), errors: this.state.errors })
+    )
   }
 
   values () {
@@ -228,15 +237,26 @@ class Show extends React.Component {
   }
 
   componentDidMount () {
-    const { startFetching } = this.props
+    const { startFetching, record } = this.props
+    if(record) {
+      this.setState({currentLocation: record.location })
+    }
 
-    startFetching(searchAdminByRoleName(['parking_admin', 'town_manager']))
+    startFetching(dropdownsSearch('admins_by_role-town_manager'))
       .then((result) => {
         this.setState({
           dropdowns: {
             ...this.state.dropdowns,
-            parkingAdmins: result.parking_admin,
-            townManagers: result.town_manager
+            townManagers: result.data
+          }
+        });
+      })
+    startFetching(dropdownsSearch('admins_by_role-parking_admin'))
+      .then((result) => {
+        this.setState({
+          dropdowns: {
+            ...this.state.dropdowns,
+            parkingAdmins: result.data
           }
         });
       })
@@ -288,4 +308,10 @@ Show.propTypes = {
 export default connectRecord('parking_lot', SET_RECORD, resourceFetcher(show), connect(
   null,
   mapDispatch
-)(withFetching(Show)));
+)(
+  withFetching(
+    withCurrentUser(
+      Show
+    )
+  )
+));
