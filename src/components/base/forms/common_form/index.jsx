@@ -60,9 +60,9 @@ const renderInput = (field, props = {}) => {
     case FieldType.INCREASER_FIELD:
       return <Increaser {...props} field={field}/>;
     case FieldType.NUMBER_FIELD:
-      return <Text className="form-control" {...props.events} type="number" field={field.name}/>;
+      return <Text className="form-control" disabled={field.disabled} {...props.events} type="number" field={field.name}/>;
     default:
-      return <Text className="form-control" {...props.events} field={field.name}/>;
+      return <Text className="form-control" disabled={field.disabled} {...props.events} field={field.name}/>;
   }
 };
 

@@ -12,7 +12,7 @@ import { renderRecords } from '../../shared/rules'
 /* Actions */
 import { SET_RECORD } from 'actions/parking_lots';
 /* API */
-import { filterFetcher as indexAgencies  } from 'api/agencies';
+import { search as dropdownsSearch } from 'api/dropdowns';
 import { index as indexRules, update as updateRules } from 'api/parking_rules';
 import { show } from 'api/parking_lots';
 /* Base */
@@ -26,6 +26,7 @@ import TooltipInfo from 'components/helpers/tooltip_info';
 import withFetching from 'components/modules/with_fetching';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import connectRecord from 'components/modules/connect_record';
+ import withCurrentUser from 'components/modules/with_current_user';
 
 class Rules extends React.Component {
 
@@ -210,28 +211,37 @@ class Rules extends React.Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    const { startFetching } = this.props
+    if (nextProps.record && !this.props.record) {
+      this.fetchData(nextProps.record);
+    }
+  }
 
-    if (nextProps.record) {
-      startFetching(indexRules({ query: {parking_lot_id: nextProps.record.id }}))
+  fetchData = (record) => {
+    const { startFetching, currentUser } = this.props;
+
+    if (record) {
+
+      startFetching(indexRules({ query: {parking_lot_id: record.id }}))
         .then((result) => {
           this.setState({
             list: result.data
+          });
+        })
+
+      startFetching(dropdownsSearch('parking_rule-agencies_list', { admin_id: currentUser.id, parking_lot_id: record.id  }))
+        .then((result) => {
+          this.setState({
+            dropdown: {
+              agencies: result.data
+            }
           });
         })
     }
   }
 
   componentDidMount () {
-    const { startFetching } = this.props
-    startFetching(indexAgencies())
-      .then((result) => {
-        this.setState({
-          dropdown: {
-            agencies: result.data
-          }
-        });
-      })
+    const { record } = this.props;
+    this.fetchData(record);
   }
 
   render () {
@@ -244,4 +254,11 @@ Rules.propTypes = {
   currentUser: PropTypes.object
 };
 
-export default connectRecord('parking_lot', SET_RECORD, resourceFetcher(show), withFetching(Rules));
+export default connectRecord(
+  'parking_lot',
+  SET_RECORD,
+  resourceFetcher(show),
+  withFetching(
+    withCurrentUser(Rules)
+  )
+);

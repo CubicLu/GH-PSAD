@@ -1,39 +1,53 @@
 import faker from 'faker'
 import { FieldType } from 'components/helpers/form_fields'
+import  {
+  DISPUTE_ACCOUNT,
+  VIOLATION_COUNT,
+  LOCATION,
+  NAME,
+  PHONE,
+  EMAIL,
+  PARKING_ADMIN_ID,
+  TOWN_MANAGER_ID,
+  STATUS
+} from "config/permissions/forms_fields/parking_lots/fields"
 
-const fieldsNew = (managers = [], admins = [], renderLocationModal) => (
+const fieldsNew = (managers = [], admins = [], renderLocationModal, permissions = []) => (
   [
     {
       name: 'location',
       label: 'Location',
       mandatory: true,
-      render: renderLocationModal
+      render: renderLocationModal,
+      disabled: !permissions.includes(LOCATION)
     },
-    { name: 'name', label: 'Name', mandatory: true },
-    { name: 'phone', label: 'Contact' },
-    { name: 'parking_admin_id', label: 'Parking Admin', type: 'select', options: admins.map(admin => { return {value: admin.id, label: admin.email}}) },
-    { name: 'email', label: 'Email' },
-    { name: 'town_manager_id', label: 'Town Manager', mandatory: true, type: 'select', options: managers.map(manager => { return {value: manager.id, label: manager.email}}) },
-    { name: 'status', label: 'Status', mandatory: true, type: FieldType.SELECT_FIELD, options: [{value: 'active', label: 'Active'}, { value: 'suspended', label: 'Suspended' }], defaultValue: 'active' }
+    { name: 'name', label: 'Name', mandatory: true, disabled: !permissions.includes(NAME) },
+    { name: 'phone', label: 'Contact', disabled: !permissions.includes(PHONE)  },
+    { name: 'parking_admin_id', label: 'Parking Admin', type: FieldType.SELECT_FIELD, disabled: !permissions.includes(PARKING_ADMIN_ID), options: admins.map(admin => { return {value: admin.value, label: admin.label}}) },
+    { name: 'email', label: 'Email', disabled: !permissions.includes(EMAIL)  },
+    { name: 'town_manager_id', label: 'Town Manager', mandatory: true, type: FieldType.SELECT_FIELD, disabled: !permissions.includes(TOWN_MANAGER_ID), options: managers.map(manager => { return {value: manager.value, label: manager.label}}) },
+    { name: 'status', label: 'Status', mandatory: true, type: FieldType.SELECT_FIELD, disabled: !permissions.includes(STATUS), options: [{value: 'active', label: 'Active'}, { value: 'suspended', label: 'Suspended' }], defaultValue: 'active' }
   ]
 );
 
-const fieldsShow = (managers = [], admins = [], renderLocationModal) => [
+const fieldsShow = (managers = [], admins = [], renderLocationModal, permissions = []) => [
      {
       name: 'disputes_count',
       type: FieldType.TEXT_LINK_FIELD,
       props: { to: '/disputes', value: 'Show list' },
       style: { maxWidth: 'inherit', display: 'inline' },
-      label: 'Disputes received'
+      label: 'Disputes received',
+      disabled: !permissions.includes(DISPUTE_ACCOUNT)
     },
     {
       name: 'violations_count',
       type: FieldType.TEXT_LINK_FIELD,
       props: { to: '/violations', value: 'Show list' },
       style: { maxWidth: 'inherit', display: 'inline' },
-      label: 'Violation records'
+      label: 'Violation records',
+      disabled: !permissions.includes(VIOLATION_COUNT)
     },
-    ...fieldsNew(managers, admins, renderLocationModal)
+    ...fieldsNew(managers, admins, renderLocationModal, permissions)
 ]
 
 const filterFields = (parkingAdmins, townManagers) => [

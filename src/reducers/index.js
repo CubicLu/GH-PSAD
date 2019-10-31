@@ -7,6 +7,7 @@ import CameraReducers from './cameras';
 import ParkingLotReducers from './parking_lots';
 import ServerErrorReducers from './server_errors';
 import VoiReducers from './voi';
+import { LOG_OUT } from 'actions/users';
 
 const reducers = combineReducers({
   user: UserReducers,
@@ -19,4 +20,10 @@ const reducers = combineReducers({
   server: ServerErrorReducers
 });
 
-export default reducers;
+export default (state, action) => {
+  if (action.type === LOG_OUT) {
+    state = undefined;
+  }
+
+  return reducers(state, action);
+};

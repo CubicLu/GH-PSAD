@@ -14,6 +14,7 @@ import SettingSection from '../shared/setting_section';
 import NearbyPlaces from '../shared/nearby_places';
 import VoiSection from '../shared/voi_section';
 import Rules from './rules'
+import  { permissions } from 'config/permissions/forms_fields/parking_lots/new'
 /* Actions */
 import { invoke } from 'actions';
 import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/parking_lots';
@@ -23,7 +24,6 @@ import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 /* Helpers */
-import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import { btnSpinner } from 'components/helpers';
 import { fieldsNew, exampleData } from 'components/helpers/fields/parking_lots';
 import Loader from 'components/helpers/loader';
@@ -116,7 +116,16 @@ class New extends React.Component {
 
   renderFields () {
     const { dropdowns } = this.state;
-    return renderFieldsWithGrid(fieldsNew(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this)), 2, 6, {...this.fieldProps(), errors: this.state.errors });
+    const { currentUserRoleName } = this.props;
+
+    return (
+      renderFieldsWithGrid(
+        fieldsNew(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this), permissions[currentUserRoleName]),
+        2,
+        6,
+        {...this.fieldProps(), errors: this.state.errors }
+      )
+    );
   }
 
   renderLocationModal (field, props) {
@@ -240,13 +249,21 @@ class New extends React.Component {
   componentDidMount () {
     const { startFetching } = this.props
 
-    startFetching(searchAdminByRoleName(['parking_admin', 'town_manager']))
+    startFetching(dropdownsSearch('admins_by_role-town_manager'))
       .then((result) => {
         this.setState({
           dropdowns: {
             ...this.state.dropdowns,
-            parkingAdmins: result.parking_admin,
-            townManagers: result.town_manager
+            townManagers: result.data
+          }
+        });
+      })
+    startFetching(dropdownsSearch('admins_by_role-parking_admin'))
+      .then((result) => {
+        this.setState({
+          dropdowns: {
+            ...this.state.dropdowns,
+            parkingAdmins: result.data
           }
         });
       })

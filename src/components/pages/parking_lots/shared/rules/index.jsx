@@ -7,7 +7,7 @@ import styles from './rules.module.sass'
 function renderRecords () {
   const { list, dropdown } = this.state;
   return list.map((record, idx) => {
-    const currentAgency = dropdown.agencies.find(agency => agency.id === record.agency_id) || {}
+    const currentAgency = dropdown.agencies.find(agency => agency.value === record.agency_id) || {}
     return (
       <tr key={idx}>
         <td>
@@ -33,7 +33,7 @@ function renderRecords () {
         </td>
         <td>
           <Select
-            value={{value: currentAgency.id, label: currentAgency.name}}
+            value={{value: currentAgency.value, label: currentAgency.label}}
             placeholder="Agencies"
             onChange={(selectedOptions) => {
               const newList = list
@@ -42,7 +42,7 @@ function renderRecords () {
                 list: newList
               })
             }}
-            options={dropdown.agencies.map(agency => ({value: agency.id, label: agency.name}))}
+            options={dropdown.agencies.map(agency => ({value: agency.value, label: agency.label}))}
           />
         </td>
         <td onClick={() => this.setState({showModalRecipient: true, currentRule: record })}>{record.recipients.length} users</td>

@@ -16,12 +16,12 @@ import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/agencies';
 import { invoke } from 'actions';
 /* API */
 import { show, update } from 'api/agencies';
+import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
 import { fields } from 'components/helpers/fields/agencies';
-import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import { FieldType } from 'components/helpers/form_fields';
 /* Modules */
@@ -47,7 +47,6 @@ class Show extends React.Component {
   isFetching = () => {
     const { isResourceFetching } = this.props
     const { currentLocation, dropdowns } = this.state
-
     return isResourceFetching || !currentLocation || isEmpty(dropdowns)
   }
 
@@ -174,13 +173,30 @@ class Show extends React.Component {
   componentDidMount () {
     const { startFetching } = this.props
 
-    startFetching(searchAdminByRoleName(['manager', 'officer', 'town_manager']))
+    startFetching(dropdownsSearch('admins_by_role-town_manager'))
       .then((result) => {
         this.setState({
           dropdowns: {
-            officers: result.officer,
-            managers: result.manager,
-            townManagers: result.town_manager
+            ...this.state.dropdowns,
+            townManagers: result.data
+          }
+        });
+      })
+    startFetching(dropdownsSearch('admins_by_role-officer'))
+      .then((result) => {
+        this.setState({
+          dropdowns: {
+            ...this.state.dropdowns,
+            officers: result.data
+          }
+        });
+      })
+    startFetching(dropdownsSearch('admins_by_role-manager'))
+      .then((result) => {
+        this.setState({
+          dropdowns: {
+            ...this.state.dropdowns,
+            managers: result.data
           }
         });
       })
