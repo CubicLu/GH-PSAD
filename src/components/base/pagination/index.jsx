@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { times } from 'underscore';
 import Paggy from "react-js-pagination";
-import { Col } from 'reactstrap'
 import { list as selectList } from 'selectors/list';
 
 class Pagination extends React.Component {
@@ -31,7 +29,7 @@ class Pagination extends React.Component {
 
 
   render () {
-    const { total, perPage, page, list } = this.props;
+    const { total, perPage, page } = this.props;
 
     if (total < perPage) return null;
 
