@@ -130,17 +130,19 @@ class Show extends React.Component {
     const { backPath, record, match, history } = this.props;
 
     return (<Row className="p-4">
-      <Col md={2}>
+      <Col md={2} className="d-flex align-items-center">
         <Link to={backPath} className="mr-2" >
           <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
         </Link>
         {record.name}
+        <span className="ml-4 general-text-3 text-nowrap">
+          <h6 className="m-0">
+            ID: {record.id}
+          </h6>
+        </span>
       </Col>
       <Col md={10}>
         <Nav pills className="align-items-center float-right mx-auto">
-          <span className="mr-4">
-            ID: {record.id}
-          </span>
           <Button className="mr-1" onClick={() => history.push(match.url)} color="primary-lg">
             Information
           </Button>
@@ -151,6 +153,11 @@ class Show extends React.Component {
             Parking Spaces
           </Button>
         </Nav>
+      </Col>
+       <Col sm={12} className="bg-grey-light">
+       <p className="general-text-2 py-3 m-0">
+        Fields marked with an asterik (*) are mandatory
+       </p>
       </Col>
     </Row>);
   }
@@ -221,6 +228,7 @@ class Show extends React.Component {
 
     return (
       <NearbyPlaces
+        errors={this.state.errors}
         isSaving={isSaving}
         setFormApi={this.setNearbyPlacesFormApi}
         records={record.places}

@@ -2,7 +2,7 @@ import { me } from 'api/users';
 const SET_TOKEN = 'SET_TOKEN';
 const CLEAR_TOKEN = 'CLEAR_TOKEN';
 const SET_CURRENT_USER_DATA = 'SET_CURRENT_USER_DATA';
-const LOG_OUT = "LOG_OUT";
+const LOG_OUT = 'LOG_OUT';
 
 const setToken = payload => {
   return {
@@ -18,7 +18,6 @@ const clearToken = {
 const logOut = {
   type: LOG_OUT
 };
-
 
 const setCurrentUserData = () => dispatch => (
   me()

@@ -5,14 +5,12 @@ import PlacesList from './places_list'
 /* Actions */
 /* API */
 /* Base */
-import { renderFormErrors } from 'components/base/forms/common_form';
 import CollapsableCard from 'components/base/collapsable_card';
 /* Helpers */
-import { fields as fieldsNearbyPlaces } from 'components/helpers/fields/parking/nearby_places';
 /* Module */
 
 const NearbyPlacesForm = props => {
-  const { records, isSaving, setFormApi, setInputChanged, categoriesDropdown } = props;
+  const { records, isSaving, setFormApi, setInputChanged, categoriesDropdown, errors } = props;
   const events = {
     onChange: () => setInputChanged()
   }
@@ -21,10 +19,7 @@ const NearbyPlacesForm = props => {
     <fieldset disabled={isSaving}>
       <Form getApi={setFormApi} initialValues={{places: records}} >
         {({ formState, formApi }) => (
-            <React.Fragment>
-              {renderFormErrors(formState, fieldsNearbyPlaces(categoriesDropdown || []))}
-              <PlacesList categoriesDropdown={categoriesDropdown || []} events={events}/>
-            </React.Fragment>
+          <PlacesList errors={errors} categoriesDropdown={categoriesDropdown || []} events={events}/>
         )}
       </Form>
     </fieldset>

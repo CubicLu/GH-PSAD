@@ -157,6 +157,7 @@ class New extends React.Component {
 
     return (
       <NearbyPlaces
+        errors={this.state.errors}
         isSaving={isSaving}
         setFormApi={this.setNearbyPlacesFormApi}
         categoriesDropdown={categoriesPlace}
