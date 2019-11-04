@@ -33,7 +33,6 @@ class Pagination extends React.Component {
 
     if (total < perPage) return null;
 
-debugger
     return (
        <Paggy
           prevPageText='Prev'
