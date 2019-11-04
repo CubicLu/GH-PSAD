@@ -11,7 +11,7 @@ const PlacesList = (props) => (
     {({ add, fields }) => (
       <React.Fragment>
         {fields.map((dataField, i) => (
-          <Place {...dataField} categoriesDropdown={props.categoriesDropdown} events={props.events} />
+          <Place {...dataField} errors={props.errors} categoriesDropdown={props.categoriesDropdown} events={props.events} />
         ))}
         <Button className="float-right" onClick={() => {
             if (fields.length <= limit) {
