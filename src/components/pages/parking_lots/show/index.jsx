@@ -145,10 +145,10 @@ class Show extends React.Component {
             Information
           </Button>
           <Button className="mr-1" onClick={() => history.push(`${match.url}/rules`)} color="disabled-lg">
-            Parking Rules
+            Parking rules
           </Button>
           <Button className="mr-1" onClick={() => history.push(`${match.url}/spaces`)} color="disabled-lg">
-            Parking Spaces
+            Parking spaces
           </Button>
         </Nav>
       </Col>

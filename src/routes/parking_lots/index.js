@@ -4,6 +4,7 @@ import Index from 'components/pages/parking_lots/index';
 import Show from 'components/pages/parking_lots/show';
 import New from 'components/pages/parking_lots/new';
 import Rules from 'components/pages/parking_lots/show/rules'
+import ParkingSpaces from 'components/pages/parking_lots/show/parking_spaces'
 import renderWithBackPath from 'components/modules/render_with_back_path';
 import renderWithParentPath from 'components/modules/render_with_parent_path';
 
@@ -19,6 +20,7 @@ function Routing(props) {
           <React.Fragment>
             <Route exact path={`${props.match.path}`} component={renderWithBackPath(Show, `${match.url}/`)}/>
             <Route path={`${props.match.path}/rules`} render={renderWithParentPath(renderWithBackPath(Rules, `${match.url}/`), props.match.url)}/>
+            <Route path={`${props.match.path}/spaces`} render={renderWithParentPath(renderWithBackPath(ParkingSpaces, `${match.url}/`), props.match.url)}/>
           </React.Fragment>
         )}/>
       </Switch>

@@ -1,6 +1,13 @@
 import resourceApi from 'components/modules/resource_api';
+import fetchApi from 'components/modules/fetch_api';
 
 const { index, show, update, create } = resourceApi('parking_lots');
+
+const updateMap = (params = {}) => {
+  const { mapBase64, id } = params
+  return fetchApi(`dashboard/parking_lots/${id}/map`, { method: 'PUT', data: { map: mapBase64 } });
+}
+
 
 const filterFetcher = (params = {}) => {
   const { page, perPage, query, filters = {} } = params;
@@ -28,4 +35,4 @@ const filterFetcher = (params = {}) => {
   });
 };
 
-export { filterFetcher, show, update, create };
+export { filterFetcher, show, update, create, updateMap };

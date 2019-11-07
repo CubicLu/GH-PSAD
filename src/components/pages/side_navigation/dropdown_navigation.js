@@ -30,12 +30,12 @@ function DropdownNavigation (props) {
           {props.title}
           <ul className="shadow-sm bg-white p-0">
            {props.children.map((element, index) => {
-          return (
-            <NavItem className="ml-3 text-center" key={element.props.to}>
-              {element}
-            </NavItem>
-          )
-        })}
+              return (
+                <NavItem className="ml-3 text-center" key={element.props.to}>
+                  {element}
+                </NavItem>
+              )
+            })}
           </ul>
         </span>
       </div>

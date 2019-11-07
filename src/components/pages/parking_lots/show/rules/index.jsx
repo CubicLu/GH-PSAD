@@ -126,10 +126,10 @@ class Rules extends React.Component {
                 Information
               </Button>
               <Button className="mr-1" onClick={() => history.push(match.url)} color="primary-lg">
-                Parking Rules
+                Parking rules
               </Button>
               <Button className="mr-1" onClick={() => history.push(`${parentPath}/spaces`)} color="disabled-lg">
-                Parking Spaces
+                Parking spaces
               </Button>
           </Nav>
         </Col>
@@ -210,12 +210,6 @@ class Rules extends React.Component {
     );
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (nextProps.record && !this.props.record) {
-      this.fetchData(nextProps.record);
-    }
-  }
-
   fetchData = (record) => {
     const { startFetching, currentUser } = this.props;
 
@@ -236,6 +230,12 @@ class Rules extends React.Component {
             }
           });
         })
+    }
+  }
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (nextProps.record && !this.props.record) {
+      this.fetchData(nextProps.record);
     }
   }
 
