@@ -3,11 +3,20 @@ import fetchApi from 'components/modules/fetch_api';
 
 const { index, show, update, create } = resourceApi('parking_lots');
 
-const updateMap = (params = {}) => {
-  const { mapBase64, id } = params
-  return fetchApi(`dashboard/parking_lots/${id}/map`, { method: 'PUT', data: { map: mapBase64 } });
-}
+const createParkingSpace = (params = {}) => {
+  const { parkingSpaceImage, parkingLotId } = params;
+  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_spaces`, { method: 'POST', data: { parking_space_image: parkingSpaceImage } });
+};
 
+const deleteParkingSpace = (params = {}) => {
+  const { parkingLotId, parkingSpaceId } = params;
+  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_spaces/${parkingSpaceId}`, { method: 'DELETE' });
+};
+
+const updateParkingSpace = (params = {}) => {
+  const { parkingLotId, parkingSpaceCoordinates, parkingSpaceId } = params;
+  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_spaces/${parkingSpaceId}`, { method: 'PUT', data: { parking_space_coordinates: parkingSpaceCoordinates } });
+};
 
 const filterFetcher = (params = {}) => {
   const { page, perPage, query, filters = {} } = params;
@@ -35,4 +44,4 @@ const filterFetcher = (params = {}) => {
   });
 };
 
-export { filterFetcher, show, update, create, updateMap };
+export { filterFetcher, show, update, create, createParkingSpace, deleteParkingSpace, updateParkingSpace };

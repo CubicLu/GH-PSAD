@@ -83,7 +83,7 @@ class Rules extends React.Component {
     })
 
     updateRules({
-      parking_lot_id: record.id,
+      parkingLotId: record.id,
       query: {
         parking_rules: list
       }
