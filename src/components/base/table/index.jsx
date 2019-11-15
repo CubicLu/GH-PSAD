@@ -18,6 +18,7 @@ export class IndexTable extends React.Component {
   state = {
     sortedAttr: {},
     filterQuery: {},
+    isPaginationFetching: false,
     filterModalOpen: false
   }
 
@@ -35,8 +36,9 @@ export class IndexTable extends React.Component {
 
   renderRecords = () => {
     const { isFetching, renderRecords } = this.props;
+    const { isPaginationFetching } = this.state;
 
-    if (isFetching()) {
+    if (isFetching() || isPaginationFetching ) {
       return this.customLoader();
     }
 
@@ -57,6 +59,10 @@ export class IndexTable extends React.Component {
   setFilterQuery = (values) => this.setState({ filterQuery: values });
 
   toggleModal = (event) => this.setState((state) => ({ filterModalOpen: !state.filterModalOpen }));
+
+  startFetchingPagination = (event) => this.setState((state) => ({ isPaginationFetching: true }));
+
+  stopFetchingPagination = (event) => this.setState((state) => ({ isPaginationFetching: false }));
 
   paginationFetcher = (pagesQuery) => this.props.filterFetcher({filters: this.state.filterQuery, query: this.setQuery(this.state.sortedAttr), ...pagesQuery})
 
@@ -145,7 +151,12 @@ export class IndexTable extends React.Component {
             </Table>
           </Col>
         </Row>
-        <Pagination {...this.props} query={query} fetcher={this.paginationFetcher} />
+        <Pagination
+          {...this.props} query={query}
+          stopFetchingPagination={this.stopFetchingPagination}
+          startFetchingPagination={this.startFetchingPagination}
+          fetcher={this.paginationFetcher}
+        />
       </React.Fragment>
     );
   }
