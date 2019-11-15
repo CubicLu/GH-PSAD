@@ -6,7 +6,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Form } from 'informed';
 import { generatePath } from 'react-router';
-import { isEmpty } from 'underscore';
 import LocationForm from '../location/form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -37,8 +36,13 @@ class Show extends React.Component {
     isSaving: false,
     collapse: false,
     inputChanged: false,
+    isDropdownFetching: true,
     currentLocation: null,
-    dropdowns: {},
+    dropdowns: {
+      officers: [],
+      managers: [],
+      townManagers: []
+    },
     errors: {}
   }
 
@@ -46,8 +50,8 @@ class Show extends React.Component {
 
   isFetching = () => {
     const { isResourceFetching } = this.props
-    const { currentLocation, dropdowns } = this.state
-    return isResourceFetching || !currentLocation || isEmpty(dropdowns)
+    const { currentLocation, isDropdownFetching } = this.state
+    return isResourceFetching || !currentLocation || isDropdownFetching
   }
 
   fieldProps = () => ({
@@ -173,33 +177,39 @@ class Show extends React.Component {
   componentDidMount () {
     const { startFetching } = this.props
 
-    startFetching(dropdownsSearch('admins_by_role-town_manager'))
-      .then((result) => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            townManagers: result.data
-          }
-        });
+    Promise.all([
+        startFetching(dropdownsSearch('admins_by_role-town_manager'))
+          .then((result) => {
+            this.setState({
+              dropdowns: {
+                ...this.state.dropdowns,
+                townManagers: result.data
+              }
+            });
+          }),
+        startFetching(dropdownsSearch('admins_by_role-officer'))
+          .then((result) => {
+            this.setState({
+              dropdowns: {
+                ...this.state.dropdowns,
+                officers: result.data
+              }
+            });
+          }),
+        startFetching(dropdownsSearch('admins_by_role-manager'))
+          .then((result) => {
+            this.setState({
+              dropdowns: {
+                ...this.state.dropdowns,
+                managers: result.data
+              }
+            });
+          })
+    ]).then(() => {
+      this.setState({
+        isDropdownFetching: false
       })
-    startFetching(dropdownsSearch('admins_by_role-officer'))
-      .then((result) => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            officers: result.data
-          }
-        });
-      })
-    startFetching(dropdownsSearch('admins_by_role-manager'))
-      .then((result) => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            managers: result.data
-          }
-        });
-      })
+    })
   }
 
   render () {
