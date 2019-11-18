@@ -21,8 +21,8 @@ class Password extends React.Component{
     const { type } = this.state
 
     return (
-      <InputGroup>
-        <Text className="form-control position-relative"  {...customAttr}  field={field.name} type={type}/>
+      <InputGroup >
+        <Text disabled={field.disabled} className="form-control position-relative"  {...customAttr}  field={field.name} type={type}/>
         <FontAwesomeIcon className={`position-absolute ${styles.eyePassword}`} onClick={this.handleClick} icon={type === 'text' ? faEye : faEyeSlash}/>
       </InputGroup>
     )

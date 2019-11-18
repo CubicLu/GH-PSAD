@@ -13,9 +13,9 @@ const fields = (officers, managers, townManagers, renderLocationModal) => [
   { name: 'phone', label: 'Phone' },
   // TODO add condition to only show status field to system and super admin
   { name: 'status', label: 'Status', mandatory: true, type: FieldType.SELECT_FIELD, options: [{value: 'active', label: 'Active'}, { value: 'suspended', label: 'Suspended' }], defaultValue: 'active' },
-  { name: 'manager_id', label: 'Manager', mandatory: true, type: FieldType.SELECT_FIELD, emptyValue: 0, options: managers.map(manager => { return { value: manager.id, label: manager.email }})  },
-  { name: 'town_manager_id', label: 'Town Manager', mandatory: true, type: FieldType.SELECT_FIELD, emptyValue: 0, options: townManagers.map(townManager => { return { value: townManager.id, label: townManager.email }}) },
-  { name: 'officer_ids', label: 'Officers', type: FieldType.MULTISELECT_FIELD, options: officers.map(officer => { return { value: officer.id, label: officer.email }})  }
+  { name: 'manager_id', label: 'Manager', mandatory: true, type: FieldType.SELECT_FIELD, emptyValue: 0, options: managers.map(manager => { return { value: manager.value, label: manager.label }})  },
+  { name: 'town_manager_id', label: 'Town Manager', mandatory: true, type: FieldType.SELECT_FIELD, emptyValue: 0, options: townManagers.map(townManager => { return { value: townManager.value, label: townManager.label }}) },
+  { name: 'officer_ids', label: 'Officers', type: FieldType.MULTISELECT_FIELD, options: officers.map(officer => { return { value: officer.value, label: officer.label }})  }
 ];
 
 const exampleData = () => process.env.NODE_ENV !== 'production' ? {

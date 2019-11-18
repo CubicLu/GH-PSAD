@@ -6,7 +6,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Form } from 'informed';
 import { generatePath } from 'react-router';
-import { isEmpty } from 'underscore';
 import LocationForm from '../location/form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -16,12 +15,12 @@ import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/agencies';
 import { invoke } from 'actions';
 /* API */
 import { show, update } from 'api/agencies';
+import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
 import { fields } from 'components/helpers/fields/agencies';
-import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import { FieldType } from 'components/helpers/form_fields';
 /* Modules */
@@ -37,8 +36,13 @@ class Show extends React.Component {
     isSaving: false,
     collapse: false,
     inputChanged: false,
+    isDropdownFetching: true,
     currentLocation: null,
-    dropdowns: {},
+    dropdowns: {
+      officers: [],
+      managers: [],
+      townManagers: []
+    },
     errors: {}
   }
 
@@ -46,9 +50,8 @@ class Show extends React.Component {
 
   isFetching = () => {
     const { isResourceFetching } = this.props
-    const { currentLocation, dropdowns } = this.state
-
-    return isResourceFetching || !currentLocation || isEmpty(dropdowns)
+    const { currentLocation, isDropdownFetching } = this.state
+    return isResourceFetching || !currentLocation || isDropdownFetching
   }
 
   fieldProps = () => ({
@@ -57,6 +60,8 @@ class Show extends React.Component {
       onChange: () => this.setState({ inputChanged: true })
     }
   })
+
+  setDropdowns = (key, data) => this.setState({ dropdowns: {...this.state.dropdowns, [key]: data} })
 
   setFormApi = formApi => {
     this.formApi = formApi;
@@ -174,16 +179,15 @@ class Show extends React.Component {
   componentDidMount () {
     const { startFetching } = this.props
 
-    startFetching(searchAdminByRoleName(['manager', 'officer', 'town_manager']))
-      .then((result) => {
-        this.setState({
-          dropdowns: {
-            officers: result.officer,
-            managers: result.manager,
-            townManagers: result.town_manager
-          }
-        });
-      })
+    Promise.all([
+        startFetching(dropdownsSearch('admins_by_role-town_manager'))
+          .then(response => this.setDropdowns('townManagers', response.data)),
+        startFetching(dropdownsSearch('admins_by_role-officer'))
+          .then(response => this.setDropdowns('officers', response.data)),
+        startFetching(dropdownsSearch('admins_by_role-manager'))
+          .then(response => this.setDropdowns('managers', response.data))
+    ])
+      .finally(() => this.setState({ isDropdownFetching: false }))
   }
 
   render () {

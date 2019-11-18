@@ -15,9 +15,11 @@ import { filterFields } from 'components/helpers/fields/tickets';
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import withCurrentUser from 'components/modules/with_current_user';
+import withFetching from 'components/modules/with_fetching';
 
 class Index extends React.Component {
   state = {
+    isDropdownFetching: true,
     dropdowns: {
       officers: [],
       statuses: [],
@@ -28,8 +30,8 @@ class Index extends React.Component {
 
   isFetching = () => {
     const { isResourceFetching } = this.props;
-    const { officers, statuses } = this.state.dropdowns;
-    return isResourceFetching || !officers || !statuses
+    const { isDropdownFetching } = this.state;
+    return isResourceFetching || isDropdownFetching
   }
 
   renderRecords = () => {
@@ -47,19 +49,20 @@ class Index extends React.Component {
   setDropdowns = (key, data) => this.setState({dropdowns: {...this.state.dropdowns, [key]: data}})
 
   componentDidMount () {
-    const { currentUser } = this.props;
-    Promise.all([
-        dropdownsSearch('tickets_officers_filter', { admin_id: currentUser.id })
-          .then(response => this.setDropdowns('officers', response.data)),
-        dropdownsSearch('tickets_statuses_field' )
-          .then(response => this.setDropdowns('statuses', response.data)),
-        dropdownsSearch('tickets_types_field')
-          .then(response => this.setDropdowns('types', response.data)),
-        dropdownsSearch('tickets_agencies_list', { admin_id: currentUser.id })
-         .then(response => this.setDropdowns('agencies', response.data))
+    const { currentUser, startFetching } = this.props;
 
+    Promise.all([
+        startFetching(dropdownsSearch('tickets_officers_filter', { admin_id: currentUser.id }))
+          .then(response => this.setDropdowns('officers', response.data)),
+        startFetching(dropdownsSearch('tickets_statuses_field' ))
+          .then(response => this.setDropdowns('statuses', response.data)),
+        startFetching(dropdownsSearch('tickets_types_field'))
+          .then(response => this.setDropdowns('types', response.data)),
+        startFetching(dropdownsSearch('tickets_agencies_list', { admin_id: currentUser.id }))
+         .then(response => this.setDropdowns('agencies', response.data))
       ])
       .catch(this.handleFailed)
+      .finally(() => this.setState({ isDropdownFetching: false }))
   }
 
   render () {
@@ -97,4 +100,11 @@ Index.propTypes = {
 
 const resource = 'ticket'
 
-export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), withCurrentUser(Index));
+export default connectList(
+  resource,
+  SET_LIST,
+  resourceFetcher(filterFetcher, resource),
+  withFetching(
+    withCurrentUser(Index)
+  )
+);

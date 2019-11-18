@@ -14,14 +14,14 @@ const Form = (props) => {
   } = props
   return (
      <Modal isOpen={isOpen} onOpened={onOpened} size='lg' toggle={toggleModal} onClosed={onClosed} >
-      <ModalHeader>{title}</ModalHeader>
+      <ModalHeader className="mx-auto border-0">{title}</ModalHeader>
       <ModalBody>
         {props.children}
       </ModalBody>
-      <ModalFooter className="justify-content-center">
-        <Button color="danger" onClick={toggleModal}>Cancel</Button>{' '}
+      <ModalFooter className="justify-content-center border-0">
+        <Button color="danger" className="px-5 py-2 mb-4" onClick={toggleModal}>Cancel</Button>{' '}
         {
-          showSaveButton && <Button color="success" onClick={onClickSave}>Save</Button>
+          showSaveButton && <Button color="success" className="px-5 py-2 mb-4" onClick={onClickSave}>Save&nbsp;&nbsp;</Button>
         }
       </ModalFooter>
     </Modal>

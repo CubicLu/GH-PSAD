@@ -8,7 +8,7 @@ import { isEmpty } from 'underscore';
 
 /* Actions */
 /* API */
-import { filterFetcher as indexAgencies  } from 'api/agencies';
+import { search as dropdownsSearch } from 'api/dropdowns';
 import { index } from 'api/parking_rules';
 /* Base */
  import IndexTable from 'components/base/table';
@@ -178,7 +178,7 @@ class New extends React.Component {
   }
 
   componentDidMount () {
-    const { startFetching } = this.props
+    const { startFetching, currentUser } = this.props
 
     startFetching(index())
       .then((result) => {
@@ -186,7 +186,7 @@ class New extends React.Component {
           list: result.data
         });
       })
-    startFetching(indexAgencies())
+    startFetching(dropdownsSearch('parking_rule-agencies_list', { admin_id:currentUser.id }))
       .then((result) => {
         this.setState({
           dropdown: {

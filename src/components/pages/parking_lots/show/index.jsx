@@ -13,6 +13,7 @@ import VoiSection from '../shared/voi_section';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { cloneDeep } from 'lodash'
+import  { permissions } from 'config/permissions/forms_fields/parking_lots/show'
 /* Actions */
 import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/parking_lots';
 import { invoke } from 'actions';
@@ -23,7 +24,6 @@ import { show, update } from 'api/parking_lots';
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
-import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import { FieldType } from 'components/helpers/form_fields';
 import { fieldsShow } from 'components/helpers/fields/parking_lots';
@@ -34,11 +34,13 @@ import updateRecord from 'components/modules/form_actions/update_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import withFetching from 'components/modules/with_fetching';
 import setEmptyFields from 'components/modules/set_empty_fields';
+import withCurrentUser from 'components/modules/with_current_user';
 
 class Show extends React.Component {
   state = {
     isSaving: false,
     currentLocation: null,
+    isDropdownFetching: true,
     inputChanged: false,
     dropdowns: {},
     errors: {}
@@ -51,6 +53,8 @@ class Show extends React.Component {
     const { dropdowns, currentLocation } = this.state
     return isResourceFetching || !currentLocation || isEmpty(dropdowns)
   }
+
+  setDropdowns = (key, data) => this.setState({ dropdowns: {...this.state.dropdowns, [key]: data} })
 
   setFormApi = formApi => {
     this.formApi = formApi;
@@ -96,7 +100,15 @@ class Show extends React.Component {
 
   renderFields () {
     const { dropdowns } = this.state;
-    return renderFieldsWithGrid(fieldsShow(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this)), 2, 6, {...this.fieldProps(), errors: this.state.errors });
+    const { currentUserRoleName } = this.props;
+
+    return (
+      renderFieldsWithGrid(
+        fieldsShow(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this), permissions[currentUserRoleName]),
+        2,
+        6,
+        {...this.fieldProps(), errors: this.state.errors })
+    )
   }
 
   values () {
@@ -121,17 +133,19 @@ class Show extends React.Component {
     const { backPath, record, match, history } = this.props;
 
     return (<Row className="p-4">
-      <Col md={2}>
+      <Col md={2} className="d-flex align-items-center">
         <Link to={backPath} className="mr-2" >
           <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
         </Link>
         {record.name}
+        <span className="ml-4 general-text-3 text-nowrap">
+          <h6 className="m-0">
+            ID: {record.id}
+          </h6>
+        </span>
       </Col>
       <Col md={10}>
         <Nav pills className="align-items-center float-right mx-auto">
-          <span className="mr-4">
-            ID: {record.id}
-          </span>
           <Button className="mr-1" onClick={() => history.push(match.url)} color="primary-lg">
             Information
           </Button>
@@ -142,6 +156,11 @@ class Show extends React.Component {
             Parking Spaces
           </Button>
         </Nav>
+      </Col>
+       <Col sm={12} className="bg-grey-light">
+       <p className="general-text-2 py-3 m-0">
+        Fields marked with an asterik (*) are mandatory
+       </p>
       </Col>
     </Row>);
   }
@@ -212,6 +231,7 @@ class Show extends React.Component {
 
     return (
       <NearbyPlaces
+        errors={this.state.errors}
         isSaving={isSaving}
         setFormApi={this.setNearbyPlacesFormApi}
         records={record.places}
@@ -228,27 +248,20 @@ class Show extends React.Component {
   }
 
   componentDidMount () {
-    const { startFetching } = this.props
+    const { startFetching, record } = this.props
+    if(record) {
+      this.setState({currentLocation: record.location })
+    }
+    Promise.all([
+      startFetching(dropdownsSearch('admins_by_role-town_manager'))
+         .then(response => this.setDropdowns('townManagers', response.data)),
+      startFetching(dropdownsSearch('admins_by_role-parking_admin'))
+         .then(response => this.setDropdowns('parkingAdmins', response.data)),
+      startFetching(dropdownsSearch('categories_place'))
+         .then(response => this.setDropdowns('categoriesPlace', response.data))
+    ])
+      .finally(() => this.setState({ isDropdownFetching: false }))
 
-    startFetching(searchAdminByRoleName(['parking_admin', 'town_manager']))
-      .then((result) => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            parkingAdmins: result.parking_admin,
-            townManagers: result.town_manager
-          }
-        });
-      })
-    startFetching(dropdownsSearch('categories_place'))
-      .then(result => {
-         this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            categoriesPlace: result.data
-          }
-        });
-      })
   }
 
   render () {
@@ -288,4 +301,10 @@ Show.propTypes = {
 export default connectRecord('parking_lot', SET_RECORD, resourceFetcher(show), connect(
   null,
   mapDispatch
-)(withFetching(Show)));
+)(
+  withFetching(
+    withCurrentUser(
+      Show
+    )
+  )
+));

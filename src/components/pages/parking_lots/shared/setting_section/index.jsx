@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { fields } from 'components/helpers/fields/parking/settings';
 import { Form } from 'informed';
-import { renderFieldsWithGrid, renderFormErrors } from 'components/base/forms/common_form';
+import { renderFieldsWithGrid } from 'components/base/forms/common_form';
 import CollapsableCard from 'components/base/collapsable_card';
 
 const FormSetting = props => {
@@ -13,8 +13,7 @@ const FormSetting = props => {
       <Form getApi={setFormApi} initialValues={record} >
         {({ formState }) => (
           <React.Fragment>
-            {renderFormErrors(formState, fields)}
-            {renderFieldsWithGrid(fields, 2, 6, fieldProps)}
+            {renderFieldsWithGrid(fields, 2, 6, {...fieldProps, formState })}
           </React.Fragment>
         )}
       </Form>
