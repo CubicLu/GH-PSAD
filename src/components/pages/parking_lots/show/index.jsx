@@ -40,6 +40,7 @@ class Show extends React.Component {
   state = {
     isSaving: false,
     currentLocation: null,
+    isDropdownFetching: true,
     inputChanged: false,
     dropdowns: {},
     errors: {}
@@ -52,6 +53,8 @@ class Show extends React.Component {
     const { dropdowns, currentLocation } = this.state
     return isResourceFetching || !currentLocation || isEmpty(dropdowns)
   }
+
+  setDropdowns = (key, data) => this.setState({ dropdowns: {...this.state.dropdowns, [key]: data} })
 
   setFormApi = formApi => {
     this.formApi = formApi;
@@ -249,34 +252,16 @@ class Show extends React.Component {
     if(record) {
       this.setState({currentLocation: record.location })
     }
+    Promise.all([
+      startFetching(dropdownsSearch('admins_by_role-town_manager'))
+         .then(response => this.setDropdowns('townManagers', response.data)),
+      startFetching(dropdownsSearch('admins_by_role-parking_admin'))
+         .then(response => this.setDropdowns('parkingAdmins', response.data)),
+      startFetching(dropdownsSearch('categories_place'))
+         .then(response => this.setDropdowns('categoriesPlace', response.data))
+    ])
+      .finally(() => this.setState({ isDropdownFetching: false }))
 
-    startFetching(dropdownsSearch('admins_by_role-town_manager'))
-      .then((result) => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            townManagers: result.data
-          }
-        });
-      })
-    startFetching(dropdownsSearch('admins_by_role-parking_admin'))
-      .then((result) => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            parkingAdmins: result.data
-          }
-        });
-      })
-    startFetching(dropdownsSearch('categories_place'))
-      .then(result => {
-         this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            categoriesPlace: result.data
-          }
-        });
-      })
   }
 
   render () {
