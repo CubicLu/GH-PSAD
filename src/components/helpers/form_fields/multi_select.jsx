@@ -26,7 +26,7 @@ const CustomMultiSelect = asField(({ field, fieldApi, fieldState, options, event
         onChange={(selectedOptions) => {
           setValue(selectedOptions ? selectedOptions.map(element => element.value) : []);
           setSelectedOptions({ [field]: selectedOptions });
-          events.onChangeMutipleSelect && events.onChangeMutipleSelect()
+          events.onChange && events.onChange()
         }}
         options={options}
       />

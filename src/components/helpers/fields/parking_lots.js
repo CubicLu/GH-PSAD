@@ -1,8 +1,8 @@
 import faker from 'faker'
 import { FieldType } from 'components/helpers/form_fields'
 import  {
-  DISPUTE_ACCOUNT,
-  VIOLATION_COUNT,
+  // DISPUTE_ACCOUNT,
+  // VIOLATION_COUNT,
   LOCATION,
   NAME,
   PHONE,
@@ -31,22 +31,23 @@ const fieldsNew = (managers = [], admins = [], renderLocationModal, permissions 
 );
 
 const fieldsShow = (managers = [], admins = [], renderLocationModal, permissions = []) => [
-     {
-      name: 'disputes_count',
-      type: FieldType.TEXT_LINK_FIELD,
-      props: { to: '/disputes', value: 'Show list' },
-      style: { maxWidth: 'inherit', display: 'inline' },
-      label: 'Disputes received',
-      disabled: !permissions.includes(DISPUTE_ACCOUNT)
-    },
-    {
-      name: 'violations_count',
-      type: FieldType.TEXT_LINK_FIELD,
-      props: { to: '/violations', value: 'Show list' },
-      style: { maxWidth: 'inherit', display: 'inline' },
-      label: 'Violation records',
-      disabled: !permissions.includes(VIOLATION_COUNT)
-    },
+    // TODO: It hasn't been discussed yet
+    //  {
+    //   name: 'disputes_count',
+    //   type: FieldType.TEXT_LINK_FIELD,
+    //   props: { to: '/disputes', value: 'Show list' },
+    //   style: { maxWidth: 'inherit', display: 'inline' },
+    //   label: 'Disputes received',
+    //   disabled: !permissions.includes(DISPUTE_ACCOUNT)
+    // },
+    // {
+    //   name: 'violations_count',
+    //   type: FieldType.TEXT_LINK_FIELD,
+    //   props: { to: '/violations', value: 'Show list' },
+    //   style: { maxWidth: 'inherit', display: 'inline' },
+    //   label: 'Violation records',
+    //   disabled: !permissions.includes(VIOLATION_COUNT)
+    // },
     ...fieldsNew(managers, admins, renderLocationModal, permissions)
 ]
 

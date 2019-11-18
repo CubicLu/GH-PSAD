@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert, Button, Col, FormGroup, Label, Row } from 'reactstrap';
 import { labelFor } from 'components/helpers/forms';
+import TooltipInfo from 'components/helpers/tooltip_info';
 import {
   ImageInput,
   CustomSelect,
@@ -18,12 +19,31 @@ import { Link } from 'react-router-dom';
 import { btnSpinner } from 'components/helpers';
 import ErrorWrapper from './error'
 
+
+const renderLabel = (field, props, lSize) => {
+  const { errors = {}} = props
+  let errorName = null
+  errorName = field.prefix_error ? `${field.prefix_error}_${field.name}`: field.name
+
+  return (
+     field.label &&
+        <Label for={field.name} md={lSize}>
+          <span className={`mr-1 ${errors[errorName] ? 'general-error' : 'text-primary'}`}>{field.mandatory ? '*' : '' }</span>
+          { labelFor(field) }
+          {
+            field.tooltip &&
+            <TooltipInfo className="ml-2" text={field.tooltip} target={field.name} />
+          }
+        </Label>
+  )
+}
+
 const renderField = (field, props = {}) => {
   const { lSize = 2, iSize = 6 } = props;
 
   return (
     <FormGroup row>
-      { field.label && <Label for={field.name} md={lSize}>{labelFor(field)}</Label> }
+      { renderLabel(field, props, lSize) }
       <Col md={iSize}>
         <ErrorWrapper errors={props.errors} field={field}>
           {field.render ? field.render(field, props) : renderInput(field, props)}

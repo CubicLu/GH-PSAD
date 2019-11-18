@@ -111,17 +111,19 @@ class Rules extends React.Component {
 
     return (<Row>
       <Col sm={12} className="p-4 row">
-        <Col md={7}>
+        <Col md={7} className="d-flex align-items-center ">
           <Link to={backPath} className="mr-2" >
             <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
           </Link>
           {record.name}
+          <span className="ml-4 general-text-3 text-nowrap">
+            <h6 className="m-0">
+              ID: {record.id}
+            </h6>
+          </span>
         </Col>
         <Col md={5}>
           <Nav pills className="align-items-center float-right mx-auto">
-            <span className="mr-4">
-              ID: {record.id}
-            </span>
               <Button className="mr-1" onClick={() => history.push(parentPath)} color="disabled-lg">
                 Information
               </Button>

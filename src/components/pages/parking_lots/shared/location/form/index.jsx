@@ -67,7 +67,7 @@ const LocationForm = (props) => {
   return (
     <React.Fragment>
       <ModalForm
-        title="Add Location"
+        title="Add location"
         showSaveButton={showSaveButton}
         onClosed={onModalClose}
         onOpened={onOpened}
@@ -75,7 +75,7 @@ const LocationForm = (props) => {
         isOpen={isOpen}
         onClickSave={onClickSave}
       >
-        { renderFieldsWithGrid(fields, 2, 6, { lSize: 6, events }) }
+        { renderFieldsWithGrid(fields, 3, 4, { lSize: 4, iSize: 8, events }) }
         {
           renderFieldsWithGrid([
             {

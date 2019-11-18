@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { asField } from 'informed';
 import ReactFileReader from 'react-file-reader';
 import Media from './media';
+import TooltipInfo from 'components/helpers/tooltip_info';
 
 const ImageInput = asField(({ fieldState, fieldApi, events = {}}) => {
   const { value } = fieldState;
@@ -33,8 +34,11 @@ const ImageInput = asField(({ fieldState, fieldApi, events = {}}) => {
           filepath={filepath}
           filename={filename}
         />
-        <p className="general-text-3 pt-1 text-center">
-          Format for image:  Jpeg, Png
+        <p className="pt-1 text-center">
+          <span className="general-text-3">
+            Format for image:  Jpeg, Png
+          </span>
+          <TooltipInfo className="ml-2" text="This is the profile picture" target="picture" />
         </p>
       </React.Fragment>
     </ReactFileReader>

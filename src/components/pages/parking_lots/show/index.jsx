@@ -40,6 +40,7 @@ class Show extends React.Component {
   state = {
     isSaving: false,
     currentLocation: null,
+    isDropdownFetching: true,
     inputChanged: false,
     dropdowns: {},
     errors: {}
@@ -52,6 +53,8 @@ class Show extends React.Component {
     const { dropdowns, currentLocation } = this.state
     return isResourceFetching || !currentLocation || isEmpty(dropdowns)
   }
+
+  setDropdowns = (key, data) => this.setState({ dropdowns: {...this.state.dropdowns, [key]: data} })
 
   setFormApi = formApi => {
     this.formApi = formApi;
@@ -130,17 +133,19 @@ class Show extends React.Component {
     const { backPath, record, match, history } = this.props;
 
     return (<Row className="p-4">
-      <Col md={2}>
+      <Col md={2} className="d-flex align-items-center">
         <Link to={backPath} className="mr-2" >
           <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
         </Link>
         {record.name}
+        <span className="ml-4 general-text-3 text-nowrap">
+          <h6 className="m-0">
+            ID: {record.id}
+          </h6>
+        </span>
       </Col>
       <Col md={10}>
         <Nav pills className="align-items-center float-right mx-auto">
-          <span className="mr-4">
-            ID: {record.id}
-          </span>
           <Button className="mr-1" onClick={() => history.push(match.url)} color="primary-lg">
             Information
           </Button>
@@ -151,6 +156,11 @@ class Show extends React.Component {
             Parking spaces
           </Button>
         </Nav>
+      </Col>
+       <Col sm={12} className="bg-grey-light">
+       <p className="general-text-2 py-3 m-0">
+        Fields marked with an asterik (*) are mandatory
+       </p>
       </Col>
     </Row>);
   }
@@ -221,6 +231,7 @@ class Show extends React.Component {
 
     return (
       <NearbyPlaces
+        errors={this.state.errors}
         isSaving={isSaving}
         setFormApi={this.setNearbyPlacesFormApi}
         records={record.places}
@@ -241,34 +252,16 @@ class Show extends React.Component {
     if(record) {
       this.setState({currentLocation: record.location })
     }
+    Promise.all([
+      startFetching(dropdownsSearch('admins_by_role-town_manager'))
+         .then(response => this.setDropdowns('townManagers', response.data)),
+      startFetching(dropdownsSearch('admins_by_role-parking_admin'))
+         .then(response => this.setDropdowns('parkingAdmins', response.data)),
+      startFetching(dropdownsSearch('categories_place'))
+         .then(response => this.setDropdowns('categoriesPlace', response.data))
+    ])
+      .finally(() => this.setState({ isDropdownFetching: false }))
 
-    startFetching(dropdownsSearch('admins_by_role-town_manager'))
-      .then((result) => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            townManagers: result.data
-          }
-        });
-      })
-    startFetching(dropdownsSearch('admins_by_role-parking_admin'))
-      .then((result) => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            parkingAdmins: result.data
-          }
-        });
-      })
-    startFetching(dropdownsSearch('categories_place'))
-      .then(result => {
-         this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            categoriesPlace: result.data
-          }
-        });
-      })
   }
 
   render () {
