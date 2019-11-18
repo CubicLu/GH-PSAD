@@ -27,6 +27,10 @@ import './cameras.module.sass'
 
 
 class Show extends React.Component {
+  state = {
+    currentWatchers: []
+  }
+
   isFetching = () => {
     const { isResourceFetching } = this.props
     return isResourceFetching

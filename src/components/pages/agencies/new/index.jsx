@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 import { Form } from 'informed';
-import { isEmpty } from 'underscore';
 import LocationForm from '../location/form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -15,11 +14,11 @@ import { invoke } from 'actions';
 import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/agencies';
 /* API */
 import { create } from 'api/agencies';
+import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
-import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import { fields, exampleData } from 'components/helpers/fields/agencies';
 import { exampleData as exampleLocationData } from 'components/helpers/fields/location';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
@@ -32,6 +31,7 @@ import withFetching from 'components/modules/with_fetching';
 class New extends React.Component {
   state = {
     isSaving: false,
+    isDropdownFetching: true,
     dropdowns: {},
     currentLocation: exampleLocationData(),
     errors: {}
@@ -39,13 +39,8 @@ class New extends React.Component {
   static contextType = AlertMessagesContext
 
   isFetching = () => {
-    const { dropdowns } = this.state
-    return isEmpty(dropdowns)
-  }
-
-  isFetching = () => {
-    const { dropdowns } = this.state
-    return isEmpty(dropdowns)
+    const { isDropdownFetching } = this.state
+    return isDropdownFetching
   }
 
   setFormApi = formApi => {
@@ -136,14 +131,39 @@ class New extends React.Component {
   componentDidMount () {
     const { startFetching } = this.props
 
-    startFetching(searchAdminByRoleName(['manager', 'officer', 'town_manager']))
-      .then((result) => this.setState({
-        dropdowns: {
-          officers: result.officer,
-          managers: result.manager,
-          townManagers: result.town_manager }
-      }))
-
+    Promise.all([
+        startFetching(dropdownsSearch('admins_by_role-town_manager'))
+          .then((result) => {
+            this.setState({
+              dropdowns: {
+                ...this.state.dropdowns,
+                townManagers: result.data
+              }
+            });
+          }),
+        startFetching(dropdownsSearch('admins_by_role-officer'))
+          .then((result) => {
+            this.setState({
+              dropdowns: {
+                ...this.state.dropdowns,
+                officers: result.data
+              }
+            });
+          }),
+        startFetching(dropdownsSearch('admins_by_role-manager'))
+          .then((result) => {
+            this.setState({
+              dropdowns: {
+                ...this.state.dropdowns,
+                managers: result.data
+              }
+            });
+          })
+    ]).then(() => {
+      this.setState({
+        isDropdownFetching: false
+      })
+    })
   }
 
   render () {
