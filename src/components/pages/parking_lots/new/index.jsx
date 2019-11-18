@@ -14,6 +14,7 @@ import SettingSection from '../shared/setting_section';
 import NearbyPlaces from '../shared/nearby_places';
 import VoiSection from '../shared/voi_section';
 import Rules from './rules'
+import  { permissions } from 'config/permissions/forms_fields/parking_lots/new'
 /* Actions */
 import { invoke } from 'actions';
 import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/parking_lots';
@@ -23,7 +24,6 @@ import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 /* Helpers */
-import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import { btnSpinner } from 'components/helpers';
 import { fieldsNew, exampleData } from 'components/helpers/fields/parking_lots';
 import Loader from 'components/helpers/loader';
@@ -41,6 +41,7 @@ class New extends React.Component {
 
   state = {
     isSaving: false,
+    isDropdownFetching: true,
     currentLocation: exampleLocationData(),
     inputChanged: false,
     showParkingRulesSection: false,
@@ -51,9 +52,11 @@ class New extends React.Component {
   static contextType = AlertMessagesContext
 
   isFetching = () => {
-    const { dropdowns } = this.state
-    return isEmpty(dropdowns)
+    const { isDropdownFetching } = this.state
+    return isDropdownFetching
   }
+
+  setDropdowns = (key, data) => this.setState({ dropdowns: {...this.state.dropdowns, [key]: data} })
 
   setFormApi = formApi => {
     this.formApi = formApi;
@@ -116,7 +119,16 @@ class New extends React.Component {
 
   renderFields () {
     const { dropdowns } = this.state;
-    return renderFieldsWithGrid(fieldsNew(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this)), 2, 6, {...this.fieldProps(), errors: this.state.errors });
+    const { currentUserRoleName } = this.props;
+
+    return (
+      renderFieldsWithGrid(
+        fieldsNew(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this), permissions[currentUserRoleName]),
+        2,
+        6,
+        {...this.fieldProps(), errors: this.state.errors }
+      )
+    );
   }
 
   renderLocationModal (field, props) {
@@ -148,6 +160,7 @@ class New extends React.Component {
 
     return (
       <NearbyPlaces
+        errors={this.state.errors}
         isSaving={isSaving}
         setFormApi={this.setNearbyPlacesFormApi}
         categoriesDropdown={categoriesPlace}
@@ -239,26 +252,15 @@ class New extends React.Component {
 
   componentDidMount () {
     const { startFetching } = this.props
-
-    startFetching(searchAdminByRoleName(['parking_admin', 'town_manager']))
-      .then((result) => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            parkingAdmins: result.parking_admin,
-            townManagers: result.town_manager
-          }
-        });
-      })
-    startFetching(dropdownsSearch('categories_place'))
-      .then(result => {
-         this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            categoriesPlace: result.data
-          }
-        });
-      })
+    Promise.all([
+      startFetching(dropdownsSearch('admins_by_role-town_manager'))
+         .then(response => this.setDropdowns('townManagers', response.data)),
+      startFetching(dropdownsSearch('admins_by_role-parking_admin'))
+         .then(response => this.setDropdowns('parkingAdmins', response.data)),
+      startFetching(dropdownsSearch('categories_place'))
+         .then(response => this.setDropdowns('categoriesPlace', response.data))
+    ])
+      .finally(() => this.setState({ isDropdownFetching: false }))
   }
 
   render () {

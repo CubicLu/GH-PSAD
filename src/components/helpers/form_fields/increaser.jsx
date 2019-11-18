@@ -5,7 +5,7 @@ import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { isUndefined } from 'underscore';
 
 const Increaser = props => {
-  const { field, events } = props;
+  const { field, events, formState } = props;
   const { fieldState, fieldApi } = useField({ field: field.name });
   const { value } = fieldState;
   const { setValue } = fieldApi;
@@ -36,19 +36,24 @@ const Increaser = props => {
   };
 
   return (
-    <InputGroup>
-      <InputGroupAddon addonType="prepend">
-        <Button color="secondary" outline onClick={onDecrease}>
-          -
-        </Button>
-      </InputGroupAddon>
-      <Input className="text-center" value={renderValue(value)} readOnly plaintext/>
-      <InputGroupAddon addonType="append">
-        <Button color="secondary" outline onClick={onIncrease}>
-          +
-        </Button>
-      </InputGroupAddon>
-    </InputGroup>
+    <React.Fragment>
+      <InputGroup>
+        <InputGroupAddon addonType="prepend">
+          <Button color="secondary" outline onClick={onDecrease}>
+            -
+          </Button>
+        </InputGroupAddon>
+        <Input className={`${formState.errors[field.name] ? 'input-error' : ''} text-center`} value={renderValue(value)} readOnly plaintext/>
+        <InputGroupAddon addonType="append">
+          <Button color="secondary" outline onClick={onIncrease}>
+            +
+          </Button>
+        </InputGroupAddon>
+      </InputGroup>
+      <div className="text-center general-error general-text-1 pt-1">
+        {formState.errors[field.name] ? formState.errors[field.name] : '' }
+      </div>
+    </React.Fragment>
   );
 };
 

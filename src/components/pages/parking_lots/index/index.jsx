@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isEmpty } from 'underscore';
+import  { CREATE_PARKING_LOT } from 'config/permissions'
 /* Actions */
 import { SET_LIST } from 'actions/parking_lots';
 /* API */
@@ -19,6 +19,7 @@ import withCurrentUser from 'components/modules/with_current_user';
 
 class Index extends React.Component {
   state = {
+    isDropdownFetching: true,
     dropdowns: {
       townManagers: [],
       parkingAdmins: []
@@ -27,9 +28,11 @@ class Index extends React.Component {
 
   isFetching = () => {
     const { isResourceFetching } = this.props
-    const { dropdowns: { townManagers, parkingAdmins } } = this.state
-    return isResourceFetching && (isEmpty(townManagers) || isEmpty(parkingAdmins))
+    const { isDropdownFetching } = this.state
+    return isResourceFetching || isDropdownFetching
   }
+
+  setDropdowns = (key, data) => this.setState({ dropdowns: {...this.state.dropdowns, [key]: data} })
 
   renderRecords = () => {
     const { list, match, history } = this.props;
@@ -52,24 +55,14 @@ class Index extends React.Component {
 
   componentDidMount () {
     const { startFetching, currentUser } = this.props
-    startFetching(dropdownsSearch('parking_lot_parking_admins_filter', { admin_id: currentUser.id }))
-      .then(res => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            parkingAdmins: res.data
-          }
-        })
-      })
-    startFetching(dropdownsSearch('parking_lot_town_managers_filter', { admin_id: currentUser.id }))
-      .then(res => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            townManagers: res.data
-          }
-        })
-      })
+     Promise.all([
+      startFetching(dropdownsSearch('parking_lot_parking_admins_filter', { admin_id: currentUser.id }))
+        .then(response => this.setDropdowns('parkingAdmins', response.data)),
+      startFetching(dropdownsSearch('parking_lot_town_managers_filter', { admin_id: currentUser.id }))
+        .then(response => this.setDropdowns('townManagers', response.data)),
+     ])
+      .finally(() => this.setState({ isDropdownFetching: false }))
+
   }
 
   render () {
@@ -79,7 +72,7 @@ class Index extends React.Component {
       <IndexTable
         {...this.props}
         isFetching={this.isFetching}
-        toolbar={<BasicListToolbar {...this.props} label="+ Create New" title="Parking lot accounts"/>}
+        toolbar={<BasicListToolbar {...this.props} createRequiredPermissions={[CREATE_PARKING_LOT]} label="+ Create New" title="Parking lot accounts"/>}
         filterFields={filterFields(parkingAdmins, townManagers)}
         filterFetcher={filterFetcher}
         resource={resource}
@@ -88,10 +81,10 @@ class Index extends React.Component {
             <th disableSort>Lot ID</th>
             <th disableSort>Name</th>
             <th disableSort>Location</th>
-            <th disableSort>Phone</th>
+            <th disableSort>Contact Number</th>
             <th disableSort>Email</th>
-            <th disableSort>Parking Admin</th>
-            <th disableSort>Town Manager</th>
+            <th disableSort>Assigned Parking Admin</th>
+            <th disableSort>Assigned Town Manager</th>
             <th disableSort>Status</th>
           </React.Fragment>
         }

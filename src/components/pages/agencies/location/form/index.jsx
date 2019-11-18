@@ -67,7 +67,7 @@ const LocationForm = (props) => {
   return (
     <React.Fragment>
       <ModalForm
-        title="Add Location"
+        title="Add location"
         showSaveButton={showSaveButton}
         onClosed={onModalClose}
         onOpened={onOpened}
