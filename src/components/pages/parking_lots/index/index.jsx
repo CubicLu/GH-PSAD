@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isEmpty } from 'underscore';
 import  { CREATE_PARKING_LOT } from 'config/permissions'
 /* Actions */
 import { SET_LIST } from 'actions/parking_lots';
@@ -20,6 +19,7 @@ import withCurrentUser from 'components/modules/with_current_user';
 
 class Index extends React.Component {
   state = {
+    isDropdownFetching: true,
     dropdowns: {
       townManagers: [],
       parkingAdmins: []
@@ -28,9 +28,11 @@ class Index extends React.Component {
 
   isFetching = () => {
     const { isResourceFetching } = this.props
-    const { dropdowns: { townManagers, parkingAdmins } } = this.state
-    return isResourceFetching && (isEmpty(townManagers) || isEmpty(parkingAdmins))
+    const { isDropdownFetching } = this.state
+    return isResourceFetching || isDropdownFetching
   }
+
+  setDropdowns = (key, data) => this.setState({ dropdowns: {...this.state.dropdowns, [key]: data} })
 
   renderRecords = () => {
     const { list, match, history } = this.props;
@@ -53,24 +55,14 @@ class Index extends React.Component {
 
   componentDidMount () {
     const { startFetching, currentUser } = this.props
-    startFetching(dropdownsSearch('parking_lot_parking_admins_filter', { admin_id: currentUser.id }))
-      .then(res => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            parkingAdmins: res.data
-          }
-        })
-      })
-    startFetching(dropdownsSearch('parking_lot_town_managers_filter', { admin_id: currentUser.id }))
-      .then(res => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            townManagers: res.data
-          }
-        })
-      })
+     Promise.all([
+      startFetching(dropdownsSearch('parking_lot_parking_admins_filter', { admin_id: currentUser.id }))
+        .then(response => this.setDropdowns('parkingAdmins', response.data)),
+      startFetching(dropdownsSearch('parking_lot_town_managers_filter', { admin_id: currentUser.id }))
+        .then(response => this.setDropdowns('townManagers', response.data)),
+     ])
+      .finally(() => this.setState({ isDropdownFetching: false }))
+
   }
 
   render () {
