@@ -86,13 +86,13 @@ class Show extends React.Component {
     return values;
   };
 
-  renderHeader () {
+  renderHeader() {
     const { backPath, record } = this.props;
 
     return (<Row className="p-4">
       <Col md={2} className="align-self-center">
         <Link to={backPath} className="mr-2" >
-          <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
+          <FontAwesomeIcon color="grey" icon={faChevronLeft} />
         </Link>
         {record.name}
       </Col>
@@ -117,12 +117,12 @@ class Show extends React.Component {
     );
   }
 
-  renderFields () {
+  renderFields() {
     const { officers, managers, townManagers } = this.state.dropdowns;
-    return renderFieldsWithGrid(fields(officers, managers, townManagers, this.renderLocationModal.bind(this)), 2, 6, {...this.fieldProps(), errors: this.state.errors});
+    return renderFieldsWithGrid(fields(officers, managers, townManagers, this.renderLocationModal.bind(this)), 2, 6, { ...this.fieldProps(), errors: this.state.errors });
   }
 
-  renderLocationModal (field, props) {
+  renderLocationModal(field, props) {
     return (
       <LocationForm
         errors={props.errors}
@@ -131,7 +131,7 @@ class Show extends React.Component {
       />);
   }
 
-  renderForm () {
+  renderForm() {
     const { isSaving, inputChanged } = this.state;
 
     return (
@@ -145,14 +145,15 @@ class Show extends React.Component {
               {this.renderFields()}
             </Col>
           </Row>
-          { inputChanged && this.renderSaveButton()}
+          {inputChanged && this.renderSaveButton()}
         </Form>
       </fieldset>
     );
   }
 
-  renderRecord () {
+  renderRecord() {
     return (
+
       <Row className="m-0">
         <Col xs={12} className="mb-4 bg-white">
           {this.renderHeader()}
@@ -166,11 +167,11 @@ class Show extends React.Component {
 
   componentWillReceiveProps(nextProps, nextContext) {
     if (nextProps.record) {
-      this.setState({currentLocation: nextProps.record.location })
+      this.setState({ currentLocation: nextProps.record.location })
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { startFetching } = this.props
 
     startFetching(dropdownsSearch('admins_by_role-town_manager'))
@@ -202,8 +203,8 @@ class Show extends React.Component {
       })
   }
 
-  render () {
-    return this.isFetching() ? <Loader/> : (
+  render() {
+    return this.isFetching() ? <Loader /> : (
       this.renderRecord()
     );
   }
@@ -222,7 +223,7 @@ Show.propTypes = {
   })
 };
 
-function mapDispatch (dispatch) {
+function mapDispatch(dispatch) {
   return bindActionCreators({ setListElement: invoke(SET_LIST_ELEMENT) }, dispatch);
 }
 

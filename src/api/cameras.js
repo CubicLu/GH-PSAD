@@ -1,7 +1,7 @@
 import resourceApi from 'components/modules/resource_api';
 import searchApi from 'components/modules/search_api';
 
-const { index, show, update, destroy, create } = resourceApi('cameras');
+const { index, show, showSingle, update, destroy, create } = resourceApi('cameras');
 const search = searchApi('cameras');
 
 const filterFetcher = (params = {}) => {
@@ -11,9 +11,9 @@ const filterFetcher = (params = {}) => {
     perPage,
     query: {
       ...query,
-      parking_lot_id: filters.parking_lot_id
+      parking_lot_id: filters.parking_lot_id,
     }
   });
 };
 
-export { filterFetcher, show, update, destroy, create, search };
+export { filterFetcher, showSingle, show, update, destroy, create, search };

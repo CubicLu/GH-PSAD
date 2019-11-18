@@ -13,7 +13,7 @@ import VoiSection from '../shared/voi_section';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { cloneDeep } from 'lodash'
-import  { permissions } from 'config/permissions/forms_fields/parking_lots/show'
+import { permissions } from 'config/permissions/forms_fields/parking_lots/show'
 /* Actions */
 import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/parking_lots';
 import { invoke } from 'actions';
@@ -95,7 +95,7 @@ class Show extends React.Component {
     updateRecord.bind(this, update, '/dashboard/parking_lots')(values);
   };
 
-  renderFields () {
+  renderFields() {
     const { dropdowns } = this.state;
     const { currentUserRoleName } = this.props;
 
@@ -104,11 +104,11 @@ class Show extends React.Component {
         fieldsShow(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this), permissions[currentUserRoleName]),
         2,
         6,
-        {...this.fieldProps(), errors: this.state.errors })
+        { ...this.fieldProps(), errors: this.state.errors })
     )
   }
 
-  values () {
+  values() {
     const { record } = this.props;
     const values = Object.assign({}, record);
 
@@ -117,7 +117,7 @@ class Show extends React.Component {
     return values;
   }
 
-  renderLocationModal (field, props) {
+  renderLocationModal(field, props) {
     return (
       <LocationForm
         errors={props.errors}
@@ -126,13 +126,13 @@ class Show extends React.Component {
       />);
   }
 
-  renderHeader () {
+  renderHeader() {
     const { backPath, record, match, history } = this.props;
 
     return (<Row className="p-4">
       <Col md={2} className="d-flex align-items-center">
         <Link to={backPath} className="mr-2" >
-          <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
+          <FontAwesomeIcon color="grey" icon={faChevronLeft} />
         </Link>
         {record.name}
         <span className="ml-4 general-text-3 text-nowrap">
@@ -154,9 +154,9 @@ class Show extends React.Component {
           </Button>
         </Nav>
       </Col>
-       <Col sm={12} className="bg-grey-light">
-       <p className="general-text-2 py-3 m-0">
-        Fields marked with an asterik (*) are mandatory
+      <Col sm={12} className="bg-grey-light">
+        <p className="general-text-2 py-3 m-0">
+          Fields marked with an asterik (*) are mandatory
        </p>
       </Col>
     </Row>);
@@ -166,14 +166,14 @@ class Show extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success" className="px-5 py-2 mb-4 float-right"  onClick={this.save}>
+        <Button color="success" className="px-5 py-2 mb-4 float-right" onClick={this.save}>
           {isSaving ? btnSpinner() : 'Save Changes'}
         </Button>
       </Col>
     );
   }
 
-  renderForm () {
+  renderForm() {
     const { isSaving } = this.state;
 
     return (
@@ -192,9 +192,9 @@ class Show extends React.Component {
     );
   }
 
-  renderRecord () {
+  renderRecord() {
     return (
-       <Row className="m-0">
+      <Row className="m-0">
         <Col xs={12} className="mb-4 bg-white">
           {this.renderHeader()}
         </Col>
@@ -205,7 +205,7 @@ class Show extends React.Component {
     );
   }
 
-  renderSetting () {
+  renderSetting() {
     const { record } = this.props;
     return (
       <SettingSection
@@ -214,15 +214,15 @@ class Show extends React.Component {
         setFormApi={this.setSettingFormApi}
         record={record.setting}
       />
-      );
+    );
   }
 
-  renderVoi () {
+  renderVoi() {
     const { record } = this.props;
-    return <VoiSection records={record.vehicle_rules}/>;
+    return <VoiSection records={record.vehicle_rules} />;
   }
 
-  renderNearbyPlaces () {
+  renderNearbyPlaces() {
     const { record } = this.props;
     const { isSaving, dropdowns: { categoriesPlace } } = this.state
 
@@ -240,14 +240,14 @@ class Show extends React.Component {
 
   componentWillReceiveProps(nextProps, nextContext) {
     if (nextProps.record) {
-      this.setState({currentLocation: nextProps.record.location })
+      this.setState({ currentLocation: nextProps.record.location })
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { startFetching, record } = this.props
-    if(record) {
-      this.setState({currentLocation: record.location })
+    if (record) {
+      this.setState({ currentLocation: record.location })
     }
 
     startFetching(dropdownsSearch('admins_by_role-town_manager'))
@@ -270,7 +270,7 @@ class Show extends React.Component {
       })
     startFetching(dropdownsSearch('categories_place'))
       .then(result => {
-         this.setState({
+        this.setState({
           dropdowns: {
             ...this.state.dropdowns,
             categoriesPlace: result.data
@@ -279,26 +279,26 @@ class Show extends React.Component {
       })
   }
 
-  render () {
+  render() {
     const { inputChanged } = this.state;
 
-    return this.isFetching() ?  <Loader/> : (
+    return this.isFetching() ? <Loader /> : (
       <React.Fragment>
         {this.renderRecord()}
-        <div className="mt-1"/>
+        <div className="mt-1" />
         {this.renderSetting()}
-        <div className="mt-1"/>
+        <div className="mt-1" />
         {this.renderNearbyPlaces()}
-        <div className="mt-1"/>
+        <div className="mt-1" />
         {this.renderVoi()}
-        <div className="mt-4"/>
-        { inputChanged && this.renderSaveButton()}
+        <div className="mt-4" />
+        {inputChanged && this.renderSaveButton()}
       </React.Fragment>
     );
   }
 }
 
-function mapDispatch (dispatch) {
+function mapDispatch(dispatch) {
   return bindActionCreators({ setListElement: invoke(SET_LIST_ELEMENT) }, dispatch);
 }
 

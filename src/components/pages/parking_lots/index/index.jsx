@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'underscore';
-import  { CREATE_PARKING_LOT } from 'config/permissions'
+import { CREATE_PARKING_LOT } from 'config/permissions'
 /* Actions */
 import { SET_LIST } from 'actions/parking_lots';
 /* API */
@@ -51,7 +51,7 @@ class Index extends React.Component {
     });
   };
 
-  componentDidMount () {
+  componentDidMount() {
     const { startFetching, currentUser } = this.props
     startFetching(dropdownsSearch('parking_lot_parking_admins_filter', { admin_id: currentUser.id }))
       .then(res => {
@@ -73,14 +73,14 @@ class Index extends React.Component {
       })
   }
 
-  render () {
+  render() {
     const { dropdowns: { townManagers, parkingAdmins } } = this.state
 
     return (
       <IndexTable
         {...this.props}
         isFetching={this.isFetching}
-        toolbar={<BasicListToolbar {...this.props} createRequiredPermissions={[CREATE_PARKING_LOT]} label="+ Create New" title="Parking lot accounts"/>}
+        toolbar={<BasicListToolbar {...this.props} createRequiredPermissions={[CREATE_PARKING_LOT]} label="+ Create New" title="Parking lot accounts" />}
         filterFields={filterFields(parkingAdmins, townManagers)}
         filterFetcher={filterFetcher}
         resource={resource}

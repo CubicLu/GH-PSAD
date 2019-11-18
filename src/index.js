@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createStore, applyMiddleware} from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import Root from 'routes';
 import thunkMiddleware from 'redux-thunk';
 import persistTokenMiddleware from 'middleware/persist_token';
 import persistCurrentUserMiddleware from 'middleware/persist_current_user';
-import {createLogger} from 'redux-logger';
+import { createLogger } from 'redux-logger';
 import * as serviceWorker from 'serviceWorker';
 import reducers from 'reducers';
-import {  init_set_token, init_set_current_user } from "actions";
+import { init_set_token, init_set_current_user } from "actions";
 import 'config/axios'
 import 'bootstrap/dist/css/bootstrap.css';
 import 'styles/global.sass';
@@ -17,12 +17,20 @@ const loggerMiddleware = createLogger();
 
 const store = createStore(
   reducers,
-  applyMiddleware(
-    persistTokenMiddleware,
-    persistCurrentUserMiddleware,
-    thunkMiddleware,
-    loggerMiddleware,
+  compose(
+    applyMiddleware(
+      persistTokenMiddleware,
+      persistCurrentUserMiddleware,
+      thunkMiddleware,
+      loggerMiddleware,
+
+    ),
+    window.navigator.userAgent.includes("Chrome")
+      ? window.__REDUX_DEVTOOLS_EXTENSION__ &&
+      window.__REDUX_DEVTOOLS_EXTENSION__()
+      : compose
   )
+
 );
 
 store.dispatch(init_set_token);

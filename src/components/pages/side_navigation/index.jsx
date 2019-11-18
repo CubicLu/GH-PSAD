@@ -8,10 +8,10 @@ import { ReactComponent as AgenciesIcon } from 'assets/menu_icons/law_enf_icon.s
 import { ReactComponent as CameraIcon } from 'assets/menu_icons/stream_footages_icon.svg'
 import { ReactComponent as ParkingLotIcon } from 'assets/menu_icons/parking_lot_icon.svg'
 import styles from './side-navigation.module.sass'
-import  { permissions } from 'config/permissions'
+import { permissions } from 'config/permissions'
 import withCurrentUser from 'components/modules/with_current_user';
 import PermissibleRender from 'components/modules/permissible_render';
-import  { INDEX_PARKING_LOT } from 'config/permissions'
+import { INDEX_PARKING_LOT } from 'config/permissions'
 
 const routes = {
   dashboard: '/dashboard',
@@ -29,13 +29,13 @@ const isActive = (location, path) => (
   ) : 'menu-points'
 )
 
-function SideNavigation (props) {
+function SideNavigation(props) {
   const { currentUserRoleName } = props
   return (
     <Nav vertical pills className={`${styles.sideNavigation} shadow-sm pr-0 m-0 bg-white d-fixed h-100'`}>
       <li>
         <Link className={`nav-link ${isActive(props.location, routes.dashboard)}`} to={routes.dashboard}>
-          <DashboardIcon className="float-left mr-2"/>
+          <DashboardIcon className="float-left mr-2" />
           <span className="d-none d-lg-block d-xl-block">
             Dashboard
           </span>
@@ -43,7 +43,7 @@ function SideNavigation (props) {
       </li>
       <li>
         <Link className={`nav-link ${isActive(props.location, routes.admins)}`} to={routes.admins}>
-          <AdminIcon className="float-left mr-2"/>
+          <AdminIcon className="float-left mr-2" />
           <span className="d-none d-lg-block d-xl-block">
             User accounts
           </span>
@@ -55,7 +55,7 @@ function SideNavigation (props) {
       >
         <li>
           <Link className={`nav-link ${isActive(props.location, routes.parkingLots)}`} to={routes.parkingLots}>
-            <ParkingLotIcon className="float-left mr-2"/>
+            <ParkingLotIcon className="float-left mr-2" />
             <span className="d-none d-lg-block d-xl-block">
               Parking lot accounts
             </span>
@@ -63,19 +63,25 @@ function SideNavigation (props) {
         </li>
       </PermissibleRender>
       <li>
-        <DropdownNavigation title="Law enf agency" className="selected-point" icon={<AgenciesIcon className="float-left mr-2"/>}>
+        <DropdownNavigation title="Law enf agency" className="selected-point" icon={<AgenciesIcon className="float-left mr-2" />}>
           <Link className={`nav-link ${isActive(props.location, routes.agencies)}`} to={routes.agencies}>Law agencies</Link>
           <Link className={`nav-link ${isActive(props.location, routes.tickets)}`} to={routes.tickets}>Tickets</Link>
           <Link className={`nav-link ${isActive(props.location, routes.ticketsReport)}`} to={routes.ticketsReport}>Tickets Handling Reports</Link>
         </DropdownNavigation>
       </li>
-      <li>
+      {/* <li>
         <Link className={`nav-link ${isActive(props.location, routes.cameras)}`} to={routes.cameras}>
-          <CameraIcon className="float-left mr-2"/>
+          <CameraIcon className="float-left mr-2" />
           <span className="d-none d-lg-block d-xl-block">
             Stream footages
           </span>
         </Link>
+      </li> */}
+      <li>
+        <DropdownNavigation title="Stream footages" className="selected-point" icon={<CameraIcon className="float-left mr-2" />}>
+          <Link className={`nav-link ${isActive(props.location, routes.cameras)}`} to={routes.cameras}>Live</Link>
+          <Link className={`nav-link ${isActive(props.location, routes.archive)}`} to={routes.archive}>Archive</Link>
+        </DropdownNavigation>
       </li>
     </Nav>
   );

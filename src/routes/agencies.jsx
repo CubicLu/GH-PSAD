@@ -8,10 +8,10 @@ import renderWithBackPath from 'components/modules/render_with_back_path';
 
 const Routing = ({ match }) => (
   <React.Fragment>
-    <Route exact path={match.path} component={Index}/>
+    <Route exact path={match.path} component={Index} />
     <Switch>
-      <Route exact path={`${match.path}/new`} render={renderWithBackPath(New, match.path)}/>
-      <Route exact path={`${match.path}/:id`} component={renderWithBackPath(Show, match.path)}/>
+      <Route exact path={`${match.path}/new`} render={renderWithBackPath(New, match.path)} />
+      <Route exact path={`${match.path}/:id`} component={renderWithBackPath(Show, match.path)} />
     </Switch>
   </React.Fragment>
 );
