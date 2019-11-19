@@ -12,7 +12,7 @@ import {
   UncontrolledDropdown
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faEllipsisV, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faEllipsisV, faEyeSlash, faEye, faTrash, faSync } from '@fortawesome/free-solid-svg-icons';
 import ReactFileReader from 'react-file-reader';
 import { isEmpty } from 'underscore';
 import {ReactComponent as UploadSVG } from 'assets/upload.svg';
@@ -59,6 +59,7 @@ import styles from './parking_spaces.module.sass'
 class ParkingSpaces extends Component {
   state = {
     showConfirmationModal: false,
+    isRefreshingData: false,
     isSaving: false,
     isSavingParkingSpace: false,
     isListFetching: true,
@@ -131,6 +132,27 @@ class ParkingSpaces extends Component {
         isEditing: !isEditing
       })
     }
+  }
+
+  refreshData = () => {
+    const { record, startFetching } = this.props
+    const { list } = this.state
+    this.setState({isRefreshingData: true})
+    startFetching(index({
+        query: {
+          parking_lot_id: record.id
+        }
+      }))
+        .then(response => {
+          const newList = list.map(slot => {
+              return response.data.find( dataSlot => dataSlot.id === slot.id )
+          })
+          this.setState({
+            list: newList
+          })
+        })
+        .finally(() => this.setState({isRefreshingData: false}))
+
   }
 
   // Sync Parking Slot Left panel
@@ -351,6 +373,8 @@ class ParkingSpaces extends Component {
         className={`d-flex float-right justify-content-center align-items-center ${styles.toggleGroup}`}
         onClick={this.toggleEdit}
       >
+        <TooltipInfo text="Activate edit mode and edit parking slot on the parking space. Turn off to save the changes" target="recipients"  />
+        <span className="mx-2">Markup Mode</span>
         <input type="checkbox" className="d-none" readOnly checked={isEditing ? 'checked' : ''} />
         <div className={`${styles.onoffswitch}`} >
             <div className={styles['onoffswitch-label']}>
@@ -358,13 +382,11 @@ class ParkingSpaces extends Component {
                 <div  className={`${parkingSpaces[selectedIndexParkingSpace] ? '' : styles.disabledToggle} ${styles['onoffswitch-switch']}`}></div>
             </div>
         </div>
-        <span className="ml-2">Edit Mode</span>
-        <TooltipInfo className="ml-1" text="Activate edit mode and edit parking slot on the parking space. Turn off to save the changes" target="recipients"  />
       </div>
     )
   }
 
-  renderBottomPanel = () => {
+  renderUpperPanel = () => {
     const { parkingSpaces, selectedIndexParkingSpace } = this.state;
 
     return (
@@ -373,8 +395,8 @@ class ParkingSpaces extends Component {
           <hr className="w-100 position-absolute"/>
         </Col>
         <Col>
-          <Button onClick={(file) => this.deleteParkingSpaceFile()} className={`${parkingSpaces[selectedIndexParkingSpace] ? '' : 'disabled' } mb-3  float-left bg-grey-dark  ml-4 ${parkingSpaces[selectedIndexParkingSpace] ? '' : 'disabled' } `}>
-            Delete Layout
+          <Button color="danger" onClick={(file) => this.deleteParkingSpaceFile()} className={`${parkingSpaces[selectedIndexParkingSpace] ? '' : 'disabled not-allowed ' } mb-3 float-left ml-4`}>
+              <FontAwesomeIcon color="white" icon={faTrash}/>
           </Button>
           <ReactFileReader
               base64={true}
@@ -395,10 +417,13 @@ class ParkingSpaces extends Component {
   }
 
   renderSlot = (slot) => {
+    const allowedToShowColor = slot.coordinate_parking_space ? true : false
+    const statusColor = allowedToShowColor ? slot.status === "free" ? 'bg-green' : 'bg-red' : ''
+
     return (
       <React.Fragment key={slot.id}>
         <Col xs={12} className={`${styles.rowParkingSlot} position-relative px-0 d-flex justify-content-between align-items-center`}>
-          <div className={`border-right border-dark ${styles.availabilitySpace} ${slot.status === "free" ? 'bg-green' : 'bg-red' }`}>
+          <div className={`border-right border-dark ${styles.availabilitySpace} ${statusColor}`}>
           </div>
           <div className={`general-text-1 ml-3 ${styles.slotName}`}>
             {slot.name}
@@ -465,29 +490,28 @@ class ParkingSpaces extends Component {
     />
   }
 
-  renderSlotPanel = (parkingSpaceId) => {
-    const { list } = this.state
-    let slotList;
-    let nonSetSlotList = list.filter(slot => !slot.coordinate_parking_space);
-    let setSlotList = list.filter(slot => slot.coordinate_parking_space);
-
-    if(parkingSpaceId) {
-      slotList = setSlotList.filter(slot => slot.coordinate_parking_space.image_id === parkingSpaceId)
-    } else {
-      slotList = nonSetSlotList;
-    }
+  renderSlotPane = (parkingSpaceId) => {
+    const { list, isRefreshingData } = this.state
 
     return (
-      isEmpty(slotList) ?
+      isRefreshingData ?
         (
           <Col className="p-3 row d-flex justify-content-center">
             <p className="general-text-1">
-              You don't have any parking slot for now.
+              <Loader/>
+            </p>
+          </Col>
+        )
+      : isEmpty(list) ?
+        (
+          <Col className="p-3 row d-flex justify-content-center">
+            <p className="general-text-1">
+              You don't have any parking space for now.
             </p>
           </Col>
         ) : (
           <Col className={`overflow-auto ${styles.slotContainer} p-0 mb-4`}>
-            {slotList.map(slot => this.renderSlot(slot))}
+            {list.map(slot => this.renderSlot(slot))}
           </Col>
         )
 
@@ -500,53 +524,21 @@ class ParkingSpaces extends Component {
     return (
       <Row onMouseMove={isUserInsideEditingZone.bind(this)}>
         <Col xs={12} md={3} className="p-0">
-          <Collapse
-            initialState={false}
-            toggler={(toggleCollapsable) => (
-               <Col className="row d-flex justify-content-between text-white bg-primary p-3 m-0" xs={12}>
-                <span className="ml-4">Parking Spaces Non marked</span>
-                <ChevronDown className="pointer" onClick={toggleCollapsable} />
-              </Col>
-            )}
-          >
-            {this.renderSlotPanel()}
-          </Collapse>
-          {
-            parkingSpaces.map((parkingSpace, index) => {
-              return (
-                <Collapse
-                  initialState={selectedIndexParkingSpace === index}
-                  toggler={(toggleCollapsable) => (
-                    <Col className={`${ selectedIndexParkingSpace === index ? 'bg-green' : 'bg-primary' } row d-flex justify-content-between text-white  p-3 m-0`} xs={12}>
-                      <span className="ml-4">Section {index + 1}</span>
-                      <div>
-                        <GeneralTooltip className="mr-2" text="Load Parking Space Image" target={`section${index}`} >
-                          <FontAwesomeIcon
-                            icon={selectedIndexParkingSpace === index ? faEyeSlash : faEye }
-                            onClick={() => this.selectIndexParkingSpace(index, parkingSpace.id)}
-                            className="mr-3 pointer"
-                            id={`section${index}`}
-                          />
-                        </GeneralTooltip>
-                        <ChevronDown onClick={toggleCollapsable} className="pointer"/>
-                      </div>
-                    </Col>
-                  )}
-                >
-                  {this.renderSlotPanel(parkingSpace.id)}
-                </Collapse>
-              )
-            })
-          }
+            <Col className="row d-flex justify-content-between align-items-center text-white bg-primary p-3 m-0" xs={12}>
+              <span className="ml-4">Parking Spaces</span>
+              <FontAwesomeIcon icon={faSync} className="pointer" onClick={this.refreshData}/>
+            </Col>
+            {this.renderSlotPane()}
         </Col>
         <Col xs={12} md={9} className="p-0 overflow-auto">
+
+          <div className="mb-1">
+            {this.renderUpperPanel()}
+          </div>
           <div className={`${styles.mapContainer} mx-auto card border-dark d-flex justify-content-center align-items-center p-5`}>
             {
               isSavingParkingSpace ? <Loader/> : this.renderParkingSpace(parkingSpaces[selectedIndexParkingSpace] ? parkingSpaces[selectedIndexParkingSpace].url : null)
             }
-          </div>
-          <div className="mt-4">
-            {this.renderBottomPanel()}
           </div>
         </Col>
       </Row>
