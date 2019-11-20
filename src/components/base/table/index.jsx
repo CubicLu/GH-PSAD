@@ -18,8 +18,8 @@ export class IndexTable extends React.Component {
   state = {
     sortedAttr: {},
     filterQuery: {},
-    isPaginationFetching: false,
-    filterModalOpen: false
+    isActionTableFetching: false,
+    isSortingFetching: false
   }
 
   customLoader = () => {
@@ -36,9 +36,13 @@ export class IndexTable extends React.Component {
 
   renderRecords = () => {
     const { isFetching, renderRecords } = this.props;
-    const { isPaginationFetching } = this.state;
+    const { isActionTableFetching } = this.state;
 
+<<<<<<< HEAD
     if (isFetching() || isPaginationFetching) {
+=======
+    if (isFetching() || isActionTableFetching ) {
+>>>>>>> 2a36fc27eeab3e79074ebe0ea8656fa3b73ab04b
       return this.customLoader();
     }
 
@@ -60,9 +64,9 @@ export class IndexTable extends React.Component {
 
   toggleModal = (event) => this.setState((state) => ({ filterModalOpen: !state.filterModalOpen }));
 
-  startFetchingPagination = (event) => this.setState((state) => ({ isPaginationFetching: true }));
+  startFetchingActionTable = (event) => this.setState((state) => ({ isActionTableFetching: true }));
 
-  stopFetchingPagination = (event) => this.setState((state) => ({ isPaginationFetching: false }));
+  stopFetchingActionTable = (event) => this.setState((state) => ({ isActionTableFetching: false }));
 
   paginationFetcher = (pagesQuery) => this.props.filterFetcher({ filters: this.state.filterQuery, query: this.setQuery(this.state.sortedAttr), ...pagesQuery })
 
@@ -84,12 +88,13 @@ export class IndexTable extends React.Component {
     this.setFilterQuery(cloneValues)
     this.generateLocalStorageFilter(cloneValues)
 
-
+    this.startFetchingActionTable()
     startFetching(filterFetcher(Object.assign({}, { filters: cloneValues }, this.setQuery(this.state.sortedAttr))))
       .then((res) => {
         setList(selectList(res));
       })
       .catch(error => console.log(error))
+      .finally(this.stopFetchingActionTable)
   }
 
   setQuery = (sortedAttr) => {
@@ -137,6 +142,8 @@ export class IndexTable extends React.Component {
               <thead className="bg-dark text-white">
                 <TRSort
                   {...this.props}
+                  startFetchingSorting={this.startFetchingActionTable}
+                  stopFetchingSorting={this.stopFetchingActionTable}
                   filterQuery={filterQuery}
                   handleClick={this.handleSortedClick}
                   sortedAttr={sortedAttr}
@@ -153,8 +160,8 @@ export class IndexTable extends React.Component {
         </Row>
         <Pagination
           {...this.props} query={query}
-          stopFetchingPagination={this.stopFetchingPagination}
-          startFetchingPagination={this.startFetchingPagination}
+          stopFetchingPagination={this.stopFetchingActionTable}
+          startFetchingPagination={this.startFetchingActionTable}
           fetcher={this.paginationFetcher}
         />
       </React.Fragment>

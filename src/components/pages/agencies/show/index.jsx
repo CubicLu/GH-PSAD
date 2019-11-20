@@ -61,6 +61,8 @@ class Show extends React.Component {
     }
   })
 
+  setDropdowns = (key, data) => this.setState({ dropdowns: {...this.state.dropdowns, [key]: data} })
+
   setFormApi = formApi => {
     this.formApi = formApi;
   };
@@ -180,37 +182,13 @@ class Show extends React.Component {
 
     Promise.all([
         startFetching(dropdownsSearch('admins_by_role-town_manager'))
-          .then((result) => {
-            this.setState({
-              dropdowns: {
-                ...this.state.dropdowns,
-                townManagers: result.data
-              }
-            });
-          }),
+          .then(response => this.setDropdowns('townManagers', response.data)),
         startFetching(dropdownsSearch('admins_by_role-officer'))
-          .then((result) => {
-            this.setState({
-              dropdowns: {
-                ...this.state.dropdowns,
-                officers: result.data
-              }
-            });
-          }),
+          .then(response => this.setDropdowns('officers', response.data)),
         startFetching(dropdownsSearch('admins_by_role-manager'))
-          .then((result) => {
-            this.setState({
-              dropdowns: {
-                ...this.state.dropdowns,
-                managers: result.data
-              }
-            });
-          })
-    ]).then(() => {
-      this.setState({
-        isDropdownFetching: false
-      })
-    })
+          .then(response => this.setDropdowns('managers', response.data))
+    ])
+      .finally(() => this.setState({ isDropdownFetching: false }))
   }
 
   render() {
