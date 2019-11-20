@@ -1,7 +1,7 @@
 import resourceApi from 'components/modules/resource_api';
 import searchApi from 'components/modules/search_api';
 
-const { index, show, showSingle, update, destroy, create } = resourceApi('cameras');
+const { index, show, update, destroy, create } = resourceApi('cameras');
 const search = searchApi('cameras');
 
 const filterFetcher = (params = {}) => {
@@ -16,4 +16,4 @@ const filterFetcher = (params = {}) => {
   });
 };
 
-export { filterFetcher, showSingle, show, update, destroy, create, search };
+export { filterFetcher, show, update, destroy, create, search };

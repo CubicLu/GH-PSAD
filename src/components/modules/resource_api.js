@@ -15,10 +15,7 @@ const resourceApi = resources => {
     return fetchApi(generatePath(`dashboard/${resources}/${id}`, nestedParams), { method: 'GET' });
 
   };
-  const showSingle = (params = {}) => {
-    const { id, nestedParams = {} } = params;
-    return fetchApi(generatePath(`dashboard/${resources}?parking_lot_id=${id}`, nestedParams), { method: 'GET' });
-  }
+
 
 
   const update = (params = {}) => {
@@ -44,7 +41,7 @@ const resourceApi = resources => {
     })
   };
 
-  return { index, show, showSingle, update, destroy, create };
+  return { index, show, update, destroy, create };
 };
 
 

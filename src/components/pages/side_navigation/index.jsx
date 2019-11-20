@@ -21,6 +21,7 @@ const routes = {
   ticketsReport: '/dashboard/tickets-reports',
   cameras: '/dashboard/cameras',
   parkingLots: '/dashboard/parking_lots',
+  parkingLotsCamera: '/dashboard/parking_lots_camera'
 }
 
 const isActive = (location, path) => (
@@ -69,17 +70,9 @@ function SideNavigation(props) {
           <Link className={`nav-link ${isActive(props.location, routes.ticketsReport)}`} to={routes.ticketsReport}>Tickets Handling Reports</Link>
         </DropdownNavigation>
       </li>
-      {/* <li>
-        <Link className={`nav-link ${isActive(props.location, routes.cameras)}`} to={routes.cameras}>
-          <CameraIcon className="float-left mr-2" />
-          <span className="d-none d-lg-block d-xl-block">
-            Stream footages
-          </span>
-        </Link>
-      </li> */}
       <li>
         <DropdownNavigation title="Stream footages" className="selected-point" icon={<CameraIcon className="float-left mr-2" />}>
-          <Link className={`nav-link ${isActive(props.location, routes.cameras)}`} to={routes.cameras}>Live</Link>
+          <Link className={`nav-link ${isActive(props.location, routes.cameras)}`} to={routes.parkingLotsCamera}>Live</Link>
           <Link className={`nav-link ${isActive(props.location, routes.archive)}`} to={routes.archive}>Archive</Link>
         </DropdownNavigation>
       </li>
