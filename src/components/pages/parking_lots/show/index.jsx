@@ -54,7 +54,7 @@ class Show extends React.Component {
     return isResourceFetching || !currentLocation || isEmpty(dropdowns)
   }
 
-  setDropdowns = (key, data) => this.setState({ dropdowns: {...this.state.dropdowns, [key]: data} })
+  setDropdowns = (key, data) => this.setState({ dropdowns: { ...this.state.dropdowns, [key]: data } })
 
   setFormApi = formApi => {
     this.formApi = formApi;
@@ -254,44 +254,14 @@ class Show extends React.Component {
     }
     Promise.all([
       startFetching(dropdownsSearch('admins_by_role-town_manager'))
-         .then(response => this.setDropdowns('townManagers', response.data)),
+        .then(response => this.setDropdowns('townManagers', response.data)),
       startFetching(dropdownsSearch('admins_by_role-parking_admin'))
-         .then(response => this.setDropdowns('parkingAdmins', response.data)),
+        .then(response => this.setDropdowns('parkingAdmins', response.data)),
       startFetching(dropdownsSearch('categories_place'))
-         .then(response => this.setDropdowns('categoriesPlace', response.data))
+        .then(response => this.setDropdowns('categoriesPlace', response.data))
     ])
       .finally(() => this.setState({ isDropdownFetching: false }))
 
-<<<<<<< HEAD
-    startFetching(dropdownsSearch('admins_by_role-town_manager'))
-      .then((result) => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            townManagers: result.data
-          }
-        });
-      })
-    startFetching(dropdownsSearch('admins_by_role-parking_admin'))
-      .then((result) => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            parkingAdmins: result.data
-          }
-        });
-      })
-    startFetching(dropdownsSearch('categories_place'))
-      .then(result => {
-        this.setState({
-          dropdowns: {
-            ...this.state.dropdowns,
-            categoriesPlace: result.data
-          }
-        });
-      })
-=======
->>>>>>> 2a36fc27eeab3e79074ebe0ea8656fa3b73ab04b
   }
 
   render() {

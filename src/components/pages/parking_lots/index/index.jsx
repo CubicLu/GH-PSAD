@@ -1,11 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-<<<<<<< HEAD
-import { isEmpty } from 'underscore';
 import { CREATE_PARKING_LOT } from 'config/permissions'
-=======
-import  { CREATE_PARKING_LOT } from 'config/permissions'
->>>>>>> 2a36fc27eeab3e79074ebe0ea8656fa3b73ab04b
 /* Actions */
 import { SET_LIST } from 'actions/parking_lots';
 /* API */
@@ -37,7 +32,7 @@ class Index extends React.Component {
     return isResourceFetching || isDropdownFetching
   }
 
-  setDropdowns = (key, data) => this.setState({ dropdowns: {...this.state.dropdowns, [key]: data} })
+  setDropdowns = (key, data) => this.setState({ dropdowns: { ...this.state.dropdowns, [key]: data } })
 
   renderRecords = () => {
     const { list, match, history } = this.props;
@@ -60,12 +55,12 @@ class Index extends React.Component {
 
   componentDidMount() {
     const { startFetching, currentUser } = this.props
-     Promise.all([
+    Promise.all([
       startFetching(dropdownsSearch('parking_lot_parking_admins_filter', { admin_id: currentUser.id }))
         .then(response => this.setDropdowns('parkingAdmins', response.data)),
       startFetching(dropdownsSearch('parking_lot_town_managers_filter', { admin_id: currentUser.id }))
         .then(response => this.setDropdowns('townManagers', response.data)),
-     ])
+    ])
       .finally(() => this.setState({ isDropdownFetching: false }))
 
   }

@@ -38,11 +38,7 @@ export class IndexTable extends React.Component {
     const { isFetching, renderRecords } = this.props;
     const { isActionTableFetching } = this.state;
 
-<<<<<<< HEAD
-    if (isFetching() || isPaginationFetching) {
-=======
-    if (isFetching() || isActionTableFetching ) {
->>>>>>> 2a36fc27eeab3e79074ebe0ea8656fa3b73ab04b
+    if (isFetching() || isActionTableFetching) {
       return this.customLoader();
     }
 
