@@ -31,7 +31,7 @@
 .followCircle
   height: 30px
   width: 30px
-  background: rgba(0,0,0,0.5)
+  background: rgba($primary-color,0.5)
 .mutliselect
   width: 260px
   max-width: 260px
@@ -45,6 +45,9 @@
 .pulseCircle
   animation: pulse 1s infinite
   animation-iteration-count: 3
+.svgDark
+  path
+    fill: $grey-dark
 
 @-webkit-keyframes pulse
   0%
@@ -71,6 +74,7 @@
     -moz-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0)
     box-shadow: 0 0 0 0 rgba(204, 169, 44, 0)
     background: rgba(204, 169, 44, 1)
+
 
 // Toggle Edit Button
 

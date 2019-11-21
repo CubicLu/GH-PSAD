@@ -6,10 +6,12 @@ const ConfirmationModal = (props) => {
   const { text, accept, cancel, isOpen, toggleModal } = props
 
   return (
-    <Modal isOpen={isOpen} toggle={toggleModal} size="lg" >
-      <ModalHeader className="justify-content-center">Confirm to proceed</ModalHeader>
+    <Modal isOpen={isOpen} toggle={toggleModal} size="sm" centered={true} >
+      <ModalHeader className="border-0 h2-title justify-content-center">Confirmation</ModalHeader>
       <ModalBody>
-        {text}
+        <div className="text-center  generel-text-1">
+          {text}
+        </div>
         <div className="text-center mt-4">
           <Button onClick={cancel} className="btn btn-danger mr-1">
             No

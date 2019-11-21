@@ -4,8 +4,8 @@ import fetchApi from 'components/modules/fetch_api';
 const { index, show, update, create } = resourceApi('parking_lots');
 
 const createParkingSpace = (params = {}) => {
-  const { parkingSpaceImage, parkingLotId } = params;
-  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_spaces`, { method: 'POST', data: { parking_space_image: parkingSpaceImage } });
+  const { parkingSpaceImage, parkingLotId, name } = params;
+  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_spaces`, { method: 'POST', data: { parking_space_image: parkingSpaceImage, name } });
 };
 
 const deleteParkingSpace = (params = {}) => {
@@ -14,8 +14,8 @@ const deleteParkingSpace = (params = {}) => {
 };
 
 const updateParkingSpace = (params = {}) => {
-  const { parkingLotId, parkingSpaceCoordinates, parkingSpaceId } = params;
-  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_spaces/${parkingSpaceId}`, { method: 'PUT', data: { parking_space_coordinates: parkingSpaceCoordinates } });
+  const { parkingLotId, parkingSpaceImage, parkingSpaceCoordinates, parkingSpaceId, name } = params;
+  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_spaces/${parkingSpaceId}`, { method: 'PUT', data: { parking_space_coordinates: parkingSpaceCoordinates, name, parking_space_image: parkingSpaceImage } });
 };
 
 const filterFetcher = (params = {}) => {

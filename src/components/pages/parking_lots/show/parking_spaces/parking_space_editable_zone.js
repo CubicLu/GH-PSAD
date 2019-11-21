@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MultiSelect from 'react-select';
 import { isEmpty } from 'underscore';
-import { Button, Row } from 'reactstrap';
+import { Button, Row, Col } from 'reactstrap';
 import ParkingSlotCircle from './parking_slot_circle'
 
 import styles from './parking_spaces.module.sass'
+import { ReactComponent as TimesIcon } from 'assets/times_icon.svg'
 
 const MouseCircle = (props) => {
   const { circleRef, isEditingExistingSlot, slotIdClicked, list } = props
@@ -31,21 +32,25 @@ const CreationBar = (props) => {
 
   return (
     <div className="card p-3">
-      <MultiSelect
-        options={list.filter(slot => {
-          if(!slot.coordinate_parking_space) {
-            return !drawedSlotContainer.some(drawedSlot => drawedSlot.parking_slot_id === slot.id);
-          }
-          return false;
-        }).map( slot => ({ value: slot.id, label: slot.name}))
-        }
-        placeholder="Parking Slot to add"
-        onChange={applyMarkingSlotOnParkingSpace}
-      />
-      <Row className="justify-content-center">
-        <Button color="danger" onClick={cancelMarkingSlotOnParkingSpace} className="px-3 mt-2 py-2  float-left">
-          Cancel
-        </Button>
+
+      <Row className="justify-content-center align-items-center">
+        <Col xs={10}>
+          <MultiSelect
+            options={list.filter(slot => {
+              if(!slot.coordinate_parking_space) {
+                return !drawedSlotContainer.some(drawedSlot => drawedSlot.parking_slot_id === slot.id);
+              }
+              return false;
+            }).map( slot => ({ value: slot.id, label: slot.name}))
+            }
+            placeholder="Space ID"
+            onChange={applyMarkingSlotOnParkingSpace}
+          />
+        </Col>
+        <Col xs={2} className="p-0">
+          <TimesIcon className="pointer" onClick={cancelMarkingSlotOnParkingSpace}/>
+        </Col>
+
       </Row>
     </div>
   )
