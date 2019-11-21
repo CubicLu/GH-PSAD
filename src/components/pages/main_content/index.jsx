@@ -18,7 +18,7 @@ function MainContent(props) {
       <PrivateRoute path={`${match.path}/tickets`} component={TicketRoute} />
       <PrivateRoute path={`${match.path}/cameras`} component={CameraRoute} />
       <PrivateRoute path={`${match.path}/parking_lots`} component={ParkingLotRoute} />
-      <PrivateRoute path={`${match.path}/stream`} component={ParkingLotCameras} />
+      <PrivateRoute path={`${match.path}/live/parking_lots`} component={ParkingLotCameras} />
     </div>
   );
 }
