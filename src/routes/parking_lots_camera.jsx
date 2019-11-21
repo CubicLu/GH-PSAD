@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Route, Switch, withRouter } from 'react-router';
 import Index from 'components/pages/parking_lots_camera/index';
 import Show from 'components/pages/parking_lots_camera/show';
-import Edit from 'components/pages/cameras/edit';
-import New from 'components/pages/cameras/new';
+import Edit from 'components/pages/parking_lots_camera/edit';
+import New from 'components/pages/parking_lots_camera/new';
 import renderWithBackPath from 'components/modules/render_with_back_path';
 
 

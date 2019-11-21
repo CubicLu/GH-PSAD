@@ -23,7 +23,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import withCurrentUser from 'components/modules/with_current_user';
 import { invoke } from 'actions';
-import './parking_lots_camera.sass'
+import styles from './parking_lots_camera.sass'
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 import { FieldType } from 'components/helpers/form_fields';
 
@@ -62,7 +62,7 @@ class Show extends React.Component {
             return (
               <Col md={6} style={{ padding: 0 }} >
                 <div className="card">
-                  <p >{rec.name} <Link to={backPath} className="mr-2" >
+                  <p className={styles.cameraName}>{rec.name} <Link to={backPath} className="mr-2" >
                     <FontAwesomeIcon color="grey" icon={faEllipsisH} />
                   </Link></p>
                   {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD })}
@@ -108,7 +108,6 @@ const mapStateToProps = state => ({
 })
 
 
-// export default connectList('camera', SET_LIST, resourceFetcher(showSingle), Show);
 export default connectRecord('camera', SET_RECORD, resourceFetcher(show, 'parking_lot_camera'), connect(
   mapStateToProps,
   mapDispatch
