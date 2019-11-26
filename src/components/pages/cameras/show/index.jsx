@@ -59,25 +59,25 @@ class Show extends React.Component {
             currentWatchers.map(watcher => {
               return (
                 <li>
-                   <img
+                  <img
                     alt="avatar"
                     width="64"
                     height="64"
                     data-src={watcher.avatar || 'holder.js/64x64?auto=yes'}
                     src={watcher.avatar}
                     className="img-thumbnail mr-2"
-                    ref={ref => Holder.run({ images: ref })}/>
-                    ID: {watcher.id} Name { watcher.name }
+                    ref={ref => Holder.run({ images: ref })} />
+                  ID: {watcher.id} Name {watcher.name}
                 </li>
               )
             })
           }
-      </ul>
-    </React.Fragment>
+        </ul>
+      </React.Fragment>
     )
   }
 
-  renderRecord () {
+  renderRecord() {
     const { currentUser, record, backPath, match } = this.props;
     return (<Card>
       <CardHeader>{record.name}</CardHeader>
@@ -98,14 +98,14 @@ class Show extends React.Component {
           backPath={backPath}
           editURL={match.url}
         />
-        <hr/>
+        <hr />
         {this.renderWatchers()}
       </CardBody>
     </Card>);
   }
 
-  render () {
-    return this.isFetching() ? <Loader/> : this.renderRecord();
+  render() {
+    return this.isFetching() ? <Loader /> : this.renderRecord();
   }
 }
 

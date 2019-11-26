@@ -13,7 +13,10 @@ const resourceApi = resources => {
   const show = (params = {}) => {
     const { id, nestedParams = {} } = params;
     return fetchApi(generatePath(`dashboard/${resources}/${id}`, nestedParams), { method: 'GET' });
+
   };
+
+
 
   const update = (params = {}) => {
     const { id, data, nestedParams = {} } = params;

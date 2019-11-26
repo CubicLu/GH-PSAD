@@ -20,7 +20,7 @@ const withResourceFetching = (Component, fetchData) => {
       isResourceFetching: true
     };
 
-    componentWillUnmount () {
+    componentWillUnmount() {
       this._isMounted = false;
     }
 
@@ -30,7 +30,7 @@ const withResourceFetching = (Component, fetchData) => {
       }
     };
 
-    componentDidMount () {
+    componentDidMount() {
       this._isMounted = true;
       fetchData(this);
     }
@@ -40,7 +40,7 @@ const withResourceFetching = (Component, fetchData) => {
       this.setState({ isResourceFetching: true });
     };
 
-    render () {
+    render() {
       return <Component
         {...this.props}
         isResourceFetching={this.state.isResourceFetching}
