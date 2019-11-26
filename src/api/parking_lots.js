@@ -3,19 +3,19 @@ import fetchApi from 'components/modules/fetch_api';
 
 const { index, show, update, create } = resourceApi('parking_lots');
 
-const createParkingSpace = (params = {}) => {
-  const { parkingSpaceImage, parkingLotId, name } = params;
-  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_spaces`, { method: 'POST', data: { parking_space_image: parkingSpaceImage, name } });
+const createParkingPlan = (params = {}) => {
+  const { parkingPlanImage, parkingLotId, name } = params;
+  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_plans`, { method: 'POST', data: { parking_plan_image: parkingPlanImage, name } });
 };
 
-const deleteParkingSpace = (params = {}) => {
-  const { parkingLotId, parkingSpaceId } = params;
-  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_spaces/${parkingSpaceId}`, { method: 'DELETE' });
+const deleteParkingPlan = (params = {}) => {
+  const { parkingLotId, parkingPlanId } = params;
+  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_plans/${parkingPlanId}`, { method: 'DELETE' });
 };
 
-const updateParkingSpace = (params = {}) => {
-  const { parkingLotId, parkingSpaceImage, parkingSpaceCoordinates, parkingSpaceId, name } = params;
-  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_spaces/${parkingSpaceId}`, { method: 'PUT', data: { parking_space_coordinates: parkingSpaceCoordinates, name, parking_space_image: parkingSpaceImage } });
+const updateParkingPlan = (params = {}) => {
+  const { parkingLotId, parkingPlanImage, parkingPlanCoordinates, parkingPlanId, name } = params;
+  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_plans/${parkingPlanId}`, { method: 'PUT', data: { parking_plan_coordinates: parkingPlanCoordinates, name, parking_plan_image: parkingPlanImage } });
 };
 
 const filterFetcher = (params = {}) => {
@@ -44,4 +44,4 @@ const filterFetcher = (params = {}) => {
   });
 };
 
-export { filterFetcher, show, update, create, createParkingSpace, deleteParkingSpace, updateParkingSpace };
+export { filterFetcher, show, update, create, createParkingPlan, deleteParkingPlan, updateParkingPlan };

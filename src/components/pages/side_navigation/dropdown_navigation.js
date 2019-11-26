@@ -18,7 +18,7 @@ function DropdownNavigation (props) {
 
   return (
     <Navbar className={`p-0 ${isSomeLinkActive ? 'selected-point' : ''}`}>
-      <div className={`${isOpen ? styles.svgWhite : ''} menu-points d-flex align-items-center`}  onClick={() => setIsOpen(!isOpen)} >
+      <div className={`${isOpen ? 'svg-white' : ''} menu-points d-flex align-items-center`}  onClick={() => setIsOpen(!isOpen)} >
         {props.icon}
         <span className=" d-none d-lg-block d-xl-block mr-2">
           {props.title}

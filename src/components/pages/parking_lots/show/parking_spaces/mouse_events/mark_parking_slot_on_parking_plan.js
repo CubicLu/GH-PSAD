@@ -3,12 +3,12 @@ import { isEmpty } from 'underscore';
 
 const offsetMouse = 15
 
-export function markSlotOnParkingSpace (e) {
+export function markSlotOnParkingPlan (e) {
   const {
    isInsideEditingZone,
    isEditing,
    newCircleInfo,
-   isEditingExistingSlot,
+   isMovingExistingSlot,
    slotIdClicked
   } = this.state;
 
@@ -16,7 +16,7 @@ export function markSlotOnParkingSpace (e) {
     const x = e.clientX, y = e.clientY,
     elementMouseIsOver = document.elementFromPoint(x, y);
     // To avoid mark a new circle when user is selecting an existing circle
-    if(elementMouseIsOver !== this.circleRef.current && elementMouseIsOver !== this.circleRef.current.firstChild) {
+    if(!isMovingExistingSlot && elementMouseIsOver !== this.circleRef.current && elementMouseIsOver !== this.circleRef.current.firstChild) {
       return
     }
     const offsetX = x - this.mapRef.current.getBoundingClientRect().left - offsetMouse;
@@ -27,12 +27,13 @@ export function markSlotOnParkingSpace (e) {
 
     this.multiSelectContainerRef.current.focus()
 
-    if(isEditingExistingSlot) {
+    if(isMovingExistingSlot) {
       // When the user was moving an existing circle
+      this.deleteParkingSlotCircle(slotIdClicked)
       this.setState({
         newCircleInfo: {},
         slotIdClicked: null,
-        isEditingExistingSlot: false,
+        isMovingExistingSlot: false,
         drawedSlotContainer: [
           ...this.state.drawedSlotContainer,
           {

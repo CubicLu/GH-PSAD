@@ -6,36 +6,29 @@ import {
   Col,
   Row,
   Nav,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  UncontrolledDropdown
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faEllipsisV, faEyeSlash, faEye, faTrash, faSync, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
-import ReactFileReader from 'react-file-reader';
+import { faChevronLeft, faSync } from '@fortawesome/free-solid-svg-icons';
 import { isEmpty, isMatch } from 'underscore';
 import {
   isUserInsideEditingZone,
-  markSlotOnParkingSpace,
-  updateCirclePointer
+  markSlotOnParkingPlan
 } from './mouse_events'
 
-import ParkingSpaceEditableZone from './parking_space_editable_zone'
+import ParkingPlanEditableZone from './parking_plan_editable_zone'
 import FileLayoutModal from './file_layout_modal'
+import UpperPanel from './upper_panel'
+import SlotPane from './slot_pane'
 
 /* Actions */
 import { SET_RECORD } from 'actions/parking_lots';
 /* API */
-import { index } from 'api/parking_slots';
-import { show, createParkingSpace, deleteParkingSpace, updateParkingSpace } from 'api/parking_lots';
+import { index as indexParkingSlot } from 'api/parking_slots';
+import { show, createParkingPlan, deleteParkingPlan, updateParkingPlan } from 'api/parking_lots';
 /* Base */
 /* Helpers */
-import Collapse from 'components/helpers/collapse';
 import Loader from 'components/helpers/loader';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
-import TooltipInfo from 'components/helpers/tooltip_info';
-import GeneralTooltip from 'components/helpers/general_tooltip';
 import ConfirmationModal from 'components/helpers/modals/confirmation';
 import { btnSpinner } from 'components/helpers';
 /* Modules */
@@ -44,49 +37,48 @@ import resourceFetcher from 'components/modules/resource_fetcher';
 import connectRecord from 'components/modules/connect_record';
 import withCurrentUser from 'components/modules/with_current_user';
 /* Assets */
-import styles from './parking_spaces.module.sass'
-import { ReactComponent as LocationIcon } from 'assets/location_icon.svg'
-import { ReactComponent as EditIcon } from 'assets/edit_icon.svg'
-import { ReactComponent as RecordsIcon } from 'assets/records_icon.svg'
-import {ReactComponent as UploadSVG } from 'assets/upload.svg';
-import {ReactComponent as ChevronDown } from 'assets/chevron_down.svg';
+import styles from './parking_plans.module.sass'
 
 /**
   * @state (Bool)  isEditing indicate if the user is in editing mode
   * @state (Bool) isInsideEditingZone indicate if the user pointer is inside the layout parking space
-  * @state (Bool) isEditingExistingSlot indicate if the user is moving/editing a circle that was already on parking space
+  * @state (Bool) isMovingExistingSlot indicate if the user is moving a circle that was already on parking space
+  * @state (Bool) isRefreshingData indicate if the suer pressed the reload button on the parking slot pane
   * @state (Array) drawedSlotContainer contains circle drawed on top of the parking space
   * @state (Array) tmpDrawedSlotContainer contains the initial data of drawedSlotContainer variable to check if the data was changed when the user tries to turn off the edit mode
   * @state (Array) list contains a list of parking slot and its state
-  * @state (Array) parkingSpaces contains a list of images associated to Parking Lot
+  * @state (Array) parkingPlans contains a list of images associated to Parking Lot
   * @state (Integer) slotIdClicked contains the ID of the slot selected on 'Edit mode'
-  * @state (Integer) selectedIndexParkingSpace contains the index of the current parking space where the user is working on
+  * @state (Integer) selectedIndexParkingPlan contains the index of the current parking space where the user is working on
   * @state (Object) newCircleInfo store temporaly the information about the new circle that will be created
   * @state (Integer) slotIdToBeDeleted store temporaly the slot id to wait user deletion confirmation
 */
 
-class ParkingSpaces extends Component {
+export const ParkingPlanContext = React.createContext();
+
+class ParkingPlans extends Component {
   state = {
     /* Modal */
     showCircleConfirmationModal: false,
-    showParkingSpaceDeleteConfirmationModal: false,
+    showParkingPlanDeleteConfirmationModal: false,
     showUnsavedChangesModal: false,
     showFileLayoutModal: false,
     /* Loader State */
     isRefreshingData: false,
-    isSaving: false,
-    isSavingParkingSpace: false,
+    isSavingCoordinates: false,
+    isSavingParkingPlan: false,
     isListFetching: true,
 
     fileLayoutModalShouldUpdate: false,
     list: [],
-    parkingSpaces: [],
-    selectedIndexParkingSpace: 0,
+    parkingPlans: [],
+    selectedIndexParkingPlan: 0,
     slotIdToBeDeleted: null,
     errors: {},
     isEditing: false,
     isInsideEditingZone: false,
-    isEditingExistingSlot: false,
+    isMovingExistingSlot: false,
+    isChangingIdToExistingSlot: false,
     slotIdClicked: null,
     locateSlotId: null,
     newCircleInfo: {},
@@ -111,10 +103,11 @@ class ParkingSpaces extends Component {
       slotIdToBeDeleted: null,
       showCircleConfirmationModal: false,
       isInsideEditingZone: false,
-      isEditingExistingSlot: false,
+      isMovingExistingSlot: false,
       newCircleInfo: {},
       slotIdClicked: null,
-      isEditing: false
+      isEditing: false,
+      isChangingIdToExistingSlot: false
     })
   }
 
@@ -128,11 +121,13 @@ class ParkingSpaces extends Component {
     })
   }
 
-  clearLocateSlotId = () => {
-    this.setState({
-      locateSlotId: null
-    });
-  }
+  clearLocateSlotId = () => this.setState({ locateSlotId: null })
+
+  toggleFileLayoutModal = () => this.setState({ showFileLayoutModal: !this.state.showFileLayoutModal})
+
+  toggleUnsavedChangesModal = () =>  this.setState((state) => ({ showUnsavedChangesModal: !state.showUnsavedChangesModal }))
+
+  toggleParkingPlanDeleteConfirmationModal = () => this.setState((state) => ({ showParkingPlanDeleteConfirmationModal:  !state.showParkingPlanDeleteConfirmationModal }))
 
   toggleCircleConfirmationModal = (slotId) => {
     this.setState({
@@ -141,25 +136,21 @@ class ParkingSpaces extends Component {
     });
   }
 
-  toggleUnsavedChangesModal = () => {
-    this.setState((state) => ({
-      showUnsavedChangesModal: !state.showUnsavedChangesModal
-    }));
-  }
-
-  toggleParkingSpaceDeleteConfirmationModal = () => {
-    this.setState((state) => ({
-      showParkingSpaceDeleteConfirmationModal:  !state.showParkingSpaceDeleteConfirmationModal
-    }));
+  cancelParkingSlotCircleDeletion = () => {
+    this.setState({
+      slotIdToBeDeleted: null,
+      slotIdClicked: null,
+      showCircleConfirmationModal: false
+    })
   }
 
   toggleEdit = () => {
-    const { drawedSlotContainer, tmpDrawedSlotContainer, parkingSpaces, selectedIndexParkingSpace, isEditing } = this.state;
+    const { drawedSlotContainer, tmpDrawedSlotContainer, parkingPlans, selectedIndexParkingPlan, isEditing } = this.state;
 
-    if(parkingSpaces[selectedIndexParkingSpace]) {
+    if(parkingPlans[selectedIndexParkingPlan]) {
 
       if(isEditing) {
-        const isNotChanged = drawedSlotContainer.length != tmpDrawedSlotContainer.length ? false :
+        const isNotChanged = drawedSlotContainer.length !== tmpDrawedSlotContainer.length ? false :
         drawedSlotContainer.every((slot, index) => {
           return isMatch(slot, tmpDrawedSlotContainer[index])
         })
@@ -176,7 +167,7 @@ class ParkingSpaces extends Component {
         slotIdToBeDeleted: null,
         showCircleConfirmationModal: false,
         isInsideEditingZone: false,
-        isEditingExistingSlot: false,
+        isMovingExistingSlot: false,
         newCircleInfo: {},
         slotIdClicked: null,
         isEditing: !isEditing
@@ -187,8 +178,9 @@ class ParkingSpaces extends Component {
   refreshData = () => {
     const { record, startFetching } = this.props
     const { list } = this.state
-    this.setState({isRefreshingData: true})
-    startFetching(index({
+    this.setState({ isRefreshingData: true })
+    return startFetching(
+      indexParkingSlot({
         query: {
           parking_lot_id: record.id
         }
@@ -200,22 +192,23 @@ class ParkingSpaces extends Component {
           this.setState({
             list: newList
           })
+          return response;
         })
         .finally(() => this.setState({isRefreshingData: false}))
 
   }
 
-  // Sync Parking Slot Left panel
-  syncDrawedSlotContainer = () => {
-    const { parkingSpaces, selectedIndexParkingSpace, list } = this.state
+  // Sync Parking Slot marked on the map
+  syncSlotContainerOnMap = () => {
+    const { parkingPlans, selectedIndexParkingPlan, list } = this.state
     let drawedSlotContainer = [];
-    if(!isEmpty(parkingSpaces)){
-      const parkingSpaceId = parkingSpaces[selectedIndexParkingSpace || 0].id ;
-      let setSlotList = list.filter(slot => slot.coordinate_parking_space);
+    if(!isEmpty(parkingPlans)){
+      const parkingPlanId = parkingPlans[selectedIndexParkingPlan || 0].id ;
+      let setSlotList = list.filter(slot => slot.coordinate_parking_plan);
 
       if(setSlotList) {
-        const slotList = setSlotList.filter(slot => slot.coordinate_parking_space.image_id === parkingSpaceId)
-        drawedSlotContainer = slotList.map(slot => slot.coordinate_parking_space)
+        const slotList = setSlotList.filter(slot => slot.coordinate_parking_plan.image_id === parkingPlanId)
+        drawedSlotContainer = slotList.map(slot => slot.coordinate_parking_plan)
       }
     }
 
@@ -226,33 +219,33 @@ class ParkingSpaces extends Component {
   }
 
   // Change parking space
-  selectIndexParkingSpace = (index) => {
+  selectIndexParkingPlan = (index) => {
     this.resetData();
     this.setState({
-      selectedIndexParkingSpace: index
-    }, this.syncDrawedSlotContainer)
+      selectedIndexParkingPlan: index
+    }, this.syncSlotContainerOnMap)
   }
 
 
   // Cancel when user selects on the parking space in editing mode
-  cancelMarkingSlotOnParkingSpace = () => {
+  cancelMarkingSlotOnParkingPlan = () => {
     this.setState({
-      newCircleInfo: {}
-    })
-  }
-
-  cancelParkingSlotCircleDeletion = () => {
-    this.setState({
-      slotIdToBeDeleted: null,
-      slotIdClicked: null,
-      showCircleConfirmationModal: false
+      newCircleInfo: {},
+      isChangingIdToExistingSlot: false,
+      slotIdClicked: null
     })
   }
 
   // Add new point on the parking space after select parking slot on dropdown
-  applyMarkingSlotOnParkingSpace = (selectedOptions) => {
+  applyMarkingSlotOnParkingPlan = (selectedOptions) => {
+    const { isChangingIdToExistingSlot } = this.state
+    if(isChangingIdToExistingSlot)  {
+      this.changeIdToSlotOnParkingPlan(selectedOptions);
+      return;
+    }
+
     const newCircleInfo = this.state.newCircleInfo;
-    newCircleInfo.parking_slot_id = selectedOptions.value
+    newCircleInfo.parking_slot_id = selectedOptions.value;
 
     this.setState({
       newCircleInfo: {},
@@ -263,32 +256,73 @@ class ParkingSpaces extends Component {
     })
   }
 
-  editParkingSlotCircle = (id) => {
-    this.deleteParkingSlotCircle(id)
+  changeIdToSlotOnParkingPlan = (selectedOptions) => {
+    const { slotIdClicked } = this.state
+    const drawedSlotContainer = [...this.state.drawedSlotContainer]
+    let replacementIndex;
+    const newSlot = drawedSlotContainer.find((slot, index ) => {
+      if(slot.parking_slot_id === slotIdClicked) {
+        replacementIndex = index;
+        return true
+      }
+      return false
+    });
+    newSlot.parking_slot_id = selectedOptions.value;
+    drawedSlotContainer.splice(replacementIndex, 1);
     this.setState({
-      slotIdClicked: id,
-      isEditingExistingSlot: true
+      newCircleInfo: {},
+      isChangingIdToExistingSlot: false,
+      drawedSlotContainer: [
+        newSlot,
+        ...drawedSlotContainer
+      ]
     })
   }
+
+  onMouseDownOnSlotCircle = (id) => {
+    const { isEditing } = this.state
+    if(isEditing) {
+      this.setState({
+        slotIdClicked: id
+      })
+    }
+  }
+
+  onMouseDragOnSlotCircle = () => this.setState({ isMovingExistingSlot: true })
+
+  onMouseUpOnSlotCircle = (e) => {
+    const { isMovingExistingSlot, isEditing, slotIdClicked } = this.state
+
+    if(isEditing && isMovingExistingSlot) {
+      markSlotOnParkingPlan.call(this, e)
+    }
+
+    this.setState({
+      slotIdClicked: isMovingExistingSlot ? null : slotIdClicked,
+      isMovingExistingSlot: false
+    })
+  }
+
+  editParkingSlotCircle = () =>  this.setState({ isChangingIdToExistingSlot: true })
 
   // Show info of the clicked circle
   showCircleDrawSlowInfo = (id) => {
     this.setState({
       slotIdClicked: id,
+      isChangingIdToExistingSlot: false, // To reset SlotAssignmentBar in case decide to click another one while editing ID
       newCircleInfo: {}
     })
   }
 
   // Locate the parking slot on any pakring space
-  locateSlotOnParkingSpace = (id) => {
-    const { list, parkingSpaces } = this.state
+  locateSlotOnParkingPlan = (id) => {
+    const { list, parkingPlans } = this.state
     const slot = list.find(slot => slot.id === id)
-    const selectedIndexParkingSpace = parkingSpaces.findIndex(parkingSpace => parkingSpace.id === slot.coordinate_parking_space.image_id)
-
+    const selectedIndexParkingPlan = parkingPlans.findIndex(parkingPlan => parkingPlan.id === slot.coordinate_parking_plan.image_id)
     this.setState({
       locateSlotId: id,
-      selectedIndexParkingSpace
-    }, this.syncDrawedSlotContainer)
+      selectedIndexParkingPlan
+    }, this.syncSlotContainerOnMap)
   }
 
   /**
@@ -307,122 +341,153 @@ class ParkingSpaces extends Component {
     })
   }
 
-  deleteParkingSpaceFile = () => {
+  deleteParkingPlanFile = () => {
     const { record, startFetching } = this.props
-    const { selectedIndexParkingSpace, parkingSpaces } = this.state
+    const { selectedIndexParkingPlan, parkingPlans } = this.state
     this.setState({
-      showParkingSpaceDeleteConfirmationModal: false,
-      isSavingParkingSpace: true
+      showParkingPlanDeleteConfirmationModal: false,
+      isSavingParkingPlan: true
     })
-    startFetching(deleteParkingSpace({
-        parkingLotId: record.id,
-        parkingSpaceId: parkingSpaces[selectedIndexParkingSpace].id
-      }))
-      .then(response => {
-        this.resetData()
-        this.setState({
-          selectedIndexParkingSpace: 0,
-          parkingSpaces: response.data.parking_spaces
-        }, this.syncDrawedSlotContainer)
+
+    startFetching(deleteParkingPlan({
+      parkingLotId: record.id,
+      parkingPlanId: parkingPlans[selectedIndexParkingPlan].id
+    }))
+      .then(responseDeleteParkingPlan => {
+        this.refreshData()
+          .then(response => {
+            this.resetData()
+            this.setState({
+              selectedIndexParkingPlan: 0,
+              parkingPlans: responseDeleteParkingPlan.data.parking_plans,
+              list: response.data
+            }, this.syncSlotContainerOnMap);
+          })
+          .catch((error) => {
+            this.renderErrorMessage()
+            console.log(error);
+          })
+          .finally(() => this.setState({ isSavingParkingPlan: false }))
       })
       .catch((err) => {
+        this.renderErrorMessage()
         console.error(err);
+        this.setState({ isSavingParkingPlan: false })
       })
-      .finally(() => this.setState({ isSavingParkingSpace: false }))
   }
 
   /**
     SAVE ACTIONS
   */
 
-  saveCoordinateCircles = (parkingSpaceId) => {
+  saveCoordinateCircles = () => {
     const { startFetching, record } = this.props;
-    const { drawedSlotContainer } = this.state
+    const { selectedIndexParkingPlan, parkingPlans, drawedSlotContainer } = this.state
+
+    this.setState({ isSavingCoordinates: true })
 
     startFetching(
-      updateParkingSpace({
+      updateParkingPlan({
         parkingLotId: record.id,
-        parkingSpaceCoordinates: drawedSlotContainer,
-        parkingSpaceId
+        parkingPlanCoordinates: drawedSlotContainer,
+        parkingPlanId: parkingPlans[selectedIndexParkingPlan].id
       })
     ).then(() => {
-      startFetching(index({
-        query: {
-          parking_lot_id: record.id
-        }
-      }))
+      this.refreshData()
         .then(response => {
+          this.setState({
+            tmpDrawedSlotContainer: drawedSlotContainer
+          })
           this.context.addAlertMessages([{
             type: 'Success',
             text: 'Parking Space data saved succesfully'
           }]);
-
-          this.setState({
-            tmpDrawedSlotContainer: drawedSlotContainer,
-            list: response.data
-          });
         })
         .catch((error) => {
+          this.renderErrorMessage()
           console.log(error);
-          this.context.addAlertMessages([{
-            type: 'Error',
-            text: 'An error has occurred'
-          }]);
         })
+        .finally(() => this.setState({ isSavingCoordinates: false }))
     })
+
   };
 
-  updateParkingSpaceFile = (file, fileName) => {
-    const { parkingSpaces, selectedIndexParkingSpace } = this.state
+  updateParkingPlanFile = (file, fileName) => {
+    const { parkingPlans, selectedIndexParkingPlan } = this.state
     const { startFetching, record } = this.props;
     const base64 = file ? file.base64 : ''
     this.setState({
       fileLayoutModalShouldUpdate: false,
-      isSavingParkingSpace: true
+      isSavingParkingPlan: true
     })
 
     startFetching(
-      updateParkingSpace({
+      updateParkingPlan({
         parkingLotId: record.id,
         name: fileName,
-        parkingSpaceImage: base64,
-        parkingSpaceId: parkingSpaces[selectedIndexParkingSpace].id
+        parkingPlanImage: base64,
+        parkingPlanId: parkingPlans[selectedIndexParkingPlan].id
       })
     )
-      .then((response) => this.setState({ parkingSpaces: response.data.parking_spaces }))
-      .finally(() => this.setState({ isSavingParkingSpace: false }))
+      .then((response) => this.setState({ parkingPlans: response.data.parking_plans }))
+      .finally(() => this.setState({ isSavingParkingPlan: false }))
   }
 
-  saveParkingSpaceFile = (file, fileName) => {
+  saveParkingPlanFile = (file, fileName) => {
     if(this.state.fileLayoutModalShouldUpdate) {
-      this.updateParkingSpaceFile(file, fileName);
+      this.updateParkingPlanFile(file, fileName);
       return;
     }
 
-    const { record, startFetching } = this.props
-    this.setState({ isSavingParkingSpace: true })
-    startFetching(
-      createParkingSpace({
-      parkingLotId: record.id,
-      parkingSpaceImage: file.base64,
-      name: fileName
-    }))
-      .then(response => {
-        this.resetData()
-        this.setState({
-          selectedIndexParkingSpace: response.data.parking_spaces.length - 1,
-          parkingSpaces: response.data.parking_spaces
-        }, this.syncDrawedSlotContainer)
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-      .finally(() => this.setState({ isSavingParkingSpace: false }))
+    if(file) {
+      const { record, startFetching } = this.props
+      this.setState({ isSavingParkingPlan: true })
+      startFetching(
+        createParkingPlan({
+        parkingLotId: record.id,
+        parkingPlanImage: file.base64,
+        name: fileName
+      }))
+        .then(response => {
+          this.resetData()
+          // Show the map previously uploaded and update parking spaces layout
+          this.setState({
+            selectedIndexParkingPlan: response.data.parking_plans.length - 1,
+            parkingPlans: response.data.parking_plans
+          }, this.syncSlotContainerOnMap)
+        })
+        .catch((err) => {
+          this.renderErrorMessage()
+          console.error(err);
+        })
+        .finally(() => this.setState({ isSavingParkingPlan: false }))
+    }
+  }
+
+  addNewMap = () => {
+    this.toggleFileLayoutModal();
+    this.setState({
+      fileLayoutModalShouldUpdate: false
+    })
+  }
+
+  editCurrentMap = () => {
+    this.toggleFileLayoutModal();
+    this.setState({
+      fileLayoutModalShouldUpdate: true
+    })
   }
 
   /**
     RENDER ACTIONS
   */
+
+  renderErrorMessage = () => {
+    this.context.addAlertMessages([{
+      type: 'Error',
+      text: 'An error has occurred'
+    }]);
+  }
 
   renderHeader () {
     const { backPath, parentPath, history, match, record } = this.props;
@@ -457,144 +522,7 @@ class ParkingSpaces extends Component {
       </Row>);
   }
 
-  renderEnableButton = () => {
-    const { isEditing, parkingSpaces, selectedIndexParkingSpace } = this.state;
-
-    return (
-      <div
-        className={`d-flex float-right justify-content-center align-items-center ${styles.toggleGroup}`}
-        onClick={this.toggleEdit}
-      >
-        <TooltipInfo text="Edit Mode allows you to create, update or delete markups on the parking lot layout screen." target="recipients"  />
-        <span className="mx-2">Markup Mode</span>
-        <input type="checkbox" className="d-none" readOnly checked={isEditing ? 'checked' : ''} />
-        <div className={`${styles.onoffswitch}`} >
-            <div className={styles['onoffswitch-label']}>
-                <div className={styles['onoffswitch-inner']}></div>
-                <div  className={`${parkingSpaces[selectedIndexParkingSpace] ? '' : styles.disabledToggle} ${styles['onoffswitch-switch']}`}></div>
-            </div>
-        </div>
-      </div>
-    )
-  }
-
-  renderUploadLayout = () => {
-    const { parkingSpaces, selectedIndexParkingSpace } = this.state;
-
-    return (
-      parkingSpaces[selectedIndexParkingSpace] ? (
-        <UncontrolledDropdown className="float-left">
-          <DropdownToggle caret>
-            {parkingSpaces[selectedIndexParkingSpace].name}
-          </DropdownToggle>
-          <DropdownMenu>
-            {
-              parkingSpaces.map((parkingSpace, index) => {
-                return (
-                    <DropdownItem
-                      key={parkingSpace.id}
-                      onClick={() => this.selectIndexParkingSpace(index, parkingSpace.id)}
-                      disabled={parkingSpace.id === parkingSpaces[selectedIndexParkingSpace].id}
-                    >
-                      {parkingSpace.name}
-                    </DropdownItem>
-                )
-              })
-            }
-            <DropdownItem divider />
-            <DropdownItem onClick={this.addNewMap}>
-              <span class="text-primary">+ ADD NEW</span>
-            </DropdownItem>
-          </DropdownMenu>
-        </UncontrolledDropdown>
-      ) : (
-        <Button onClick={this.addNewMap} className="mb-3 float-left bg-grey-dark  ml-4 ">
-          <UploadSVG className="mr-2"/>
-          Add a Layout
-        </Button>
-      )
-    )
-  }
-
-  toggleFileLayoutModal = () => this.setState({ showFileLayoutModal: !this.state.showFileLayoutModal})
-
-  addNewMap = () => {
-    this.toggleFileLayoutModal();
-    this.setState({
-      fileLayoutModalShouldUpdate: false
-    })
-  }
-
-  editCurrentMap = () => {
-    this.toggleFileLayoutModal();
-    this.setState({
-      fileLayoutModalShouldUpdate: true
-    })
-  }
-
-  renderUpperPanel = () => {
-    const { parkingSpaces, selectedIndexParkingSpace } = this.state;
-    return (
-      <Col className="row">
-        <Col sm={12} className="mb-5">
-          <hr className="w-100 position-absolute"/>
-        </Col>
-        <Col>
-          {this.renderUploadLayout()}
-          <Button color="primary" onClick={this.editCurrentMap} className={`${parkingSpaces[selectedIndexParkingSpace] ? '' : 'disabled not-allowed ' } mb-3 float-left ml-4`}>
-              <EditIcon />
-          </Button>
-          <Button color="danger" onClick={this.toggleParkingSpaceDeleteConfirmationModal} className={`${parkingSpaces[selectedIndexParkingSpace] ? '' : 'disabled not-allowed ' } mb-3 float-left ml-4`}>
-              <FontAwesomeIcon color="white" icon={faTrash}/>
-          </Button>
-          <Button color="secondary" onClick={() => {}} className={`${parkingSpaces[selectedIndexParkingSpace] ? '' : 'disabled not-allowed ' } mb-3 float-left ml-4`}>
-              <RecordsIcon className="white"/>
-          </Button>
-
-          {this.renderEnableButton()}
-        </Col>
-      </Col>
-    );
-  }
-
-  renderSlot = (slot) => {
-    const statusColor = slot.status === "free" ? 'bg-green' : 'bg-red'
-
-    return (
-      <React.Fragment key={slot.id}>
-        <Col xs={12} className={`${styles.rowParkingSlot} position-relative px-0 d-flex justify-content-between align-items-center`}>
-          <div className={`border-right border-dark ${styles.availabilitySpace} ${statusColor}`}>
-          </div>
-          <div className={`general-text-1 ml-3 ${styles.slotName}`}>
-            {slot.name}
-          </div>
-          <div className="p-3 mr-5">
-            <UncontrolledDropdown>
-              <DropdownToggle tag="span" className="pointer">
-                <FontAwesomeIcon color="grey" icon={faEllipsisV}/>
-              </DropdownToggle>
-              <DropdownMenu right>
-                {
-                  slot.coordinate_parking_space && (
-                    <DropdownItem onClick={() => this.locateSlotOnParkingSpace(slot.id)} className="p-3 text-grey">
-                        <LocationIcon className={`mr-1 ${styles.svgDark}`} width="20" height="20"/>
-                        <span className="general-text-1" >Locate</span>
-                    </DropdownItem>
-                  )
-                }
-                <DropdownItem className="p-3 text-grey">
-                    <RecordsIcon className={`mr-2 ${styles.svgDark}`} width="15" height="15" />
-                    <span className="general-text-1" >Session Records</span>
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-          </div>
-        </Col>
-      </React.Fragment>
-    )
-  }
-
-  renderEmptyParkingSpace = () => {
+  renderEmptyParkingPlan = () => {
     return (
       <React.Fragment>
           <div className={`${styles.emptyImageMap} d-flex justify-content-center align-items-center`}>
@@ -609,64 +537,25 @@ class ParkingSpaces extends Component {
     )
   }
 
-  renderParkingSpace = (parkingSpaceImageURL) => {
+  renderParkingPlan = (parkingPlanImageURL) => {
 
-    if (!parkingSpaceImageURL) {
-      return this.renderEmptyParkingSpace()
+    if (!parkingPlanImageURL) {
+      return this.renderEmptyParkingPlan()
     }
 
-    return <ParkingSpaceEditableZone
-      {...this.state}
-      parkingSpaceImageURL={parkingSpaceImageURL}
-      circleRef={this.circleRef}
-      mapRef={this.mapRef}
-      editParkingSlotCircle={this.editParkingSlotCircle}
-      toggleConfirmationModal={this.toggleCircleConfirmationModal}
-      multiSelectContainerRef={this.multiSelectContainerRef}
-      applyMarkingSlotOnParkingSpace={this.applyMarkingSlotOnParkingSpace}
-      cancelMarkingSlotOnParkingSpace={this.cancelMarkingSlotOnParkingSpace}
-      showCircleDrawSlowInfo={this.showCircleDrawSlowInfo}
-      markSlotOnParkingSpace={markSlotOnParkingSpace.bind(this)}
-      clearLocateSlotId={this.clearLocateSlotId}
-      updateCirclePointer={updateCirclePointer.bind(this)}
+    return <ParkingPlanEditableZone
+      parkingPlanImageURL={parkingPlanImageURL}
     />
   }
 
-  renderSlotPane = (parkingSpaceId) => {
-    const { list, isRefreshingData } = this.state
-
-    return (
-      isRefreshingData ?
-        (
-          <Col className="p-3 row d-flex justify-content-center">
-            <p className="general-text-1">
-              <Loader/>
-            </p>
-          </Col>
-        )
-      : isEmpty(list) ?
-        (
-          <Col className="p-3 row d-flex justify-content-center">
-            <p className="general-text-1">
-              You don't have any parking space for now.
-            </p>
-          </Col>
-        ) : (
-          <Col className={`overflow-auto ${styles.slotContainer} p-0 mb-4`}>
-            {list.map(slot => this.renderSlot(slot))}
-          </Col>
-        )
-
-    )
-  }
 
   renderSaveButton = () => {
-    const { isEditing, isSaving } = this.state
+    const { isEditing, isSavingCoordinates } = this.state
     return (
       isEditing && (
         <Col>
           <Button color="success" className="px-5 py-2 mx-5 my-2 float-right"  onClick={this.saveCoordinateCircles}>
-            {isSaving ? btnSpinner() : 'Save Changes'}
+            {isSavingCoordinates ? btnSpinner() : 'Save Changes'}
           </Button>
         </Col>
       )
@@ -674,7 +563,7 @@ class ParkingSpaces extends Component {
   }
 
   renderForm () {
-    const { isSavingParkingSpace, parkingSpaces, selectedIndexParkingSpace } = this.state
+    const { isSavingParkingPlan, parkingPlans, selectedIndexParkingPlan } = this.state
 
     return (
       <Row onMouseMove={isUserInsideEditingZone.bind(this)}>
@@ -683,16 +572,15 @@ class ParkingSpaces extends Component {
               <span className="ml-4">Parking Spaces</span>
               <FontAwesomeIcon icon={faSync} className="pointer" onClick={this.refreshData}/>
             </Col>
-            {this.renderSlotPane()}
+            <SlotPane/>
         </Col>
         <Col xs={12} md={9} className="p-0 overflow-auto">
-
           <div className="mb-1">
-            {this.renderUpperPanel()}
+            <UpperPanel/>
           </div>
           <div className={`${styles.mapContainer} mx-auto card border-dark d-flex justify-content-center align-items-center p-5`}>
             {
-              isSavingParkingSpace ? <Loader/> : this.renderParkingSpace(parkingSpaces[selectedIndexParkingSpace] ? parkingSpaces[selectedIndexParkingSpace].url : null)
+              isSavingParkingPlan ? <Loader/> : this.renderParkingPlan(parkingPlans[selectedIndexParkingPlan] ? parkingPlans[selectedIndexParkingPlan].url : null)
             }
           </div>
           {this.renderSaveButton()}
@@ -706,21 +594,21 @@ class ParkingSpaces extends Component {
       showFileLayoutModal,
       slotIdToBeDeleted,
       fileLayoutModalShouldUpdate,
-      parkingSpaces,
-      selectedIndexParkingSpace,
+      parkingPlans,
+      selectedIndexParkingPlan,
       showCircleConfirmationModal,
-      showParkingSpaceDeleteConfirmationModal,
+      showParkingPlanDeleteConfirmationModal,
       showUnsavedChangesModal
     } = this.state
 
     return (
       <React.Fragment>
         <FileLayoutModal
-          defaultName={fileLayoutModalShouldUpdate ? parkingSpaces[selectedIndexParkingSpace].name : ''}
-          defaultURL={fileLayoutModalShouldUpdate ? parkingSpaces[selectedIndexParkingSpace].url : ''}
+          defaultName={fileLayoutModalShouldUpdate ? parkingPlans[selectedIndexParkingPlan].name : ''}
+          defaultURL={fileLayoutModalShouldUpdate ? parkingPlans[selectedIndexParkingPlan].url : ''}
           isOpen={showFileLayoutModal}
           toggleModal={this.toggleFileLayoutModal}
-          saveParkingSpaceFile={this.saveParkingSpaceFile}
+          saveParkingPlanFile={this.saveParkingPlanFile}
         />
         <ConfirmationModal
           text={"There are unsaved changes, are you sure you want to disable edit mode?"}
@@ -730,9 +618,9 @@ class ParkingSpaces extends Component {
         />
         <ConfirmationModal
           text={"Delete this markup?"}
-          accept={this.deleteParkingSpaceFile}
-          cancel={this.toggleParkingSpaceDeleteConfirmationModal}
-          isOpen={showParkingSpaceDeleteConfirmationModal}
+          accept={this.deleteParkingPlanFile}
+          cancel={this.toggleParkingPlanDeleteConfirmationModal}
+          isOpen={showParkingPlanDeleteConfirmationModal}
         />
         <ConfirmationModal
           text={"Delete this parking space?"}
@@ -746,15 +634,20 @@ class ParkingSpaces extends Component {
 
   renderRecord () {
     return (
-      <Row className="m-0">
-        <Col xs={12} className="mb-4 bg-white">
-          {this.renderHeader()}
-        </Col>
-        <Col xs={12}>
-          {this.renderForm()}
-        </Col>
-        {this.renderModals()}
-      </Row>
+      <ParkingPlanContext.Provider value={{
+        state: {...this.state},
+        func: this
+      }}>
+        <Row className="m-0">
+          <Col xs={12} className="mb-4 bg-white">
+            {this.renderHeader()}
+          </Col>
+          <Col xs={12}>
+            {this.renderForm()}
+          </Col>
+          {this.renderModals()}
+        </Row>
+      </ParkingPlanContext.Provider>
     );
   }
 
@@ -762,17 +655,19 @@ class ParkingSpaces extends Component {
     const { startFetching } = this.props;
 
     if (record) {
-      startFetching(index({
-        query: {
-          parking_lot_id: record.id
-        }
-      }))
+      startFetching(
+        indexParkingSlot({
+          query: {
+            parking_lot_id: record.id
+          }
+        })
+      )
         .then(response => {
-          const updateDrawedSlotContainer = response.data.length > 0 ? this.syncDrawedSlotContainer : null
+          const updateDrawedSlotContainer = response.data.length > 0 ? this.syncSlotContainerOnMap : null
           this.setState({
             isListFetching: false,
             list: response.data,
-            parkingSpaces: record.parking_spaces
+            parkingPlans: record.parking_plans
           }, updateDrawedSlotContainer)
         })
 
@@ -795,7 +690,7 @@ class ParkingSpaces extends Component {
   }
 }
 
-ParkingSpaces.propTypes = {
+ParkingPlans.propTypes = {
   backPath: PropTypes.string.isRequired,
   currentUser: PropTypes.object
 };
@@ -805,6 +700,6 @@ export default connectRecord(
   SET_RECORD,
   resourceFetcher(show),
   withFetching(
-    withCurrentUser(ParkingSpaces)
+    withCurrentUser(ParkingPlans)
   )
 );
