@@ -16,9 +16,10 @@ export function markSlotOnParkingPlan (e) {
     const x = e.clientX, y = e.clientY,
     elementMouseIsOver = document.elementFromPoint(x, y);
     // To avoid mark a new circle when user is selecting an existing circle
-    if(!isMovingExistingSlot && elementMouseIsOver !== this.circleRef.current && elementMouseIsOver !== this.circleRef.current.firstChild) {
+    if(!isMovingExistingSlot && elementMouseIsOver !== this.mapRef.current) {
       return
     }
+
     const offsetX = x - this.mapRef.current.getBoundingClientRect().left - offsetMouse;
     const offsetY = y - this.mapRef.current.getBoundingClientRect().top - offsetMouse;
 

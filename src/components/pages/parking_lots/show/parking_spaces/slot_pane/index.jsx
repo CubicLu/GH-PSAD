@@ -43,9 +43,9 @@ const SlotElement = (slot) => {
                   </DropdownItem>
                 )
               }
-              <DropdownItem className="p-3 text-grey">
+              <DropdownItem className="p-3 text-grey not-allowed">
                   <RecordsIcon className={`mr-2 svg-dark`} width="15" height="15" />
-                  <span className="general-text-1" >Session Records</span>
+                  <span className="general-text-1" >Session Records (In dev)</span>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>

@@ -63,6 +63,7 @@ class ParkingPlans extends Component {
     showParkingPlanDeleteConfirmationModal: false,
     showUnsavedChangesModal: false,
     showFileLayoutModal: false,
+    showLocateSlotModalConfirmation: false,
     /* Loader State */
     isRefreshingData: false,
     isSavingCoordinates: false,
@@ -89,7 +90,6 @@ class ParkingPlans extends Component {
   static contextType = AlertMessagesContext
 
   mapRef = React.createRef();
-  circleRef = React.createRef();
   multiSelectContainerRef = React.createRef();
 
   isFetching = () => {
@@ -129,6 +129,8 @@ class ParkingPlans extends Component {
 
   toggleParkingPlanDeleteConfirmationModal = () => this.setState((state) => ({ showParkingPlanDeleteConfirmationModal:  !state.showParkingPlanDeleteConfirmationModal }))
 
+  hideConfirmationLocateSlotModal = () => this.setState({ showLocateSlotModalConfirmation: false, tmplocateSlotId: null })
+
   toggleCircleConfirmationModal = (slotId) => {
     this.setState({
       slotIdToBeDeleted: slotId,
@@ -144,21 +146,24 @@ class ParkingPlans extends Component {
     })
   }
 
+  willDataBeErased = () => {
+    const { drawedSlotContainer, tmpDrawedSlotContainer } = this.state;
+    const willErase = drawedSlotContainer.length !== tmpDrawedSlotContainer.length ? false :
+    drawedSlotContainer.every((slot, index) => {
+      return isMatch(slot, tmpDrawedSlotContainer[index])
+    })
+
+    return !willErase
+  }
+
   toggleEdit = () => {
-    const { drawedSlotContainer, tmpDrawedSlotContainer, parkingPlans, selectedIndexParkingPlan, isEditing } = this.state;
+    const { drawedSlotContainer, parkingPlans, selectedIndexParkingPlan, isEditing } = this.state;
 
     if(parkingPlans[selectedIndexParkingPlan]) {
 
-      if(isEditing) {
-        const isNotChanged = drawedSlotContainer.length !== tmpDrawedSlotContainer.length ? false :
-        drawedSlotContainer.every((slot, index) => {
-          return isMatch(slot, tmpDrawedSlotContainer[index])
-        })
-
-        if(!isNotChanged) {
+      if(isEditing && this.willDataBeErased()) {
           this.toggleUnsavedChangesModal();
           return
-        }
       }
       const copyDrawedSlotContainer = drawedSlotContainer
 
@@ -198,7 +203,7 @@ class ParkingPlans extends Component {
 
   // Sync Parking Slot marked on the map
   syncSlotContainerOnMap = () => {
-    const { parkingPlans, selectedIndexParkingPlan, list } = this.state
+    const { parkingPlans, selectedIndexParkingPlan, isEditing, list } = this.state
     let drawedSlotContainer = [];
     if(!isEmpty(parkingPlans)){
       const parkingPlanId = parkingPlans[selectedIndexParkingPlan || 0].id ;
@@ -211,7 +216,8 @@ class ParkingPlans extends Component {
     }
 
     this.setState({
-      drawedSlotContainer
+      drawedSlotContainer,
+      tmpDrawedSlotContainer: isEditing ? drawedSlotContainer : []
     })
 
   }
@@ -314,13 +320,24 @@ class ParkingPlans extends Component {
 
   // Locate the parking slot on any pakring space
   locateSlotOnParkingPlan = (id) => {
-    const { list, parkingPlans } = this.state
-    const slot = list.find(slot => slot.id === id)
-    const selectedIndexParkingPlan = parkingPlans.findIndex(parkingPlan => parkingPlan.id === slot.coordinate_parking_plan.image_id)
+    const { list, parkingPlans, tmplocateSlotId, selectedIndexParkingPlan, isEditing } = this.state
+    const slot = list.find(slot => slot.id === (tmplocateSlotId || id))
+    const newSelectedIndexParkingPlan = parkingPlans.findIndex(parkingPlan => parkingPlan.id === slot.coordinate_parking_plan.image_id)
+
+    if(!tmplocateSlotId && newSelectedIndexParkingPlan !== selectedIndexParkingPlan && isEditing && this.willDataBeErased() ) {
+      this.setState({
+        showLocateSlotModalConfirmation: true,
+        tmplocateSlotId: id
+      })
+      return
+    }
+
     this.setState({
       locateSlotId: id,
-      selectedIndexParkingPlan
-    }, this.syncSlotContainerOnMap)
+      showLocateSlotModalConfirmation: false,
+      tmplocateSlotId: null,
+      selectedIndexParkingPlan: newSelectedIndexParkingPlan
+    }, newSelectedIndexParkingPlan !== selectedIndexParkingPlan ? this.syncSlotContainerOnMap : null)
   }
 
   /**
@@ -596,7 +613,8 @@ class ParkingPlans extends Component {
       selectedIndexParkingPlan,
       showCircleConfirmationModal,
       showParkingPlanDeleteConfirmationModal,
-      showUnsavedChangesModal
+      showUnsavedChangesModal,
+      showLocateSlotModalConfirmation
     } = this.state
 
     return (
@@ -613,6 +631,12 @@ class ParkingPlans extends Component {
           accept={this.resetUnsavedChanges}
           cancel={this.toggleUnsavedChangesModal}
           isOpen={showUnsavedChangesModal}
+        />
+        <ConfirmationModal
+          text={"The parking slot you are trying to locate is in another plan, the changes won't be saved if you proceed, are you sure do you want ot proceed?"}
+          accept={this.locateSlotOnParkingPlan}
+          cancel={this.hideConfirmationLocateSlotModal}
+          isOpen={showLocateSlotModalConfirmation}
         />
         <ConfirmationModal
           text={"Delete this markup?"}

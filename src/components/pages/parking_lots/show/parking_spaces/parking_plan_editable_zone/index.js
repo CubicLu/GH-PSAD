@@ -5,50 +5,26 @@ import ParkingSlotCircle from '../parking_slot_circle'
 import SlotAssignmentBar from '../slot_assignment_bar'
 import {
   markSlotOnParkingPlan,
-  updateCirclePointer
 } from '../mouse_events'
 import styles from '../parking_plans.module.sass'
 import { ParkingPlanContext } from '../index'
-
-const MouseCircle = () => {
-
-  const parkingPlanContext = useContext(ParkingPlanContext)
-  const { circleRef } = parkingPlanContext.func
-
-  let slot, colorCircle = '';
-
-  return (
-      <div
-        ref={circleRef}
-        className={`position-absolute rounded-circle d-flex justify-content-center align-items-center ${styles.followCircle} ${colorCircle}`}
-      >
-        <p className="text-white m-0">{slot ? slot.name : '' }</p>
-      </div>
-  )
-}
 
 const ParkingPlanEditableZone = (props) => {
 
   const parkingPlanContext = useContext(ParkingPlanContext)
   const { mapRef, multiSelectContainerRef } = parkingPlanContext.func
   const { applyMarkingSlotOnParkingPlan } = parkingPlanContext.func
-  const { isEditing, isInsideEditingZone, newCircleInfo, drawedSlotContainer, list, isMovingExistingSlot, slotIdClicked } = parkingPlanContext.state
+  const { isEditing, newCircleInfo, drawedSlotContainer, list, isMovingExistingSlot, slotIdClicked } = parkingPlanContext.state
   const { parkingPlanImageURL } = props
-  const cursorClass = isEditing ? isMovingExistingSlot ? 'grabbing' : 'crosshair' : ''
+  const cursorClass = isEditing ? isMovingExistingSlot ? 'grabbing' : styles.followCircle : ''
   const showSlotAssignmentBar = !isEmpty(newCircleInfo) ? '' : 'd-none'
   return (
     <React.Fragment>
       <div
         ref={mapRef}
         className={`user-select-none map-boundaries position-relative ${styles.imageMap} ${cursorClass}`}
-        onMouseMove={updateCirclePointer.bind(parkingPlanContext.func)}
         onClick={markSlotOnParkingPlan.bind(parkingPlanContext.func)}
       >
-        {
-          (isEditing && isInsideEditingZone) && (
-            <MouseCircle />
-          )
-        }
         <div ref={multiSelectContainerRef} className={`${styles.CircleBarContainer} ${showSlotAssignmentBar} position-absolute`}>
               <SlotAssignmentBar
                 onChange={applyMarkingSlotOnParkingPlan}

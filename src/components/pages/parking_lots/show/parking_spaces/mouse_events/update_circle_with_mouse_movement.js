@@ -1,3 +1,4 @@
+// TODO: Delete this file
 // Executed every time the user moves the mouse inside the map
 import { isEmpty } from 'underscore';
 const offsetMouse = 15

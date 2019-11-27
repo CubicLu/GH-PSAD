@@ -39,7 +39,7 @@ const UpperPanel = () => {
           <Button color="danger" onClick={toggleParkingPlanDeleteConfirmationModal} className={`${parkingPlans[selectedIndexParkingPlan] ? '' : 'disabled not-allowed ' } mb-3 float-left ml-4`}>
               <TrashIcon className="svg-white" />
           </Button>
-          <Button color="secondary" onClick={() => {}} className={`${parkingPlans[selectedIndexParkingPlan] ? '' : 'disabled not-allowed ' } mb-3 float-left ml-4`}>
+          <Button color="secondary" onClick={() => {}} className={`${parkingPlans[selectedIndexParkingPlan] ? '' : 'disabled  ' } mb-3 not-allowed float-left ml-4`}>
               <RecordsIcon className="white"/>
           </Button>
           <EnableButton/>
