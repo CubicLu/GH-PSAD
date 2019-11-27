@@ -11,7 +11,7 @@ const withApiCatch = (promise, isCritical = false) => {
       return
     }
 
-    if(isCritical) {
+    if (isCritical) {
       store.dispatch(critical(error));
       return
     }

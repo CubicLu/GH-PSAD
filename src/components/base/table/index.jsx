@@ -24,9 +24,9 @@ export class IndexTable extends React.Component {
 
   customLoader = () => {
     return (
-       <React.Fragment>
+      <React.Fragment>
         <div className="w-100 position-absolute">
-          <Loader/>
+          <Loader />
         </div>
         <td height="60">
         </td>
@@ -96,8 +96,8 @@ export class IndexTable extends React.Component {
   setQuery = (sortedAttr) => {
     const { paginationQuery } = this.props
     return !isEmpty(sortedAttr) ?
-        Object.assign({}, paginationQuery , { 'order[keyword]': sortedAttr.keyword, 'order[direction]': sortedAttr.asc ? 'asc' : 'desc' })
-        : paginationQuery
+      Object.assign({}, paginationQuery, { 'order[keyword]': sortedAttr.keyword, 'order[direction]': sortedAttr.asc ? 'asc' : 'desc' })
+      : paginationQuery
   }
 
   componentDidMount() {
@@ -149,7 +149,7 @@ export class IndexTable extends React.Component {
                 </TRSort>
               </thead>
               <tbody>
-               {this.renderRecords()}
+                {this.renderRecords()}
               </tbody>
             </Table>
           </Col>

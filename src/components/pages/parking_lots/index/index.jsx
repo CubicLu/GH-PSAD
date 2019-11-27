@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import  { CREATE_PARKING_LOT } from 'config/permissions'
+import { CREATE_PARKING_LOT } from 'config/permissions'
 /* Actions */
 import { SET_LIST } from 'actions/parking_lots';
 /* API */
@@ -32,7 +32,7 @@ class Index extends React.Component {
     return isResourceFetching || isDropdownFetching
   }
 
-  setDropdowns = (key, data) => this.setState({ dropdowns: {...this.state.dropdowns, [key]: data} })
+  setDropdowns = (key, data) => this.setState({ dropdowns: { ...this.state.dropdowns, [key]: data } })
 
   renderRecords = () => {
     const { list, match, history } = this.props;
@@ -53,26 +53,26 @@ class Index extends React.Component {
     });
   };
 
-  componentDidMount () {
+  componentDidMount() {
     const { startFetching, currentUser } = this.props
-     Promise.all([
+    Promise.all([
       startFetching(dropdownsSearch('parking_lot_parking_admins_filter', { admin_id: currentUser.id }))
         .then(response => this.setDropdowns('parkingAdmins', response.data)),
       startFetching(dropdownsSearch('parking_lot_town_managers_filter', { admin_id: currentUser.id }))
         .then(response => this.setDropdowns('townManagers', response.data)),
-     ])
+    ])
       .finally(() => this.setState({ isDropdownFetching: false }))
 
   }
 
-  render () {
+  render() {
     const { dropdowns: { townManagers, parkingAdmins } } = this.state
 
     return (
       <IndexTable
         {...this.props}
         isFetching={this.isFetching}
-        toolbar={<BasicListToolbar {...this.props} createRequiredPermissions={[CREATE_PARKING_LOT]} label="+ Create New" title="Parking lot accounts"/>}
+        toolbar={<BasicListToolbar {...this.props} createRequiredPermissions={[CREATE_PARKING_LOT]} label="+ Create New" title="Parking lot accounts" />}
         filterFields={filterFields(parkingAdmins, townManagers)}
         filterFetcher={filterFetcher}
         resource={resource}

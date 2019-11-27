@@ -36,9 +36,9 @@ class ShowForm extends React.Component {
       case FieldType.MULTISELECT_FIELD:
         return this.listField(value, field.innerLabel);
       case FieldType.FILE_FIELD:
-        return <img src={value} alt={field.name}/>;
+        return <img src={value} alt={field.name} />;
       default:
-        return <Input id={field.name} plaintext readOnly value={value}/>;
+        return <Input id={field.name} plaintext readOnly value={value} />;
     }
   };
 
@@ -65,7 +65,7 @@ class ShowForm extends React.Component {
     </React.Fragment>
   );
 
-  render () {
+  render() {
     return <Form> {this.renderForm()} </Form>;
   }
 }

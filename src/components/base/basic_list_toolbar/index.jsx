@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Badge, Row, Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
-import  { permissions } from 'config/permissions'
+import { permissions } from 'config/permissions'
 /* Modules */
 import withCurrentUser from 'components/modules/with_current_user';
 import PermissibleRender from 'components/modules/permissible_render';
@@ -16,7 +16,7 @@ class BasicListToolbar extends React.Component {
     history.push(`${match.path}/new`);
   };
 
-  render () {
+  render() {
     const {
       label,
       title,
@@ -28,28 +28,29 @@ class BasicListToolbar extends React.Component {
     } = this.props;
 
     return (
+
       <Row className="w-100 justify-content-around">
         <Col md={4} className="d-flex align-items-center pb-1 pl-0">
           <h4>
-            { title }
+            {title}
           </h4>
         </Col>
         <Col md={6} className="row pb-1 align-items-center justify-content-end pr-0">
-          <Col className="m-0"  xs={12} sm={8} md={8} lg={8}>
+          <Col className="m-0" xs={12} sm={8} md={8} lg={8}>
             <div className="filter-box shadow d-inline-block float-right">
               <span className="general-text-3 mr-3">Filter By</span>
               {
                 badgesFilter.map(element => (
                   <Button onClick={() => badgesDelete(element)} key={element} color="secondary" className="mr-3" >
-                    {element.label} <Badge color="secondary"> <FontAwesomeIcon icon={faTimes}/> </Badge>
+                    {element.label} <Badge color="secondary"> <FontAwesomeIcon icon={faTimes} /> </Badge>
                   </Button>
                 ))
               }
               <Button color="dark" onClick={onClickFilter}>
-                <FontAwesomeIcon icon={faFilter}/>
+                <FontAwesomeIcon icon={faFilter} />
               </Button>
             </div>
-         </Col>
+          </Col>
           {
             label && (
               <PermissibleRender

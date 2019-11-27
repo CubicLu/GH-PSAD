@@ -1,6 +1,6 @@
 import faker from 'faker'
 import { FieldType } from 'components/helpers/form_fields'
-import  {
+import {
   // DISPUTE_ACCOUNT,
   // VIOLATION_COUNT,
   LOCATION,
@@ -60,8 +60,8 @@ const filterFields = (parkingAdmins, townManagers) => [
   {
     name: 'parking_admins',
     label: 'Assigned Parking Admin',
-    type: FieldType.SELECT_FIELD  ,
-    options: parkingAdmins.map(({value, label}) => {
+    type: FieldType.SELECT_FIELD,
+    options: parkingAdmins.map(({ value, label }) => {
       return { value, label };
     })
   },
@@ -69,7 +69,7 @@ const filterFields = (parkingAdmins, townManagers) => [
     name: 'town_managers',
     label: 'Assigned Town Manager',
     type: FieldType.SELECT_FIELD,
-    options: townManagers.map(({value, label}) => {
+    options: townManagers.map(({ value, label }) => {
       return { value, label };
     })
   },
@@ -87,7 +87,7 @@ const exampleData = (roles) => process.env.NODE_ENV !== 'production' ? {
   email: faker.internet.email(),
   status: 'active'
 } : {
-  status: 'active'
-} // These are defaults values for each field
+    status: 'active'
+  } // These are defaults values for each field
 
 export { fieldsNew, fieldsShow, filterFields, exampleData };

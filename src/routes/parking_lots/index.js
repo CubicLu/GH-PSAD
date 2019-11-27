@@ -12,15 +12,15 @@ function Routing(props) {
 
   return (
     <React.Fragment>
-      <Route exact path={match.path} component={Index}/>
+      <Route exact path={match.path} component={Index} />
       <Switch>
-        <Route exact path={`${match.path}/new/`} render={renderWithBackPath(New, `${match.url}/`)}/>
+        <Route exact path={`${match.path}/new/`} render={renderWithBackPath(New, `${match.url}/`)} />
         <Route path={`${match.path}/:id`} render={(props) => (
           <React.Fragment>
-            <Route exact path={`${props.match.path}`} component={renderWithBackPath(Show, `${match.url}/`)}/>
-            <Route path={`${props.match.path}/rules`} render={renderWithParentPath(renderWithBackPath(Rules, `${match.url}/`), props.match.url)}/>
+            <Route exact path={`${props.match.path}`} component={renderWithBackPath(Show, `${match.url}/`)} />
+            <Route path={`${props.match.path}/rules`} render={renderWithParentPath(renderWithBackPath(Rules, `${match.url}/`), props.match.url)} />
           </React.Fragment>
-        )}/>
+        )} />
       </Switch>
     </React.Fragment>
   );

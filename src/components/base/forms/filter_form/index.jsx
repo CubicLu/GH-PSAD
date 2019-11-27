@@ -29,7 +29,7 @@ class FilterForm extends React.Component {
       case FieldType.SELECT_FIELD:
         return <CustomSelect field={field} />;
       default:
-        return <Text className="form-control" {...field.props} field={field.name} validate={field.validate}/>;
+        return <Text className="form-control" {...field.props} field={field.name} validate={field.validate} />;
     }
   };
 
@@ -47,7 +47,7 @@ class FilterForm extends React.Component {
           Cancel
         </Button>
         <Button onClick={() => submitForm(formState.values)} color="info" type="submit">
-          { isFetching() ? btnSpinner() : 'Apply'}
+          {isFetching() ? btnSpinner() : 'Apply'}
         </Button>
       </div>
     );
@@ -60,10 +60,10 @@ class FilterForm extends React.Component {
     </React.Fragment>
   );
 
-  render () {
+  render() {
     const { values, isFetching } = this.props;
     return (
-      isFetching() ? <Loader/> : <Form initialValues={values} component={this.renderForm}/>
+      isFetching() ? <Loader /> : <Form initialValues={values} component={this.renderForm} />
     );
   }
 }
