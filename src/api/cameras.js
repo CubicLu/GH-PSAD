@@ -11,7 +11,7 @@ const filterFetcher = (params = {}) => {
     perPage,
     query: {
       ...query,
-      parking_lot_id: filters.parking_lot_id
+      parking_lot_id: filters.parking_lot_id,
     }
   });
 };

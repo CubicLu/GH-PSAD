@@ -8,7 +8,7 @@ const parkingLot = lot => {
     <FormGroup row>
       <Label for="parking_lot" sm={2}>Parking Lot</Label>
       <Col sm={10}>
-        <Input id="parking_lot" plaintext readOnly value={lot.name}/>
+        <Input id="parking_lot" plaintext readOnly value={lot.name} />
       </Col>
     </FormGroup>
   );
@@ -27,21 +27,24 @@ const showFields = () => [
   { name: 'stream', label: 'Stream' },
   { name: 'login', label: 'Login' },
   { name: 'password', label: 'Password' },
-  { name: 'parking_lot.id', label: 'Parking Lot' },
+  { name: 'parking_lot_id', label: 'Parking Lot' },
   { name: 'created_at', label: 'Created At' },
   { name: 'updated_at', label: 'Updated At' }
 ];
 
 const filterFields = () => [
-  { name: 'parking_lot_id', label: 'Parking Lot' }
+  { name: 'name', label: 'Name' },
+  { name: 'id', label: 'Parking Lot' },
+  { name: 'city', label: 'Location' },
+  { name: 'available_cameras', label: 'Available Cameras' },
 ]
 
 const exampleData = () => process.env.NODE_ENV !== 'production' ? {
   name: faker.lorem.words(),
   stream: faker.internet.url(),
-  login:  faker.internet.userName(),
-  password:  faker.internet.password()
+  login: faker.internet.userName(),
+  password: faker.internet.password()
 } : {
-} // These are defaults values for each field
+  } // These are defaults values for each field
 
 export { parkingLot, fields, showFields, filterFields, exampleData };

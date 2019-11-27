@@ -13,7 +13,7 @@ const resourceFetcher = (fetcher, resource) => {
     let filters = retrieveFilters(resource)
 
     wrapper.resourceFetchStarted(
-      fetcher({filters, page, ...params})
+      fetcher({ filters, page, ...params })
         .then(onResponse)
         .catch(err => console.error(err))
     );
