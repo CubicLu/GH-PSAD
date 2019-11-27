@@ -7,7 +7,7 @@ export function updateCirclePointer(e) {
 
   if(isInsideEditingZone && isEditing && isEmpty(newCircleInfo))  {
     const target = this.circleRef.current;
-     const x = e.clientX, y = e.clientY;
+    const x = e.clientX, y = e.clientY;
     const offsetX = x - this.mapRef.current.getBoundingClientRect().left - offsetMouse;
     const offsetY = y - this.mapRef.current.getBoundingClientRect().top - offsetMouse;
 

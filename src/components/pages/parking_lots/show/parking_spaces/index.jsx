@@ -181,9 +181,7 @@ class ParkingPlans extends Component {
     this.setState({ isRefreshingData: true })
     return startFetching(
       indexParkingSlot({
-        query: {
-          parking_lot_id: record.id
-        }
+        parkingLotId: record.id
       }))
         .then(response => {
           const newList = list.map(slot => {
@@ -657,9 +655,7 @@ class ParkingPlans extends Component {
     if (record) {
       startFetching(
         indexParkingSlot({
-          query: {
-            parking_lot_id: record.id
-          }
+          parkingLotId: record.id
         })
       )
         .then(response => {

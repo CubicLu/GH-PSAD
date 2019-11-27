@@ -23,12 +23,13 @@ const isCSSIdValid = (id) => (
 
 const Circle = (props) => {
   const parkingPlanContext = useContext(ParkingPlanContext)
-  const [tooltipOpen, setTooltipOpen] = useState(false);
-  const toggle = () => setTooltipOpen(!tooltipOpen);
 
   const { onMouseDragOnSlotCircle, onMouseUpOnSlotCircle, clearLocateSlotId } = parkingPlanContext.func
   const { isEditing, isMovingExistingSlot, locateSlotId } = parkingPlanContext.state
   const { slot, element, backgroundColor } = props
+
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const toggle = () => setTooltipOpen(!tooltipOpen);
 
   if(locateSlotId) {
     setTimeout(() => {
