@@ -27,12 +27,16 @@ const withFetching = (Component) => {
 
     startFetching = promise => {
       return new Promise((resolve, reject) => {
-        promise.then((response) => {
-          if(!this._isMounted) {
-            return reject()
-          }
-          return resolve(response)
-        })
+        promise
+          .then((response) => {
+            if(!this._isMounted) {
+              return reject()
+            }
+            return resolve(response)
+          })
+          .catch(err => {
+            return reject(err)
+          })
       })
     };
 

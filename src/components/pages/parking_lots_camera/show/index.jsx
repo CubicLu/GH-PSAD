@@ -12,10 +12,7 @@ import Loader from 'components/helpers/loader';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import { Link } from 'react-router-dom';
-import {
-  Col, Row, Card, CardImg, CardText, CardBody,
-  CardTitle, CardSubtitle, Button
-} from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import withFetching from 'components/modules/with_fetching'
@@ -24,7 +21,7 @@ import { connect } from 'react-redux';
 import withCurrentUser from 'components/modules/with_current_user';
 import { invoke } from 'actions';
 import styles from './parking_lots_camera.sass'
-import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
+import { renderImageField } from 'components/base/forms/common_form';
 import { FieldType } from 'components/helpers/form_fields';
 
 class Show extends React.Component {
