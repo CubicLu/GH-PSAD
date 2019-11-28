@@ -16,6 +16,7 @@ import {
 
 import ParkingPlanEditableZone from './parking_plan_editable_zone'
 import FileLayoutModal from './file_layout_modal'
+import SessionRecordModal from './session_record_modal'
 import UpperPanel from './upper_panel'
 import SlotPane from './slot_pane'
 
@@ -63,12 +64,14 @@ class ParkingPlans extends Component {
     showUnsavedChangesModal: false,
     showFileLayoutModal: false,
     showLocateSlotModalConfirmation: false,
+    showParkingSessionRecords: false,
     /* Loader State */
     isRefreshingData: false,
     isSavingCoordinates: false,
     isSavingParkingPlan: false,
     isListFetching: true,
 
+    currentSessionRecord: {},
     fileLayoutModalShouldUpdate: false,
     list: [],
     parkingPlans: [],
@@ -121,6 +124,10 @@ class ParkingPlans extends Component {
   }
 
   clearLocateSlotId = () => this.setState({ locateSlotId: null })
+
+  setSessionRecords = (currentSessionRecord) => this.setState({ showParkingSessionRecords: true, currentSessionRecord })
+
+  hideSessionRecordModal = () => this.setState({ showParkingSessionRecords: false })
 
   toggleFileLayoutModal = () => this.setState({ showFileLayoutModal: !this.state.showFileLayoutModal})
 
@@ -636,11 +643,18 @@ class ParkingPlans extends Component {
       showCircleConfirmationModal,
       showParkingPlanDeleteConfirmationModal,
       showUnsavedChangesModal,
-      showLocateSlotModalConfirmation
+      showLocateSlotModalConfirmation,
+      showParkingSessionRecords,
+      currentSessionRecord
     } = this.state
 
     return (
       <React.Fragment>
+        <SessionRecordModal
+          currentSessionRecord={currentSessionRecord}
+          toggleModal={this.hideSessionRecordModal}
+          isOpen={showParkingSessionRecords}
+        />
         <FileLayoutModal
           defaultName={fileLayoutModalShouldUpdate ? parkingPlans[selectedIndexParkingPlan].name : ''}
           defaultURL={fileLayoutModalShouldUpdate ? parkingPlans[selectedIndexParkingPlan].url : ''}
