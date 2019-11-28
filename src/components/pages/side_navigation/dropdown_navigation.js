@@ -18,7 +18,7 @@ function DropdownNavigation (props) {
 
   return (
     <Navbar className={`p-0 ${isSomeLinkActive ? 'selected-point' : ''}`}>
-      <div className={`${isOpen ? styles.svgWhite : ''} menu-points d-flex align-items-center`}  onClick={() => setIsOpen(!isOpen)} >
+      <div className={`${isOpen ? styles.svgWhiteMobile : ''} menu-points d-flex align-items-center`}  onClick={() => setIsOpen(!isOpen)} >
         {props.icon}
         <span className=" d-none d-lg-block d-xl-block mr-2">
           {props.title}
@@ -30,12 +30,12 @@ function DropdownNavigation (props) {
           {props.title}
           <ul className="shadow-sm bg-white p-0">
            {props.children.map((element, index) => {
-          return (
-            <NavItem className="ml-3 text-center" key={element.props.to}>
-              {element}
-            </NavItem>
-          )
-        })}
+              return (
+                <NavItem className="ml-3 text-center" key={element.props.to}>
+                  {element}
+                </NavItem>
+              )
+            })}
           </ul>
         </span>
       </div>

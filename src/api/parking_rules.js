@@ -6,8 +6,8 @@ const index = (params = {}) => {
 };
 
 const update = (params = {}) => {
-  const { page, perPage, parking_lot_id, query } = params;
-  return fetchApi(`dashboard/parking_rules`, { method: 'PUT', params: { page, perPage, ...query, parking_lot_id } });
+  const { page, perPage, parkingLotId, query } = params;
+  return fetchApi(`dashboard/parking_rules`, { method: 'PUT', params: { page, perPage, ...query, parking_lot_id: parkingLotId } });
 };
 
 export { index, update };

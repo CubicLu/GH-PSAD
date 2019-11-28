@@ -21,7 +21,8 @@ const routes = {
   ticketsReport: '/dashboard/tickets-reports',
   cameras: '/dashboard/cameras',
   parkingLots: '/dashboard/parking_lots',
-  parkingLotsCamera: '/dashboard/live/parking_lots'
+  parkingLotsCamera: '/dashboard/live/parking_lots',
+  archive: ''
 }
 
 const isActive = (location, path) => (

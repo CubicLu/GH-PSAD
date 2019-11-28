@@ -1,6 +1,22 @@
 import resourceApi from 'components/modules/resource_api';
+import fetchApi from 'components/modules/fetch_api';
 
 const { index, show, update, create } = resourceApi('parking_lots');
+
+const createParkingPlan = (params = {}) => {
+  const { parkingPlanImage, parkingLotId, name } = params;
+  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_plans`, { method: 'POST', data: { parking_plan_image: parkingPlanImage, name } });
+};
+
+const deleteParkingPlan = (params = {}) => {
+  const { parkingLotId, parkingPlanId } = params;
+  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_plans/${parkingPlanId}`, { method: 'DELETE' });
+};
+
+const updateParkingPlan = (params = {}) => {
+  const { parkingLotId, parkingPlanImage, parkingPlanCoordinates, parkingPlanId, name } = params;
+  return fetchApi(`dashboard/parking_lots/${parkingLotId}/parking_plans/${parkingPlanId}`, { method: 'PUT', data: { parking_plan_coordinates: parkingPlanCoordinates, name, parking_plan_image: parkingPlanImage } });
+};
 
 const filterFetcher = (params = {}) => {
   const { page, perPage, query, filters = {} } = params;
@@ -31,4 +47,4 @@ const filterFetcher = (params = {}) => {
   });
 };
 
-export { filterFetcher, show, update, create };
+export { filterFetcher, show, update, create, createParkingPlan, deleteParkingPlan, updateParkingPlan };

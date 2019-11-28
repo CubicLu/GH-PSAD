@@ -38,7 +38,7 @@ export class IndexTable extends React.Component {
     const { isFetching, renderRecords } = this.props;
     const { isActionTableFetching } = this.state;
 
-    if (isFetching() || isActionTableFetching ) {
+    if (isFetching() || isActionTableFetching) {
       return this.customLoader();
     }
 
@@ -64,7 +64,7 @@ export class IndexTable extends React.Component {
 
   stopFetchingActionTable = (event) => this.setState((state) => ({ isActionTableFetching: false }));
 
-  paginationFetcher = (pagesQuery) => this.props.filterFetcher({filters: this.state.filterQuery, query: this.setQuery(this.state.sortedAttr), ...pagesQuery})
+  paginationFetcher = (pagesQuery) => this.props.filterFetcher({ filters: this.state.filterQuery, query: this.setQuery(this.state.sortedAttr), ...pagesQuery })
 
   badgesDelete = (badgeInfo) => {
     const { filterQuery } = this.state
