@@ -98,7 +98,7 @@ class Show extends React.Component {
           backPath={backPath}
           editURL={match.url}
         />
-        <hr />
+        <hr/>
         {this.renderWatchers()}
       </CardBody>
     </Card>);
