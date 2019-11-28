@@ -8,8 +8,7 @@ export function markSlotOnParkingPlan (e) {
    isInsideEditingZone,
    isEditing,
    newCircleInfo,
-   isMovingExistingSlot,
-   slotIdClicked
+   isMovingExistingSlot
   } = this.state;
 
   if(isInsideEditingZone && isEditing && isEmpty(newCircleInfo) && this.mapRef.current)  {
@@ -28,32 +27,13 @@ export function markSlotOnParkingPlan (e) {
 
     this.multiSelectContainerRef.current.focus()
 
-    if(isMovingExistingSlot) {
-      // When the user was moving an existing circle
-      this.deleteParkingSlotCircle(slotIdClicked)
-      this.setState({
-        newCircleInfo: {},
-        slotIdClicked: null,
-        isMovingExistingSlot: false,
-        drawedSlotContainer: [
-          ...this.state.drawedSlotContainer,
-          {
-            x: offsetX,
-            y: offsetY,
-            parking_slot_id: slotIdClicked
-          }
-        ]
-      })
-    } else {
-      // Create a grey circle where the user clicked while he choose the new slot
-      this.setState({
-        slotIdClicked: null,
-        newCircleInfo:  {
-          x: offsetX,
-          y: offsetY,
-          parking_slot_id: null
-        }
-      })
-    }
+     this.setState({
+      slotIdClicked: null,
+      newCircleInfo:  {
+        x: offsetX,
+        y: offsetY,
+        parking_slot_id: null
+      }
+    })
   }
 }

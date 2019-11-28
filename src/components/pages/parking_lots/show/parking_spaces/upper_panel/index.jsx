@@ -40,7 +40,7 @@ const UpperPanel = () => {
               <TrashIcon className="svg-white" />
           </Button>
           <Button color="secondary" onClick={() => {}} className={`${parkingPlans[selectedIndexParkingPlan] ? '' : 'disabled  ' } mb-3 not-allowed float-left ml-4`}>
-              <RecordsIcon className="white"/>
+              <RecordsIcon width="18" height="18" className="white"/>
           </Button>
           <EnableButton/>
         </Col>
