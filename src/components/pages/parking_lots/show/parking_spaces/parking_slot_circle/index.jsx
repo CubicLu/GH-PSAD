@@ -34,7 +34,7 @@ const Circle = (props) => {
 
   if(locateSlotId) {
     setTimeout(() => {
-        clearLocateSlotId()
+      clearLocateSlotId()
     }, 2500);
   }
   const ID = `Slot${slot.name}`

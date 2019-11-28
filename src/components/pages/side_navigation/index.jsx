@@ -57,7 +57,7 @@ function SideNavigation(props) {
       >
         <li>
           <Link className={`nav-link ${isActive(props.location, routes.parkingLots)}`} to={routes.parkingLots}>
-            <ParkingLotIcon className="float-left mr-2" />
+            <ParkingLotIcon className="float-left mr-2"/>
             <span className="d-none d-lg-block d-xl-block">
               Parking lot accounts
             </span>
@@ -65,7 +65,7 @@ function SideNavigation(props) {
         </li>
       </PermissibleRender>
       <li>
-        <DropdownNavigation title="Law enf agency" className="selected-point" icon={<AgenciesIcon className="float-left mr-2" />}>
+        <DropdownNavigation title="Law enf agency" className="selected-point" icon={<AgenciesIcon className="float-left mr-2"/>}>
           <Link className={`nav-link ${isActive(props.location, routes.agencies)}`} to={routes.agencies}>Law agencies</Link>
           <Link className={`nav-link ${isActive(props.location, routes.tickets)}`} to={routes.tickets}>Tickets</Link>
           <Link className={`nav-link ${isActive(props.location, routes.ticketsReport)}`} to={routes.ticketsReport}>Tickets Handling Reports</Link>
