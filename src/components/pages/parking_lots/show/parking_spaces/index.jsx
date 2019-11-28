@@ -11,8 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faSync } from '@fortawesome/free-solid-svg-icons';
 import { isEmpty, isMatch } from 'underscore';
 import {
-  isUserInsideEditingZone,
-  markSlotOnParkingPlan
+  isUserInsideEditingZone
 } from './mouse_events'
 
 import ParkingPlanEditableZone from './parking_plan_editable_zone'
@@ -298,7 +297,30 @@ class ParkingPlans extends Component {
     const { isMovingExistingSlot, isEditing, slotIdClicked } = this.state
 
     if(isEditing && isMovingExistingSlot) {
-      markSlotOnParkingPlan.call(this, e)
+      const target = e.target.tagName.toLowerCase() === 'p' ? e.target.parentElement : e.target
+      const leftTarget = target.getBoundingClientRect().left
+      const topTarget = target.getBoundingClientRect().top
+
+      const offsetX = leftTarget - this.mapRef.current.getBoundingClientRect().left;
+      const offsetY = topTarget - this.mapRef.current.getBoundingClientRect().top;
+
+      const drawedSlotContainer = [...this.state.drawedSlotContainer]
+      const slotToDelete = drawedSlotContainer.findIndex(drawedSlot => drawedSlot.parking_slot_id === slotIdClicked)
+      drawedSlotContainer.splice(slotToDelete, 1)
+
+      this.setState({
+        newCircleInfo: {},
+        slotIdClicked: null,
+        isMovingExistingSlot: false,
+        drawedSlotContainer: [
+          ...drawedSlotContainer,
+          {
+            x: offsetX,
+            y: offsetY,
+            parking_slot_id: slotIdClicked
+          }
+        ]
+      })
     }
 
     this.setState({
@@ -581,7 +603,7 @@ class ParkingPlans extends Component {
     const { isSavingParkingPlan, parkingPlans, selectedIndexParkingPlan } = this.state
 
     return (
-      <Row onMouseMove={isUserInsideEditingZone.bind(this)}>
+      <Row onMouseMove={isUserInsideEditingZone.bind(this)} className="pb-5">
         <Col xs={12} md={3} className="p-0">
             <Col className="row d-flex justify-content-between align-items-center text-white bg-primary p-3 m-0" xs={12}>
               <span className="ml-4">Parking Spaces</span>

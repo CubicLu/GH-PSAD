@@ -29,6 +29,7 @@ const Circle = (props) => {
   const { slot, element, backgroundColor } = props
 
   const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [position,] = useState(element); // This is in order
   const toggle = () => setTooltipOpen(!tooltipOpen);
 
   if(locateSlotId) {
@@ -54,8 +55,8 @@ const Circle = (props) => {
           position-absolute d-flex justify-content-center align-items-center rounded-circle`}
         id={ID}
         style={{
-          top: element.y,
-          left: element.x,
+          top: position.y,
+          left: position.x,
           width: circleSize.width,
           height: circleSize.height
         }}
