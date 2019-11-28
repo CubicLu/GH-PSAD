@@ -80,6 +80,7 @@ const ParkingSlotCircle = (props) => {
     showCircleDrawSlowInfo,
     applyMarkingSlotOnParkingPlan,
     editParkingSlotCircle,
+    setSessionRecords,
     toggleCircleConfirmationModal
    } = parkingPlanContext.func
   const { isChangingIdToExistingSlot } = parkingPlanContext.state
@@ -107,7 +108,7 @@ const ParkingSlotCircle = (props) => {
                     {slot ? slot.name : 'Error: Missing'}
                   </Col>
                   <Col className="d-flex flex-row justify-content-around align-items-center">
-                    <InfoIcon width="20" height="20" onClick={() => {}} className="pointer mr-2"/>
+                    <InfoIcon width="20" height="20" onClick={() => setSessionRecords(slot.active_parking_session)} className="pointer mr-2"/>
                     <EditIcon width="20" height="20" onClick={editParkingSlotCircle} className={`svg-dark pointer mr-2`}/>
                     <TrashIcon width="20" height="20" onClick={() => toggleCircleConfirmationModal(slot.id)} color="red" className="pointer"/>
                   </Col>
