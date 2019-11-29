@@ -17,7 +17,7 @@ import { ParkingPlanContext } from '../index'
 
 const SlotElement = (slot) => {
   const parkingPlanContext = useContext(ParkingPlanContext)
-  const { locateSlotOnParkingPlan } = parkingPlanContext.func
+  const { locateSlotOnParkingPlan, setSessionRecords } = parkingPlanContext.func
 
   const statusColor = slot.status === "free" ? 'bg-green' : 'bg-red'
 
@@ -43,9 +43,9 @@ const SlotElement = (slot) => {
                   </DropdownItem>
                 )
               }
-              <DropdownItem className="p-3 text-grey not-allowed">
+              <DropdownItem onClick={() => setSessionRecords(slot.active_parking_session)} className="p-3 text-grey not-allowed">
                   <RecordsIcon className={`mr-2 svg-dark`} width="15" height="15" />
-                  <span className="general-text-1" >Session Records (In dev)</span>
+                  <span className="general-text-1" >Session Records</span>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
