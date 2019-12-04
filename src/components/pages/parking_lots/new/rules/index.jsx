@@ -93,7 +93,7 @@ class New extends React.Component {
             </div>
             <div className="mr-1 text-green">
               <span className={sharedStyles['border-number']}>2</span>
-              Parking Rules
+              Parking rules
             </div>
           </Nav>
         </Col>

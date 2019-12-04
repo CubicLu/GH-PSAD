@@ -29,6 +29,8 @@ import NotAllowed from '../../../helpers/form_fields/image/NotAllowNotConnect/No
 import NotConnect from '../../../helpers/form_fields/image/NotAllowNotConnect/NotConnect'
 import BasicBackListToolbarWithSearch from 'components/base/parking_lot_camera/back';
 import debounce from 'lodash/debounce'
+import { renderImageField } from 'components/base/forms/common_form';
+import { FieldType } from 'components/helpers/form_fields';
 
 class Show extends React.Component {
   state = {
