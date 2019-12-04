@@ -25,7 +25,7 @@ class Index extends React.Component {
 
     return list.map((record, idx) => {
       return (
-        <tr key={idx} onClick={() => history.push(`${match.path}/${record.id}`)} >
+        <tr key={idx} onClick={() => history.push(`${match.path}/${record.id}`, { record: record })} >
           <td>{record.name}</td>
           <td>{record.id ? record.id : null}</td>
           <td>{record.location.full_address ? record.location.full_address : null}</td>

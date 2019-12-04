@@ -4,3 +4,57 @@
     background-color: $disabled-bg-color
     color: $grey-dark
     padding: 20px 30px
+.card-adjust:nth-child(even)
+    padding-left: 0
+.card-adjust:nth-child(odd)
+    padding-right: 0
+.dropdown
+    float: right
+.stream
+    width: 80%
+    margin-bottom: 5%
+    height: auto
+    min-height: 300px
+.card-adjust:nth-child(odd) .stream
+    margin-left: 10%
+
+.card-adjust:nth-child(even) .stream
+    margin-right: 15%
+    margin-left: 5%
+.card-adjust:nth-child(odd) .cameraName
+    padding-left: 15%
+.card-adjust:nth-child(even) .cameraName
+    padding-left: 5%
+.live
+    background-color: #DE856C
+    color: $primary-text-color
+    position: absolute
+    top: 22%
+    font-size: 15px
+    padding: 0% 2%
+.card-adjust:nth-child(odd) .live
+    left: 86%
+.card-adjust:nth-child(even) .live
+    left: 80%
+
+// DropdpownMenu
+
+.dropdownmenu
+    color: $general-text-color
+.dropdownmenu:hover
+    color: $general-text-color
+    text-decoration: none
+
+//Expand camera view
+
+.modal-body
+    min-height: 768px
+    height: auto
+.modal-body  .stream
+    width: 100%
+    min-height: 600px
+    height: auto
+.modal-body  .live
+    position: absolute
+    top: 6%
+    left: 90%
