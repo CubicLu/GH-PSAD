@@ -29,8 +29,7 @@ import NotAllowed from '../../../helpers/form_fields/image/NotAllowNotConnect/No
 import NotConnect from '../../../helpers/form_fields/image/NotAllowNotConnect/NotConnect'
 import BasicBackListToolbarWithSearch from 'components/base/parking_lot_camera/back';
 import debounce from 'lodash/debounce'
-import { renderImageField } from 'components/base/forms/common_form';
-import { FieldType } from 'components/helpers/form_fields';
+
 
 class Show extends React.Component {
   state = {
@@ -125,7 +124,6 @@ class Show extends React.Component {
   }
 
   renderStream(idx) {
-    const { currentUser: { role: { name } } } = this.props
     const { record } = this.props
     return (
       ReactPlayer.canPlay(record[idx].stream) ? <div><ReactPlayer className="stream" url={record[idx].stream} playing={true} width={'80 %'} /><p className="live">Live</p></div> : <NotConnect />
