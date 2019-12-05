@@ -1,13 +1,12 @@
 import React from 'react';
 import { isEmpty } from 'underscore';
-import { ReactComponent as TimesIcon } from 'assets/times_icon.svg'
 import { displayUnixTimestamp } from 'components/helpers';
 
-import { Modal, ModalHeader, ModalBody, Button, Input, Label, Col, Row } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, Col, Row } from 'reactstrap';
+
 const SessionRecordModal = (props) => {
   const { isOpen, toggleModal, currentSessionRecord } = props;
 
-  debugger
   return (
     <Modal isOpen={isOpen} toggle={toggleModal} size="md">
       <ModalHeader toggle={() => toggleModal()} >

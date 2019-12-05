@@ -608,7 +608,7 @@ class ParkingPlans extends Component {
 
   renderForm () {
     const { isSavingParkingPlan, parkingPlans, selectedIndexParkingPlan } = this.state
-
+    const { history, parentPath } = this.props
     return (
       <Row onMouseMove={isUserInsideEditingZone.bind(this)} className="pb-5">
         <Col xs={12} md={3} className="p-0">
@@ -620,7 +620,10 @@ class ParkingPlans extends Component {
         </Col>
         <Col xs={12} md={9} className="p-0 overflow-auto">
           <div className="mb-1">
-            <UpperPanel/>
+            <UpperPanel
+              history={history}
+              parentPath={parentPath}
+            />
           </div>
           <div className={`${styles.mapContainer} mx-auto card border-dark d-flex justify-content-center align-items-center p-5`}>
             {
