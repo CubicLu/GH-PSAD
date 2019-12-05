@@ -81,7 +81,7 @@ class Index extends React.Component {
             <th attr="parking_sessions.id">Transaction Number</th>
             <th attr="vehicles.plate_number">Vehicle Plate</th>
             <th attr="parking_sessions.created_at">Date</th>
-            <th attr="slot.id">Parking Space ID</th>
+            <th attr="parking_slots.name">Parking Space ID</th>
             <th attr="parking_sessions.status">Status</th>
           </React.Fragment>
         }
