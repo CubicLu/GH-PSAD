@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { Button, Badge, Row, Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { permissions } from 'config/permissions'
 /* Modules */
 import withCurrentUser from 'components/modules/with_current_user';
 import PermissibleRender from 'components/modules/permissible_render';
 
-import './back_list_toolbar.sass'
+import styles from './basic_list_toolbar.module.sass'
 
 class BasicListToolbar extends React.Component {
   newRecord = () => {
@@ -24,7 +25,9 @@ class BasicListToolbar extends React.Component {
       badgesFilter,
       badgesDelete,
       createRequiredPermissions,
-      currentUserRoleName
+      currentUserRoleName,
+      goBackPath,
+      extraButtons = () => {}
     } = this.props;
 
     return (
@@ -32,12 +35,22 @@ class BasicListToolbar extends React.Component {
       <Row className="w-100 justify-content-around">
         <Col md={4} className="d-flex align-items-center pb-1 pl-0">
           <h4>
+            {
+              goBackPath && (
+                <Link to={goBackPath} className="mr-3" >
+                  <FontAwesomeIcon size="sm" color="grey" icon={faChevronLeft}/>
+                </Link>
+              )
+            }
             {title}
           </h4>
         </Col>
         <Col md={6} className="row pb-1 align-items-center justify-content-end pr-0">
-          <Col className="m-0" xs={12} sm={8} md={8} lg={8}>
-            <div className="filter-box shadow d-inline-block float-right">
+          <Col className="m-0 align-items-center d-flex justify-content-end" xs={12} sm={8} md={8} lg={8}>
+            <div className={`d-inline-block float-right`}>
+              { extraButtons() }
+            </div>
+            <div className={`${styles.filterBox} shadow d-inline-block float-right`}>
               <span className="general-text-3 mr-3">Filter By</span>
               {
                 badgesFilter.map(element => (
@@ -74,7 +87,7 @@ BasicListToolbar.propTypes = {
   history: PropTypes.object.isRequired,
   onClickFilter: PropTypes.func,
   setList: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired
+  label: PropTypes.string
 };
 
 export default withCurrentUser(BasicListToolbar);
