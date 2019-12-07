@@ -17,7 +17,7 @@ import ReactPlayer from 'react-player'
 import { Col, Row, DropdownToggle, DropdownMenu, DropdownItem, Dropdown, Modal, ModalHeader, ModalBody, Button, ButtonToolbar, ButtonGroup } from 'reactstrap';
 /* Font Awesome */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faEllipsisH, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisH, faSearch } from '@fortawesome/free-solid-svg-icons';
 /* Redux */
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -70,14 +70,8 @@ class Show extends React.Component {
     const { backPath, history } = this.props;
     let id = this.props.match.params.id
     return (<Row className="p-4" >
-      <Col md={2} className="d-flex align-items-center">
-        <Link to={backPath} className="mr-2" >
-          <FontAwesomeIcon color="grey" icon={faChevronLeft} />
-        </Link>
-        <span>{!!history.location.name ? history.location.name.state.record.name : `Parking lot ${id - 1} `}</span>
-      </Col>
-      <Col md={10} >
-        <BasicListToolbar {...this.props} addStreamView={true} label="+ Add Stream" badgesFilter={null} extraButtons={() => {
+      <Col md={12} >
+        <BasicListToolbar goBackPath={backPath} title={!!history.location.name ? history.location.name.state.record.name : `Parking lot ${id - 1} `} {...this.props} addStreamView={true} label="+ Add Stream" badgesFilter={null} extraButtons={() => {
           return (
             this.renderSearchRefresh()
           )
@@ -89,7 +83,7 @@ class Show extends React.Component {
   //show additional button serach and refresh
   renderSearchRefresh() {
     return (
-      <ButtonToolbar className="pb-1 float-right">
+      <ButtonToolbar className="float-right">
         <ButtonGroup className="mr-4 search">
           <input className="form-control" type="text" onChange={(e) => this.handleChange(e.target.value)} placeholder="Search by keyword" />
           <FontAwesomeIcon className="magnifire" color="grey" icon={faSearch} />
@@ -217,15 +211,9 @@ function mapDispatch(dispatch) {
   return bindActionCreators({ setListElement: invoke(SET_LIST_ELEMENT) }, dispatch);
 }
 
-let mapStateToProps = null
-// = state => ({
-//   record: { ...state.camera.records[undefined] }
-
-// })
-
 
 export default connectList('camera', SET_LIST, resourceFetcher(show, 'parking_lot_camera'), connect(
-  mapStateToProps,
+  null,
   mapDispatch
 )(
   withFetching(
