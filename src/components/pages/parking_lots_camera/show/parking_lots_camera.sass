@@ -50,6 +50,7 @@
 .modal-body
     min-height: 768px
     height: auto
+    width: 100%
 .modal-body  .stream
     width: 100%
     min-height: 600px
@@ -57,4 +58,29 @@
 .modal-body  .live
     position: absolute
     top: 6%
-    left: 90%
+    left: 88%
+.modal-dialog
+    max-width: none !important
+// search and inut field
+.search
+    position: relative
+    color: $disabled-bg-color
+.search input
+    border-radius: 0.5rem
+    color: $grey-light
+    box-shadow: inset 0px 1px 8px rgba(0, 0, 0, 0.1)
+    -webkit-transition: .18s ease-out
+    -moz-transition: .18s ease-out
+    -o-transition: .18s ease-out
+    transition: .18s ease-out
+    padding-bottom: 8px
+
+.magnifire
+    position: absolute
+    left: 87%
+    top: 28%
+    color: $disabled-bg-color
+.search input::-webkit-input-placeholder
+    color: $disabled-bg-color
+    font-size: 16px
+    padding-bottom: 8px

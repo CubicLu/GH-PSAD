@@ -22,6 +22,18 @@ const fields = () => [
   { name: 'parking_lot_id', mandatory: true }
 ];
 
+const filedsStream = () => [
+  { name: 'Stream Name', label: 'Name', mandatory: true },
+  { name: 'IP Address', label: 'IP Adress', mandatory: true },
+  { name: 'Server', label: 'Server', mandatory: true },
+  { name: 'Other required Information', label: 'Other required Information' },
+]
+
+const streamHeading = () => [
+  { name: 'Please Enter the folowing information to connect to the camera and add it to your live footage' },
+
+];
+
 const showFields = () => [
   { name: 'name', label: 'Name' },
   { name: 'stream', label: 'Stream' },
@@ -47,4 +59,4 @@ const exampleData = () => process.env.NODE_ENV !== 'production' ? {
 } : {
   } // These are defaults values for each field
 
-export { parkingLot, fields, showFields, filterFields, exampleData };
+export { parkingLot, fields, showFields, filterFields, exampleData, filedsStream, streamHeading };
