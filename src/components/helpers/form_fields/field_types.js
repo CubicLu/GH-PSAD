@@ -9,7 +9,6 @@ const INCREASER_FIELD = 'increaser';
 const LABEL_TEXT_FIELD = 'label_text'
 const GOOGLE_MAPS_FIELD = 'google_maps'
 const NUMBER_FIELD = 'number'
-const TEXT_AREA = 'text_area'
 
 export {
   SELECT_FIELD,
@@ -23,5 +22,4 @@ export {
   LABEL_TEXT_FIELD,
   NUMBER_FIELD,
   GOOGLE_MAPS_FIELD,
-  TEXT_AREA
 };

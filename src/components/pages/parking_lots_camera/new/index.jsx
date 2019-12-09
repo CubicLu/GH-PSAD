@@ -10,15 +10,14 @@ import { SET_RECORD } from 'actions/cameras';
 /* API */
 import { create } from 'api/cameras';
 /* Base */
-import { renderFieldsWithGridStream } from 'components/base/forms/common_form';
+import { renderFieldsWithGrid } from 'components/base/forms/common_form';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
-import { filedsStream, exampleData, streamHeading } from 'components/helpers/fields/cameras';
+import { fields, exampleData } from 'components/helpers/fields/cameras';
 import Loader from 'components/helpers/loader';
 import { fromJson as showErrors } from 'components/helpers/errors';
 /* Modules */
 import saveRecord from 'components/modules/form_actions/save_record';
-import './addstream.sass'
 
 class New extends React.Component {
   state = {
@@ -27,7 +26,6 @@ class New extends React.Component {
 
   isFetching = () => {
     const { isResourceFetching } = this.props
-    console.log(this.props);
     return isResourceFetching
   }
 
@@ -41,12 +39,11 @@ class New extends React.Component {
     saveRecord.call(this, create, backPath, values);
   };
 
-  renderFields() {
-    //                         (fields, step, cols, props = {})
-    return renderFieldsWithGridStream(filedsStream(), 1, 6, fieldProps, streamHeading());
+  renderFields () {
+    return renderFieldsWithGrid(fields(), 2, 6, fieldProps);
   }
 
-  renderForm() {
+  renderForm () {
     const { isSaving } = this.state;
     return (
       <fieldset disabled={isSaving}>
@@ -59,7 +56,7 @@ class New extends React.Component {
     );
   }
 
-  renderHeader() {
+  renderHeader () {
     const { isSaving } = this.state;
 
     return (<Row>
@@ -71,7 +68,7 @@ class New extends React.Component {
     </Row>);
   }
 
-  renderRecord() {
+  renderRecord () {
     return (
       <Card>
         <CardHeader>
@@ -85,8 +82,8 @@ class New extends React.Component {
     );
   }
 
-  render() {
-    return this.isFetching() ? <Loader /> : (
+  render () {
+    return this.isFetching() ? <Loader/> : (
       <React.Fragment>
         {this.renderRecord()}
       </React.Fragment>
@@ -94,11 +91,11 @@ class New extends React.Component {
   }
 }
 
-function mapDispatch(dispatch) {
+function mapDispatch (dispatch) {
   return bindActionCreators({ setRecord: invoke(SET_RECORD) }, dispatch);
 }
 
-const fieldProps = { lSize: 2 };
+const fieldProps = { lSize: 6 };
 
 New.propTypes = {
   backPath: PropTypes.string.isRequired,

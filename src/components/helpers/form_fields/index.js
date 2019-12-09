@@ -8,7 +8,6 @@ import Toggler from './toggler'
 import DateRangeInput from './date_range_input'
 import GoogleMaps from './google_maps'
 import * as FieldType from './field_types'
-import TextArea from './textarea'
 
 export {
   ImageInput,
@@ -21,5 +20,4 @@ export {
   DateRangeInput,
   GoogleMaps,
   FieldType,
-  TextArea
 }

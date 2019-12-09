@@ -13,7 +13,6 @@ import {
   Toggler,
   GoogleMaps,
   FieldType,
-  TextArea
 } from 'components/helpers/form_fields';
 import { Form, Text } from 'informed';
 import { Link } from 'react-router-dom';
@@ -88,8 +87,7 @@ const renderInput = (field, props = {}) => {
       return <Increaser {...props} field={field} />;
     case FieldType.NUMBER_FIELD:
       return <Text className="form-control" disabled={field.disabled} {...props.events} type="number" field={field.name} />;
-    case FieldType.TEXT_AREA:
-      return <TextArea className="form-control" disabled={field.disabled} {...props.events} type="number" field={field.name} />;
+
     default:
       return <Text className="form-control" disabled={field.disabled} {...props.events} field={field.name} placeholder={field.name} />;
   }
@@ -117,26 +115,7 @@ const renderFieldsWithGrid = (fields, step, cols, props = {}) => {
   return fieldList;
 };
 
-// name, label, mandatory | Col | inputs sirina | LSize- label sirina
-const renderFieldsWithGridStream = (fields, step, cols, props = {}, streamHeading) => {
-  const fieldList = [];
-  let start = 0;
-  while (start < fields.length - 1) {     // 0          4     
-    const mappedFields = fields.slice(start, start + step)
-      .map((field, idx) => {
-        return (
-          <Col key={idx} md={cols} >{renderField(field, props)}</Col>
-        )
-      })
 
-    fieldList.push((<Row key={start} >{mappedFields}</Row>))
-    start += step;
-
-  }
-  fieldList.push((<Row key={start}> <Col md={4}><TextArea></TextArea></Col></Row>))
-  fieldList.unshift((<Row><Col md={cols}>{streamHeading[0].name}</Col></Row>))
-  return fieldList;
-};
 const renderButtons = (formState, props = {}) => {
   const { backPath, isFetching } = props;
 
@@ -201,4 +180,4 @@ renderForm.propTypes = {
   fields: PropTypes.object.isRequired
 };
 
-export { renderField, renderFields, renderFieldsWithGrid, renderFormErrors, renderButtons, renderForm, renderInput, renderImageField, renderFieldsWithGridStream };
+export { renderField, renderFields, renderFieldsWithGrid, renderFormErrors, renderButtons, renderForm, renderInput, renderImageField };
