@@ -27,6 +27,7 @@ import './parking_lots_camera.sass'
 import NotAllowedConnect from '../../../helpers/form_fields/image/NotAllowNotConnect/NotAllowedConnect'
 import BasicListToolbar from '../../../base/basic_list_toolbar'
 import debounce from 'lodash/debounce'
+import Hls from 'hls.js'
 
 
 class Show extends React.Component {
@@ -42,6 +43,8 @@ class Show extends React.Component {
 
   isFetching = () => {
     const { isResourceFetching } = this.props
+    console.log(this.props);
+
     return isResourceFetching
   }
 
@@ -166,14 +169,44 @@ class Show extends React.Component {
       </Row >
     );
   }
+  componentDidMount() {
 
+    // if (Hls.isSupported() && this.player) {
+    //   let streamUrl = null
+    //   const video = this.player
+    //   const hls = new Hls();
+    //   hls.loadSource(streamUrl);
+    //   hls.attachMedia(video);
+    //   hls.on(Hls.Events.MANIFEST_PARSED, function () {
+    //     video.play();
+    //   });
+    // }
+  }
+  //
   renderStream(idx) {
     const { list } = this.props
-    let listSource = this.state.refresh ? this.state.list[idx] : list[idx]
-    const canPlay = ReactPlayer.canPlay(listSource.stream)
-    return (
-      ReactPlayer.canPlay(listSource.stream) ? <div><ReactPlayer className="stream" url={listSource.stream} playing={true} width={'80 %'} /><p className="live">Live</p></div> : <NotAllowedConnect canPlay={canPlay} />
-    )
+
+    // if (Hls.isSupported() && this.player) {
+    // this.state.refresh ? this.state.list[idx].stream : list[idx].stream
+    // let streamUrl = this.state.refresh ? this.state.list[idx].stream : list[idx].stream
+    let streamUrl = 'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov'
+    const video = this.player
+    const hls = new Hls();
+    hls.loadSource(streamUrl);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+      video.play();
+    });
+    // }
+    //
+    // let listSource = this.state.refresh ? this.state.list[idx] : list[idx]
+    // const canPlay = ReactPlayer.canPlay(listSource.stream)
+    return (<video autoPlay={true} ref={(player) => this.player = player} style={{ width: '640', height: '360', background: '#000' }} />)
+    // return (
+    //   ReactPlayer.canPlay(listSource.stream) ? <div><ReactPlayer className="stream" url={listSource.stream} playing={true} width={'80 %'} /><p className="live">Live</p></div> : <NotAllowedConnect canPlay={canPlay} />
+
+    // )
+
   }
 
 
