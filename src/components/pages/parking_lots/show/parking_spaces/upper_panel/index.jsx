@@ -12,7 +12,7 @@ import { ParkingPlanContext } from '../index'
 import EnableButton from './enable_button'
 import UploadLayoutButton from './upload_layout_button'
 
-const UpperPanel = () => {
+const UpperPanel = (props) => {
     const parkingPlanContext = useContext(ParkingPlanContext)
 
     const {
@@ -24,6 +24,11 @@ const UpperPanel = () => {
       editCurrentMap,
       toggleParkingPlanDeleteConfirmationModal
     } = parkingPlanContext.func
+
+    const {
+      parentPath,
+      history
+    } = props
 
     return (
       <Col className="row">
@@ -39,7 +44,7 @@ const UpperPanel = () => {
           <Button color="danger" onClick={toggleParkingPlanDeleteConfirmationModal} className={`${parkingPlans[selectedIndexParkingPlan] ? '' : 'disabled not-allowed ' } mb-3 float-left ml-4`}>
               <TrashIcon className="svg-white" />
           </Button>
-          <Button color="secondary" onClick={() => {}} className={`${parkingPlans[selectedIndexParkingPlan] ? '' : 'disabled  ' } mb-3 not-allowed float-left ml-4`}>
+          <Button color="secondary" onClick={() => history.push(`${parentPath}/parking_sessions`)}  className={`mb-3 float-left ml-4`}>
               <RecordsIcon width="18" height="18" className="white"/>
           </Button>
           <EnableButton/>

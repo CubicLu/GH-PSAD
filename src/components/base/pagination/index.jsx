@@ -16,12 +16,13 @@ class Pagination extends React.Component {
   }
 
   open = page => {
-    const { startFetching, fetcher, perPage, startFetchingPagination, stopFetchingPagination } = this.props;
+    const { startFetching, fetcher, perPage, startFetchingPagination, stopFetchingPagination, match } = this.props;
     this.setState({
       currentPageToOpen: page
     })
     startFetchingPagination()
-    startFetching(fetcher({ page, perPage }))
+
+    startFetching(fetcher({ page, perPage, ...match.params }))
         .then((res) => this.openSucceed(res, page))
         .catch(this.openFailed)
         .finally(() => stopFetchingPagination())

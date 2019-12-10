@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { Col, Row, Table } from 'reactstrap';
 import { isEmpty } from 'underscore';
 import { cloneDeep } from 'lodash'
@@ -79,13 +80,13 @@ export class IndexTable extends React.Component {
   }
 
   submitForm = (values, setErrorMessage) => {
-    const { filterFetcher, startFetching, setList } = this.props
+    const { filterFetcher, startFetching, setList, match } = this.props
     const cloneValues = cloneDeep(values)
     this.setFilterQuery(cloneValues)
     this.generateLocalStorageFilter(cloneValues)
 
     this.startFetchingActionTable()
-    startFetching(filterFetcher(Object.assign({}, { filters: cloneValues }, this.setQuery(this.state.sortedAttr))))
+    startFetching(filterFetcher(Object.assign({ ...match.params }, { filters: cloneValues }, this.setQuery(this.state.sortedAttr))))
       .then((res) => {
         setList(selectList(res));
       })
@@ -155,7 +156,8 @@ export class IndexTable extends React.Component {
           </Col>
         </Row>
         <Pagination
-          {...this.props} query={query}
+          {...this.props}
+          query={query}
           stopFetchingPagination={this.stopFetchingActionTable}
           startFetchingPagination={this.startFetchingActionTable}
           fetcher={this.paginationFetcher}
@@ -165,4 +167,6 @@ export class IndexTable extends React.Component {
   }
 }
 
-export default withFetching(IndexTable);
+export default withFetching(
+  withRouter(IndexTable)
+);
