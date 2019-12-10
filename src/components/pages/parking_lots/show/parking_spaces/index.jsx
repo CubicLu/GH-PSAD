@@ -290,11 +290,14 @@ class ParkingPlans extends Component {
   }
 
   onMouseDownOnSlotCircle = (id) => {
-    const { isEditing } = this.state
+    const { isEditing, list } = this.state
     if(isEditing) {
       this.setState({
         slotIdClicked: id
       })
+    } else {
+      const slot = list.find(slot => slot.id === id)
+      this.setSessionRecords(slot.active_parking_session)
     }
   }
 
