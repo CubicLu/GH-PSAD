@@ -12,7 +12,6 @@ import { show } from 'api/parking_sessions';
 /* Base */
 import { ShowForm } from 'components/base/forms';
 /* Helpers */
-import { formatToUSD } from 'components/helpers/currency_formatter';
 import { displayUnixTimestamp } from 'components/helpers';
 import { showFields } from 'components/helpers/fields/parking_sessions';
 import PrintableContent from 'components/helpers/printable_content';
@@ -38,10 +37,7 @@ class Show extends React.Component {
       created_at: displayUnixTimestamp(record.created_at),
       check_in: record.check_in && displayUnixTimestamp(record.check_in),
       check_out: record.check_out && displayUnixTimestamp(record.check_out),
-      fee_applied: `${formatToUSD(record.fee_applied)}`,
-      total_price: `${formatToUSD(record.total_price/100)}`,
       slot_id: record.slot ? record.slot.id : '',
-      paid: record.paid ? 'PAID' : 'UNPAID',
       payment_method: record.payments.map(payment => payment.payment_method).join(',')
     });
   };
@@ -57,7 +53,6 @@ class Show extends React.Component {
     const url = `${env.backend_url}/dashboard/parking_sessions/report.xlsx?token=${token}&parking_session_id=${id}`
     window.open(url, '_blank');
     window.focus();
-
   }
 
   renderRecord() {

@@ -55,7 +55,7 @@ const DateRangeInput = asField(({ fieldState, fieldApi, ...props }) => {
   return (
       <Row>
         <Col sm={12} md={6}>
-          <Label>
+          <Label className="mr-1">
             From:
           </Label>
             {
@@ -73,7 +73,7 @@ const DateRangeInput = asField(({ fieldState, fieldApi, ...props }) => {
             }
         </Col>
         <Col sm={12} md={6}>
-          <Label>
+          <Label className="mr-1">
           To:
           </Label>
             {

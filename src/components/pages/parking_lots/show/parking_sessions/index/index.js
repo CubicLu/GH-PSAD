@@ -6,6 +6,7 @@ import { Button } from 'reactstrap';
 import { SET_LIST } from 'actions/parking_sessions';
 /* API */
 import { filterFetcher } from 'api/parking_sessions';
+import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';
@@ -15,13 +16,17 @@ import { filterFields } from 'components/helpers/fields/parking_sessions';
 /* Modules */
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
+import withFetching from 'components/modules/with_fetching';
 /* Assets */
 import { ReactComponent as ExportIcon } from 'assets/export_icon.svg'
 
 class Index extends React.Component {
   state = {
-    isDropdownFetching: false,
+    isDropdownFetching: true,
     dropdowns: {
+      paymentMethods: [],
+      parkingSessionStatuses: [],
+      parkingSessionsKioskIds: []
     }
   }
 
@@ -39,6 +44,8 @@ class Index extends React.Component {
     return isResourceFetching || isDropdownFetching
   }
 
+  setDropdowns = (key, data) => this.setState({ dropdowns: { ...this.state.dropdowns, [key]: data } })
+
   renderRecords = () => {
     const { list, match, history } = this.props;
     return list.map((record, idx) => (
@@ -52,8 +59,23 @@ class Index extends React.Component {
     ));
   };
 
+  componentDidMount () {
+    const { startFetching, match } = this.props
+    Promise.all([
+      startFetching(dropdownsSearch('payment_methods_list'))
+        .then(response => this.setDropdowns('paymentMethods', response.data)),
+      startFetching(dropdownsSearch('parking_session_statuses_list'))
+        .then(response => this.setDropdowns('parkingSessionStatuses', response.data)),
+      startFetching(dropdownsSearch('parking_session_kiosk_ids_list', { parking_lot_id: match.params.id }))
+        .then(response => this.setDropdowns('parkingSessionsKioskIds', response.data)),
+    ])
+      .finally(() => this.setState({ isDropdownFetching: false }))
+  }
+
+
   render () {
     const { backPath } = this.props
+    const { dropdowns: { paymentMethods, parkingSessionStatuses, parkingSessionsKioskIds } } = this.state
      return (
       <IndexTable
         isFetching={this.isFetching}
@@ -73,7 +95,7 @@ class Index extends React.Component {
             }
           }/>
         }
-        filterFields={filterFields()}
+        filterFields={filterFields(paymentMethods, parkingSessionStatuses, parkingSessionsKioskIds)}
         filterFetcher={filterFetcher}
         resource={resource}
         columns={
@@ -103,5 +125,5 @@ export default connectList(
   resource,
   SET_LIST,
   resourceFetcher(filterFetcher, resource),
-  Index
+  withFetching(Index)
 );

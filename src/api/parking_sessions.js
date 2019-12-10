@@ -12,14 +12,26 @@ const index = (params = {}) => {
 
 const filterFetcher = (params = {}) => {
   const { page, perPage, query, id, filters = {} } = params;
-  debugger
   return index({
     page,
     perPage,
     query: Object.assign({}, {
+      ...query,
       parking_session_id: filters.id,
+      payment_methods: filters.payment_methods,
+      statuses: filters.statuses,
+      user_ids: filters.user_ids,
+      kiosk_ids: filters.kiosk_ids,
+      created_at: filters.created_at,
+      check_in: filters.check_in,
+      check_out: filters.check_out,
+      slot_name: filters.slot_name,
+      fee_applied: filters.fee_applied,
+      total_price: filters.total_price,
       query: {
-        ...query,
+        vehicles: {
+          plate_number: filters.vehicles_plate_number
+        }
       }
     }),
     parkingLotId: id
