@@ -23,11 +23,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { invoke } from 'actions';
 /* Style */
-import './parking_lots_camera.sass'
+import styles from './parking_lots_camera.module.sass'
 import NotAllowedConnect from '../../../helpers/form_fields/image/NotAllowNotConnect/NotAllowedConnect'
 import BasicListToolbar from '../../../base/basic_list_toolbar'
 import debounce from 'lodash/debounce'
-import Hls from 'hls.js'
 
 
 class Show extends React.Component {
@@ -43,8 +42,6 @@ class Show extends React.Component {
 
   isFetching = () => {
     const { isResourceFetching } = this.props
-    console.log(this.props);
-
     return isResourceFetching
   }
 
@@ -74,7 +71,7 @@ class Show extends React.Component {
     let id = this.props.match.params.id
     return (<Row className="p-4" >
       <Col md={12} >
-        <BasicListToolbar goBackPath={backPath} title={!!history.location.name ? history.location.name.state.record.name : `Parking lot ${id - 1} `} {...this.props} addStreamView={true} label="+ Add Stream" badgesFilter={null} extraButtons={() => {
+        <BasicListToolbar showFilters={false} widthSearch={10} goBackPath={backPath} title={!!history.location.name ? history.location.name.state.record.name : `Parking lot ${id - 1} `} {...this.props} label="+ Add Stream" badgesFilter={null} extraButtons={() => {
           return (
             this.renderSearchRefresh()
           )
@@ -87,9 +84,9 @@ class Show extends React.Component {
   renderSearchRefresh() {
     return (
       <ButtonToolbar className="float-right">
-        <ButtonGroup className="mr-4 search">
+        <ButtonGroup className={`mr-4 ${styles.search}`}>
           <input className="form-control" type="text" onChange={(e) => this.handleChange(e.target.value)} placeholder="Search by keyword" />
-          <FontAwesomeIcon className="magnifire" color="grey" icon={faSearch} />
+          <FontAwesomeIcon className={`${styles.magnifire}`} color="grey" icon={faSearch} />
         </ButtonGroup>
         <ButtonGroup className="mr-4">
           <Button color="primary-lg" className="btn-md px-4 text-uppercase " onClick={() => this.refresh(this.props.match.params.id)}>Refresh</Button>
@@ -135,23 +132,22 @@ class Show extends React.Component {
         <React.Fragment>
           {list.map((rec, idx) => {
             return (
-              <Col md={6} className="card-adjust" >
+              <Col md={6} className={`${styles.cardAdjust}`} >
                 <div className="card">
-                  <p className="cameraName">{rec.name}
-                    <Dropdown direction="left" isOpen={this.state.showDropdown[rec.name]} toggle={(e) => this.toggleDropdown(e, rec.name)}>
+                  <p className={`${styles.cameraName}`}>{rec.name}
+                    <Dropdown className={`${styles.dropdown}`} direction="left" isOpen={this.state.showDropdown[rec.name]} toggle={(e) => this.toggleDropdown(e, rec.name)}>
                       <DropdownToggle color="none">
                         <FontAwesomeIcon color="grey" icon={faEllipsisH} />
                       </DropdownToggle>
-                      <DropdownMenu className="dropdown-menu-right">
+                      <DropdownMenu >
                         {this.fieldsDropdowns().map(fieldsDropdown => {
                           return (
                             <DropdownItem >
-                              {fieldsDropdown.name === 'Expand' ? (<p onClick={() => this.toggle(rec.name)}>{fieldsDropdown.name}</p>) : <Link className="dropdownmenu" to={`${fieldsDropdown.path}`}>{fieldsDropdown.name}</Link>}
+                              {fieldsDropdown.name === 'Expand' ? (<p onClick={() => this.toggle(rec.name)}>{fieldsDropdown.name}</p>) : <Link className={`${styles.dropdownmenu}`} to={`${fieldsDropdown.path}`}>{fieldsDropdown.name}</Link>}
                               <Modal isOpen={this.state.modal[rec.name]} toggle={() => this.toggle(rec.name)}>
                                 <ModalHeader toggle={() => this.toggle(rec.name)} >{rec.name}</ModalHeader>
-                                <ModalBody>
+                                <ModalBody className={`${styles.modalBody}`}>
                                   {this.renderStream(idx)}
-
                                 </ModalBody>
                               </Modal>
                             </DropdownItem>)
@@ -169,44 +165,14 @@ class Show extends React.Component {
       </Row >
     );
   }
-  componentDidMount() {
 
-    // if (Hls.isSupported() && this.player) {
-    //   let streamUrl = null
-    //   const video = this.player
-    //   const hls = new Hls();
-    //   hls.loadSource(streamUrl);
-    //   hls.attachMedia(video);
-    //   hls.on(Hls.Events.MANIFEST_PARSED, function () {
-    //     video.play();
-    //   });
-    // }
-  }
-  //
   renderStream(idx) {
     const { list } = this.props
-
-    // if (Hls.isSupported() && this.player) {
-    // this.state.refresh ? this.state.list[idx].stream : list[idx].stream
-    // let streamUrl = this.state.refresh ? this.state.list[idx].stream : list[idx].stream
-    let streamUrl = 'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov'
-    const video = this.player
-    const hls = new Hls();
-    hls.loadSource(streamUrl);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, function () {
-      video.play();
-    });
-    // }
-    //
-    // let listSource = this.state.refresh ? this.state.list[idx] : list[idx]
-    // const canPlay = ReactPlayer.canPlay(listSource.stream)
-    return (<video autoPlay={true} ref={(player) => this.player = player} style={{ width: '640', height: '360', background: '#000' }} />)
-    // return (
-    //   ReactPlayer.canPlay(listSource.stream) ? <div><ReactPlayer className="stream" url={listSource.stream} playing={true} width={'80 %'} /><p className="live">Live</p></div> : <NotAllowedConnect canPlay={canPlay} />
-
-    // )
-
+    let listSource = this.state.refresh ? this.state.list[idx] : list[idx]
+    const canPlay = ReactPlayer.canPlay(listSource.stream)
+    return (
+      ReactPlayer.canPlay(listSource.stream) ? <div><ReactPlayer className={`${styles.stream}`} url={listSource.stream} playing={true} width={'80 %'} /><p className={`${styles.live}`}>Live</p></div> : <NotAllowedConnect canPlay={canPlay} />
+    )
   }
 
 

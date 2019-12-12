@@ -28,8 +28,8 @@ class BasicListToolbar extends React.Component {
       currentUserRoleName,
       goBackPath,
       extraButtons = () => { },
-      addStreamView
-
+      showFilters,
+      widthSearch
     } = this.props;
 
     return (
@@ -47,12 +47,12 @@ class BasicListToolbar extends React.Component {
             {title}
           </h4>
         </Col>
-        <Col md={!addStreamView ? 6 : 10} className="row pb-1 align-items-center justify-content-end pr-0">
+        <Col md={showFilters ? 6 : widthSearch} className="row pb-1 align-items-center justify-content-end pr-0">
           <Col className="m-0 align-items-center d-flex justify-content-end" xs={12} sm={12} md={10} lg={8}>
             <div className={`d-inline-block float-right`}>
               {extraButtons()}
             </div>
-            {!addStreamView &&
+            {typeof showFilters === "undefined" ?
               <div className={`${styles.filterBox} shadow d-inline-block float-right`}>
                 <span className="general-text-3 mr-3">Filter By</span>
                 {
@@ -66,7 +66,7 @@ class BasicListToolbar extends React.Component {
                   <FontAwesomeIcon icon={faFilter} />
                 </Button>
               </div>
-            }
+              : null}
           </Col>
           {
             label && (
