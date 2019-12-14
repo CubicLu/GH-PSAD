@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import env from '.env';
+import qs from 'qs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
  import { Card, CardHeader, CardBody, Button } from 'reactstrap';
@@ -47,10 +48,14 @@ class Show extends React.Component {
   }
 
   exportFile = () => {
-    const { record } = this.props;
-    const token = localStorage.TOKEN
-    const id = record.id
-    const url = `${env.backend_url}/dashboard/parking_sessions/report.xlsx?token=${token}&parking_session_id=${id}`
+    const { match } = this.props;
+    const query = qs.stringify({
+      token: localStorage.TOKEN,
+      parking_session_id: match.params.id,
+      parking_lot_id: match.params.parking_lot_id
+    })
+
+    const url = `${env.backend_url}/dashboard/parking_sessions/report.xlsx?${query}`
     window.open(url, '_blank');
     window.focus();
   }

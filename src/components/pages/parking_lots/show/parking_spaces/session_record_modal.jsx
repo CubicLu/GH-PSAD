@@ -28,7 +28,7 @@ const SessionRecordModal = (props) => {
                     <strong>Plate Number:</strong> {currentSessionRecord.vehicle.plate_number.toUpperCase()}
                 </Col>
                 <Col className="general-text-1 mb-2" sm={12}>
-                    <strong>Account:</strong> {currentSessionRecord.user_id ? currentSessionRecord.user_id : "NOT ACCOUNT"}
+                    <strong>Account:</strong> {currentSessionRecord.user_id }
                 </Col>
                 <Col className="general-text-1 mb-2" sm={12}>
                   <strong>Created at:</strong> {displayUnixTimestamp(currentSessionRecord.created_at)}
@@ -43,10 +43,10 @@ const SessionRecordModal = (props) => {
                     <strong>Parking session number:</strong> {currentSessionRecord.id}
                 </Col>
                 <Col className="general-text-1 mb-2" sm={12}>
-                    <strong>Session Status:</strong> {currentSessionRecord.status.toLowerCase() === 'created' ? "UNCONFIRMED" : "CONFIRMED" }
+                    <strong>Session Status:</strong> {currentSessionRecord.status }
                 </Col>
                 <Col className="general-text-1 mb-2" sm={12}>
-                    <strong>Paid Status:</strong> {currentSessionRecord.paid ? "UNPAID" : "PAID" }
+                    <strong>Paid Status:</strong> {currentSessionRecord.paid }
                 </Col>
                 <Col className="general-text-1 my-3 justify-content-center d-flex" sm={12}>
                   <Button  size="md" onClick={() => history.push(`parking_sessions`)} className="bg-grey-dark" >
