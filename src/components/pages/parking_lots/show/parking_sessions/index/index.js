@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import env from '.env';
+import qs from 'qs';
 import { Button } from 'reactstrap';
 /* Actions */
 import { SET_LIST } from 'actions/parking_sessions';
@@ -13,6 +14,7 @@ import IndexTable from 'components/base/table';
 /* Helpers */
 import { displayUnixTimestamp } from 'components/helpers';
 import { filterFields } from 'components/helpers/fields/parking_sessions';
+import TooltipInfo from 'components/helpers/tooltip_info';
 /* Modules */
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
@@ -33,7 +35,17 @@ class Index extends React.Component {
   exportFile = () => {
     const { match } = this.props;
     const parking_lot_id = match.params.id
-    const url = `${env.backend_url}/dashboard/parking_sessions/report.xlsx?token=${localStorage.TOKEN}&parking_lot_id=${parking_lot_id}`
+    const qsOptions = {
+      arrayFormat: 'brackets',
+      encode: false
+    }
+    const query = qs.stringify(Object.assign({
+        token: localStorage.TOKEN,
+        parking_lot_id
+      },
+      JSON.parse(localStorage.getItem("FILTERS_parking_session"))
+    ), qsOptions)
+    const url = `${env.backend_url}/dashboard/parking_sessions/report.xlsx?${query}`
     window.open(url, '_blank');
     window.focus();
   }
@@ -87,10 +99,13 @@ class Index extends React.Component {
           title="Parking Session Records"
           extraButtons={() => {
             return (
-              <Button onClick={this.exportFile} color="primary" className="px-2 py-2 align-items-center mr-3 d-flex">
-                <ExportIcon className="mr-1"/>
-                Export
-              </Button>
+              <div className="d-flex align-items-center">
+                <TooltipInfo width="20" height="20" className="mr-2" text="The exported data can either be the results of the filter you applied or all sessions if there is no filter." target="export" />
+                <Button onClick={this.exportFile} color="primary" className="px-2 py-2 align-items-center mr-3 d-flex">
+                  <ExportIcon className="mr-1"/>
+                  Export
+                </Button>
+              </div>
               )
             }
           }/>

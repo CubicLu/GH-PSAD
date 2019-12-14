@@ -24,7 +24,7 @@ function Routing(props) {
             <Route exact path={`${props.match.path}/rules`} render={renderWithParentPath(renderWithBackPath(Rules, `${match.url}/`), props.match.url)} />
             <Route exact path={`${props.match.path}/spaces`} render={renderWithParentPath(renderWithBackPath(ParkingSpaces, `${match.url}/`), props.match.url)}/>
             <Route exact path={`${props.match.path}/parking_sessions`} render={renderWithBackPath(ParkingSessionsIndex,`${props.match.url}/spaces`)}/>
-            <Route exact path={`${props.match.path}/parking_sessions/:id`} render={renderWithBackPath(ParkingSessionsShow,`${props.match.url}/parking_sessions`)}/>
+            <Route exact path={`${props.match.path.replace(":id", ":parking_lot_id")}/parking_sessions/:id`} render={renderWithBackPath(ParkingSessionsShow,`${props.match.url}/parking_sessions`)}/>
           </React.Fragment>
         )} />
       </Switch>
