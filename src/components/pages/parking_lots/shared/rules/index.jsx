@@ -29,7 +29,7 @@ function renderRecords () {
         </td>
         <td>
           {record.name}
-          <TooltipInfo className="ml-2" text="Rule name" target="recipients" />
+          <TooltipInfo className="ml-2" text={record.description} target={`rule_${record.id}`} />
         </td>
         <td>
           <Select

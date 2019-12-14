@@ -7,7 +7,7 @@ const fetchApi = (endpoint, data, critical = false) => {
     axios(Object.assign({
       url: `${env.backend_url}/${endpoint}`,
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': data.contentType ? data.contentType : 'application/json',
         'Authorization': localStorage.TOKEN
       }
     }, data)

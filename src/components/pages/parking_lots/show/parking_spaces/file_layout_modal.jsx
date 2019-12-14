@@ -16,7 +16,7 @@ const FileLayoutModal = (props) => {
   }, [defaultName, defaultURL]);
 
   return (
-    <Modal isOpen={isOpen} toggle={toggleModal} size="md">
+    <Modal centered={true} isOpen={isOpen} toggle={toggleModal} size="md">
       <ModalHeader className="justify-content-center border-0 h2-title">Add New Layout</ModalHeader>
       <ModalBody>
         <Row className="justify-content-center">
