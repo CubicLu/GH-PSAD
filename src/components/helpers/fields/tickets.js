@@ -14,20 +14,12 @@ const fields = (officers, statuses) => [
   },
   {
     name: 'status',
-    innerLabel: 'Current Status:',
+    label: 'Current Status:',
     mandatory: true,
-    type: FieldType.TOGGLER_FIELD,
-    options: {
-      on: {
-        value: statuses[0].value,
-        labelButton:  statuses[0].label
-      },
-      off: {
-        value:  statuses[1].value,
-        labelButton:  statuses[1].label
-      }
-    },
-    defaultValue: 'inactive'
+    type: FieldType.SELECT_FIELD,
+    options: statuses.map(({label, value}) => {
+      return { value, label };
+    })
   }
 ]
 

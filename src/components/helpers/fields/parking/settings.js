@@ -5,8 +5,8 @@ const fields = [
     name: 'rate',
     label: 'Hourly Rate $',
     type: FieldType.INCREASER_FIELD,
-    step: 1,
-    min: 1,
+    step: 0.25,
+    min: 0,
     tooltip: "Per hour rate of the parking lot",
     renderValue: value => `$${value}`
   },
@@ -14,7 +14,7 @@ const fields = [
     label: 'Minimum Chargeable Time in minutes',
     type: FieldType.INCREASER_FIELD,
     step: 60,
-    max: 6000,
+    max: 3540,
     min: 60,
     tooltip: "This is the minimum time that is multiplied to the hourly rate. Ex. The driver is charged 30 minutes even if he only stayed for 20 minutes",
     renderValue: value => (value / 60)
