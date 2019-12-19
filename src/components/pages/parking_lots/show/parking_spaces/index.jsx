@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { ActionCableConsumer } from 'react-actioncable-provider';
 import {
   Button,
   Col,
@@ -696,7 +697,20 @@ class ParkingPlans extends Component {
     )
   }
 
+  handleReceived = (data) => {
+    const { list } = this.state
+    this.setState({
+      list: list.map(slot => {
+        if(slot.id === data.id) {
+          return data
+        }
+        return slot
+      })
+    }, this.syncSlotContainerOnMap)
+  }
+
   renderRecord () {
+    const { record } = this.props
     return (
       <ParkingPlanContext.Provider value={{
         state: {...this.state},
@@ -707,6 +721,15 @@ class ParkingPlans extends Component {
             {this.renderHeader()}
           </Col>
           <Col xs={12}>
+            <ActionCableConsumer
+              ref='parkingSpaceRoom'
+              channel={{
+                channel: "ParkingSpacesChannel",
+                parking_lot_id: record.id
+              }}
+              onConnected={() => console.log("Websocket connection established")}
+              onReceived={this.handleReceived}
+            />
             {this.renderForm()}
           </Col>
           {this.renderModals()}
