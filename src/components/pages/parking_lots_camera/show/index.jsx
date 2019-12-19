@@ -23,7 +23,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { invoke } from 'actions';
 /* Style */
-import './parking_lots_camera.sass'
 import styles from './parking_lots_camera.module.sass'
 import NotAllowedConnect from '../../../helpers/form_fields/image/NotAllowNotConnect/NotAllowedConnect'
 import BasicListToolbar from '../../../base/basic_list_toolbar'
@@ -75,7 +74,7 @@ class Show extends React.Component {
     let id = this.props.match.params.id
     return (<Row className="p-4" >
       <Col md={12} >
-        <BasicListToolbar showFilters={false} widthSearch={10} goBackPath={backPath} title={!!history.location.name ? history.location.name.state.record.name : `Parking lot ${id - 1} `} {...this.props} label="+ Add Stream" badgesFilter={null} extraButtons={() => {
+        <BasicListToolbar  showFilters={false} widthSearch={10} goBackPath={backPath} title={!!history.location.name ? history.location.name.state.record.name : `Parking lot ${id - 1} `} {...this.props} label="+ Add Stream" badgesFilter={null} extraButtons={() => {
           return (
             this.renderSearchRefresh()
           )
@@ -174,13 +173,14 @@ class Show extends React.Component {
                             return (
                               <DropdownItem >
                                 {fieldsDropdown.name === 'Expand' ? (<p onClick={() => this.toggle(rec.name)}>{fieldsDropdown.name}</p>) : <Link className={`${styles.dropdownmenu}`} to={`${fieldsDropdown.path}`}>{fieldsDropdown.name}</Link>}
-                                <Modal isOpen={this.state.modal[rec.name]} toggle={() => this.toggle(rec.name)}>
+                                <Modal  size="lg" style={{maxWidth: 'none'}}  isOpen={this.state.modal[rec.name]} toggle={() => this.toggle(rec.name)}>
                                   <ModalHeader toggle={() => this.toggle(rec.name)} >{rec.name}</ModalHeader>
                                   <ModalBody className={`${styles.modalBody}`}>
                                      {this.renderStream(idx) }
                                   </ModalBody>
 
                                 </Modal>
+
                               </DropdownItem>)
                           })}
                         </DropdownMenu>
