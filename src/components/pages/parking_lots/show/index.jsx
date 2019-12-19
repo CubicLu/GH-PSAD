@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import LocationForm from '../shared/location/form';
 import SettingSection from '../shared/setting_section';
 import NearbyPlaces from '../shared/nearby_places';
-import VoiSection from '../shared/voi_section';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { cloneDeep } from 'lodash'
@@ -149,6 +148,9 @@ class Show extends React.Component {
           <Button className="mr-1" onClick={() => history.push(match.url)} color="primary-lg">
             Information
           </Button>
+          <Button className="mr-1" onClick={() => history.push(`${match.url}/voi`)} color="disabled-lg">
+            VOI
+          </Button>
           <Button className="mr-1" onClick={() => history.push(`${match.url}/rules`)} color="disabled-lg">
             Parking rules
           </Button>
@@ -220,11 +222,6 @@ class Show extends React.Component {
     );
   }
 
-  renderVoi() {
-    const { record } = this.props;
-    return <VoiSection records={record.vehicle_rules} />;
-  }
-
   renderNearbyPlaces() {
     const { record } = this.props;
     const { isSaving, dropdowns: { categoriesPlace } } = this.state
@@ -275,7 +272,6 @@ class Show extends React.Component {
         <div className="mt-1" />
         {this.renderNearbyPlaces()}
         <div className="mt-1" />
-        {this.renderVoi()}
         <div className="mt-4" />
         {inputChanged && this.renderSaveButton()}
       </React.Fragment>
