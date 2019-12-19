@@ -30,7 +30,7 @@ const ParkingPlanEditableZone = (props) => {
                 onChange={applyMarkingSlotOnParkingPlan}
               />
         </div>
-        <img src={parkingPlanImageURL} className="pointer-events-none w-100" alt="Layout Parking Space"/>
+        <img src={parkingPlanImageURL} className="pointer-events-none" alt="Layout Parking Space"/>
         {
           drawedSlotContainer.map(element => {
             const slot = list.find(slot => slot.id === element.parking_slot_id)
