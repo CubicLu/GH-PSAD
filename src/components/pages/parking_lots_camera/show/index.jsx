@@ -5,6 +5,7 @@ import { SET_LIST } from 'actions/cameras';
 import { SET_LIST_ELEMENT } from 'actions/parking_lots';
 /* API */
 import { show , search} from 'api/parking_lot_camera';
+import { filterFetcher } from 'api/parking_lots'
 /* Helpers */
 import Loader from 'components/helpers/loader';
 /* Modules */
@@ -27,7 +28,7 @@ import styles from './parking_lots_camera.module.sass'
 import NotAllowedConnect from '../../../helpers/form_fields/image/NotAllowNotConnect/NotAllowedConnect'
 import BasicListToolbar from '../../../base/basic_list_toolbar'
 import debounce from 'lodash/debounce'
-
+/* API */
 
 class Show extends React.Component {
   state = {
@@ -37,13 +38,13 @@ class Show extends React.Component {
     modal: false,
     refresh: false,
     listFromState: null,
-    search:false
+    search:false,
+    parkingLotName:''
 
   }
 
   isFetching = () => {
     const { isResourceFetching } = this.props
-    
     return isResourceFetching
   }
 
@@ -68,19 +69,31 @@ class Show extends React.Component {
     }
   }
 
-   redirect(){
-    const { backPath, history } = this.props;
-    if(!history.location.state){
-       history.push(backPath)
-    }
-  }
+  componentDidMount(){
+    filterFetcher()
+    .then(response => {
+      let id = this.props.match.params.id
+      let resLists = response.data
+        resLists.map((resItem)=>{
+        if(resItem.id.toString() === id){
+         return (
+          this.setState({
+            parkingLotName: resItem.name
+          })
+         )
+        }
+      })
+    })
+ 
+}
+    
 
   renderHeader() {
-    const { backPath, history } = this.props;
-    let id = this.props.match.params.id
+    
+    const { backPath } = this.props;
     return (<Row className="p-4" >
       <Col md={12} >
-        <BasicListToolbar  showFilters={false} widthSearch={10} goBackPath={backPath} title={!!history.location.state ? history.location.state.record.name : this.redirect()} {...this.props} label="+ Add Stream" badgesFilter={null} extraButtons={() => {
+        <BasicListToolbar  showFilters={false} widthSearch={10} goBackPath={backPath} title={this.state.parkingLotName} {...this.props} label="+ Add Stream" badgesFilter={null} extraButtons={() => {
           return (
             this.renderSearchRefresh()
           )
