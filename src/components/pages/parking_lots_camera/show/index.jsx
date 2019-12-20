@@ -43,7 +43,6 @@ class Show extends React.Component {
 
   isFetching = () => {
     const { isResourceFetching } = this.props
-    console.log(this.props);
     
     return isResourceFetching
   }
@@ -69,12 +68,19 @@ class Show extends React.Component {
     }
   }
 
+   redirect(){
+    const { backPath, history } = this.props;
+    if(!history.location.state){
+       history.push(backPath)
+    }
+  }
+
   renderHeader() {
     const { backPath, history } = this.props;
     let id = this.props.match.params.id
     return (<Row className="p-4" >
       <Col md={12} >
-        <BasicListToolbar  showFilters={false} widthSearch={10} goBackPath={backPath} title={!!history.location.name ? history.location.name.state.record.name : `Parking lot ${id - 1} `} {...this.props} label="+ Add Stream" badgesFilter={null} extraButtons={() => {
+        <BasicListToolbar  showFilters={false} widthSearch={10} goBackPath={backPath} title={!!history.location.state ? history.location.state.record.name : this.redirect()} {...this.props} label="+ Add Stream" badgesFilter={null} extraButtons={() => {
           return (
             this.renderSearchRefresh()
           )

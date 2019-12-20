@@ -66,8 +66,6 @@ const renderImageField = (field, props = {}) => (
 );
 
 const renderInput = (field, props = {}) => {
-  console.log(field);
-
   switch (field.type) {
     case FieldType.MULTISELECT_FIELD:
       return <CustomMultiSelect {...props} field={field.name} options={field.options} />;
