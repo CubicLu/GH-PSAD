@@ -39,6 +39,7 @@ const Circle = (props) => {
   }
   const ID = `Slot${slot.name}`
   const cursorClass = isEditing ? isMovingExistingSlot ? 'grabbing' : 'grab' : ''
+  const slotName = slot ? slot.name.length > 2 ? `${slot.name.substring(0, 2)}...` : slot.name : 'Error: Missing'
 
   return (
     <Draggable
@@ -61,7 +62,7 @@ const Circle = (props) => {
           height: circleSize.height
         }}
       >
-        <p className="text-white m-0">{slot ? slot.name : 'Error: Missing' }</p>
+        <p className={`text-white m-0 ${slotName.includes('...') ? 'pl-2' : ''}`}>{slotName}</p>
         {
           isCSSIdValid(ID) && !isMovingExistingSlot &&
             <Tooltip placement="top" isOpen={tooltipOpen} target={ID} toggle={toggle}>

@@ -104,7 +104,7 @@ nav
 li
   list-style: none
 
-tbody tr:hover
+tbody tr:hover:not(.non-hover)
   cursor: pointer
   background-color: rgba(0,0,0,.05)
 
@@ -117,6 +117,10 @@ tbody tr:hover
 .pointer-events-none
   pointer-events: none
 
+.svg-primary
+  path
+    fill: $primary-color
+
 .svg-white
   path
     fill: white
@@ -124,7 +128,14 @@ tbody tr:hover
 .svg-dark
   path
     fill: $grey-dark
+#printable
+  display: none !important
 
+@media print
+  .no-print
+      display: none !important
+  #printable
+      display: block !important
 /* Cursor */
 
 .grab

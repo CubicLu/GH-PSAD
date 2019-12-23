@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { ActionCableConsumer } from 'react-actioncable-provider';
 import {
   Button,
   Col,
@@ -290,11 +291,14 @@ class ParkingPlans extends Component {
   }
 
   onMouseDownOnSlotCircle = (id) => {
-    const { isEditing } = this.state
+    const { isEditing, list } = this.state
     if(isEditing) {
       this.setState({
         slotIdClicked: id
       })
+    } else {
+      const slot = list.find(slot => slot.id === id)
+      this.setSessionRecords(slot.active_parking_session)
     }
   }
 
@@ -554,6 +558,9 @@ class ParkingPlans extends Component {
                 <Button className="mr-1" onClick={() => history.push(parentPath)} color="disabled-lg">
                   Information
                 </Button>
+                <Button className="mr-1" onClick={() => history.push(`${parentPath}/voi`)} color="disabled-lg">
+                  VOI
+                </Button>
                 <Button className="mr-1" onClick={() => history.push(`${parentPath}/rules`)} color="disabled-lg">
                   Parking rules
                 </Button>
@@ -608,7 +615,7 @@ class ParkingPlans extends Component {
 
   renderForm () {
     const { isSavingParkingPlan, parkingPlans, selectedIndexParkingPlan } = this.state
-
+    const { history, parentPath } = this.props
     return (
       <Row onMouseMove={isUserInsideEditingZone.bind(this)} className="pb-5">
         <Col xs={12} md={3} className="p-0">
@@ -620,7 +627,10 @@ class ParkingPlans extends Component {
         </Col>
         <Col xs={12} md={9} className="p-0 overflow-auto">
           <div className="mb-1">
-            <UpperPanel/>
+            <UpperPanel
+              history={history}
+              parentPath={parentPath}
+            />
           </div>
           <div className={`${styles.mapContainer} mx-auto card border-dark d-flex justify-content-center align-items-center p-5`}>
             {
@@ -690,7 +700,20 @@ class ParkingPlans extends Component {
     )
   }
 
+  handleReceived = (data) => {
+    const { list } = this.state
+    this.setState({
+      list: list.map(slot => {
+        if(slot.id === data.id) {
+          return data
+        }
+        return slot
+      })
+    }, this.syncSlotContainerOnMap)
+  }
+
   renderRecord () {
+    const { record } = this.props
     return (
       <ParkingPlanContext.Provider value={{
         state: {...this.state},
@@ -701,6 +724,15 @@ class ParkingPlans extends Component {
             {this.renderHeader()}
           </Col>
           <Col xs={12}>
+            <ActionCableConsumer
+              ref='parkingSpaceRoom'
+              channel={{
+                channel: "ParkingSpacesChannel",
+                parking_lot_id: record.id
+              }}
+              onConnected={() => console.log("Websocket connection established")}
+              onReceived={this.handleReceived}
+            />
             {this.renderForm()}
           </Col>
           {this.renderModals()}

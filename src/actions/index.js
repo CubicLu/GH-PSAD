@@ -6,6 +6,7 @@ import * as AgencyActions from './agencies';
 import * as UserActions from './users';
 import * as CameraActions from './cameras';
 import * as ParkingLotActions from './parking_lots';
+import * as ParkingSessionActions from './parking_sessions';
 import * as VoiActions from './voi';
 import * as ServerErrorActions from './server_errors';
 
@@ -35,6 +36,7 @@ export {
   AgencyActions,
   CameraActions,
   ParkingLotActions,
+  ParkingSessionActions,
   TicketActions,
   INIT_SET_TOKEN,
   INIT_SET_CURRENT_USER,

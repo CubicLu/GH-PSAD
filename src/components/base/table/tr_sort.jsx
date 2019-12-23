@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { list as selectList } from 'selectors/list';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown, faSortUp, faMinus } from '@fortawesome/free-solid-svg-icons';
@@ -15,7 +16,8 @@ const TRSort = (props) => {
     setQuery,
     filterQuery,
     startFetchingSorting,
-    stopFetchingSorting
+    stopFetchingSorting,
+    match
   } = props
 
   const onClickSort = (th) => {
@@ -26,7 +28,7 @@ const TRSort = (props) => {
       }
       startFetchingSorting()
       startFetching(
-        filterFetcher({filters: filterQuery, query: setQuery(newSortedAttr)})
+        filterFetcher({filters: filterQuery, query: setQuery(newSortedAttr), ...match.params })
           .then((res) => {
             setList(selectList(res));
           })
@@ -66,4 +68,9 @@ const arrowPosition = (th, sortedAttr) => {
   }
 }
 
-export default withFetching(TRSort);
+export default
+  withRouter(
+    withFetching(
+    TRSort
+  )
+);

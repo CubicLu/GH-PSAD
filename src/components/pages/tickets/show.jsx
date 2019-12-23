@@ -19,6 +19,7 @@ import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/co
 /* Helpers */
 import { btnSpinner, displayUnixTimestamp } from 'components/helpers';
 import { fields } from 'components/helpers/fields/tickets';
+import Loader from 'components/helpers/loader';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import { FieldType } from 'components/helpers/form_fields';
 /* Modules */
@@ -197,7 +198,8 @@ class Show extends React.Component {
     const { officersFetched } = this.state
     if (nextProps.record && !officersFetched) {
       this.setState({officersFetched: true})
-      dropdownsSearch('agency_officers_list', { agency_id: nextProps.record.agency.id })
+      const agency = nextProps.record.agency
+      dropdownsSearch('agency_officers_list', { agency_id: agency ? agency.id : null })
         .then((response) => this.setDropdowns('officers', response.data))
         .catch(this.handleFailed);
     }
@@ -210,7 +212,7 @@ class Show extends React.Component {
   }
 
   render () {
-    return this.isFetching() ? <div>Loading data...</div> : (
+    return this.isFetching() ? <Loader/> : (
       <React.Fragment>
         {this.renderRecord()}
         <div className="mt-4"/>
