@@ -41,7 +41,7 @@ class Index extends React.Component {
       <IndexTable
         {...this.props}
         isFetching={this.isFetching}
-        toolbar={<BasicListToolbar {...this.props} title="Live footage" />}
+        toolbar={<BasicListToolbar  showFilters={true} {...this.props} title="Live footage" />}
         filterFields={filterFields()}
         filterFetcher={filterFetcher}
         resource={resource}

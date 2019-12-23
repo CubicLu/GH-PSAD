@@ -29,12 +29,11 @@ class BasicListToolbar extends React.Component {
       goBackPath,
       extraButtons = () => { },
       showFilters,
-      widthSearch
     } = this.props;
 
     return (
 
-      <Row className="w-100 justify-content-around">
+      <Row className="w-100 justify-content-end">
         <Col md={2} className="d-flex align-items-center pb-1 pl-0">
           <h4>
             {
@@ -47,12 +46,12 @@ class BasicListToolbar extends React.Component {
             {title}
           </h4>
         </Col>
-        <Col md={showFilters ? 6 : widthSearch} className="row pb-1 align-items-center justify-content-end pr-0">
-          <Col className="m-0 align-items-center d-flex justify-content-end" xs={12} sm={12} md={10} lg={8}>
+        <Col md={{size:6, offset:3}} className="row pb-1 pr-0 align-items-center justify-content-end pr-0">
+          <Col className="m-0 align-items-center d-flex justify-content-end pr-0" xs={12} sm={12} md={10} lg={8}>
             <div className={`d-inline-block float-right`}>
               {extraButtons()}
             </div>
-            {typeof showFilters === "undefined" ?
+            {showFilters ?
               <div className={`${styles.filterBox} shadow d-inline-block float-right`}>
                 <span className="general-text-3 mr-3">Filter By</span>
                 {
@@ -74,7 +73,7 @@ class BasicListToolbar extends React.Component {
                 userPermissions={permissions[currentUserRoleName]}
                 requiredPermissions={createRequiredPermissions || permissions[currentUserRoleName]}
               >
-                <Col xs={12} sm={12} md={2} lg={4} className="pr-0">
+                <Col xs={12} sm={4} md={4} lg={4} className="pr-0 pl-0">
                   <Button color="primary-lg" className="btn-md px-4 text-uppercase " onClick={this.newRecord}>{label}</Button>
                 </Col>
               </PermissibleRender>

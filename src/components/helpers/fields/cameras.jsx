@@ -22,7 +22,7 @@ const fields = () => [
   { name: 'parking_lot_id', mandatory: true }
 ];
 
-const filedsStream = () => [
+const fieldsStream = () => [
   { name: 'Stream Name', label: 'Name', mandatory: true },
   { name: 'IP Address', label: 'IP Adress', mandatory: true },
   { name: 'Server', label: 'Server', mandatory: true },
@@ -59,4 +59,4 @@ const exampleData = () => process.env.NODE_ENV !== 'production' ? {
 } : {
   } // These are defaults values for each field
 
-export { parkingLot, fields, showFields, filterFields, exampleData, filedsStream, streamHeading };
+export { parkingLot, fields, showFields, filterFields, exampleData, fieldsStream, streamHeading };

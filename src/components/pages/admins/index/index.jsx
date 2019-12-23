@@ -56,7 +56,7 @@ class Index extends React.Component {
       <IndexTable
         {...this.props}
         isFetching={this.isFetching}
-        toolbar={ <BasicListToolbar {...this.props} createRequiredPermissions={[CREATE_ADMIN]} title='User accounts' label="+ Create Account" /> }
+        toolbar={ <BasicListToolbar  showFilters={true} {...this.props} createRequiredPermissions={[CREATE_ADMIN]} title='User accounts' label="+ Create Account" /> }
         resource={resource}
         filterFields={filterFields(this.state.filterRolesField)}
         filterFetcher={filterFetcher}

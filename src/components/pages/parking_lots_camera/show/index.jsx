@@ -39,7 +39,8 @@ class Show extends React.Component {
     refresh: false,
     listFromState: null,
     search:false,
-    parkingLotName:''
+    parkingLotName:'',
+    loading:false
 
   }
 
@@ -93,7 +94,7 @@ class Show extends React.Component {
     const { backPath } = this.props;
     return (<Row className="p-4" >
       <Col md={12} >
-        <BasicListToolbar  showFilters={false} widthSearch={10} goBackPath={backPath} title={this.state.parkingLotName} {...this.props} label="+ Add Stream" badgesFilter={null} extraButtons={() => {
+        <BasicListToolbar  showFilters={false}  goBackPath={backPath} title={this.state.parkingLotName} {...this.props} label="+ Add Stream" badgesFilter={null} extraButtons={() => {
           return (
             this.renderSearchRefresh()
           )
@@ -123,7 +124,8 @@ class Show extends React.Component {
   //Search input
   handleChange = debounce(((searchInput, id) => {
     this.setState({
-      searchInput
+      searchInput,
+      loading:true
     }, ()=>this.search(id))
   }), 1000);
 
@@ -133,7 +135,8 @@ class Show extends React.Component {
     .then(response=>{
       return this.setState({
         search:true, 
-        listFromState: response.data
+        listFromState: response.data,
+        loading:false
       })
     })
   }
@@ -176,9 +179,7 @@ class Show extends React.Component {
     return (
       <Row >
         <React.Fragment>
-    
-          {listToShow.map((rec, idx) => {
-            
+          {!this.state.loading ? listToShow.map((rec, idx) => {
               return (
                 <Col md={6} className={`${styles.cardAdjust}`} >
                   <div className="card">
@@ -197,22 +198,20 @@ class Show extends React.Component {
                                   <ModalBody className={`${styles.modalBody}`}>
                                      {this.renderStream(idx) }
                                   </ModalBody>
-
                                 </Modal>
-
                               </DropdownItem>)
                           })}
                         </DropdownMenu>
                       </Dropdown>
                     </p>
-                    {this.renderStream(idx)}
+                    {  this.renderStream(idx)}
                   </div>
                 </Col>
               )
 
           })
           
-          }
+          : <Col md={12}><Loader/></Col>}
         </React.Fragment>
       </Row >
     );

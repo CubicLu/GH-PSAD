@@ -87,7 +87,7 @@ const renderInput = (field, props = {}) => {
       return <Text className="form-control" disabled={field.disabled} {...props.events} type="number" field={field.name} />;
 
     default:
-      return <Text className="form-control" disabled={field.disabled} {...props.events} field={field.name} placeholder={field.name} />;
+      return <Text className="form-control" disabled={field.disabled} {...props.events} field={field.name}  />;
   }
 };
 

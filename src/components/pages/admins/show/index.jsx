@@ -128,7 +128,7 @@ class Show extends React.Component {
   }
 
   renderFields () {
-    return renderFieldsWithGrid(this.fieldsForCommonForm(), 2, 6, {...this.fieldProps(), errors: this.state.errors});
+    return renderFieldsWithGrid(this.fieldsForCommonForm(), 1, 6, {...this.fieldProps(), errors: this.state.errors});
   }
 
   renderForm () {
