@@ -25,13 +25,13 @@ export class IndexTable extends React.Component {
 
   customLoader = () => {
     return (
-      <React.Fragment>
-        <div className="w-100 position-absolute">
-          <Loader />
-        </div>
-        <td height="60">
+      <tr>
+        <td height="80">
+          <div className="w-100 position-absolute">
+            <Loader />
+          </div>
         </td>
-      </React.Fragment>
+      </tr>
     )
   }
 
