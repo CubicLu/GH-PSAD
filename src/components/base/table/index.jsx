@@ -107,6 +107,7 @@ export class IndexTable extends React.Component {
   }
 
   render() {
+    throw "test on staging"
     const { sortedAttr, filterModalOpen, filterQuery } = this.state
     const { toolbar, filterFields, columns, total: totalRecords, filterFetcher } = this.props
     let toolbarWithProps = null
