@@ -1,3 +1,4 @@
+import env from '.env';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
@@ -7,6 +8,7 @@ import persistTokenMiddleware from 'middleware/persist_token';
 import persistCurrentUserMiddleware from 'middleware/persist_current_user';
 import { createLogger } from 'redux-logger';
 import * as serviceWorker from 'serviceWorker';
+import * as Sentry from '@sentry/browser';
 import reducers from 'reducers';
 import { init_set_token, init_set_current_user } from "actions";
 import 'config/axios'
@@ -28,6 +30,11 @@ const store = createStore(
   )
 
 );
+
+Sentry.init({
+  dsn: env.sentry_dns,
+  environment: env.sentry_current_env
+});
 
 store.dispatch(init_set_token);
 store.dispatch(init_set_current_user);

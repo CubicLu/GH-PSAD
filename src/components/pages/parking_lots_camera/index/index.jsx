@@ -30,7 +30,7 @@ class Index extends React.Component {
           <td>{record.id ? record.id : null}</td>
           <td>{record.location.full_address ? record.location.full_address : null}</td>
           <td>{record.available_cameras}</td>
-        </ tr>
+        </tr>
       );
     });
   };

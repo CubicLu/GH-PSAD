@@ -4,6 +4,7 @@ import AlertErrors from './alert_errors';
 import { withRouter } from 'react-router-dom';
 import { clearErrors } from 'actions/server_errors';
 import { connect } from 'react-redux';
+import * as Sentry from '@sentry/browser';
 
 class ErrorBoundary extends React.Component {
   state = {
@@ -26,11 +27,15 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch (error, info) {
-    this.setState({
-      appErrors: {
-        response: info,
-        message: error.message
-      }
+    Sentry.withScope((scope) => {
+      scope.setExtras(info);
+      Sentry.captureException(error)
+      this.setState({
+        appErrors: {
+          response: info,
+          message: error.message
+        }
+      });
     });
   }
 
