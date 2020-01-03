@@ -2,18 +2,6 @@ import faker from 'faker'
 import { FieldType } from 'components/helpers/form_fields'
 
 const fields = (roles) => [
-  
-  {
-    name: 'role_id',
-    label: 'Role',
-    mandatory: true,
-    type: FieldType.SELECT_FIELD,
-    options: roles.map(({value, label}) => {
-      const disabled = label === 'super_admin' || label === 'system_admin'
-      return { value, label, disabled };
-    })
-  },
-  
   {
     name: 'status',
     label: 'Status',
@@ -35,7 +23,7 @@ const filterFields = (roles) => [
     name: 'role_names',
     label: 'Role',
     type: FieldType.MULTISELECT_FIELD,
-    options: roles.map(({value, label}) => {
+    options: roles.map(({ value, label }) => {
       return { value, label };
     })
   },
@@ -55,7 +43,7 @@ const exampleData = (roles) => process.env.NODE_ENV !== 'production' ? {
   status: 'suspended',
   role_id: roles ? roles.value : ''
 } : {
-  status: 'suspended'
-} // These are defaults values for each field
+    status: 'suspended'
+  } // These are defaults values for each field
 
 export { fields, exampleData, filterFields };

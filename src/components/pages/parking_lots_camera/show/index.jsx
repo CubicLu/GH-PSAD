@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { SET_LIST } from 'actions/cameras';
 import { SET_LIST_ELEMENT } from 'actions/parking_lots';
 /* API */
-import { show , search} from 'api/parking_lot_camera';
+import { show, search } from 'api/parking_lot_camera';
 import { filterFetcher } from 'api/parking_lots'
 /* Helpers */
 import Loader from 'components/helpers/loader';
@@ -38,9 +38,9 @@ class Show extends React.Component {
     modal: false,
     refresh: false,
     listFromState: null,
-    search:false,
-    parkingLotName:'',
-    loading:false
+    search: false,
+    parkingLotName: '',
+    loading: false
 
   }
 
@@ -70,31 +70,27 @@ class Show extends React.Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     filterFetcher()
-    .then(response => {
-      let id = this.props.match.params.id
-      let resLists = response.data
-        resLists.map((resItem)=>{
-        if(resItem.id.toString() === id){
-         return (
-          this.setState({
+      .then(response => {
+        let id = this.props.match.params.id
+        let resLists = response.data
+        resLists.filter(resItem => resItem.id.toString() === id).map((resItem, idx) => {
+          return this.setState({
             parkingLotName: resItem.name
           })
-         )
-        }
+        })
       })
-    })
- 
-}
-    
+
+  }
+
 
   renderHeader() {
-    
+
     const { backPath } = this.props;
     return (<Row className="p-4" >
       <Col md={12} >
-        <BasicListToolbar  showFilters={false}  goBackPath={backPath} title={this.state.parkingLotName} {...this.props} label="+ Add Stream" badgesFilter={null} extraButtons={() => {
+        <BasicListToolbar showFilters={false} goBackPath={backPath} title={this.state.parkingLotName} {...this.props} label="+ Add Stream" badgesFilter={null} extraButtons={() => {
           return (
             this.renderSearchRefresh()
           )
@@ -111,7 +107,7 @@ class Show extends React.Component {
     return (
       <ButtonToolbar className="float-right">
         <ButtonGroup className={`mr-4 ${styles.search}`}>
-          <input  className="form-control" type="text" onChange={(e) => this.handleChange(e.target.value, id)} placeholder="Search by keyword" />
+          <input className="form-control" type="text" onChange={(e) => this.handleChange(e.target.value, id)} placeholder="Search by keyword" />
           <FontAwesomeIcon className={`${styles.magnifire}`} color="grey" icon={faSearch} />
         </ButtonGroup>
         <ButtonGroup className="mr-4">
@@ -125,20 +121,20 @@ class Show extends React.Component {
   handleChange = debounce(((searchInput, id) => {
     this.setState({
       searchInput,
-      loading:true
-    }, ()=>this.search(id))
+      loading: true
+    }, () => this.search(id))
   }), 1000);
 
-  search(id){
-    const { searchInput} = this.state
-    search({name:searchInput, id:id})
-    .then(response=>{
-      return this.setState({
-        search:true, 
-        listFromState: response.data,
-        loading:false
+  search(id) {
+    const { searchInput } = this.state
+    search({ name: searchInput, id: id })
+      .then(response => {
+        return this.setState({
+          search: true,
+          listFromState: response.data,
+          loading: false
+        })
       })
-    })
   }
 
   //Looking only stream 
@@ -151,12 +147,12 @@ class Show extends React.Component {
       })
       .then(response => {
         this.setState({
-          refresh:true,
+          refresh: true,
         })
-     
+
 
       })
-   
+
   }
 
 
@@ -180,38 +176,38 @@ class Show extends React.Component {
       <Row >
         <React.Fragment>
           {!this.state.loading ? listToShow.map((rec, idx) => {
-              return (
-                <Col md={6} className={`${styles.cardAdjust}`} >
-                  <div className="card">
-                    <p className={`${styles.cameraName}`}>{rec.name}
-                      <Dropdown className={`${styles.dropdown}`} direction="left" isOpen={this.state.showDropdown[rec.name]} toggle={(e) => this.toggleDropdown(e, rec.name)}>
-                        <DropdownToggle color="none">
-                          <FontAwesomeIcon color="grey" icon={faEllipsisH} />
-                        </DropdownToggle>
-                        <DropdownMenu >
-                          {this.fieldsDropdowns().map(fieldsDropdown => {
-                            return (
-                              <DropdownItem >
-                                {fieldsDropdown.name === 'Expand' ? (<p onClick={() => this.toggle(rec.name)}>{fieldsDropdown.name}</p>) : <Link className={`${styles.dropdownmenu}`} to={`${fieldsDropdown.path}`}>{fieldsDropdown.name}</Link>}
-                                <Modal  size="lg" style={{maxWidth: 'none'}}  isOpen={this.state.modal[rec.name]} toggle={() => this.toggle(rec.name)}>
-                                  <ModalHeader toggle={() => this.toggle(rec.name)} >{rec.name}</ModalHeader>
-                                  <ModalBody className={`${styles.modalBody}`}>
-                                     {this.renderStream(idx) }
-                                  </ModalBody>
-                                </Modal>
-                              </DropdownItem>)
-                          })}
-                        </DropdownMenu>
-                      </Dropdown>
-                    </p>
-                    {  this.renderStream(idx)}
-                  </div>
-                </Col>
-              )
+            return (
+              <Col md={6} className={`${styles.cardAdjust}`} >
+                <div className="card">
+                  <p className={`${styles.cameraName}`}>{rec.name}
+                    <Dropdown className={`${styles.dropdown}`} direction="left" isOpen={this.state.showDropdown[rec.name]} toggle={(e) => this.toggleDropdown(e, rec.name)}>
+                      <DropdownToggle color="none">
+                        <FontAwesomeIcon color="grey" icon={faEllipsisH} />
+                      </DropdownToggle>
+                      <DropdownMenu >
+                        {this.fieldsDropdowns().map(fieldsDropdown => {
+                          return (
+                            <DropdownItem >
+                              {fieldsDropdown.name === 'Expand' ? (<p onClick={() => this.toggle(rec.name)}>{fieldsDropdown.name}</p>) : <Link className={`${styles.dropdownmenu}`} to={`${fieldsDropdown.path}`}>{fieldsDropdown.name}</Link>}
+                              <Modal size="lg" style={{ maxWidth: 'none' }} isOpen={this.state.modal[rec.name]} toggle={() => this.toggle(rec.name)}>
+                                <ModalHeader toggle={() => this.toggle(rec.name)} >{rec.name}</ModalHeader>
+                                <ModalBody className={`${styles.modalBody}`}>
+                                  {this.renderStream(idx)}
+                                </ModalBody>
+                              </Modal>
+                            </DropdownItem>)
+                        })}
+                      </DropdownMenu>
+                    </Dropdown>
+                  </p>
+                  {this.renderStream(idx)}
+                </div>
+              </Col>
+            )
 
           })
-          
-          : <Col md={12}><Loader/></Col>}
+
+            : <Col md={12}><Loader /></Col>}
         </React.Fragment>
       </Row >
     );
@@ -219,11 +215,11 @@ class Show extends React.Component {
 
   renderStream(idx) {
     const { list } = this.props
-    const { listFromState} = this.state
+    const { listFromState } = this.state
     let listState = listFromState
     let listSource = this.state.refresh ? listState : list
-  
-    
+
+
     const canPlay = ReactPlayer.canPlay(listSource[idx].stream)
     return (
       ReactPlayer.canPlay(listSource[idx].stream) ? <div><ReactPlayer className={`${styles.stream}`} url={listSource[idx].stream} playing={true} width={'80 %'} /><p className={`${styles.live}`}>Live</p></div> : <NotAllowedConnect canPlay={canPlay} />
