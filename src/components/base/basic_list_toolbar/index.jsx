@@ -33,9 +33,9 @@ class BasicListToolbar extends React.Component {
 
     return (
 
-      <Row className="w-100 justify-content-end">
+      <Row className="w-100 px-3 justify-content-between mx-3">
         <Col md={2} className="d-flex align-items-center pb-1 pl-0">
-          <h4>
+          <h4 className="text-nowrap">
             {
               goBackPath && (
                 <Link to={goBackPath} className="mr-3" >
@@ -46,7 +46,7 @@ class BasicListToolbar extends React.Component {
             {title}
           </h4>
         </Col>
-        <Col md={{size:6, offset:3}} className="row pb-1 pr-0 align-items-center justify-content-end pr-0">
+        <Col md={6} className="row pb-1 pr-0 align-items-center justify-content-end pr-0">
           <Col className="m-0 align-items-center d-flex justify-content-end pr-0" xs={12} sm={12} md={10} lg={8}>
             <div className={`d-inline-block float-right`}>
               {extraButtons()}
@@ -74,7 +74,7 @@ class BasicListToolbar extends React.Component {
                 requiredPermissions={createRequiredPermissions || permissions[currentUserRoleName]}
               >
                 <Col xs={12} sm={4} md={4} lg={4} className="pr-0 pl-0">
-                  <Button color="primary-lg" className="btn-md px-4 text-uppercase " onClick={this.newRecord}>{label}</Button>
+                  <Button color="primary-lg" className="text-nowrap btn-md px-4 text-uppercase " onClick={this.newRecord}>{label}</Button>
                 </Col>
               </PermissibleRender>
             )
