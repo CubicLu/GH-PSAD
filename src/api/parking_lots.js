@@ -39,8 +39,7 @@ const filterFetcher = (params = {}) => {
 
         },
         locations: {
-          full_address: filters.full_address,
-          city: filters.city
+          full_address: filters.full_address
         }
       }
     }

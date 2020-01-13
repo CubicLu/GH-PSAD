@@ -49,7 +49,7 @@ class Index extends React.Component {
           <React.Fragment>
             <th attr="parking_lots.name">Parking lot name</th>
             <th attr="parking_lots.id">Parking lot ID</th>
-            <th attr="locations.street">Location</th>
+            <th attr="locations.full_address">Location</th>
             <th attr="available_cameras">Available Cameras</th>
           </React.Fragment>
         }
