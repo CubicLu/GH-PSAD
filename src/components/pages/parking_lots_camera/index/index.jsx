@@ -1,23 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 /* Actions */
-import { SET_LIST } from 'actions/parking_lots';
+import { SET_LIST } from 'actions/parking_lots_camera';
 /* API */
 import { filterFetcher } from 'api/parking_lots';
 /* Base */
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';
 /* Helpers */
-import { filterFields } from 'components/helpers/fields/cameras';
+import { filterFieldsCameras } from 'components/helpers/fields/parking_lots';
 /* Modules */
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
+import withFetching from 'components/modules/with_fetching';
+import withCurrentUser from 'components/modules/with_current_user';
 
 class Index extends React.Component {
   isFetching = () => {
     const { isResourceFetching } = this.props
     return isResourceFetching
   }
+
 
 
   renderRecords = () => {
@@ -41,8 +44,8 @@ class Index extends React.Component {
       <IndexTable
         {...this.props}
         isFetching={this.isFetching}
-        toolbar={<BasicListToolbar  showFilters={true} {...this.props} title="Live footage" />}
-        filterFields={filterFields()}
+        toolbar={<BasicListToolbar showFilters={true} {...this.props} title="Live footage" />}
+        filterFields={filterFieldsCameras()}
         filterFetcher={filterFetcher}
         resource={resource}
         columns={
@@ -67,7 +70,9 @@ Index.propTypes = {
   match: PropTypes.object.isRequired
 };
 
-const resource = 'parking_lot'
+const resource = 'parking_lot_camera'
 
-export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), Index)
+export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), withFetching(
+  withCurrentUser(Index)
+))
 
