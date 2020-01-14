@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 /* Actions */
 import { SET_LIST } from 'actions/cameras';
-import { SET_LIST_ELEMENT } from 'actions/parking_lots';
+import { SET_LIST_ELEMENT } from 'actions/parking_lots_camera';
 /* API */
-import { show, search } from 'api/parking_lot_camera';
-import { filterFetcher } from 'api/parking_lots'
+import { show, search } from 'api/parking_lots_camera';
+import { filterFetcher } from 'api/parking_lots_camera'
 /* Helpers */
 import Loader from 'components/helpers/loader';
 /* Modules */

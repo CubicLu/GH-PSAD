@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 /* Actions */
 import { SET_LIST } from 'actions/parking_lots_camera';
 /* API */
-import { filterFetcher } from 'api/parking_lots';
+import { filterFetcher } from 'api/parking_lots_camera';
 /* Base */
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';
 /* Helpers */
-import { filterFieldsCameras } from 'components/helpers/fields/parking_lots';
+import { liveFootageFilterFields } from 'components/helpers/fields/parking_lots';
 /* Modules */
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
@@ -45,7 +45,7 @@ class Index extends React.Component {
         {...this.props}
         isFetching={this.isFetching}
         toolbar={<BasicListToolbar showFilters={true} {...this.props} title="Live footage" />}
-        filterFields={filterFieldsCameras()}
+        filterFields={liveFootageFilterFields()}
         filterFetcher={filterFetcher}
         resource={resource}
         columns={

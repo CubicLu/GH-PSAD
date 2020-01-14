@@ -50,10 +50,10 @@ const fieldsShow = (managers = [], admins = [], renderLocationModal, permissions
   // },
   ...fieldsNew(managers, admins, renderLocationModal, permissions)
 ]
-const filterFieldsCameras = () => [
+const liveFootageFilterFields = () => [
   { name: 'name', label: 'Name' },
   { name: 'id', label: 'Parking Lot' },
-  { name: 'city', label: 'Location' },
+  { name: 'full_address', label: 'Location' },
   { name: 'available_cameras', label: 'Available Cameras' },
 ]
 
@@ -96,4 +96,4 @@ const exampleData = (roles) => process.env.NODE_ENV !== 'production' ? {
     status: 'active'
   } // These are defaults values for each field
 
-export { fieldsNew, fieldsShow, filterFields, exampleData, filterFieldsCameras };
+export { fieldsNew, fieldsShow, filterFields, exampleData, liveFootageFilterFields };
