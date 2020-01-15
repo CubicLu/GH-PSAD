@@ -83,8 +83,8 @@ class Index extends React.Component {
             <th disableSort>Location</th>
             <th disableSort>Contact Number</th>
             <th disableSort>Email</th>
-            <th disableSort>Assigned Parking Admin</th>
-            <th disableSort>Assigned Town Manager</th>
+            <th disableSort>Parking Admin</th>
+            <th disableSort>Town Manager</th>
             <th disableSort>Status</th>
           </React.Fragment>
         }
