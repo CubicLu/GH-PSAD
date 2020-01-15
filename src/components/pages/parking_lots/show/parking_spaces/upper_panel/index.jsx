@@ -3,7 +3,7 @@ import {
   Button,
   Col,
 } from 'reactstrap';
-
+import { isEmpty } from 'underscore';
 import { ReactComponent as EditIcon } from 'assets/edit_icon.svg'
 import { ReactComponent as RecordsIcon } from 'assets/records_icon.svg'
 import {ReactComponent as TrashIcon } from 'assets/trash_icon.svg';
@@ -30,6 +30,18 @@ const UpperPanel = (props) => {
       history
     } = props
 
+    const deleteParkingPlan = () => {
+      if(!isEmpty(parkingPlans)){
+        toggleParkingPlanDeleteConfirmationModal()
+      }
+    }
+
+    const editParkingPlan = () => {
+      if(!isEmpty(parkingPlans)){
+        editCurrentMap()
+      }
+    }
+
     return (
       <Col className="row">
         <Col sm={12} className="mb-5">
@@ -38,10 +50,10 @@ const UpperPanel = (props) => {
         </Col>
         <Col>
           <UploadLayoutButton/>
-          <Button color="primary" onClick={editCurrentMap} className={`${parkingPlans[selectedIndexParkingPlan] ? '' : 'disabled not-allowed ' } mb-3 float-left ml-4`}>
+          <Button color="primary" onClick={editParkingPlan} className={`${parkingPlans[selectedIndexParkingPlan] ? '' : 'disabled not-allowed ' } mb-3 float-left ml-4`}>
               <EditIcon />
           </Button>
-          <Button color="danger" onClick={toggleParkingPlanDeleteConfirmationModal} className={`${parkingPlans[selectedIndexParkingPlan] ? '' : 'disabled not-allowed ' } mb-3 float-left ml-4`}>
+          <Button color="danger" onClick={deleteParkingPlan} className={`${parkingPlans[selectedIndexParkingPlan] ? '' : 'disabled not-allowed ' } mb-3 float-left ml-4`}>
               <TrashIcon className="svg-white" />
           </Button>
           <Button color="secondary" onClick={() => history.push(`${parentPath}/parking_sessions`)}  className={`mb-3 float-left ml-4`}>
