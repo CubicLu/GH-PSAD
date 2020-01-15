@@ -50,9 +50,10 @@ const fieldsShow = (managers = [], admins = [], renderLocationModal, permissions
   // },
   ...fieldsNew(managers, admins, renderLocationModal, permissions)
 ]
+
 const liveFootageFilterFields = () => [
-  { name: 'name', label: 'Name' },
-  { name: 'id', label: 'Parking Lot' },
+  { name: 'name', label: 'Parking Lot Name' },
+  { name: 'id', label: 'Parking Lot ID' },
   { name: 'full_address', label: 'Location' },
   { name: 'available_cameras', label: 'Available Cameras' },
 ]
