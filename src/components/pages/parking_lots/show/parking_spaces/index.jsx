@@ -768,6 +768,21 @@ class ParkingPlans extends Component {
     }
   }
 
+  // Update record on the redux store when leaving
+  componentWillUnmount() {
+    const { record, setRecord } = this.props
+    if(record) {
+      show({ id: record.id})
+        .then((res) => {
+          setRecord(res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+          console.log('Error while fetching parking lot')
+        })
+    }
+  }
+
   componentDidMount () {
     const { record } = this.props;
     this.fetchData(record);
