@@ -21,15 +21,10 @@ const filterFetcher = (params = {}) => {
     query: {
       ...query,
       id: filters.id,
-      status: filters.status,
-      parking_admins: filters.parking_admins,
-      town_managers: filters.town_managers,
       available_cameras: filters.available_cameras,
       query: {
         parking_lots: {
-          email: filters.email,
           name: filters.name ? encodeURIComponent(filters.name) : '',
-          phone: filters.phone,
 
         },
         locations: {
