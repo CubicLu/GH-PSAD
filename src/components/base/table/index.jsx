@@ -131,7 +131,7 @@ export class IndexTable extends React.Component {
           {...this.props}
         />
         <Row>
-          <Col xs="12" className="my-3 d-flex justify-content-between">
+          <Col xs="12" className="my-3 d-flex justify-content-center">
             {toolbarWithProps}
           </Col>
           <Col xs="12">

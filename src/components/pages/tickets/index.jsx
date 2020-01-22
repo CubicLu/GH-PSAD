@@ -71,7 +71,7 @@ class Index extends React.Component {
       <IndexTable
         isFetching={this.isFetching}
         {...this.props}
-        toolbar={ <BasicListToolbar {...this.props} title="Tickets"/>}
+        toolbar={ <BasicListToolbar showFilters={true} {...this.props} title="Tickets"/>}
         filterFields={filterFields(officers, statuses, types, agencies)}
         filterFetcher={filterFetcher}
         resource={resource}

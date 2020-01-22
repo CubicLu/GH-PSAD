@@ -19,5 +19,5 @@ export {
   TextWithLink,
   DateRangeInput,
   GoogleMaps,
-  FieldType
+  FieldType,
 }
