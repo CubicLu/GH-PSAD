@@ -59,7 +59,7 @@ const filterFields = (parkingAdmins, townManagers) => [
   { name: 'email', label: 'Email Address' },
   {
     name: 'parking_admins',
-    label: 'Assigned Parking Admin',
+    label: 'Parking Admin',
     type: FieldType.SELECT_FIELD,
     options: parkingAdmins.map(({ value, label }) => {
       return { value, label };
@@ -67,7 +67,7 @@ const filterFields = (parkingAdmins, townManagers) => [
   },
   {
     name: 'town_managers',
-    label: 'Assigned Town Manager',
+    label: 'Town Manager',
     type: FieldType.SELECT_FIELD,
     options: townManagers.map(({ value, label }) => {
       return { value, label };
