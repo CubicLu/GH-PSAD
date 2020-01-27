@@ -51,6 +51,13 @@ const fieldsShow = (managers = [], admins = [], renderLocationModal, permissions
   ...fieldsNew(managers, admins, renderLocationModal, permissions)
 ]
 
+const liveFootageFilterFields = () => [
+  { name: 'name', label: 'Parking Lot Name' },
+  { name: 'id', label: 'Parking Lot ID' },
+  { name: 'full_address', label: 'Location' },
+  { name: 'available_cameras', label: 'Available Cameras' },
+]
+
 const filterFields = (parkingAdmins, townManagers) => [
   { name: 'id', label: 'Parking Lot ID' },
   { name: 'name', label: 'Parking Lot Name' },
@@ -59,7 +66,7 @@ const filterFields = (parkingAdmins, townManagers) => [
   { name: 'email', label: 'Email Address' },
   {
     name: 'parking_admins',
-    label: 'Assigned Parking Admin',
+    label: 'Parking Admin',
     type: FieldType.SELECT_FIELD,
     options: parkingAdmins.map(({ value, label }) => {
       return { value, label };
@@ -67,7 +74,7 @@ const filterFields = (parkingAdmins, townManagers) => [
   },
   {
     name: 'town_managers',
-    label: 'Assigned Town Manager',
+    label: 'Town Manager',
     type: FieldType.SELECT_FIELD,
     options: townManagers.map(({ value, label }) => {
       return { value, label };
@@ -90,4 +97,4 @@ const exampleData = (roles) => process.env.NODE_ENV !== 'production' ? {
     status: 'active'
   } // These are defaults values for each field
 
-export { fieldsNew, fieldsShow, filterFields, exampleData };
+export { fieldsNew, fieldsShow, filterFields, exampleData, liveFootageFilterFields };

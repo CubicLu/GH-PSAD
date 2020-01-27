@@ -127,6 +127,9 @@ class Rules extends React.Component {
               <Button className="mr-1" onClick={() => history.push(parentPath)} color="disabled-lg">
                 Information
               </Button>
+              <Button className="mr-1" onClick={() => history.push(`${parentPath}/voi`)} color="disabled-lg">
+                VOI
+              </Button>
               <Button className="mr-1" onClick={() => history.push(match.url)} color="primary-lg">
                 Parking rules
               </Button>

@@ -1,4 +1,5 @@
 import store from 'index';
+import * as Sentry from '@sentry/browser';
 import { clearToken } from 'actions/users';
 import { notFound, internal, critical } from 'actions/server_errors';
 
@@ -12,6 +13,7 @@ const withApiCatch = (promise, isCritical = false) => {
     }
 
     if (isCritical) {
+      Sentry.captureException(error);
       store.dispatch(critical(error));
       return
     }
@@ -23,6 +25,7 @@ const withApiCatch = (promise, isCritical = false) => {
       case 422:
         throw error;
       case 500:
+        Sentry.captureException(error);
         store.dispatch(internal(error));
         break;
       default:

@@ -25,7 +25,7 @@ const SessionRecordModal = (props) => {
             ) : (
               <React.Fragment>
                 <Col className="general-text-1 mb-2" sm={12}>
-                    <strong>Plate Number:</strong> {currentSessionRecord.vehicle.plate_number.toUpperCase()}
+                    <strong>Plate Number:</strong> {currentSessionRecord.vehicle.plate_number ? currentSessionRecord.vehicle.plate_number.toUpperCase() : 'NON DETECTED'}
                 </Col>
                 <Col className="general-text-1 mb-2" sm={12}>
                     <strong>Account:</strong> {currentSessionRecord.user_id }

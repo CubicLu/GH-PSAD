@@ -12,7 +12,7 @@ import {
   Password,
   Toggler,
   GoogleMaps,
-  FieldType
+  FieldType,
 } from 'components/helpers/form_fields';
 import { Form, Text } from 'informed';
 import { Link } from 'react-router-dom';
@@ -21,29 +21,33 @@ import ErrorWrapper from './error'
 
 
 const renderLabel = (field, props, lSize) => {
-  const { errors = {}} = props
+
+  const { errors = {} } = props
   let errorName = null
-  errorName = field.prefix_error ? `${field.prefix_error}_${field.name}`: field.name
+  errorName = field.prefix_error ? `${field.prefix_error}_${field.name}` : field.name
+
+  console.log(props);
 
   return (
-     field.label &&
-        <Label for={field.name} md={lSize}>
-          <span className={`mr-1 ${errors[errorName] ? 'general-error' : 'text-primary'}`}>{field.mandatory ? '*' : '' }</span>
-          { labelFor(field) }
-          {
-            field.tooltip &&
-            <TooltipInfo className="ml-2" text={field.tooltip} target={field.name} />
-          }
-        </Label>
+    field.label &&
+    <Label for={field.name} md={lSize}>
+      <span className={`mr-1 ${errors[errorName] ? 'general-error' : 'text-primary'}`}>{field.mandatory ? '*' : ''}</span>
+      {labelFor(field)}
+      {
+        field.tooltip &&
+        <TooltipInfo className="ml-2" text={field.tooltip} target={field.name} />
+      }
+    </Label>
   )
 }
 
 const renderField = (field, props = {}) => {
-  const { lSize = 2, iSize = 6 } = props;
+
+  const { lSize = 12, iSize = 6 } = props;
 
   return (
     <FormGroup row>
-      { renderLabel(field, props, lSize) }
+      {renderLabel(field, props, lSize)}
       <Col md={iSize}>
         <ErrorWrapper errors={props.errors} field={field}>
           {field.render ? field.render(field, props) : renderInput(field, props)}
@@ -64,25 +68,26 @@ const renderImageField = (field, props = {}) => (
 const renderInput = (field, props = {}) => {
   switch (field.type) {
     case FieldType.MULTISELECT_FIELD:
-      return <CustomMultiSelect {...props} field={field.name} options={field.options}/>;
+      return <CustomMultiSelect {...props} field={field.name} options={field.options} />;
     case FieldType.FILE_FIELD:
-      return <ImageInput {...props} className="form-control" field={field.name}/>;
+      return <ImageInput {...props} className="form-control" field={field.name} />;
     case FieldType.SELECT_FIELD:
-      return <CustomSelect {...props} field={field}/>;
+      return <CustomSelect {...props} field={field} />;
     case FieldType.TOGGLER_FIELD:
-      return <Toggler {...props} field={field.name} label={field.innerLabel} options={field.options}/>;
+      return <Toggler {...props} field={field.name} label={field.innerLabel} options={field.options} />;
     case FieldType.TEXT_LINK_FIELD:
-      return <TextWithLink {...props} field={field}/>;
+      return <TextWithLink {...props} field={field} />;
     case FieldType.PASSWORD_FIELD:
       return <Password {...props} field={field} />;
     case FieldType.GOOGLE_MAPS_FIELD:
-      return <GoogleMaps {...props.events} {...field.options}/>;
+      return <GoogleMaps {...props.events} {...field.options} />;
     case FieldType.INCREASER_FIELD:
-      return <Increaser {...props} field={field}/>;
+      return <Increaser {...props} field={field} />;
     case FieldType.NUMBER_FIELD:
-      return <Text className="form-control" disabled={field.disabled} {...props.events} type="number" field={field.name}/>;
+      return <Text className="form-control" disabled={field.disabled} {...props.events} type="number" field={field.name} />;
+
     default:
-      return <Text className="form-control" disabled={field.disabled} {...props.events} field={field.name}/>;
+      return <Text className="form-control" disabled={field.disabled} {...props.events} field={field.name}  />;
   }
 };
 
@@ -107,6 +112,7 @@ const renderFieldsWithGrid = (fields, step, cols, props = {}) => {
 
   return fieldList;
 };
+
 
 const renderButtons = (formState, props = {}) => {
   const { backPath, isFetching } = props;

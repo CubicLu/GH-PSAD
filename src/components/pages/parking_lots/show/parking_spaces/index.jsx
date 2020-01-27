@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { ActionCableConsumer } from 'react-actioncable-provider';
 import {
   Button,
   Col,
@@ -557,6 +558,9 @@ class ParkingPlans extends Component {
                 <Button className="mr-1" onClick={() => history.push(parentPath)} color="disabled-lg">
                   Information
                 </Button>
+                <Button className="mr-1" onClick={() => history.push(`${parentPath}/voi`)} color="disabled-lg">
+                  VOI
+                </Button>
                 <Button className="mr-1" onClick={() => history.push(`${parentPath}/rules`)} color="disabled-lg">
                   Parking rules
                 </Button>
@@ -696,7 +700,20 @@ class ParkingPlans extends Component {
     )
   }
 
+  handleReceived = (data) => {
+    const { list } = this.state
+    this.setState({
+      list: list.map(slot => {
+        if(slot.id === data.id) {
+          return data
+        }
+        return slot
+      })
+    }, this.syncSlotContainerOnMap)
+  }
+
   renderRecord () {
+    const { record } = this.props
     return (
       <ParkingPlanContext.Provider value={{
         state: {...this.state},
@@ -707,6 +724,15 @@ class ParkingPlans extends Component {
             {this.renderHeader()}
           </Col>
           <Col xs={12}>
+            <ActionCableConsumer
+              ref='parkingSpaceRoom'
+              channel={{
+                channel: "ParkingSpacesChannel",
+                parking_lot_id: record.id
+              }}
+              onConnected={() => console.log("Websocket connection established")}
+              onReceived={this.handleReceived}
+            />
             {this.renderForm()}
           </Col>
           {this.renderModals()}
@@ -739,6 +765,21 @@ class ParkingPlans extends Component {
   componentWillReceiveProps(nextProps, nextContext) {
     if (nextProps.record && !this.props.record) {
       this.fetchData(nextProps.record);
+    }
+  }
+
+  // Update record on the redux store when leaving
+  componentWillUnmount() {
+    const { record, setRecord } = this.props
+    if(record) {
+      show({ id: record.id})
+        .then((res) => {
+          setRecord(res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+          console.log('Error while fetching parking lot')
+        })
     }
   }
 

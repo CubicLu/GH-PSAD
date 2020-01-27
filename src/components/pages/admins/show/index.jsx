@@ -47,7 +47,7 @@ class Show extends React.Component {
 
   static contextType = AlertMessagesContext
 
-  isFetching () {
+  isFetching() {
     const { isResourceFetching } = this.props
     const { roles } = this.state.dropdowns;
     return isResourceFetching || isEmpty(roles)
@@ -98,13 +98,13 @@ class Show extends React.Component {
     });
   };
 
-  renderHeader () {
+  renderHeader() {
     const { backPath, record } = this.props;
 
     return (<Row className="p-4">
       <Col md={2} className="align-self-center ">
         <Link to={backPath} className="mr-2" >
-          <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
+          <FontAwesomeIcon color="grey" icon={faChevronLeft} />
         </Link>
         {record.username}
       </Col>
@@ -120,18 +120,18 @@ class Show extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success" className="px-5 py-2 float-right"  onClick={this.save}>
+        <Button color="success" className="px-5 py-2 float-right" onClick={this.save}>
           {isSaving ? btnSpinner() : 'Save Changes'}
         </Button>
       </Col>
     );
   }
 
-  renderFields () {
-    return renderFieldsWithGrid(this.fieldsForCommonForm(), 2, 6, {...this.fieldProps(), errors: this.state.errors});
+  renderFields() {
+    return renderFieldsWithGrid(this.fieldsForCommonForm(), 2, 6, { ...this.fieldProps(), errors: this.state.errors });
   }
 
-  renderForm () {
+  renderForm() {
     const { record } = this.props;
     const { isSaving, inputChanged } = this.state;
 
@@ -146,13 +146,13 @@ class Show extends React.Component {
               {this.renderFields()}
             </Col>
           </Row>
-          { inputChanged && this.renderSaveButton()}
+          {inputChanged && this.renderSaveButton()}
         </Form>
       </fieldset>
     );
   }
 
-  renderRecord () {
+  renderRecord() {
     return (
       <Row className="m-0">
         <PasswordConfirmationModal
@@ -185,7 +185,7 @@ class Show extends React.Component {
     updateRecord.call(this, update, path, values);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { currentUser } = this.props
     if (currentUser) {
       dropdownsSearch('role_id', { admin_id: currentUser.id })
@@ -194,18 +194,18 @@ class Show extends React.Component {
             this.setState({ dropdowns: { roles: response.data } })
           } else {
             // This happens when the user is not allowed to update
-            this.setState({ dropdowns: { roles: [{value: currentUser.role.id, label: currentUser.role.name}] } })
+            this.setState({ dropdowns: { roles: [{ value: currentUser.role.id, label: currentUser.role.name }] } })
           }
         });
     }
   }
 
-  render () {
-    return this.isFetching() ? <Loader/> : (
+  render() {
+    return this.isFetching() ? <Loader /> : (
       <React.Fragment>
         {this.renderRecord()}
-        <div className="mt-1"/>
-        <ActivityIndex/>
+        <div className="mt-1" />
+        <ActivityIndex />
       </React.Fragment>
     );
   }
@@ -223,7 +223,7 @@ Show.propTypes = {
   })
 };
 
-function mapDispatch (dispatch) {
+function mapDispatch(dispatch) {
   return bindActionCreators({ setListElement: invoke(SET_LIST_ELEMENT) }, dispatch);
 }
 

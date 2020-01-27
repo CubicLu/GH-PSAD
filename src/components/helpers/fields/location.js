@@ -41,7 +41,9 @@ const exampleData = () => process.env.NODE_ENV !== 'production' ? {
   'street': faker.address.streetName(),
   'city': faker.address.city(),
   'country': faker.address.country(),
-  'full_address': ''
+  'full_address': '',
+  'ltd': '38.771665',
+  'lng': '-76.0762605',
 } : {
   'full_address': ''
 }

@@ -72,7 +72,7 @@ class Index extends React.Component {
       <IndexTable
         {...this.props}
         isFetching={this.isFetching}
-        toolbar={<BasicListToolbar {...this.props} createRequiredPermissions={[CREATE_PARKING_LOT]} label="+ Create New" title="Parking lot accounts" />}
+        toolbar={<BasicListToolbar showFilters={true} {...this.props} createRequiredPermissions={[CREATE_PARKING_LOT]} label="+ Create New" title="Parking lot accounts" />}
         filterFields={filterFields(parkingAdmins, townManagers)}
         filterFetcher={filterFetcher}
         resource={resource}
@@ -83,8 +83,8 @@ class Index extends React.Component {
             <th disableSort>Location</th>
             <th disableSort>Contact Number</th>
             <th disableSort>Email</th>
-            <th disableSort>Assigned Parking Admin</th>
-            <th disableSort>Assigned Town Manager</th>
+            <th disableSort>Parking Admin</th>
+            <th disableSort>Town Manager</th>
             <th disableSort>Status</th>
           </React.Fragment>
         }
