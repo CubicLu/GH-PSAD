@@ -3,12 +3,10 @@ import {
   Col,
   Form,
   FormGroup,
-  Input,
   Label,
   ListGroup,
   ListGroupItem
 } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import { FieldType } from 'components/helpers/form_fields';
 import _ from 'lodash';
 
@@ -38,7 +36,7 @@ class ShowForm extends React.Component {
       case FieldType.FILE_FIELD:
         return <img src={value} alt={field.name} />;
       default:
-        return <Input id={field.name} plaintext readOnly value={value} />;
+        return <Label id={field.name}>{value}</Label>;
     }
   };
 
@@ -47,21 +45,9 @@ class ShowForm extends React.Component {
     return fields.map((field, idx) => this.renderField(field, idx));
   };
 
-  renderButtons = formState => {
-    const { backPath, editURL } = this.props;
-
-    return (
-      <React.Fragment>
-        <Link to={backPath} className="btn btn-primary mr-1">Back</Link>
-        {editURL && <Link to={`${editURL}/edit`} className="btn btn-primary">Edit</Link>}
-      </React.Fragment>
-    );
-  };
-
   renderForm = () => (
     <React.Fragment>
       {this.renderFields()}
-      {this.renderButtons()}
     </React.Fragment>
   );
 
