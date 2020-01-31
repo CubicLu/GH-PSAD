@@ -38,7 +38,7 @@ class Show extends React.Component {
       created_at: displayUnixTimestamp(record.created_at),
       check_in: record.check_in && displayUnixTimestamp(record.check_in),
       check_out: record.check_out && displayUnixTimestamp(record.check_out),
-      slot_id: record.slot ? record.slot.id : '',
+      slot_id: record.slot ? record.slot.name : '',
       payment_method: record.payments.map(payment => payment.payment_method).join(',')
     });
   };
