@@ -12,6 +12,7 @@ import * as Sentry from '@sentry/browser';
 import reducers from 'reducers';
 import { init_set_token, init_set_current_user } from "actions";
 import 'config/axios'
+import 'config/generate_unique_tracker_id'
 import 'bootstrap/dist/css/bootstrap.css';
 import 'styles/global.sass';
 
