@@ -34,5 +34,4 @@ const withApiCatch = (promise, isCritical = false) => {
   });
 };
 
-
 export default withApiCatch;
