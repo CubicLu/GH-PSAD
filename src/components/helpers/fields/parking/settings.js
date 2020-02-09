@@ -13,9 +13,9 @@ const fields = [
   { name: 'period',
     label: 'Minimum Chargeable Time in minutes',
     type: FieldType.INCREASER_FIELD,
-    step: 60,
-    max: 3540,
-    min: 60,
+    step: 1800,
+    max: 3600,
+    min: 1800,
     tooltip: "This is the minimum time that is multiplied to the hourly rate. Ex. The driver is charged 30 minutes even if he only stayed for 20 minutes",
     renderValue: value => (value / 60)
   },
