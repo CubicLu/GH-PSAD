@@ -29,8 +29,8 @@ function Header (props) {
           <DropdownToggle nav className="text-light float-right pr-3">
             {  currentUser ? (
                 <span>
-                  { process.env.NODE_ENV !== 'production' ? currentUser.role.name : currentUser.name}
-                  <img src ={ currentUser.avatar || 'https://i.stack.imgur.com/ 34AD2.jpg'} alt="profile" className="rounded-circle d-none d-sm-inline ml-3" width="40" height="40"/>
+                  <span className="d-none d-sm-inline">{ process.env.NODE_ENV !== 'production' ? currentUser.role.name : currentUser.name}</span>
+                  <img src ={ currentUser.avatar || 'https://i.stack.imgur.com/34AD2.jpg'} alt="profile" className="rounded-circle ml-3" width="40" height="40"/>
                 </span>
               ) : (
                 <span>

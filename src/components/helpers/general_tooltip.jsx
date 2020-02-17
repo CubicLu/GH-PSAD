@@ -7,7 +7,7 @@ const GeneralTooltip = (props) => {
   return (
     <React.Fragment>
       {props.children}
-      <Tooltip placement="top" isOpen={tooltipOpen} target={props.target} toggle={toggle}>
+      <Tooltip placement={props.placement || 'top'} isOpen={tooltipOpen} target={props.target} toggle={toggle}>
         {props.text}
       </Tooltip>
     </React.Fragment>

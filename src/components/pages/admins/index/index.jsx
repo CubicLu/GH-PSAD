@@ -63,10 +63,10 @@ class Index extends React.Component {
         columns={
           <React.Fragment>
             <th attr="username">Username</th>
-            <th attr="name">Name</th>
-            <th attr="email">Email</th>
+            <th attr="admins.name">Name</th>
+            <th attr="admins.email">Email</th>
             <th attr="roles.name">Role</th>
-            <th attr="status">Status</th>
+            <th attr="admins.status">Status</th>
           </React.Fragment>
         }
         renderRecords={this.renderRecords}

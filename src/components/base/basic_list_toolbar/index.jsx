@@ -47,7 +47,7 @@ class BasicListToolbar extends React.Component {
           </h4>
         </Col>
         <Col md={6} className="row pb-1 pr-0 align-items-center justify-content-end pr-0">
-          <Col className="m-0 align-items-center d-flex justify-content-end pr-0" xs={12} sm={12} md={10} lg={8}>
+          <Col className={`${styles.filterContainer} m-0 align-items-center d-flex pr-0`} xs={12} sm={12} md={10} lg={8}>
             <div className={`d-inline-block float-right`}>
               {extraButtons()}
             </div>
