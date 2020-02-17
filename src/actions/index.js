@@ -8,6 +8,7 @@ import * as CameraActions from './cameras';
 import * as ParkingLotActions from './parking_lots';
 import * as ParkingLotCameraActions from './parking_lots_camera';
 import * as ParkingSessionActions from './parking_sessions';
+import * as ReportActions from './reports';
 import * as VoiActions from './voi';
 import * as ServerErrorActions from './server_errors';
 
@@ -39,6 +40,7 @@ export {
   ParkingLotActions,
   ParkingLotCameraActions,
   ParkingSessionActions,
+  ReportActions,
   TicketActions,
   INIT_SET_TOKEN,
   INIT_SET_CURRENT_USER,

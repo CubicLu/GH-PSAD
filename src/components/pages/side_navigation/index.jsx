@@ -7,6 +7,7 @@ import { ReactComponent as AdminIcon } from 'assets/menu_icons/user_accounts_ico
 import { ReactComponent as AgenciesIcon } from 'assets/menu_icons/law_enf_icon.svg'
 import { ReactComponent as CameraIcon } from 'assets/menu_icons/stream_footages_icon.svg'
 import { ReactComponent as ParkingLotIcon } from 'assets/menu_icons/parking_lot_icon.svg'
+import { ReactComponent as ReportIcon } from 'assets/menu_icons/reports_icon.svg'
 import styles from './side-navigation.module.sass'
 import { permissions } from 'config/permissions'
 import withCurrentUser from 'components/modules/with_current_user';
@@ -22,6 +23,7 @@ const routes = {
   cameras: '/dashboard/cameras',
   parkingLots: '/dashboard/parking_lots',
   parkingLotsCamera: '/dashboard/live/parking_lots',
+  reports: '/dashboard/reports',
   archive: ''
 }
 
@@ -34,7 +36,7 @@ const isActive = (location, path) => (
 function SideNavigation(props) {
   const { currentUserRoleName } = props
   return (
-    <Nav vertical pills className={`${styles.sideNavigation} shadow-sm pr-0 m-0 bg-white d-fixed h-100'`}>
+    <Nav vertical pills className={`${styles.sideNavigation} shadow-sm pr-0 m-0 bg-white position-fixed h-100`}>
       <li>
         <Link className={`nav-link ${isActive(props.location, routes.dashboard)}`} to={routes.dashboard}>
           <DashboardIcon className="float-left mr-2" />
@@ -76,6 +78,14 @@ function SideNavigation(props) {
           <Link className={`nav-link ${isActive(props.location, routes.cameras)}`} to={routes.parkingLotsCamera}>Live</Link>
           <Link className={`nav-link ${isActive(props.location, routes.archive)}`} to={routes.archive}>Archive</Link>
         </DropdownNavigation>
+      </li>
+        <li>
+        <Link className={`nav-link ${isActive(props.location, routes.reports)}`} to={routes.reports}>
+          <ReportIcon className="float-left mr-2" />
+          <span className="d-none d-lg-block d-xl-block">
+            Reports
+          </span>
+        </Link>
       </li>
     </Nav>
   );
