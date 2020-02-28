@@ -4,8 +4,8 @@ const { index } = resourceApi('reports');
 const filterFetcher = (params = {}) => {
   const { page, perPage, query, filters = {} } = params;
   if (filters.range) {
-    var from = filters.range.from
-    var to = filters.range.to
+    var from = filters.range.from;
+    var to = filters.range.to;
   }
   return index({
     page,

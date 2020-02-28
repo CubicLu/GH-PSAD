@@ -51,7 +51,7 @@ const UploadLayoutButton = () => {
         </DropdownMenu>
       </UncontrolledDropdown>
     ) : (
-      <Button onClick={addNewMap} className="mb-3 float-left bg-grey-dark  ml-4 ">
+      <Button onClick={addNewMap} className="mb-3 float-left bg-grey-dark ml-4">
         <UploadSVG className="mr-2"/>
         Add a Layout
       </Button>

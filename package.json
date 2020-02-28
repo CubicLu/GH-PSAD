@@ -17,6 +17,7 @@
     "qs": "^6.8.0",
     "react": "^16.8.6",
     "react-actioncable-provider": "github:jordanhudgens/react-actioncable-provider",
+    "react-date-range": "^1.0.1",
     "react-datepicker": "^2.8.0",
     "react-dom": "^16.8.6",
     "react-draggable": "^4.1.0",

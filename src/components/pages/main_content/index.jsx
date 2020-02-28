@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import AdminRoute from 'routes/admins';
+import DashboardRoute from 'routes/dashboard';
 import AgencyRoute from 'routes/agencies';
 import CameraRoute from 'routes/cameras';
 import TicketRoute from 'routes/tickets';
@@ -14,6 +15,7 @@ function MainContent(props) {
 
   return (
     <div className=''>
+      <PrivateRoute path={`${match.path}`} component={DashboardRoute} />
       <PrivateRoute path={`${match.path}/admins`} component={AdminRoute} />
       <PrivateRoute path={`${match.path}/agencies`} component={AgencyRoute} />
       <PrivateRoute path={`${match.path}/tickets`} component={TicketRoute} />
