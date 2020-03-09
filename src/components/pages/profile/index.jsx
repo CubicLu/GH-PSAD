@@ -50,6 +50,9 @@ class Profile extends React.Component {
           type: 'Success',
           text: 'Profile updated succesfully'
         }])
+        this.setState({
+          errors: {}
+        })
       })
       .catch((error) => {
         this.setState({ errors: error.response.data.errors })
