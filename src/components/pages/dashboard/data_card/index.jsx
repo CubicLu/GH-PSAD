@@ -4,7 +4,6 @@ import {
   Col,
   Card,
   CardTitle,
-  CardText,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -150,7 +149,7 @@ class DataCard extends Component {
                         <DropdownMenu right>
                           {
                             datesToFilter.map(data => (
-                              <DropdownItem onClick={() => this.fetchData(data.from.format('YYYY-M-D'), data.to ? data.to.format('YYYY-M-D') : null, data.since)} className="p-3 text-grey">
+                              <DropdownItem key={data.from.format('YYYY-M-D')} onClick={() => this.fetchData(data.from.format('YYYY-M-D'), data.to ? data.to.format('YYYY-M-D') : null, data.since)} className="p-3 text-grey">
                                 <span className="general-text-2" >{data.from.format('MM/DD')}{data.to ? `-${data.to.format('MM/DD')}` : ''} {data.text}</span>
                               </DropdownItem>
                             ))
@@ -164,7 +163,7 @@ class DataCard extends Component {
                   }
                   </Col>
                 </CardTitle>
-                <CardText className="row mt-3">
+                <div className="row mt-3">
                   <Col xs="6" className={`${style.currentValue}`}>
                     {data.result}
                   </Col>
@@ -195,7 +194,7 @@ class DataCard extends Component {
                     <span className="text-primary">MORE </span>
                   </Col>
                   */}
-                </CardText>
+                </div>
               </React.Fragment>
             )
           }

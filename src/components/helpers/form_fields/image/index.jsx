@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { asField } from 'informed';
 import ReactFileReader from 'react-file-reader';
 import Media from './media';
@@ -15,6 +15,13 @@ const ImageInput = asField(({ fieldState, fieldApi, events = {}}) => {
     defaultName = paths[paths.length - 1];
   }
 
+  useEffect(() => {
+    setTimeout(() => {
+      setValue('')
+    }, 0);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [filename, setFilename] = useState(defaultName);
   const [filepath, setFilepath] = useState(value);
 
@@ -24,6 +31,7 @@ const ImageInput = asField(({ fieldState, fieldApi, events = {}}) => {
     setFilename(data.fileList[0].name);
     events.onChange && events.onChange()
   };
+
   return (
     <ReactFileReader
       base64={true}

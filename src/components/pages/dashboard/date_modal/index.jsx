@@ -45,11 +45,9 @@ const DateModal = (props) => {
 
 
 DateModal.propTypes = {
-  saveParkingPlanFile: PropTypes.func.isRequired,
+  apply: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
-  toggleModal: PropTypes.func.isRequired,
-  defaultName: PropTypes.string.isRequired,
-  defaultURL: PropTypes.string.isRequired
+  toggleModal: PropTypes.func.isRequired
 }
 
 export default DateModal;

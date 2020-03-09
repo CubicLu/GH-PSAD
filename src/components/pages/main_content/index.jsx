@@ -8,6 +8,7 @@ import CameraRoute from 'routes/cameras';
 import TicketRoute from 'routes/tickets';
 import ParkingLotRoute from 'routes/parking_lots';
 import ReportRoute from 'routes/reports';
+import ProfileRoute from 'routes/profile';
 import PrivateRoute from 'routes/private_route';
 import ParkingLotCameras from 'routes/parking_lots_camera'
 function MainContent(props) {
@@ -16,6 +17,7 @@ function MainContent(props) {
   return (
     <div className=''>
       <PrivateRoute path={`${match.path}`} component={DashboardRoute} />
+      <PrivateRoute path={`${match.path}/profile`} component={ProfileRoute} />
       <PrivateRoute path={`${match.path}/admins`} component={AdminRoute} />
       <PrivateRoute path={`${match.path}/agencies`} component={AgencyRoute} />
       <PrivateRoute path={`${match.path}/tickets`} component={TicketRoute} />

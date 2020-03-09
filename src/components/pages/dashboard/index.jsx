@@ -148,7 +148,7 @@ class Dashboard extends Component {
       <Row>
         <Col xs="12">
           <Col xs="12" className="my-3">
-            <Toolbar {...this.props} filter={this.filter} resetFilter={this.resetFilter} search={this.search} />
+            <Toolbar filter={this.filter} resetFilter={this.resetFilter} search={this.search} />
           </Col>
           <Col xs="12">
           </Col>
@@ -156,7 +156,7 @@ class Dashboard extends Component {
         <Col xs="12" className="row">
           {
             types.map((type) => (
-              <Col sm="12" lg="4" className={`py-4 ${type.display ? '' : 'd-none' }`} >
+              <Col sm="12" lg="4" className={`py-4 ${type.display ? '' : 'd-none' }`} key={type.name} >
                 <DataCard
                   parkingLots={parkingLots}
                   type={type.name}
