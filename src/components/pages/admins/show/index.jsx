@@ -81,7 +81,6 @@ class Show extends React.Component {
   save = () => {
     const values = setEmptyFields(this.fieldsForCommonForm(), this.formApi);
     values.avatar = this.formApi.getValue('avatar');
-
     if (this.formApi.getValue('password')) {
       this.toggleModal();
     } else {
@@ -178,13 +177,6 @@ class Show extends React.Component {
     return fieldsSet;
   }
 
-  handlePasswordSuccess = () => {
-    const { values } = this.formApi.getState();
-    const { backPath, record } = this.props;
-    const path = generatePath(backPath, { id: record.id });
-    updateRecord.call(this, update, path, values);
-  }
-
   fetchData = (currentUser, record) => {
     dropdownsSearch('role_id', { admin_id: currentUser.id, edited_admin_id: record.id })
       .then(response => {
@@ -203,7 +195,7 @@ class Show extends React.Component {
     }
   }
 
-  componentDidMount(nextProps) {
+  componentDidMount() {
     const { currentUser, record } = this.props
     if (currentUser && record) {
       this.fetchData(currentUser, record)

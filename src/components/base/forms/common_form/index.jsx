@@ -26,8 +26,6 @@ const renderLabel = (field, props, lSize) => {
   let errorName = null
   errorName = field.prefix_error ? `${field.prefix_error}_${field.name}` : field.name
 
-  console.log(props);
-
   return (
     field.label &&
     <Label for={field.name} md={lSize}>

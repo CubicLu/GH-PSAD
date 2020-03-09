@@ -44,7 +44,10 @@ const ParkingLotSelect = (props) => {
 
 ParkingLotSelect.propTypes = {
   options: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.string,
+    value:  PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
     label: PropTypes.string
   })),
   values: PropTypes.object

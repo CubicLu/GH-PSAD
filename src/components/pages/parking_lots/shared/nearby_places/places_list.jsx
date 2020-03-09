@@ -11,7 +11,7 @@ const PlacesList = (props) => (
     {({ add, fields }) => (
       <React.Fragment>
         {fields.map((dataField, i) => (
-          <Place {...dataField} errors={props.errors} categoriesDropdown={props.categoriesDropdown} events={props.events} />
+          <Place {...dataField} key={i} errors={props.errors} categoriesDropdown={props.categoriesDropdown} events={props.events} />
         ))}
         <Button className="float-right" onClick={() => {
             if (fields.length <= limit) {
@@ -25,8 +25,8 @@ const PlacesList = (props) => (
   </ArrayField>
 )
 
-const Place = ({ field, key, remove, ...props}) => (
-  <Scope scope={field} key={key}>
+const Place = ({ field, remove, ...props}) => (
+  <Scope scope={field} >
     <div>
       <Button onClick={() => {
         props.events.onChange() // To show 'save changes' button

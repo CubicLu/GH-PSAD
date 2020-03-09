@@ -88,10 +88,9 @@ class Toolbar extends React.Component {
 }
 
 Toolbar.propTypes = {
-  match: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
-  setList: PropTypes.func.isRequired,
-  label: PropTypes.string
+  filter: PropTypes.func.isRequired,
+  resetFilter: PropTypes.func.isRequired,
+  search: PropTypes.func.isRequired
 };
 
 export default Toolbar;
