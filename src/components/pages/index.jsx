@@ -4,7 +4,7 @@ import { Redirect, Route } from 'react-router';
 import Login from './login';
 import SendResetPasswordInstructions from './send_reset_password_instructions';
 import ResetPassword from './reset_password';
-import Dashboard from './dashboard';
+import Dashboard from './frame';
 import PrivateRoute from 'routes/private_route';
 import Layout from 'components/base/layout';
 import { connect } from 'react-redux';

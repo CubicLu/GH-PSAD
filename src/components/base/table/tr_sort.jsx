@@ -46,7 +46,7 @@ const TRSort = (props) => {
             <th className="px-4">
               <span className={th.props.disableSort ? 'non-sortable' : 'sortable'} onClick={() => onClickSort(th)}>
                 {th.props.children}
-                <FontAwesomeIcon icon={arrowPosition(th.props, sortedAttr)}/>
+                {th.disableSort && <FontAwesomeIcon icon={arrowPosition(th.props, sortedAttr)}/>}
               </span>
             </th>
           </React.Fragment>
@@ -57,9 +57,6 @@ const TRSort = (props) => {
 }
 
 const arrowPosition = (th, sortedAttr) => {
-  if (th.disableSort) {
-    return ''
-  }
 
   if(th.attr === sortedAttr.keyword) {
     return sortedAttr.asc ? faSortDown : faSortUp

@@ -10,7 +10,6 @@ const Form = (props) => {
     showSaveButton,
     onClickSave,
     onOpened
-    // handleServerError
   } = props
   return (
      <Modal isOpen={isOpen} onOpened={onOpened} size='lg' toggle={toggleModal} onClosed={onClosed} >

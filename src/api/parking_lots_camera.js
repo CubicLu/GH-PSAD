@@ -24,7 +24,7 @@ const filterFetcher = (params = {}) => {
       available_cameras: filters.available_cameras,
       query: {
         parking_lots: {
-          name: filters.name ? encodeURIComponent(filters.name) : '',
+          name: filters.name ? encodeURIComponent(filters.name) : ''
 
         },
         locations: {

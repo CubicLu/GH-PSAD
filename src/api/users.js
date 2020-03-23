@@ -18,15 +18,20 @@ const checkPasswordToken = (token) => {
   return axios.post(`${env.backend_url}/dashboard/auth/check_reset_password_token`, { token });
 };
 
-function me() {
+const me = () => {
   const critical = true;
   return fetchApi(`dashboard/admins/me `, { method: 'GET' }, critical);
-}
+};
+
+const updateMe = (params) => {
+  return fetchApi(`dashboard/admins/me`, { method: 'PUT', data: { admin: params } });
+};
 
 export {
   auth,
   sendResetPasswordInstructionsRequest,
   resetPasswordRequest,
   checkPasswordToken,
+  updateMe,
   me
 };

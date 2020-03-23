@@ -6,7 +6,7 @@ const resourceApi = resources => {
     const { page, perPage, query, nestedParams = {} } = params;
     return fetchApi(
       generatePath(`dashboard/${resources}`, nestedParams),
-      { method: 'GET', params: { page, perPage, ...query } }
+      { method: 'GET', params: { page, per_page: perPage, ...query } }
     );
   };
 
@@ -15,8 +15,6 @@ const resourceApi = resources => {
     return fetchApi(generatePath(`dashboard/${resources}/${id}`, nestedParams), { method: 'GET' });
 
   };
-
-
 
   const update = (params = {}) => {
     const { id, data, nestedParams = {} } = params;

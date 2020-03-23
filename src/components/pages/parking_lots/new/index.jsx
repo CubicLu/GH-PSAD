@@ -12,7 +12,6 @@ import { cloneDeep } from 'lodash'
 import LocationForm from '../shared/location/form';
 import SettingSection from '../shared/setting_section';
 import NearbyPlaces from '../shared/nearby_places';
-import VoiSection from '../shared/voi_section';
 import Rules from './rules'
 import  { permissions } from 'config/permissions/forms_fields/parking_lots/new'
 /* Actions */
@@ -142,17 +141,17 @@ class New extends React.Component {
 
   renderSetting () {
     const defaultData = {
-      overtime: 1800,
+      overtime: 900,
       parked: 1800,
       period: 1800,
-      rate: 10
+      rate: 0.25
     }
-    return <SettingSection isSaving={this.state.isSaving} setFormApi={this.setSettingFormApi} record={defaultData} />;
-  }
-
-
-  renderVoi () {
-    return <VoiSection />;
+    return <SettingSection
+              fieldProps={this.fieldProps()}
+              isSaving={this.state.isSaving}
+              setFormApi={this.setSettingFormApi}
+              record={defaultData}
+            />;
   }
 
   renderNearbyPlaces () {
@@ -219,7 +218,7 @@ class New extends React.Component {
         <Form getApi={this.setFormApi} initialValues={exampleData()}>
           <Row>
             <Col sm={12} md={3}>
-              {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, fieldProps)}
+              {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, this.fieldProps())}
             </Col>
             <Col sm={12} md={9}>
               {this.renderFields()}
@@ -281,8 +280,6 @@ class New extends React.Component {
           {this.renderSetting()}
           <div className="mt-1"/>
           {this.renderNearbyPlaces()}
-          <div className="mt-1"/>
-          {this.renderVoi()}
           <div className="mt-4"/>
           { this.renderSaveButton()}
         </div>
@@ -294,8 +291,6 @@ class New extends React.Component {
 function mapDispatch (dispatch) {
   return {...bindActionCreators({ setRecord: invoke(SET_RECORD), setListElement: invoke(SET_LIST_ELEMENT) }, dispatch)};
 }
-
-const fieldProps = { lSize: 6 };
 
 New.propTypes = {
   backPath: PropTypes.string.isRequired,

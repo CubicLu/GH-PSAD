@@ -8,7 +8,7 @@ import {
   Navbar,
   UncontrolledDropdown
 } from 'reactstrap';
-import { NavLink, withRouter, Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import withCurrentUser from 'components/modules/with_current_user';
 import {ReactComponent as Logo } from 'assets/logo.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,7 +18,7 @@ function Header (props) {
   const { currentUser } = props;
   return (
     <Navbar color='primary' light expand className="shadow-sm" >
-      <Link  to='/dashboard' className='ml-4 btn-default text-light'>
+      <Link to='/dashboard' className='ml-4 btn-default text-light pointer'>
         <Logo/>
       </Link>
       <Nav className='ml-auto' navbar>
@@ -29,8 +29,8 @@ function Header (props) {
           <DropdownToggle nav className="text-light float-right pr-3">
             {  currentUser ? (
                 <span>
-                  { process.env.NODE_ENV !== 'production' ? currentUser.role.name : currentUser.name}
-                  <img src ={ currentUser.avatar || 'https://i.stack.imgur.com/ 34AD2.jpg'} alt="profile" className="rounded-circle d-none d-sm-inline ml-3" width="40" height="40"/>
+                  <span className="d-none d-sm-inline">{ process.env.NODE_ENV !== 'production' ? currentUser.role.name : currentUser.name}</span>
+                  <img src ={ currentUser.avatar || 'https://i.stack.imgur.com/34AD2.jpg'} alt="profile" className="rounded-circle ml-3" width="40" height="40"/>
                 </span>
               ) : (
                 <span>
@@ -41,16 +41,16 @@ function Header (props) {
           </DropdownToggle>
           <DropdownMenu right>
             <DropdownItem>
-              <NavLink className='nav-link menu-points' to='/user/settings'>
+              <Link className='nav-link menu-points' to='/dashboard/profile'>
                 <FontAwesomeIcon size="xs" icon={faPencilAlt} className="mr-2"/>
                 Edit account
-              </NavLink>
+              </Link>
             </DropdownItem>
             <DropdownItem>
-              <NavLink className='nav-link menu-points' to='/sign_out'>
+              <Link className='nav-link menu-points' to='/sign_out'>
                 <FontAwesomeIcon size="xs" icon={faSignOutAlt} className="mr-2"/>
                 Log out
-              </NavLink>
+              </Link>
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>
