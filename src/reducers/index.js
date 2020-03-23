@@ -7,6 +7,7 @@ import CameraReducers from './cameras';
 import ParkingLotReducers from './parking_lots';
 import ParkingLotCameraReducers from './parking_lots_camera';
 import ParkingSessionReducers from './parking_sessions';
+import ReportReducers from './reports';
 import ServerErrorReducers from './server_errors';
 import VoiReducers from './voi';
 import { LOG_OUT } from 'actions/users';
@@ -21,6 +22,7 @@ const reducers = combineReducers({
   parking_lot_camera: ParkingLotCameraReducers,
   parking_session: ParkingSessionReducers,
   voi: VoiReducers,
+  report: ReportReducers,
   server: ServerErrorReducers
 });
 

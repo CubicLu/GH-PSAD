@@ -108,7 +108,7 @@ class Show extends React.Component {
       <ButtonToolbar className="float-right">
         <ButtonGroup className={`mr-4 ${styles.search}`}>
           <input className="form-control" type="text" onChange={(e) => this.handleChange(e.target.value, id)} placeholder="Search by keyword" />
-          <FontAwesomeIcon className={`${styles.magnifire}`} color="grey" icon={faSearch} />
+          <FontAwesomeIcon className={`${styles.magnifier}`} color="grey" icon={faSearch} />
         </ButtonGroup>
         <ButtonGroup className="mr-4">
           <Button color="primary-lg" className="btn-md px-4 text-uppercase " onClick={() => this.refresh(this.props.match.params.id)}>Refresh</Button>
@@ -137,7 +137,7 @@ class Show extends React.Component {
       })
   }
 
-  //Looking only stream 
+  //Looking only stream
   refresh = (id) => {
     show({ id: id })
       .then(response => {

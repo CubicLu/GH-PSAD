@@ -35,7 +35,7 @@ const filterFetcher = (params = {}) => {
         parking_lots: {
           email: filters.email,
           name: filters.name ? encodeURIComponent(filters.name) : '',
-          phone: filters.phone,
+          phone: filters.phone
 
         },
         locations: {
@@ -46,4 +46,4 @@ const filterFetcher = (params = {}) => {
   });
 };
 
-export { filterFetcher, show, update, create, createParkingPlan, deleteParkingPlan, updateParkingPlan };
+export { filterFetcher, show, update, create, createParkingPlan, deleteParkingPlan, updateParkingPlan, index };

@@ -81,7 +81,6 @@ class Show extends React.Component {
   save = () => {
     const values = setEmptyFields(this.fieldsForCommonForm(), this.formApi);
     values.avatar = this.formApi.getValue('avatar');
-
     if (this.formApi.getValue('password')) {
       this.toggleModal();
     } else {
@@ -178,25 +177,28 @@ class Show extends React.Component {
     return fieldsSet;
   }
 
-  handlePasswordSuccess = () => {
-    const { values } = this.formApi.getState();
-    const { backPath, record } = this.props;
-    const path = generatePath(backPath, { id: record.id });
-    updateRecord.call(this, update, path, values);
+  fetchData = (currentUser, record) => {
+    dropdownsSearch('role_id', { admin_id: currentUser.id, edited_admin_id: record.id })
+      .then(response => {
+        if (!isEmpty(response.data)) {
+          this.setState({ dropdowns: { roles: response.data } })
+        } else {
+          // This happens when the user is not allowed to update
+          this.setState({ dropdowns: { roles: [{ value: currentUser.role.id, label: currentUser.role.name }] } })
+        }
+      });
+  }
+  componentWillReceiveProps(nextProps) {
+    const { currentUser, record } = nextProps
+    if (currentUser && record) {
+      this.fetchData(currentUser, record)
+    }
   }
 
   componentDidMount() {
-    const { currentUser } = this.props
-    if (currentUser) {
-      dropdownsSearch('role_id', { admin_id: currentUser.id })
-        .then(response => {
-          if (!isEmpty(response.data)) {
-            this.setState({ dropdowns: { roles: response.data } })
-          } else {
-            // This happens when the user is not allowed to update
-            this.setState({ dropdowns: { roles: [{ value: currentUser.role.id, label: currentUser.role.name }] } })
-          }
-        });
+    const { currentUser, record } = this.props
+    if (currentUser && record) {
+      this.fetchData(currentUser, record)
     }
   }
 
