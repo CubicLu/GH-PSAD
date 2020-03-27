@@ -7,7 +7,7 @@ const NotAllowedConnect = (canPlay) => {
     return (
         <div className={`${styles.stream} `} >
             <FontAwesomeIcon className={canPlay ? `${styles.exclamation} ` : `${styles.lock} `} icon={canPlay ? faExclamationTriangle : faLock} />
-            <p className={canPlay ? `${styles.noconnection} ` : `${styles.notallowed} `}>{canPlay ? "Streaming Not Connected" : "Not Allowed"}</p>
+            <p className={canPlay ? `${styles.noconnection} ` : `${styles.notallowed} `}>{canPlay ? "Camera not connected" : "Not Allowed"}</p>
         </div>
     )
 }
