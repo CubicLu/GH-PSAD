@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 /* Actions */
 import { SET_LIST } from 'actions/parking_lots_camera';
 /* API */
-import { filterFetcher } from 'api/parking_lots_camera';
+import { filterFetcher } from 'api/parking_lots';
 /* Base */
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';

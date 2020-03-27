@@ -1,10 +1,13 @@
 @import 'src/styles/variables'
 .stream
-    width: 84%
-    margin-bottom: 5%
+    width: 85%
     height: 360px
     background-color: #495259
-    margin-left: 5%
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-direction: column
+    margin: 25px auto
 .stream>.lock, .stream> .exclamation
     font-size: 90px
     height: 360px
@@ -12,7 +15,6 @@
     display: flex
     height: fit-content
     align-content: center
-    margin-top: 7%
 
 .stream>.lock
     color: $green
