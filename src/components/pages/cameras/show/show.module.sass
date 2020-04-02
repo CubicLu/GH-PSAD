@@ -1,0 +1,44 @@
+@import 'src/styles/variables'
+
+.cameraName
+    background-color: #eff0f5
+    color: black
+    padding: 20px 30px
+.cardAdjust:nth-child(even)
+    padding-left: 0
+.cardAdjust:nth-child(odd)
+    padding-right: 0
+.dropdown
+    float: right
+.dropdown button p
+    margin-bottom: 0rem
+
+.stream
+    width: 100%
+    margin: 25px
+    min-height: 300px
+
+.live
+    background-color: #DE856C
+    color: $primary-text-color
+    position: absolute
+    top: 40px
+    right: 40px
+    font-size: 15px
+    padding: 0% 2%
+.timestamp
+    color: $primary-text-color
+    position: absolute
+    bottom: 40px
+    left: 40px
+    font-size: 15px
+    padding: 0% 2%
+    & p
+        margin: 0
+.pencil
+    right: 24px
+.cardAdjust:nth-child(odd) .live
+    left: 80%
+.cardAdjust:nth-child(even) .live
+    left: 75%
+
