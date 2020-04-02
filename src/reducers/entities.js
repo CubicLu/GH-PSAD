@@ -9,6 +9,12 @@ const reduceEntity = actions => {
             action.payload.id !== element.id ? element : action.payload
           ))
         });
+      case actions.POP_LIST_ELEMENT:
+        return Object.assign({}, state, {
+          list: state.list.filter(element => (
+            action.payload.id === element.id
+          ))
+        });
       default:
         return state;
     }
