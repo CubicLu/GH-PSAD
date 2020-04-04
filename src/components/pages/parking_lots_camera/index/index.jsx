@@ -21,8 +21,6 @@ class Index extends React.Component {
     return isResourceFetching
   }
 
-
-
   renderRecords = () => {
     const { list, match, history } = this.props;
 
@@ -63,8 +61,6 @@ class Index extends React.Component {
   }
 }
 
-
-
 Index.propTypes = {
   list: PropTypes.arrayOf(PropTypes.object).isRequired,
   match: PropTypes.object.isRequired
@@ -72,7 +68,11 @@ Index.propTypes = {
 
 const resource = 'parking_lot_camera'
 
-export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), withFetching(
-  withCurrentUser(Index)
-))
-
+export default connectList(
+  resource,
+  SET_LIST,
+  resourceFetcher(filterFetcher, resource),
+  withFetching(
+    withCurrentUser(Index)
+  )
+)

@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import ReactPlayer from 'react-player'
+import { permissions } from 'config/permissions/forms_fields/cameras/index'
+import { STREAM_TRANSMISSION } from 'config/permissions/forms_fields/cameras/fields'
 /* Actions */
 import { SET_LIST } from 'actions/cameras';
 import { SET_LIST_ELEMENT } from 'actions/parking_lots_camera';
@@ -9,8 +11,9 @@ import { SET_LIST_ELEMENT } from 'actions/parking_lots_camera';
 import { show, search } from 'api/parking_lots_camera';
 import { filterFetcher } from 'api/parking_lots'
 /* Helpers */
-import NotAllowedConnect from 'components/helpers/form_fields/image/NotAllowNotConnect/NotAllowedConnect'
+import CameraNotConnected from 'components/helpers/camera/not_connected'
 import Loader from 'components/helpers/loader';
+import CameraNotAllowed from 'components/helpers/camera/not_allowed'
 /* Modules */
 import connectList from 'components/modules/connect_list';
 import resourceFetcher from 'components/modules/resource_fetcher';
@@ -34,7 +37,7 @@ class Index extends React.Component {
     showDropdown: false,
     searchInput: '',
     isModalOpen: false,
-    cameraModalStream: null,
+    cameraModal: {},
     refresh: false,
     listFromState: null,
     search: false,
@@ -167,7 +170,7 @@ class Index extends React.Component {
                           <DropdownItem>
                             <Link className={`${styles.dropdownmenu}`} to={`/dashboard/live/parking_lots`}>Settings</Link>
                           </DropdownItem>
-                          <DropdownItem onClick={() => this.setState({ cameraModalStream: rec.stream, isModalOpen: true })}>
+                          <DropdownItem onClick={() => this.setState({ cameraModal: rec, isModalOpen: true })}>
                             <p>Expand</p>
                           </DropdownItem>
                           <DropdownItem>
@@ -176,7 +179,7 @@ class Index extends React.Component {
                         </DropdownMenu>
                       </Dropdown>
                     </p>
-                    {this.renderStream(rec.stream)}
+                    {this.renderStream(rec.stream, rec.allowed)}
                   </div>
                 </Col>
               )
@@ -191,8 +194,14 @@ class Index extends React.Component {
     );
   }
 
-  renderStream(stream) {
+  renderStream(stream, allowed) {
+    const { currentUserRoleName } = this.props
     const canPlay = ReactPlayer.canPlay(stream)
+
+    if(!allowed && !permissions[currentUserRoleName].includes(STREAM_TRANSMISSION)) {
+      return <CameraNotAllowed/>
+    }
+
     return (
       canPlay ? (
         <div>
@@ -200,7 +209,7 @@ class Index extends React.Component {
           <p className={`${styles.live}`}>LIVE</p>
         </div>
       ) : (
-        <NotAllowedConnect canPlay={canPlay} />
+        <CameraNotConnected canPlay={canPlay} />
       )
     )
   }
@@ -208,7 +217,7 @@ class Index extends React.Component {
 
 
   render() {
-    const { isModalOpen, cameraModalStream } = this.state;
+    const { isModalOpen, cameraModal } = this.state;
 
     return this.isFetching() ? <Loader /> : (
       <React.Fragment >
@@ -216,7 +225,7 @@ class Index extends React.Component {
         {this.renderRecord()}
         <Modal size="lg" style={{ maxWidth: 'none' }} isOpen={isModalOpen} toggle={this.toggleModal}>
           <ModalBody className={`${styles.modalBody}`}>
-            {this.renderStream(cameraModalStream)}
+            {this.renderStream(cameraModal.stream, cameraModal.allowed)}
           </ModalBody>
         </Modal>
       </React.Fragment>
@@ -225,8 +234,6 @@ class Index extends React.Component {
 
 
 }
-
-
 
 Index.propTypes = {
   backPath: PropTypes.string.isRequired,
@@ -241,12 +248,9 @@ Index.propTypes = {
   })
 };
 
-
-
 function mapDispatch(dispatch) {
   return bindActionCreators({ setListElement: invoke(SET_LIST_ELEMENT) }, dispatch);
 }
-
 
 export default connectList('camera', SET_LIST, resourceFetcher(show, 'parking_lot_camera'), connect(
   null,
