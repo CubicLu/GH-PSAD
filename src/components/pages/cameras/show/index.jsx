@@ -11,7 +11,7 @@ import { Row, Col, Button, Input } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { permissions } from 'config/permissions/forms_fields/cameras/show'
-import { STREAM_PERMISSION, STREAM_NAME, DELETE_STREAM } from 'config/permissions/forms_fields/cameras/fields'
+import { STREAM_PERMISSION, STREAM_NAME, DELETE_STREAM, STREAM_TRANSMISSION } from 'config/permissions/forms_fields/cameras/fields'
 /* Actions */
 import { SET_RECORD, SET_LIST_ELEMENT, POP_LIST_ELEMENT } from 'actions/cameras';
 import { invoke } from 'actions';
@@ -20,7 +20,9 @@ import { show, update, destroy } from 'api/cameras';
 import { show as parkingLotShow } from 'api/parking_lots';
 /* Base */
 /* Helpers */
-import NotAllowedConnect from 'components/helpers/form_fields/image/NotAllowNotConnect/NotAllowedConnect'
+import { AlertMessagesContext } from 'components/helpers/alert_messages';
+import CameraNotConnected from 'components/helpers/camera/not_connected'
+import CameraNotAllowed from 'components/helpers/camera/not_allowed'
 import Loader from 'components/helpers/loader';
 import ConfirmationModal from 'components/helpers/modals/confirmation';
 /* Modules */
@@ -39,8 +41,11 @@ class Show extends React.Component {
     currentWatchers: [],
     parkingLot: null,
     streamName: '',
-    isConfirmationModalOpen: false
+    isConfirmationModalOpen: false,
+    errors: {}
   }
+
+  static contextType = AlertMessagesContext
 
   clockRef = React.createRef()
 
@@ -121,9 +126,9 @@ class Show extends React.Component {
         </div>
         <ul>
           {
-            currentWatchers.map(watcher => {
+            currentWatchers.map((watcher, index) => {
               return (
-                <li className="py-3">
+                <li className="py-3" key={index}>
                   <img
                     alt="avatar"
                     width="40"
@@ -143,7 +148,7 @@ class Show extends React.Component {
 
   renderCameraHeaderDetails = () => {
     const { record, currentUserRoleName } = this.props
-    const { streamName } = this.state
+    const { streamName, errors } = this.state
 
     return (
       <Row>
@@ -151,8 +156,13 @@ class Show extends React.Component {
           {
             permissions[currentUserRoleName].includes(STREAM_NAME) ? (
               <React.Fragment>
-                <span className="general-text-3 mr-1">Stream name:</span>
-                <Input className="pr-4" onChange={this.changeStreamName} value={streamName || record.name}/>
+                <span className={`${errors['name'] && 'general-error'} general-text-3 mr-1`}>Stream name:</span>
+                <Input className={` pr-4 ${errors['name'] && 'input-error'}`} onChange={this.changeStreamName} value={streamName || record.name}/>
+                <div className={`position-relative input-error`}>
+                  <div className="text-left general-error general-text-1 pt-1">
+                    {errors['name']}
+                  </div>
+                </div>
                 <EditIcon width="22" height="22" className={`svg-dark position-relative ${styles.pencil}`}/>
               </React.Fragment>
             ) : (
@@ -187,6 +197,9 @@ class Show extends React.Component {
           More information:
         </p>
         <p>
+          URL: { record.stream }
+        </p>
+        <p>
           {
             record.other_information
           }
@@ -196,7 +209,7 @@ class Show extends React.Component {
   }
 
   renderCamera = () => {
-    const { record } = this.props
+    const { record, currentUserRoleName } = this.props
     const { parkingLot } = this.state
     const canPlay = ReactPlayer.canPlay(record.stream)
     return (
@@ -204,18 +217,22 @@ class Show extends React.Component {
         {this.renderCameraHeaderDetails()}
         <Row>
           {
-            canPlay ? (
-              <Col xs={12}>
-                <ReactPlayer className={`${styles.stream}`} url={record.stream} playing={true} width={'80 %'} />
-                <p className={`${styles.live}`}>LIVE</p>
-                <p className={`${styles.timestamp}`}>
-                  <p>{record.name}</p>
-                  <p>{ moment().utcOffset(parkingLot.time_zone.offset).format('MMM Do, YYYY')}</p>
-                  <p ref={this.clockRef}></p>
-                </p>
-              </Col>
+            (!record.allowed && !permissions[currentUserRoleName].includes(STREAM_TRANSMISSION)) ? (
+              <CameraNotAllowed/>
             ) : (
-              <NotAllowedConnect canPlay={canPlay} />
+              canPlay ? (
+                <Col xs={12}>
+                  <ReactPlayer className={`${styles.stream}`} url={record.stream} playing={true} width={'80 %'} />
+                  <p className={`${styles.live}`}>LIVE</p>
+                  <p className={`${styles.timestamp}`}>
+                    <p>{record.name}</p>
+                    <p>{ moment().utcOffset(parkingLot.time_zone.offset).format('MMM Do, YYYY')}</p>
+                    <p ref={this.clockRef}></p>
+                  </p>
+                </Col>
+              ) : (
+                <CameraNotConnected canPlay={canPlay} />
+              )
             )
           }
         </Row>
@@ -226,7 +243,7 @@ class Show extends React.Component {
 
   updateClock = () => {
     const { parkingLot } = this.state
-    if(parkingLot) {
+    if(parkingLot && this.clockRef.current) {
       return this.clockRef.current.innerText = moment().utcOffset(parkingLot.time_zone.offset).format('H:mm:ss')
     }
   }
@@ -308,7 +325,13 @@ class Show extends React.Component {
         })
       })
     this.clockInterval = setInterval(() => {
-      this.updateClock()
+      const { record } = this.props
+      const canPlay = ReactPlayer.canPlay(record.stream)
+      if (canPlay) {
+        this.updateClock()
+      } else {
+        clearInterval(this.clockInterval)
+      }
     }, 1000);
   }
 

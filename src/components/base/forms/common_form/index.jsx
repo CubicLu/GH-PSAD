@@ -12,6 +12,7 @@ import {
   Password,
   Toggler,
   GoogleMaps,
+  TextArea,
   FieldType,
 } from 'components/helpers/form_fields';
 import { Form, Text } from 'informed';
@@ -81,6 +82,8 @@ const renderInput = (field, props = {}) => {
       return <GoogleMaps {...props.events} {...field.options} />;
     case FieldType.INCREASER_FIELD:
       return <Increaser {...props} field={field} />;
+    case FieldType.TEXT_AREA:
+        return <TextArea  {...props} field={field}/>
     case FieldType.NUMBER_FIELD:
       return <Text className="form-control" disabled={field.disabled} {...props.events} type="number" field={field.name} />;
 

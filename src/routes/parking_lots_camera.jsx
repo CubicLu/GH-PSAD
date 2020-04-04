@@ -4,9 +4,8 @@ import { Route, Switch, withRouter } from 'react-router';
 import Index from 'components/pages/parking_lots_camera/index';
 import CameraIndex from 'components/pages/cameras/index';
 import CameraShow from 'components/pages/cameras/show';
-import New from 'components/pages/parking_lots_camera/new';
+import CameraNew from 'components/pages/cameras/new';
 import renderWithBackPath from 'components/modules/render_with_back_path';
-import renderWithParentPath from 'components/modules/render_with_parent_path';
 
 const Routing = ({ match }) => (
   <React.Fragment>
@@ -15,7 +14,7 @@ const Routing = ({ match }) => (
       <Route path={`${match.path}/:id`} render={(props) => (
         <React.Fragment>
           <Route exact path={`${props.match.path}`} render={renderWithBackPath(CameraIndex, `${match.url}`)} />
-          <Route exact path={`${props.match.path}/new`} render={renderWithParentPath(renderWithBackPath(New, `${match.url}/`), props.match.url)} />
+          <Route exact path={`${props.match.path.replace(":id", ":parking_lot_id")}/new`} render={renderWithBackPath(CameraNew, `${props.match.url}`)} />
           <Route exact path={`${props.match.path.replace(":id", ":parking_lot_id")}/cameras/:id`} render={renderWithBackPath(CameraShow,`${props.match.url}`)}/>
         </React.Fragment>
       )} />

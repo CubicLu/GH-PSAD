@@ -14,7 +14,7 @@ import styles from './basic_list_toolbar.module.sass'
 class BasicListToolbar extends React.Component {
   newRecord = () => {
     const { match, history } = this.props;
-    history.push(`${match.path}/new`);
+    history.push(`${match.url}/new`);
   };
 
   render() {

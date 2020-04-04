@@ -1,14 +1,8 @@
 import {
-  STREAM_NAME,
-  STREAM_PERMISSION,
-  DELETE_STREAM,
   STREAM_TRANSMISSION
 } from './fields';
 
 const allPrivileges = [
-  STREAM_NAME,
-  STREAM_PERMISSION,
-  DELETE_STREAM,
   STREAM_TRANSMISSION
 ]
 
