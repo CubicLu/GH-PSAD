@@ -45,6 +45,11 @@ class Dashboard extends Component {
         display: true,
         reload: false
       },
+      {
+        name: 'ai_error',
+        display: true,
+        reload: false
+      },
     ]
   }
 
