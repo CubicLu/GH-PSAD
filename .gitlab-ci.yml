@@ -16,8 +16,8 @@ stg_image_build:
   script:
     - git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git
     - cp /tmp/psad/dashboard/conf/stg/.env.js ./src
-    - docker build -t telesoft-psad-dashboard-stg .
-    - docker push telesoft-psad-dashboard-stg
+    - docker build -t telesoftdevops/devops:telesoft-psad-dashboard-stg .
+    - docker push telesoftdevops/devops:telesoft-psad-dashboard-stg
     - rm -rf /tmp/psad
   only:
     - devops
