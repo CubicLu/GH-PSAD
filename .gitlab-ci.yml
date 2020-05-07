@@ -33,7 +33,7 @@ stg_image_deploy:
     - echo "Deploy Image"
     - if [[ $(docker ps -a | grep ${STG_APP_NAME} | wc -l)  = 1 ]] ; then [[ $(docker stop ${STG_APP_NAME} && docker rm ${STG_APP_NAME}) ]]; fi
     - echo "Starting container"
-    - docker pull telesoft-psad-dashboard-stg
+    - docker pull telesoftdevops/devops:telesoft-psad-dashboard-stg
     - docker run -it -d --restart=always --name ${STG_APP_NAME} -h ${STG_APP_NAME} -p 8090:80 telesoftdevops/devops:telesoft-psad-dashboard-stg
   only:
     - devops 
