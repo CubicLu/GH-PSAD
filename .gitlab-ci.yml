@@ -14,7 +14,7 @@ stg_image_build:
     url: ${STG_URL}
   stage: build
   script:
-    - git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git
+    - if [[ $(ls -al /tmp | grep psad | wc -l)  = 1 ]] ; then [[ $(rm -rf /tmp/psad &&  git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git) ]]; else [[ git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git ]] ; fi
     - cp /tmp/psad/dashboard/conf/stg/.env.js ./src
     - docker build -t ${STG_APP_NAME} .
     - rm -rf /tmp/psad
