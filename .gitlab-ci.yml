@@ -30,7 +30,7 @@ stg_image_deploy:
   stage: deploy
   script:
     - echo "Deploy Image"
-    - if [[ $(docker ps -a | grep ${STG_APP_NAME} | wc -l)  = 1 ]] ; then [[ $(docker stop ${STG_APP_NAME} && docker rm ${STG_APP_NAME} && docker run -it -d --name ${STG_APP_NAME} ${STG_APP_NAME}) ]]; else [[ $(docker run -it -d --name ${STG_APP_NAME} ${STG_APP_NAME} ]] ; fi
+    - if [[ $(docker ps -a | grep ${STG_APP_NAME} | wc -l)  = 1 ]] ; then [[ $(docker stop ${STG_APP_NAME} && docker rm ${STG_APP_NAME} && docker run -it -d --name ${STG_APP_NAME} ${STG_APP_NAME}) ]]; else [[ $(docker run -it -d --name ${STG_APP_NAME} ${STG_APP_NAME}) ]] ; fi
   only:
     - devops 
   tags:
