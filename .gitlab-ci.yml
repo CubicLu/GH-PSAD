@@ -1,0 +1,62 @@
+image: docker:19.03.1
+
+variables:
+  STG_APP_NAME: psad-dashboard-test
+  STG_URL: https://dashboard.telesoftmobile.com
+  PROD_APP_NAME: xyz
+
+before_script:
+  - docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
+
+stg_image_build:
+  environment:
+    name: staging
+    url: ${STG_URL}
+  stage: build
+  script:
+    - git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git
+    - cp /tmp/psad/dashboard/conf/stg/* ./src
+    - docker build -t ${STG_APP_NAME} .
+    - rm -rf /tmp/psad
+  only:
+    - devops
+  tags:
+    - shell
+
+stg_image_deploy:
+  environment:
+    name: staging
+    url: ${STG_URL}
+  stage: deploy
+  script:
+    - echo "Deploy Image"
+    - if [[ $(docker ps -a | grep ${STG_APP_NAME} | wc -l)  = 1 ]] ; then [[ $(docker stop ${STG_APP_NAME} && docker rm ${STG_APP_NAME} && docker run -it -d --name ${STG_APP_NAME} ${STG_APP_NAME}) ]]; else [[ $(docker run -it -d --name ${STG_APP_NAME} ${STG_APP_NAME} ]] ; fi
+  only:
+    - devops 
+  tags:
+    - shell
+
+prod_image_build:
+  environment:
+    name: prod
+  stage: build
+  script:
+    - echo "test"
+  when:
+    manual
+  only:
+    - devops
+  tags:
+    - shell
+
+prod_image_deploy:
+  environment:
+    name: prod
+  stage: deploy
+  script:
+    - echo "test"
+  when: manual
+  only:
+    - devops
+  tags:
+    - prod
