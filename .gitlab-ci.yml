@@ -1,7 +1,7 @@
 image: docker:19.03.1
 
 variables:
-  STG_APP_NAME: psad-dashboard-test
+  STG_APP_NAME: telesoft-psad-dashboard
   STG_URL: https://dashboard.telesoftmobile.com
   PROD_APP_NAME: xyz
 
@@ -16,7 +16,8 @@ stg_image_build:
   script:
     - git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git
     - cp /tmp/psad/dashboard/conf/stg/.env.js ./src
-    - docker build -t psad-dashboard-test .
+    - docker build -t telesoft-psad-dashboard-stg .
+    - docker push telesoft-psad-dashboard-stg
     - rm -rf /tmp/psad
   only:
     - devops
@@ -30,7 +31,10 @@ stg_image_deploy:
   stage: deploy
   script:
     - echo "Deploy Image"
-    - if [[ $(docker ps -a | grep ${STG_APP_NAME} | wc -l)  = 1 ]] ; then [[ $(docker stop ${STG_APP_NAME} && docker rm ${STG_APP_NAME} && docker run -it -d --name ${STG_APP_NAME} ${STG_APP_NAME}) ]]; else [[ $(docker run -it -d --name ${STG_APP_NAME} ${STG_APP_NAME}) ]] ; fi
+    - if [[ $(docker ps -a | grep ${STG_APP_NAME} | wc -l)  = 1 ]] ; then [[ $(docker stop ${STG_APP_NAME} && docker rm ${STG_APP_NAME}) ]]; fi
+    - echo "Starting container"
+    - docker pull telesoft-psad-dashboard-stg
+    - docker run -it -d --restart=always --name ${STG_APP_NAME} -h ${STG_APP_NAME} -p 8090:80 telesoftdevops/devops:telesoft-psad-dashboard-stg
   only:
     - devops 
   tags:
