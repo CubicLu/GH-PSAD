@@ -20,7 +20,7 @@ stg_image_build:
     - docker push telesoftdevops/devops:telesoft-psad-dashboard-stg
     - rm -rf /tmp/psad
   only:
-    - devops
+    - stg
   tags:
     - shell
 
@@ -36,7 +36,7 @@ stg_image_deploy:
     - docker pull telesoftdevops/devops:telesoft-psad-dashboard-stg
     - docker run -it -d --restart=always --name ${STG_APP_NAME} -h ${STG_APP_NAME} -p 8090:80 telesoftdevops/devops:telesoft-psad-dashboard-stg
   only:
-    - devops 
+    - stg 
   tags:
     - shell
 
