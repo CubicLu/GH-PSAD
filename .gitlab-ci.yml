@@ -1,0 +1,75 @@
+image: docker:19.03.1
+
+variables:
+  STG_APP_NAME: telesoft-psad-dashboard
+  STG_URL: https://dashboard.telesoftmobile.com
+  PROD_URL: https://dashboard.eastonmd.gov
+  PROD_APP_1_NAME: telesoft-psad-dashboard-1
+  PROD_APP_2_NAME: telesoft-psad-dashboard-2  
+
+before_script:
+  - docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
+
+stg_image_build:
+  environment:
+    name: staging
+    url: ${STG_URL}
+  stage: build
+  script:
+    - git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git
+    - cp /tmp/psad/dashboard/conf/stg/.env.js ./src
+    - docker build -t telesoftdevops/devops:telesoft-psad-dashboard-stg .
+    - docker push telesoftdevops/devops:telesoft-psad-dashboard-stg
+    - rm -rf /tmp/psad
+  only:
+    - stg
+  tags:
+    - shell
+
+stg_image_deploy:
+  environment:
+    name: staging
+    url: ${STG_URL}
+  stage: deploy
+  script:
+    - echo "Deploy Image"
+    - if [[ $(docker ps -a | grep ${STG_APP_NAME} | wc -l)  = 1 ]] ; then [[ $(docker stop ${STG_APP_NAME} && docker rm ${STG_APP_NAME}) ]]; fi
+    - echo "Starting container"
+    - docker pull telesoftdevops/devops:telesoft-psad-dashboard-stg
+    - docker run -it -d --restart=always --name ${STG_APP_NAME} -h ${STG_APP_NAME} -p 8090:80 telesoftdevops/devops:telesoft-psad-dashboard-stg
+  only:
+    - stg 
+  tags:
+    - shell
+
+prod_image_build:
+  environment:
+    name: prod
+    url: ${PROD_URL}
+  stage: build
+  script:
+    - git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git
+    - cp /tmp/psad/dashboard/conf/prod/.env.js ./src
+    - docker build -t telesoftdevops/devops:telesoft-psad-dashboard-prod .
+    - docker push telesoftdevops/devops:telesoft-psad-dashboard-prod
+    - rm -rf /tmp/psad
+  when:
+    manual
+  only:
+    - master
+  tags:
+    - shell
+
+prod_image_deploy:
+  environment:
+    name: prod
+    url: ${PROD_URL}
+  stage: deploy
+  script:
+    - echo "Deploy iamge to PROD"
+    - sh ci/prod-deploy_test.sh ${PROD_APP_1_NAME} ${PROD_APP_2_NAME}
+  when: manual
+  only:
+    - psad-1076
+  tags:
+    - prod-shell
