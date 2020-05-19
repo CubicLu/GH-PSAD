@@ -20,12 +20,12 @@ const fields = [
     renderValue: value => (value / 60)
   },
   { name: 'parked',
-    label: 'Minutes before car is considered as parked',
+    label: 'Parking Grace Period',
     type: FieldType.INCREASER_FIELD,
-    step: 60,
-    max: 6000,
-    min: 60,
-    tooltip: " The car is considered as already parked if he stayed as long as what is indicated here on a parking space.",
+    step: 300,
+    max: 900,
+    min: 300,
+    tooltip: " Minutes before a car is considered as parked automatically.",
     renderValue: value => (value / 60)
   },
   { name: 'overtime',
