@@ -95,7 +95,7 @@ class Login extends React.Component {
             <div className="form-label-group mt-2">
               <label className="general-text-3" htmlFor="password">Password</label>
               <Password
-                field={{ name: "password" }}
+                field={{ name: "password", filled: false }}
                 customAttr={{
                   onChange: e => this.setState({ [e.target.name]: e.target.value }),
                   className: `position-relative form-control-lg form-control ${!isEmpty(messages) ? 'input-error' : ''}`,
