@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Row, Col } from 'reactstrap';
 import Toolbar from './toolbar'
 import DataCard from './data_card'
+import moment from 'moment';
 import { index } from 'api/parking_lots';
+import { Row, Col } from 'reactstrap';
 
 class Dashboard extends Component {
 
@@ -13,7 +14,8 @@ class Dashboard extends Component {
       {
         name: 'vehicles_parked',
         display: true,
-        reload: false
+        reload: false,
+        maxDate: moment()
       },
       {
         name: 'vehicles_currently_parked',
@@ -172,6 +174,7 @@ class Dashboard extends Component {
                   stopRefreshing={this.stopRefreshing}
                   from={dateRange.from}
                   to={dateRange.to}
+                  maxDate={type.maxDate}
                 />
               </Col>
             ))

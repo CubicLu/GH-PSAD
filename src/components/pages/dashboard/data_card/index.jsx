@@ -120,7 +120,7 @@ class DataCard extends Component {
 
   render() {
     const { data, datesToFilter, currentSinceText, modalIsOpen } = this.state
-    const { parkingLots, display } = this.props
+    const { parkingLots, display, maxDate } = this.props
 
     if(!display) {
       return null
@@ -199,7 +199,7 @@ class DataCard extends Component {
             )
           }
         </Card>
-        <DateModal isOpen={modalIsOpen} apply={this.fetchData} toggleModal={() => this.setState({ modalIsOpen: false })} />
+        <DateModal maxDate={maxDate} isOpen={modalIsOpen} apply={this.fetchData} toggleModal={() => this.setState({ modalIsOpen: false })} />
       </React.Fragment>
     )
   }

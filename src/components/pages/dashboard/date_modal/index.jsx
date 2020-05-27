@@ -8,7 +8,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import styles from './date_modal.module.sass'
 
 const DateModal = (props) => {
-  const { isOpen, toggleModal, apply } = props;
+  const { isOpen, toggleModal, apply, maxDate } = props;
   const [selectionRange, setSelectionRange] = useState({
     startDate: new Date(),
     endDate: new Date(),
@@ -26,7 +26,7 @@ const DateModal = (props) => {
                   className={styles.datePicker}
                   ranges={[selectionRange]}
                   date={new Date()}
-                  maxDate={moment().endOf('month').toDate()}
+                  maxDate={(maxDate || moment().endOf('month')).toDate()}
                   onChange={(ranges) => setSelectionRange(ranges.selection)}
                 />
             </Col>
