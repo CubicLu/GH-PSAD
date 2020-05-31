@@ -18,6 +18,6 @@ nginx -s reload
 docker stop $2
 docker rm $2
 docker run -it -d --restart=always --name $2 -p 8092:80 telesoftdevops/devops:telesoft-psad-dashboard-prod
-sed -i 's/#    server 127.0.0.1:8092;/    server 127.0.0.1:8092;/g' /etc/nginx/sites-enabled/parkings.conf
+sed -i 's/#    server 127.0.0.1:8092;/    server 127.0.0.1:8092;/g' /etc/nginx/sites-enabled/dashboard.conf
 nginx -s reload
 docker container ls -a | grep telesoft-psad-dashboard
