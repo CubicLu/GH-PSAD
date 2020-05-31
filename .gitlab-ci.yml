@@ -67,7 +67,7 @@ prod_image_deploy:
   stage: deploy
   script:
     - echo "Deploy iamge to PROD"
-    - sh ci/prod-deploy_test.sh ${PROD_APP_1_NAME} ${PROD_APP_2_NAME}
+    - sudo ci/prod-deploy.sh ${PROD_APP_1_NAME} ${PROD_APP_2_NAME}
   when: manual
   only:
     - psad-1076
