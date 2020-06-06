@@ -43,7 +43,17 @@ class Dashboard extends Component {
         reload: false
       },
       {
+        name: 'parking_tickets_opened',
+        display: true,
+        reload: false
+      },
+      {
         name: 'parking_tickets_issued',
+        display: true,
+        reload: false
+      },
+      {
+        name: 'parking_tickets_settled',
         display: true,
         reload: false
       },
