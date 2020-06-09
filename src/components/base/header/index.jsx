@@ -13,6 +13,8 @@ import withCurrentUser from 'components/modules/with_current_user';
 import {ReactComponent as Logo } from 'assets/logo.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faSignOutAlt, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import CurrentTime from 'components/pages/dashboard/current_time';
+import styles from './header.module.sass'
 
 function Header (props) {
   const { currentUser } = props;
@@ -28,9 +30,14 @@ function Header (props) {
           </DropdownToggle>
           <DropdownToggle nav className="text-light float-right pr-3">
             {  currentUser ? (
-                <span>
-                  <span className="d-none d-sm-inline">{ process.env.NODE_ENV !== 'production' ? currentUser.role.name : currentUser.name}</span>
-                  <img src ={ currentUser.avatar || 'https://i.stack.imgur.com/34AD2.jpg'} alt="profile" className="rounded-circle ml-3" width="40" height="40"/>
+                <span className={styles.dFlex}>
+                  <span className="d-none d-sm-inline">
+                    <span className={`${styles.dFlex} ${styles.dFlexColumn}`}>
+                      <span>{ process.env.NODE_ENV !== 'production' ? currentUser.role.name : currentUser.name}</span>
+                      <CurrentTime className={styles.currentTime} />
+                    </span>
+                  </span>
+                  <img src={ currentUser.avatar || 'https://i.stack.imgur.com/34AD2.jpg'} alt="profile" className="rounded-circle ml-3" width="40" height="40"/>
                 </span>
               ) : (
                 <span>
