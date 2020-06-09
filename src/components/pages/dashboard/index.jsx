@@ -23,7 +23,12 @@ class Dashboard extends Component {
         reload: false
       },
       {
-        name: 'violations_commited',
+        name: 'violation_reports_opened',
+        display: true,
+        reload: false
+      },
+      {
+        name: 'violation_reports_rejected',
         display: true,
         reload: false
       },
