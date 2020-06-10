@@ -20,8 +20,12 @@ function Header (props) {
   const { currentUser } = props;
   return (
     <Navbar color='primary' light expand className="shadow-sm" >
-      <Link to='/dashboard' className='ml-4 btn-default text-light pointer'>
+      <Link to='/dashboard' className={`${styles.logoLink} d-flex align-items-center ml-4 btn-default text-light pointer`}>
         <Logo/>
+        <div className="ml-1">
+          <div className={styles.title}>EASTON PARK SMART</div>
+          <div className={`${styles.whiteText} general-text-2`}>ADMIN PANEL</div>
+        </div>
       </Link>
       <Nav className='ml-auto' navbar>
         <UncontrolledDropdown nav inNavbar className="d-flex align-items-center">

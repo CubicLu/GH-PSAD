@@ -42,24 +42,22 @@ class Toolbar extends React.Component {
 
     return (
 
-      <Row className="w-100 px-3 justify-content-between " sm="12">
-        <Col sm={12} lg={4} className={`${styles.title} mt-2 align-items-center d-flex pb-1 pl-0`}>
-          <h4 className="text-nowrap d-inline-block">
+      <Row className={`${styles.toolBar} w-100 align-items-center m-0`} sm="12">
+        <Col className={`${styles.title} col-auto align-items-center d-flex px-0`}>
+          <span className="text-nowrap d-inline-block">
             Dashboard
-          </h4>
-          <Button onClick={() => filter()} size="sm" outline color="primary" className="general-text-1 py-2 px-5 ml-3 ">
+          </span>
+          <Button onClick={() => filter()} outline color="primary" className={`general-text-1 ${styles.btnRefresh}`}>
             <FontAwesomeIcon icon={faSync} className="pointer mr-2"/>
             <span className="">Refresh</span>
           </Button>
         </Col>
-        <Col sm={12} lg={4} className="justify-content-center mt-2 pb-1 pr-0 align-items-center pr-0 d-flex">
-          <Col className={`${styles.filterContainer} ${styles.search} m-0 align-items-center justify-content-end d-flex pr-0`} xs={12}>
+        <Col className="justify-content-center col-auto ml-auto align-items-center d-flex px-0">
+          <Col className={`${styles.search} col-auto align-items-center justify-content-end d-flex px-0 ml-0`}>
             <input className="form-control" type="text" onChange={(e) => search(e.target.value)} placeholder="Search by keyword" />
             <FontAwesomeIcon className={`${styles.magnifier}`} color="grey" icon={faSearch} />
           </Col>
-        </Col>
-        <Col sm={12} lg={4} className="justify-content-center mt-2 pb-1 pr-0 align-items-center pr-0">
-          <Col className={`${styles.filterContainer} m-0 align-items-center d-flex pr-0`} xs={12}>
+          <Col className="col-auto m-0 align-items-center d-flex px-0">
             <div className={`${styles.filterBox} shadow d-inline-block float-right`}>
               <span className="general-text-3 mr-3">Filter By</span>
               {
@@ -73,12 +71,6 @@ class Toolbar extends React.Component {
                 <FontAwesomeIcon icon={faFilter} />
               </Button>
             </div>
-              <Button
-                onClick={this.resetDate}
-                className="float-left bg-grey-dark text-nowrap ml-1 px-5 py-2 d-none d-sm-block"
-              >
-                Clear filters
-              </Button>
           </Col>
         </Col>
         <DateModal isOpen={modalIsOpen} apply={this.dateModalApply} toggleModal={() => this.setState({ modalIsOpen: false })} />

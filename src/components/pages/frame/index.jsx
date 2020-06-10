@@ -10,8 +10,8 @@ const Frame = props => {
   const { serverError } = props;
 
   return (
-    <div className='d-flex justify-content-between'>
-      <div className={styles.SideNavigationContainer}>
+    <div className='d-flex'>
+      <div className={`${styles.SideNavigationContainer} position-sticky`}>
         <SideNavigation />
       </div>
       <div className={`${styles.contentContainer} frame-container shadow-sm bg-white`}>
