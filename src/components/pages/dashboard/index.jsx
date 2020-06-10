@@ -4,6 +4,7 @@ import DataCard from './data_card'
 import moment from 'moment';
 import { index } from 'api/parking_lots';
 import { Row, Col } from 'reactstrap';
+import styles from './dashboard.module.sass';
 
 class Dashboard extends Component {
 
@@ -162,35 +163,35 @@ class Dashboard extends Component {
   render() {
     const { types, dateRange, parkingLots } = this.state
     return (
-      <Row>
-        <Col xs="12">
-          <Col xs="12" className="my-3">
+      <div className={styles.container}>
+        <Row>
+          <Col xs="12">
             <Toolbar filter={this.filter} resetFilter={this.resetFilter} search={this.search} />
           </Col>
           <Col xs="12">
+            <Row className={styles.listDataCard}>
+              {
+                types.map((type) => (
+                  <Col xs="6" xl="4" className={`${styles.dataCardContainer} ${type.display ? '' : 'd-none' }`} key={type.name} >
+                    <DataCard
+                      parkingLots={parkingLots}
+                      type={type.name}
+                      reset={type.reset}
+                      reload={type.reload}
+                      display={type.display}
+                      disable_date_range={type.disable_date_range}
+                      stopRefreshing={this.stopRefreshing}
+                      from={dateRange.from}
+                      to={dateRange.to}
+                      maxDate={type.maxDate}
+                    />
+                  </Col>
+                ))
+              }
+            </Row>
           </Col>
-        </Col>
-        <Col xs="12" className="row">
-          {
-            types.map((type) => (
-              <Col sm="12" lg="4" className={`py-4 ${type.display ? '' : 'd-none' }`} key={type.name} >
-                <DataCard
-                  parkingLots={parkingLots}
-                  type={type.name}
-                  reset={type.reset}
-                  reload={type.reload}
-                  display={type.display}
-                  disable_date_range={type.disable_date_range}
-                  stopRefreshing={this.stopRefreshing}
-                  from={dateRange.from}
-                  to={dateRange.to}
-                  maxDate={type.maxDate}
-                />
-              </Col>
-            ))
-          }
-        </Col>
-      </Row>
+        </Row>
+      </div>
     )
   }
 }

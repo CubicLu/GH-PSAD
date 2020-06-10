@@ -20,12 +20,12 @@ function DropdownNavigation (props) {
     <Navbar className={`p-0 ${isSomeLinkActive ? 'selected-point' : ''}`}>
       <div className={`${isOpen ? styles.svgWhiteMobile : ''} menu-points d-flex align-items-center`}  onClick={() => setIsOpen(!isOpen)} >
         {props.icon}
-        <span className=" d-none d-lg-block d-xl-block mr-2">
+        <span className=" d-none d-xl-block mr-2">
           {props.title}
         </span>
-        <FontAwesomeIcon className="d-none d-lg-block d-xl-block" icon={isOpen ? faAngleUp : faAngleDown}/>
+        <FontAwesomeIcon className="d-none d-xl-block" icon={isOpen ? faAngleUp : faAngleDown}/>
       </div>
-      <div className={`${isOpen ? styles.activeNavbar : ''} ${styles.transitionWidth} d-flex d-sm-none d-none d-sm-flex d-md-none d-md-flex d-lg-none h-100 d-flex align-items-center position-absolute`}>
+      <div className={`${isOpen ? styles.activeNavbar : ''} ${styles.transitionWidth} d-flex d-xl-none h-100 align-items-center position-absolute`}>
         <span className="mr-3 float-right">
           {props.title}
           <ul className="shadow-sm bg-white p-0">
@@ -42,7 +42,7 @@ function DropdownNavigation (props) {
       <Collapse isOpen={isOpen}>
         {props.children.map((element, index) => {
           return (
-            <NavItem className="ml-3 d-none d-lg-block d-xl-block" key={element.props.to}>
+            <NavItem className="ml-3 d-none d-xl-block" key={element.props.to}>
               {element}
             </NavItem>
           )

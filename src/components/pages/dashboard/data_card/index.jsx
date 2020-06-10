@@ -128,34 +128,34 @@ class DataCard extends Component {
 
     return (
       <React.Fragment>
-        <Card body className={`${style.borderPrimary} p-4 h-100`}>
+        <Card body className={`${style.borderPrimary} h-100`}>
           {
             isEmpty(data) ? (
             <Loader/>
             ) : (
               <React.Fragment>
-                <CardTitle className="row">
-                  <Col xs="6" className="h2-title">
+                <CardTitle className={`${style.cardTitle} row`}>
+                  <Col className={`${style.title} pr-0`}>
                     {data.title}
                   </Col>
-                  <Col xs="6" className="d-flex justify-content-end align-items-center">
-                  <span className="text-muted">{data.range_current_period} </span>
+                  <Col xs="auto" className="d-flex align-items-center pl-0">
+                  <span className={style.secondaryText}>{data.range_current_period} </span>
                   {
                     !data.disable_date_range && (
                       <UncontrolledDropdown>
                         <DropdownToggle tag="span" className="pointer">
                           <EllipsiIcon width="12" height="12"/>
                         </DropdownToggle>
-                        <DropdownMenu right>
+                        <DropdownMenu right className={style.dateDropdown}>
                           {
                             datesToFilter.map(data => (
-                              <DropdownItem key={data.from.format('YYYY-M-D')} onClick={() => this.fetchData(data.from.format('YYYY-M-D'), data.to ? data.to.format('YYYY-M-D') : null, data.since)} className="p-3 text-grey">
-                                <span className="general-text-2" >{data.from.format('MM/DD')}{data.to ? `-${data.to.format('MM/DD')}` : ''} {data.text}</span>
+                              <DropdownItem key={data.from.format('YYYY-M-D')} onClick={() => this.fetchData(data.from.format('YYYY-M-D'), data.to ? data.to.format('YYYY-M-D') : null, data.since)}>
+                                <span className="general-text-1" >{data.from.format('MM/DD')}{data.to ? `-${data.to.format('MM/DD')}` : ''} {data.text}</span>
                               </DropdownItem>
                             ))
                           }
-                          <DropdownItem onClick={() => this.setState({ modalIsOpen: true })} className="p-3 text-grey">
-                            <span className="general-text-2" >Select custom...</span>
+                          <DropdownItem onClick={() => this.setState({ modalIsOpen: true })}>
+                            <span className="general-text-1" >Select custom...</span>
                           </DropdownItem>
                         </DropdownMenu>
                       </UncontrolledDropdown>
@@ -163,11 +163,11 @@ class DataCard extends Component {
                   }
                   </Col>
                 </CardTitle>
-                <div className="row mt-3">
-                  <Col xs="6" className={`${style.currentValue}`}>
+                <div className="row">
+                  <Col className={`${style.currentValue} pr-0`}>
                     {data.result}
                   </Col>
-                  <Col xs="6">
+                  <Col xs="auto" className="pl-0">
                     <ParkingLotSelect
                       options={parkingLots}
                       updateData={this.updateData}
@@ -178,14 +178,14 @@ class DataCard extends Component {
                       <Col xs="12" className="mt-1">
                         <FontAwesomeIcon color={data.compare_with_previous_period.raise ? 'green' : 'red'} icon={data.compare_with_previous_period.raise ? faArrowUp : faArrowDown} className="mr-1" />
                         <strong className={data.compare_with_previous_period.raise ? style.raise : style.less}>{data.compare_with_previous_period.percentage} </strong>
-                        <span className="text-muted">{currentSinceText}</span>
+                        <span className={style.secondaryText}>{currentSinceText}</span>
                       </Col>
                     )
                   }
                   {
                     data.result_previous_period && (
                       <Col xs="12" className="mt-1">
-                        <span className="text-muted"> {data.result_previous_period} {currentSinceText ? `- ${currentSinceText}`: ''}</span>
+                        <span className={style.secondaryText}> {data.result_previous_period} {currentSinceText ? `- ${currentSinceText}`: ''}</span>
                       </Col>
                     )
                   }
