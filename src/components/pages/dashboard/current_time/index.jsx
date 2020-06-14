@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import axios from 'axios';
 
 const CurrentTime = (props) => {
   const getCurrentTime = (callback) => {
-    fetch('http://worldclockapi.com/api/json/est/now').
-    then(resp => resp.json()).
+    axios.get('http://worldclockapi.com/api/json/est/now').
     then(data => {
-      callback(data);
+      callback(data.data);
     });
   }
 
