@@ -11,6 +11,17 @@ const Increaser = props => {
   const { setValue } = fieldApi;
   const { renderValue, step, min, max } = field;
 
+  const updateValue = (value) => {
+    if (value > max) {
+      setValue(max);
+    } else if (value < min) {
+      setValue(min);
+    } else {
+      setValue(value);
+    }
+    events.onChange();
+  };
+
   const onIncrease = () => {
     const newValue = value + step;
 
@@ -18,9 +29,8 @@ const Increaser = props => {
       fieldApi.setError(`cannot be more than ${renderValue(max)}`);
     } else {
       fieldApi.setError(undefined);
-      events.onChange();
-      setValue(newValue);
     }
+    updateValue(newValue);
   };
 
   const onDecrease = () => {
@@ -30,9 +40,8 @@ const Increaser = props => {
       fieldApi.setError(`cannot be less than ${renderValue(min)}`);
     } else {
       fieldApi.setError(undefined);
-      events.onChange();
-      setValue(newValue);
     }
+    updateValue(newValue);
   };
 
   return (
