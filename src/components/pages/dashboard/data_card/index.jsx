@@ -35,19 +35,22 @@ class DataCard extends Component {
       {
         from: moment(),
         to: null,
-        text: '(Today)',
+        label: 'Today',
+        text: `Today (${moment().format('L')})`,
         since: 'since yesterday'
       },
       {
-        from: moment().weekday(1),
-        to: moment().weekday(7),
-        text: '(Week)',
+        from: moment().startOf('isoWeek'),
+        to: moment().endOf('isoWeek'),
+        label: 'This week',
+        text: `This week (${moment().startOf('isoWeek').format('MM/DD')}-${moment().endOf('isoWeek').format('MM/DD')})`,
         since: 'since last week'
       },
       {
         from: moment().startOf('month'),
         to: moment().endOf('month'),
-        text: '(This Month)',
+        label: 'This month',
+        text: `This month (${moment().startOf('month').format('MMM')})`,
         since: 'since last month'
       }
     ],
@@ -118,6 +121,10 @@ class DataCard extends Component {
     this.fetchData()
   }
 
+  isActiveMenu = (menu) => {
+    return this.state.data.range_current_period == menu
+  }
+
   render() {
     const { data, datesToFilter, currentSinceText, modalIsOpen } = this.state
     const { parkingLots, display, maxDate } = this.props
@@ -149,8 +156,8 @@ class DataCard extends Component {
                         <DropdownMenu right className={style.dateDropdown}>
                           {
                             datesToFilter.map(data => (
-                              <DropdownItem key={data.from.format('YYYY-M-D')} onClick={() => this.fetchData(data.from.format('YYYY-M-D'), data.to ? data.to.format('YYYY-M-D') : null, data.since)}>
-                                <span className="general-text-1" >{data.from.format('MM/DD')}{data.to ? `-${data.to.format('MM/DD')}` : ''} {data.text}</span>
+                              <DropdownItem className={`${this.isActiveMenu(data.label) ? 'active' : ''} general-text-1`} key={data.from.format('YYYY-M-D')} onClick={() => this.fetchData(data.from.format('YYYY-M-D'), data.to ? data.to.format('YYYY-M-D') : null, data.since)}>
+                                { data.text }
                               </DropdownItem>
                             ))
                           }
@@ -174,18 +181,10 @@ class DataCard extends Component {
                     />
                   </Col>
                   {
-                    data.compare_with_previous_period && (
+                    (data.result_previous_period && data.compare_with_previous_period) && (
                       <Col xs="12" className="mt-1">
                         <FontAwesomeIcon color={data.compare_with_previous_period.raise ? 'green' : 'red'} icon={data.compare_with_previous_period.raise ? faArrowUp : faArrowDown} className="mr-1" />
-                        <strong className={data.compare_with_previous_period.raise ? style.raise : style.less}>{data.compare_with_previous_period.percentage} </strong>
-                        <span className={style.secondaryText}>{currentSinceText}</span>
-                      </Col>
-                    )
-                  }
-                  {
-                    data.result_previous_period && (
-                      <Col xs="12" className="mt-1">
-                        <span className={style.secondaryText}> {data.result_previous_period} {currentSinceText ? `- ${currentSinceText}`: ''}</span>
+                        <span className={style.secondaryText}> {data.result_previous_period}</span>
                       </Col>
                     )
                   }
