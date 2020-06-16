@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Toolbar from './toolbar'
 import DataCard from './data_card'
-import moment from 'moment';
 import { index } from 'api/parking_lots';
 import { Row, Col } from 'reactstrap';
 import styles from './dashboard.module.sass';
@@ -16,7 +15,7 @@ class Dashboard extends Component {
         name: 'vehicles_parked',
         display: true,
         reload: false,
-        maxDate: moment()
+        maxDate: new Date()
       },
       {
         name: 'vehicles_currently_parked',
@@ -119,9 +118,9 @@ class Dashboard extends Component {
   stopRefreshing = () => {
     const { types } = this.state
     this.setState({
-      dateRange: {},
       types: types.map(element => {
         return {
+          dateRange: {},
           name: element.name,
           display: element.display,
           reload: false
@@ -171,7 +170,7 @@ class Dashboard extends Component {
       <div className={styles.container}>
         <Row>
           <Col xs="12">
-            <Toolbar filter={this.filter} resetFilter={this.resetFilter} search={this.search} />
+            <Toolbar dateRange={dateRange} filter={this.filter} resetFilter={this.resetFilter} search={this.search} refresh={this.refresh} />
           </Col>
           <Col xs="12">
             <Row className={styles.listDataCard}>

@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { ReactComponent as EllipsiIcon } from 'assets/ellipsi_icon.svg'
 import moment from 'moment';
-import DateModal from '../date_modal'
+import DateModal from 'components/base/date_modal'
 import ParkingLotSelect from './parking_lot_select'
 /* Actions */
 /* API */
@@ -201,7 +201,7 @@ class DataCard extends Component {
             )
           }
         </Card>
-        <DateModal maxDate={maxDate} isOpen={modalIsOpen} apply={this.fetchData} toggleModal={() => this.setState({ modalIsOpen: false })} />
+        <DateModal maxDate={maxDate} isOpen={modalIsOpen} apply={this.fetchData} toggleModal={() => this.setState({ modalIsOpen: false })} title={data.title} />
       </React.Fragment>
     )
   }
