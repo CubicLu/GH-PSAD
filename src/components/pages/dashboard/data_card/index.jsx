@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { isEmpty } from 'underscore';
 import {
+  Row,
   Col,
   Card,
   CardTitle,
@@ -170,8 +171,8 @@ class DataCard extends Component {
                   }
                   </Col>
                 </CardTitle>
-                <div className="row">
-                  <Col className={`${style.currentValue} pr-0`}>
+                <Row className={style.currentValueRow}>
+                  <Col className={`${style.currentValue} pr-0 d-flex align-items-center`}>
                     {data.result}
                   </Col>
                   <Col xs="auto" className="pl-0">
@@ -180,20 +181,22 @@ class DataCard extends Component {
                       updateData={this.updateData}
                     />
                   </Col>
+                </Row>
+                <Row className={style.previousResultRow}>
                   {
                     (data.result_previous_period && data.compare_with_previous_period) && (
-                      <Col xs="12" className="mt-1">
+                      <Col>
                         <FontAwesomeIcon color={data.compare_with_previous_period.raise ? 'green' : 'red'} icon={data.compare_with_previous_period.raise ? faArrowUp : faArrowDown} className="mr-1" />
                         <span className={style.secondaryText}> {data.result_previous_period}</span>
                       </Col>
                     )
                   }
-                  {/*
-                  <Col xs="12" className="justify-content-end pointer d-flex mt-2">
-                    <span className="text-primary">MORE </span>
+                </Row>
+                <Row className={style.moreRow}>
+                  <Col className="justify-content-end pointer d-flex">
+                    <span className="general-text-2 text-primary">MORE</span>
                   </Col>
-                  */}
-                </div>
+                </Row>
               </React.Fragment>
             )
           }

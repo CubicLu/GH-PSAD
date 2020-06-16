@@ -22,9 +22,18 @@
     & > span
       color: white
 
+.currentValueRow
+  margin-bottom: 0px
 .currentValue
   font-size: 18px
   word-break: break-word
+.previousResultRow
+  margin-top: 6px
+  min-height: 16px
+.moreRow
+  margin-top: 6px
+  & span
+    opacity: 1 !important
 
 .secondaryText
   color: $general-text-color
@@ -58,7 +67,6 @@
     border-top: none !important
     border-top-left-radius: 0
     border-top-right-radius: 0
-    line-height: 1
     & > button
       padding: 12px 12px
       & > span
@@ -76,3 +84,13 @@
 .noneBorderBottom
   border-bottom-left-radius: 0 !important
   border-bottom-right-radius: 0 !important
+
+@media (min-width: 1600px)
+  .borderPrimary
+    padding: 40px 30px 35px 30px !important
+  .cardTitle
+    margin-bottom: 42px !important
+  .currentValueRow
+    margin-bottom: 12px
+  .moreRow
+    margin-top: 20px
