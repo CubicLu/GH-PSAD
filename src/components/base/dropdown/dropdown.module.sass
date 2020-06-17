@@ -1,0 +1,35 @@
+@import 'src/styles/variables'
+
+.dropdown
+  & > button
+    background-color: white !important
+    border: 1px solid rgba($snuff, 0.27) !important
+    line-height: 1 !important
+    box-shadow: none !important
+    & > span
+      opacity: 0.8 !important
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+  & > div
+    border: 1px solid rgba($snuff, 0.27) !important
+    border-top: none !important
+    border-top-left-radius: 0
+    border-top-right-radius: 0
+    & > button
+      padding: 12px 12px
+      & > span
+        display: block !important
+        font-weight: 300
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
+    & > button:hover
+      background-color: $primary-color
+      & > span
+        color: white
+        opacity: 1 !important
+
+.noneBorderBottom
+  border-bottom-left-radius: 0 !important
+  border-bottom-right-radius: 0 !important

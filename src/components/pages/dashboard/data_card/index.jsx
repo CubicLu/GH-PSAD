@@ -15,7 +15,7 @@ import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { ReactComponent as EllipsiIcon } from 'assets/ellipsi_icon.svg'
 import moment from 'moment';
 import DateModal from 'components/base/date_modal'
-import ParkingLotSelect from './parking_lot_select'
+import Dropdown from 'components/base/dropdown'
 /* Actions */
 /* API */
 import { filterFetcher } from 'api/statistics';
@@ -128,7 +128,7 @@ class DataCard extends Component {
 
   render() {
     const { data, datesToFilter, currentSinceText, modalIsOpen } = this.state
-    const { parkingLots, display, maxDate } = this.props
+    const { parkingLots, defaultParkingLot, display, maxDate } = this.props
 
     if(!display) {
       return null
@@ -176,9 +176,12 @@ class DataCard extends Component {
                     {data.result}
                   </Col>
                   <Col xs="auto" className="pl-0">
-                    <ParkingLotSelect
+                    <Dropdown
                       options={parkingLots}
-                      updateData={this.updateData}
+                      onChange={this.updateData}
+                      defaultOption={defaultParkingLot}
+                      width="150px"
+                      buttonSize="sm"
                     />
                   </Col>
                 </Row>
