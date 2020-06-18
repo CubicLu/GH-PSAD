@@ -5,20 +5,7 @@ import { ReactComponent as ChevronDown } from 'assets/chevron_down.svg';
 import { ReactComponent as ChevronUp } from 'assets/chevron_up.svg';
 import styles from './dropdown.module.sass';
 
-const buttonSizeStyleMap = {
-  sm:
-  {
-    padding: '8px 12px',
-    fontSize: '12'
-  },
-  md:
-  {
-    padding: '10px 14px',
-    fontSize: '13'
-  }
-};
-
-const CustomDropdown = ({ options, onChange, defaultOption, width = '100%', buttonSize = 'md' }) => {
+const CustomDropdown = ({ options, onChange, defaultOption, width = '100%', size = 'md' }) => {
   const [selectedOption, setSelectedOption] = useState(defaultOption || options[0]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -37,7 +24,6 @@ const CustomDropdown = ({ options, onChange, defaultOption, width = '100%', butt
     onChange([value]);
   };
 
-  const btnSizeStyle = buttonSizeStyleMap[buttonSize];
   const dropdownModifiers = {
     setMaxHeight: {
       enabled: true,
@@ -46,7 +32,7 @@ const CustomDropdown = ({ options, onChange, defaultOption, width = '100%', butt
         styles: {
           ...data.styles,
           overflow: 'auto',
-          maxHeight: `${144 + btnSizeStyle.fontSize * 6}px`,
+          maxHeight: size === 'sm' ? '216px' : '222px',
           minWidth: width,
           maxWidth: width,
           transform: data.styles.transform + ' translateX(0)'
@@ -55,15 +41,11 @@ const CustomDropdown = ({ options, onChange, defaultOption, width = '100%', butt
     }
   };
   const btnStyle = {
-    width,
-    padding: btnSizeStyle.padding
-  };
-  const btnTextStyle = {
-    fontSize: btnSizeStyle.fontSize + 'px'
+    width
   };
   return (
     <Dropdown
-      className={styles.dropdown}
+      className={`${styles.dropdown} ${styles[`dropdown-${size}`]}`}
       isOpen={dropdownOpen}
       toggle={handleToggle}
     >
@@ -71,10 +53,7 @@ const CustomDropdown = ({ options, onChange, defaultOption, width = '100%', butt
         className={`${dropdownOpen ? styles.noneBorderBottom : ''} d-flex justify-content-between align-items-center`}
         style={btnStyle}
       >
-        <span
-          className="general-text-2"
-          style={btnTextStyle}
-        >
+        <span className="general-text-2">
           {selectedOption ? selectedOption.label : ''}
         </span>
         {dropdownOpen
@@ -89,10 +68,7 @@ const CustomDropdown = ({ options, onChange, defaultOption, width = '100%', butt
       >
         {options.map((option, i) =>
           <DropdownItem key={i} onClick={() => handleItemClick(option)}>
-            <span
-              className="general-text-2 d-flex align-items-center"
-              style={btnTextStyle}
-            >
+            <span className="general-text-2 d-flex align-items-center">
               {option.label}
             </span>
           </DropdownItem>
@@ -118,8 +94,8 @@ CustomDropdown.propTypes = {
     label: PropTypes.string
   }),
   onChange: PropTypes.func.isRequired,
-  width: PropTypes.string,
-  buttonSize: PropTypes.string
+  width: PropTypes.string, // width can be 100% or number px
+  size: PropTypes.string // we have 2 size sm and md
 };
 
 export default CustomDropdown;

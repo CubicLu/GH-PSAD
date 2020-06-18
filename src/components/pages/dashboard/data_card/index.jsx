@@ -181,7 +181,7 @@ class DataCard extends Component {
                       onChange={this.updateData}
                       defaultOption={defaultParkingLot}
                       width="150px"
-                      buttonSize="sm"
+                      size="sm"
                     />
                   </Col>
                 </Row>
