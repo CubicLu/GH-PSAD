@@ -1,6 +1,8 @@
 #! /bin/bash
 set -x
 
+docker pull telesoftdevops/devops:telesoft-psad-dashboard-prod
+
 echo "Remove Dashboard-1 from LB-Pool"
 sed -e '/server 127.0.0.1:8091/ s/^#*/#/' -i /etc/nginx/sites-enabled/dashboard.conf
 nginx -s reload
