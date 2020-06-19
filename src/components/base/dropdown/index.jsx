@@ -35,7 +35,7 @@ const CustomDropdown = ({ options, onChange, defaultOption, width = '100%', size
           maxHeight: size === 'sm' ? '216px' : '222px',
           minWidth: width,
           maxWidth: width,
-          transform: data.styles.transform + ' translateX(0)'
+          transform: `${data.styles.transform} translateX(0)`
         }
       })
     }
