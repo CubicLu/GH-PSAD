@@ -5,6 +5,11 @@ import { index } from 'api/parking_lots';
 import { Row, Col } from 'reactstrap';
 import styles from './dashboard.module.sass';
 
+const allParkingLots = {
+  label: 'All Parking Lots',
+  value: 0
+};
+
 class Dashboard extends Component {
 
   state = {
@@ -159,7 +164,7 @@ class Dashboard extends Component {
     index({ perPage: 50})
       .then(res => {
         this.setState({
-          parkingLots: [{label: 'All Parking Lots', value: 0}].concat(res.data.map((parking_lot) => ({label: parking_lot.name, value: parking_lot.id})))
+          parkingLots: [allParkingLots].concat(res.data.map((parking_lot) => ({label: parking_lot.name, value: parking_lot.id})))
         })
       })
   }
@@ -179,6 +184,7 @@ class Dashboard extends Component {
                   <Col xs="6" xl="4" className={`${styles.dataCardContainer} ${type.display ? '' : 'd-none' }`} key={type.name} >
                     <DataCard
                       parkingLots={parkingLots}
+                      defaultParkingLot={allParkingLots}
                       type={type.name}
                       reset={type.reset}
                       reload={type.reload}
