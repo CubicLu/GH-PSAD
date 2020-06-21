@@ -9,6 +9,7 @@ import styles from './date_modal.module.sass';
 import { displayDateRange } from 'components/helpers';
 import { ReactComponent as CalendarIcon } from 'assets/calendar_icon.svg';
 import { ReactComponent as ClearIcon } from 'assets/clear_icon.svg';
+import Button from 'components/base/button';
 
 const defaultSelectionRange = {
   startDate: new Date(),
@@ -144,8 +145,8 @@ const DateModal = (props) => {
         </Row>
         <Row>
           <Col className={`${styles.btnWrapper} d-flex justify-content-end`}>
-            <button onClick={toggleModal}>CANCEL</button>
-            <button onClick={handleApply}>APPLY</button>
+            <Button onClick={toggleModal} status="secondary">CANCEL</Button>
+            <Button onClick={handleApply} status="success">APPLY</Button>
           </Col>
         </Row>
       </ModalBody>
