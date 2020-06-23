@@ -29,19 +29,21 @@ function Header (props) {
       </Link>
       <Nav className='ml-auto' navbar>
         <UncontrolledDropdown nav inNavbar className="d-flex align-items-center">
-          <DropdownToggle nav  className="float-left text-light">
-            <FontAwesomeIcon className="d-none d-lg-block d-xl-block" icon={faAngleDown}/>
-          </DropdownToggle>
-          <DropdownToggle nav className="text-light float-right pr-3">
+          <DropdownToggle nav className="text-light float-right">
             {  currentUser ? (
                 <span className={styles.dFlex}>
+                  <img src={ currentUser.avatar || 'https://i.stack.imgur.com/34AD2.jpg'} alt="profile" className="rounded-circle mr-2 mt-1" width="40" height="40"/>
                   <span className="d-none d-sm-inline">
+                    <DropdownToggle nav className="float-right text-light pl-0">
+                      <FontAwesomeIcon className="d-none d-lg-block d-xl-block" icon={faAngleDown}/>
+                    </DropdownToggle>
                     <span className={`${styles.dFlex} ${styles.dFlexColumn}`}>
-                      <span>{ process.env.NODE_ENV !== 'production' ? currentUser.role.name : currentUser.name}</span>
+                      <span>
+                        { process.env.NODE_ENV !== 'production' ? currentUser.role.name : currentUser.name}
+                      </span>
                       <CurrentTime className={styles.currentTime} />
                     </span>
                   </span>
-                  <img src={ currentUser.avatar || 'https://i.stack.imgur.com/34AD2.jpg'} alt="profile" className="rounded-circle ml-3" width="40" height="40"/>
                 </span>
               ) : (
                 <span>
