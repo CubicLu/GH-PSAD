@@ -4,6 +4,36 @@ import DataCard from './data_card'
 import { index } from 'api/parking_lots';
 import { Row, Col } from 'reactstrap';
 import styles from './dashboard.module.sass';
+import moment from 'moment';
+
+moment.updateLocale("en", { week: {
+  dow: 1,
+  doy: 4,
+}});
+
+const defaultDateFilters = [
+  {
+    from: moment(),
+    to: null,
+    label: 'Today',
+    text: `Today (${moment().format('L')})`,
+    since: 'since yesterday'
+  },
+  {
+    from: moment().startOf('week'),
+    to: moment().endOf('week'),
+    label: 'This week',
+    text: `This week (${moment().startOf('week').format('MM/DD')}-${moment().endOf('week').format('MM/DD')})`,
+    since: 'since last week'
+  },
+  {
+    from: moment().startOf('month'),
+    to: moment().endOf('month'),
+    label: 'This month',
+    text: `This month (${moment().startOf('month').format('MMM')})`,
+    since: 'since last month'
+  }
+]
 
 const allParkingLots = {
   label: 'All Parking Lots',
@@ -20,7 +50,7 @@ class Dashboard extends Component {
         name: 'vehicles_parked',
         display: true,
         reload: false,
-        maxDate: new Date()
+        maxDate: moment().subtract(1, 'days')
       },
       {
         name: 'vehicles_currently_parked',
@@ -30,17 +60,20 @@ class Dashboard extends Component {
       {
         name: 'violation_reports_opened',
         display: true,
-        reload: false
+        reload: false,
+        datesToFilter: defaultDateFilters
       },
       {
         name: 'violation_reports_rejected',
         display: true,
-        reload: false
+        reload: false,
+        datesToFilter: defaultDateFilters
       },
       {
         name: 'voi_match',
         display: true,
-        reload: false
+        reload: false,
+        datesToFilter: defaultDateFilters
       },
       {
         name: 'voi_matches_currently',
@@ -50,27 +83,32 @@ class Dashboard extends Component {
       {
         name: 'revenue',
         display: true,
-        reload: false
+        reload: false,
+        datesToFilter: defaultDateFilters
       },
       {
         name: 'parking_tickets_opened',
         display: true,
-        reload: false
+        reload: false,
+        datesToFilter: defaultDateFilters
       },
       {
         name: 'parking_tickets_issued',
         display: true,
-        reload: false
+        reload: false,
+        defaultDateFilters
       },
       {
         name: 'parking_tickets_settled',
         display: true,
-        reload: false
+        reload: false,
+        datesToFilter: defaultDateFilters
       },
       {
         name: 'ai_error',
         display: true,
-        reload: false
+        reload: false,
+        datesToFilter: defaultDateFilters
       },
     ]
   }
@@ -194,6 +232,7 @@ class Dashboard extends Component {
                       from={dateRange.from}
                       to={dateRange.to}
                       maxDate={type.maxDate}
+                      datesToFilter={type.datesToFilter}
                     />
                   </Col>
                 ))
