@@ -32,29 +32,6 @@ class DataCard extends Component {
     data: {},
     from: null,
     to: null,
-    datesToFilter: [
-      {
-        from: moment(),
-        to: null,
-        label: 'Today',
-        text: `Today (${moment().format('L')})`,
-        since: 'since yesterday'
-      },
-      {
-        from: moment().startOf('isoWeek'),
-        to: moment().endOf('isoWeek'),
-        label: 'This week',
-        text: `This week (${moment().startOf('isoWeek').format('MM/DD')}-${moment().endOf('isoWeek').format('MM/DD')})`,
-        since: 'since last week'
-      },
-      {
-        from: moment().startOf('month'),
-        to: moment().endOf('month'),
-        label: 'This month',
-        text: `This month (${moment().startOf('month').format('MMM')})`,
-        since: 'since last month'
-      }
-    ],
     currentSinceText: 'last week'
   }
 
@@ -123,12 +100,12 @@ class DataCard extends Component {
   }
 
   isActiveMenu = (menu) => {
-    return this.state.data.range_current_period == menu
+    return this.state.data.range_current_period === menu
   }
 
   render() {
-    const { data, datesToFilter, currentSinceText, modalIsOpen } = this.state
-    const { parkingLots, defaultParkingLot, display, maxDate } = this.props
+    const { data, modalIsOpen } = this.state
+    const { parkingLots, defaultParkingLot, display, maxDate, datesToFilter } = this.props
 
     if(!display) {
       return null
@@ -156,11 +133,14 @@ class DataCard extends Component {
                         </DropdownToggle>
                         <DropdownMenu right className={style.dateDropdown}>
                           {
-                            datesToFilter.map(data => (
-                              <DropdownItem className={`${this.isActiveMenu(data.label) ? 'active' : ''} general-text-1`} key={data.from.format('YYYY-M-D')} onClick={() => this.fetchData(data.from.format('YYYY-M-D'), data.to ? data.to.format('YYYY-M-D') : null, data.since)}>
-                                { data.text }
-                              </DropdownItem>
-                            ))
+                            (
+                              datesToFilter &&
+                              datesToFilter.map(data => (
+                                <DropdownItem className={`${this.isActiveMenu(data.label) ? 'active' : ''} general-text-1`} key={data.from.format('YYYY-M-D')} onClick={() => this.fetchData(data.from.format('YYYY-M-D'), data.to ? data.to.format('YYYY-M-D') : null, data.since)}>
+                                  { data.text }
+                                </DropdownItem>
+                              ))
+                            )
                           }
                           <DropdownItem onClick={() => this.setState({ modalIsOpen: true })}>
                             <span className="general-text-1" >Select custom...</span>
