@@ -6,7 +6,7 @@ const fields = [
     label: 'Hourly Rate $',
     type: FieldType.INCREASER_FIELD,
     step: 0.25,
-    min: 0,
+    min: 0.1,
     tooltip: "Per hour rate of the parking lot",
     renderValue: value => `$${value}`
   },
@@ -22,9 +22,9 @@ const fields = [
   { name: 'parked',
     label: 'Parking Grace Period',
     type: FieldType.INCREASER_FIELD,
-    step: 300,
-    max: 900,
-    min: 300,
+    step: 120,
+    max: 600,
+    min: 120,
     tooltip: " Minutes before a car is considered as parked automatically.",
     renderValue: value => (value / 60)
   },
