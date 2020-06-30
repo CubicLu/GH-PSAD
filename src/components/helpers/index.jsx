@@ -33,6 +33,13 @@ const displayDateRange = (from, to) => {
   return `${fromDate} - ${toDate}`;
 };
 
+const displayMonthAndDay = (date) => {
+  if (!date) {
+    return '';
+  }
+  return moment(date).format('MMM DD');
+};
+
 const unixDatePicker = (timestamp, inputProps, pickerProps, readOnly = false) => {
   return (
     <DatePicker readOnly={readOnly} selected={momentUnix(timestamp).toDate()} customInput={<Input {...inputProps}/>} {...pickerProps}/>
@@ -64,6 +71,7 @@ export {
   displayUnixTimestamp,
   displayDate,
   displayDateRange,
+  displayMonthAndDay,
   unixDatePicker,
   dateToUnix,
   btnSpinner
