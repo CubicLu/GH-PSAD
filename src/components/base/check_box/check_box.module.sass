@@ -1,0 +1,14 @@
+@import 'src/styles/variables'
+
+.checkBox
+  display: flex
+  align-items: center
+  & > span
+    margin-left: 10px
+    font-weight: 300
+  & g > g
+    stroke: $loblolly
+    fill: white
+  &.active g > g
+    stroke: $primary-color
+    fill: $primary-color
