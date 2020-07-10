@@ -8,10 +8,12 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
+  Popover,
+  PopoverBody
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp, faArrowDown, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { ReactComponent as EllipsiIcon } from 'assets/ellipsi_icon.svg'
 import moment from 'moment';
 import DateModal from 'components/base/date_modal'
@@ -55,7 +57,8 @@ class DataCard extends Component {
         since: 'since last month'
       }
     ],
-    currentSinceText: 'last week'
+    currentSinceText: 'last week',
+    tileInfoOpen: false
   }
 
   componentDidUpdate(prevProps) {
@@ -118,17 +121,21 @@ class DataCard extends Component {
       })
   }
 
+  toggleTileInfo = () => {
+    this.setState({ tileInfoOpen: !this.state.tileInfoOpen });
+  }
+
   componentDidMount() {
     this.fetchData()
   }
 
   isActiveMenu = (menu) => {
-    return this.state.data.range_current_period == menu
+    return this.state.data.range_current_period === menu
   }
 
   render() {
-    const { data, datesToFilter, currentSinceText, modalIsOpen } = this.state
-    const { parkingLots, defaultParkingLot, display, maxDate } = this.props
+    const { data, datesToFilter, modalIsOpen } = this.state
+    const { parkingLots, defaultParkingLot, display, maxDate, info, type } = this.props
 
     if(!display) {
       return null
@@ -145,6 +152,16 @@ class DataCard extends Component {
                 <CardTitle className={`${style.cardTitle} row`}>
                   <Col className={`${style.title} pr-0`}>
                     {data.title}
+                    {
+                      info ?
+                      <React.Fragment>
+                        <button className="ml-2 border-0 bg-white text-primary" id={type}><FontAwesomeIcon color="primary" icon={faQuestionCircle} /></button>
+                        <Popover placement="bottom" isOpen={this.state.tileInfoOpen} target={type} toggle={this.toggleTileInfo} trigger="click hover focus">
+                          <PopoverBody>{info}</PopoverBody>
+                        </Popover>
+                      </React.Fragment> :
+                      ''
+                    }
                   </Col>
                   <Col xs="auto" className="d-flex align-items-center pl-0">
                   <span className={style.secondaryText}>{data.range_current_period} </span>
@@ -156,11 +173,14 @@ class DataCard extends Component {
                         </DropdownToggle>
                         <DropdownMenu right className={style.dateDropdown}>
                           {
-                            datesToFilter.map(data => (
-                              <DropdownItem className={`${this.isActiveMenu(data.label) ? 'active' : ''} general-text-1`} key={data.from.format('YYYY-M-D')} onClick={() => this.fetchData(data.from.format('YYYY-M-D'), data.to ? data.to.format('YYYY-M-D') : null, data.since)}>
-                                { data.text }
-                              </DropdownItem>
-                            ))
+                            (
+                              datesToFilter &&
+                              datesToFilter.map(data => (
+                                <DropdownItem className={`${this.isActiveMenu(data.label) ? 'active' : ''} general-text-1`} key={data.from.format('YYYY-M-D')} onClick={() => this.fetchData(data.from.format('YYYY-M-D'), data.to ? data.to.format('YYYY-M-D') : null, data.since)}>
+                                  { data.text }
+                                </DropdownItem>
+                              ))
+                            )
                           }
                           <DropdownItem onClick={() => this.setState({ modalIsOpen: true })}>
                             <span className="general-text-1" >Select custom...</span>

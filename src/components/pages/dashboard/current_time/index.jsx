@@ -4,8 +4,7 @@ import axios from 'axios';
 
 const CurrentTime = (props) => {
   const getCurrentTime = (callback) => {
-    axios.get('http://worldclockapi.com/api/json/est/now').
-    then(data => {
+    axios.get('https://worldclockapi.com/api/json/est/now').then(data => {
       callback(data.data);
     });
   }

@@ -67,28 +67,28 @@ const renderImageField = (field, props = {}) => (
 const renderInput = (field, props = {}) => {
   switch (field.type) {
     case FieldType.MULTISELECT_FIELD:
-      return <CustomMultiSelect {...props} field={field.name} options={field.options} />;
+      return <CustomMultiSelect {...props} field={field.name} options={field.options} autoFocus={field.autoFocus}/>;
     case FieldType.FILE_FIELD:
-      return <ImageInput {...props} className="form-control" field={field.name} />;
+      return <ImageInput {...props} className="form-control" field={field.name} autoFocus={field.autoFocus}/>;
     case FieldType.SELECT_FIELD:
-      return <CustomSelect {...props} field={field} />;
+      return <CustomSelect {...props} field={field} autoFocus={field.autoFocus}/>;
     case FieldType.TOGGLER_FIELD:
-      return <Toggler {...props} field={field.name} label={field.innerLabel} options={field.options} />;
+      return <Toggler {...props} field={field.name} label={field.innerLabel} options={field.options} autoFocus={field.autoFocus}/>;
     case FieldType.TEXT_LINK_FIELD:
-      return <TextWithLink {...props} field={field} />;
+      return <TextWithLink {...props} field={field} autoFocus={field.autoFocus}/>;
     case FieldType.PASSWORD_FIELD:
-      return <Password {...props} field={field} />;
+      return <Password {...props} field={field} autoFocus={field.autoFocus}/>;
     case FieldType.GOOGLE_MAPS_FIELD:
-      return <GoogleMaps {...props.events} {...field.options} />;
+      return <GoogleMaps {...props.events} {...field.options} autoFocus={field.autoFocus}/>;
     case FieldType.INCREASER_FIELD:
-      return <Increaser {...props} field={field} />;
+      return <Increaser {...props} field={field} autoFocus={field.autoFocus}/>;
     case FieldType.TEXT_AREA:
-        return <TextArea  {...props} field={field}/>
+        return <TextArea autoFocus={field.autoFocus} {...props} field={field}/>
     case FieldType.NUMBER_FIELD:
-      return <Text className="form-control" disabled={field.disabled} {...props.events} type="number" field={field.name} />;
+      return <Text autoFocus={field.autoFocus} className="form-control" disabled={field.disabled} {...props.events} type="number" field={field.name} />;
 
     default:
-      return <Text className="form-control" disabled={field.disabled} {...props.events} field={field.name}  />;
+      return <Text className="form-control" autoFocus={field.autoFocus} disabled={field.disabled} {...props.events} field={field.name}  />;
   }
 };
 
