@@ -41,7 +41,6 @@ const allParkingLots = {
 };
 
 class Dashboard extends Component {
-
   state = {
     parkingLots: [],
     dateRange: {},
@@ -50,29 +49,34 @@ class Dashboard extends Component {
         name: 'vehicles_parked',
         display: true,
         reload: false,
+        info: 'Historical number of vehicles that parked on the covered parking lots.',
         maxDate: moment().subtract(1, 'days')
       },
       {
         name: 'vehicles_currently_parked',
         display: true,
-        reload: false
+        reload: false,
+        info: 'Number of vehicles parked as of this time.'
       },
       {
         name: 'violation_reports_opened',
         display: true,
         reload: false,
+        info: 'Number of Violation Reports that have not been reviewed yet from the covered parking lots.',
         datesToFilter: defaultDateFilters
       },
       {
         name: 'violation_reports_rejected',
         display: true,
         reload: false,
+        info: 'Number of Violation reports that have been reviewed but were deemed invalid.',
         datesToFilter: defaultDateFilters
       },
       {
         name: 'voi_match',
         display: true,
         reload: false,
+        info: 'Number of vehicles in the Vehicle of Interest(VOI) that are detected inside covered parking lots.',
         datesToFilter: defaultDateFilters
       },
       {
@@ -84,12 +88,14 @@ class Dashboard extends Component {
         name: 'revenue',
         display: true,
         reload: false,
+        info: 'Total amount of parking fees collected from the covered parking lots.',
         datesToFilter: defaultDateFilters
       },
       {
         name: 'parking_tickets_opened',
         display: true,
         reload: false,
+        info: 'Number of citation tickets that are not yet resolved/settled.',
         datesToFilter: defaultDateFilters
       },
       {
@@ -102,12 +108,14 @@ class Dashboard extends Component {
         name: 'parking_tickets_settled',
         display: true,
         reload: false,
+        info: 'Number of citation tickets that are already resolved/settled.',
         datesToFilter: defaultDateFilters
       },
       {
         name: 'ai_error',
         display: true,
         reload: false,
+        info: 'Number of AI error occurrences logged in every parking lots.',
         datesToFilter: defaultDateFilters
       },
     ]
@@ -232,6 +240,7 @@ class Dashboard extends Component {
                       from={dateRange.from}
                       to={dateRange.to}
                       maxDate={type.maxDate}
+                      info={type.info}
                       datesToFilter={type.datesToFilter}
                     />
                   </Col>
