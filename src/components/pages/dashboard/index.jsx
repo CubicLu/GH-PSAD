@@ -4,6 +4,36 @@ import DataCard from './data_card'
 import { index } from 'api/parking_lots';
 import { Row, Col } from 'reactstrap';
 import styles from './dashboard.module.sass';
+import moment from 'moment';
+
+moment.updateLocale("en", { week: {
+  dow: 1,
+  doy: 4,
+}});
+
+const defaultDateFilters = [
+  {
+    from: moment(),
+    to: null,
+    label: 'Today',
+    text: `Today (${moment().format('L')})`,
+    since: 'since yesterday'
+  },
+  {
+    from: moment().startOf('week'),
+    to: moment().endOf('week'),
+    label: 'This week',
+    text: `This week (${moment().startOf('week').format('MM/DD')}-${moment().endOf('week').format('MM/DD')})`,
+    since: 'since last week'
+  },
+  {
+    from: moment().startOf('month'),
+    to: moment().endOf('month'),
+    label: 'This month',
+    text: `This month (${moment().startOf('month').format('MMM')})`,
+    since: 'since last month'
+  }
+]
 
 const allParkingLots = {
   label: 'All Parking Lots',
@@ -11,7 +41,6 @@ const allParkingLots = {
 };
 
 class Dashboard extends Component {
-
   state = {
     parkingLots: [],
     dateRange: {},
@@ -20,27 +49,35 @@ class Dashboard extends Component {
         name: 'vehicles_parked',
         display: true,
         reload: false,
-        maxDate: new Date()
+        info: 'Historical number of vehicles that parked on the covered parking lots.',
+        maxDate: moment().subtract(1, 'days')
       },
       {
         name: 'vehicles_currently_parked',
         display: true,
-        reload: false
+        reload: false,
+        info: 'Number of vehicles parked as of this time.'
       },
       {
         name: 'violation_reports_opened',
         display: true,
-        reload: false
+        reload: false,
+        info: 'Number of Violation Reports that have not been reviewed yet from the covered parking lots.',
+        datesToFilter: defaultDateFilters
       },
       {
         name: 'violation_reports_rejected',
         display: true,
-        reload: false
+        reload: false,
+        info: 'Number of Violation reports that have been reviewed but were deemed invalid.',
+        datesToFilter: defaultDateFilters
       },
       {
         name: 'voi_match',
         display: true,
-        reload: false
+        reload: false,
+        info: 'Number of vehicles in the Vehicle of Interest(VOI) that are detected inside covered parking lots.',
+        datesToFilter: defaultDateFilters
       },
       {
         name: 'voi_matches_currently',
@@ -50,27 +87,36 @@ class Dashboard extends Component {
       {
         name: 'revenue',
         display: true,
-        reload: false
+        reload: false,
+        info: 'Total amount of parking fees collected from the covered parking lots.',
+        datesToFilter: defaultDateFilters
       },
       {
         name: 'parking_tickets_opened',
         display: true,
-        reload: false
+        reload: false,
+        info: 'Number of citation tickets that are not yet resolved/settled.',
+        datesToFilter: defaultDateFilters
       },
       {
         name: 'parking_tickets_issued',
         display: true,
-        reload: false
+        reload: false,
+        defaultDateFilters
       },
       {
         name: 'parking_tickets_settled',
         display: true,
-        reload: false
+        reload: false,
+        info: 'Number of citation tickets that are already resolved/settled.',
+        datesToFilter: defaultDateFilters
       },
       {
         name: 'ai_error',
         display: true,
-        reload: false
+        reload: false,
+        info: 'Number of AI error occurrences logged in every parking lots.',
+        datesToFilter: defaultDateFilters
       },
     ]
   }
@@ -194,6 +240,8 @@ class Dashboard extends Component {
                       from={dateRange.from}
                       to={dateRange.to}
                       maxDate={type.maxDate}
+                      info={type.info}
+                      datesToFilter={type.datesToFilter}
                     />
                   </Col>
                 ))
