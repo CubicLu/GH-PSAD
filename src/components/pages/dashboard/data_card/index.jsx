@@ -8,10 +8,12 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
+  Popover,
+  PopoverBody
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp, faArrowDown, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { ReactComponent as EllipsiIcon } from 'assets/ellipsi_icon.svg'
 import moment from 'moment';
 import DateModal from 'components/base/date_modal'
@@ -32,7 +34,31 @@ class DataCard extends Component {
     data: {},
     from: null,
     to: null,
-    currentSinceText: 'last week'
+    datesToFilter: [
+      {
+        from: moment(),
+        to: null,
+        label: 'Today',
+        text: `Today (${moment().format('L')})`,
+        since: 'since yesterday'
+      },
+      {
+        from: moment().startOf('isoWeek'),
+        to: moment().endOf('isoWeek'),
+        label: 'This week',
+        text: `This week (${moment().startOf('isoWeek').format('MM/DD')}-${moment().endOf('isoWeek').format('MM/DD')})`,
+        since: 'since last week'
+      },
+      {
+        from: moment().startOf('month'),
+        to: moment().endOf('month'),
+        label: 'This month',
+        text: `This month (${moment().startOf('month').format('MMM')})`,
+        since: 'since last month'
+      }
+    ],
+    currentSinceText: 'last week',
+    tileInfoOpen: false
   }
 
   componentDidUpdate(prevProps) {
@@ -95,6 +121,10 @@ class DataCard extends Component {
       })
   }
 
+  toggleTileInfo = () => {
+    this.setState({ tileInfoOpen: !this.state.tileInfoOpen });
+  }
+
   componentDidMount() {
     this.fetchData()
   }
@@ -104,8 +134,8 @@ class DataCard extends Component {
   }
 
   render() {
-    const { data, modalIsOpen } = this.state
-    const { parkingLots, defaultParkingLot, display, maxDate, datesToFilter } = this.props
+    const { data, datesToFilter, modalIsOpen } = this.state
+    const { parkingLots, defaultParkingLot, display, maxDate, info, type } = this.props
 
     if(!display) {
       return null
@@ -122,6 +152,16 @@ class DataCard extends Component {
                 <CardTitle className={`${style.cardTitle} row`}>
                   <Col className={`${style.title} pr-0`}>
                     {data.title}
+                    {
+                      info ?
+                      <React.Fragment>
+                        <button className="ml-2 border-0 bg-white text-primary" id={type}><FontAwesomeIcon color="primary" icon={faQuestionCircle} /></button>
+                        <Popover placement="bottom" isOpen={this.state.tileInfoOpen} target={type} toggle={this.toggleTileInfo} trigger="click hover focus">
+                          <PopoverBody>{info}</PopoverBody>
+                        </Popover>
+                      </React.Fragment> :
+                      ''
+                    }
                   </Col>
                   <Col xs="auto" className="d-flex align-items-center pl-0">
                   <span className={style.secondaryText}>{data.range_current_period} </span>
