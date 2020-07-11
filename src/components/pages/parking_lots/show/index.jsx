@@ -136,7 +136,7 @@ class Show extends React.Component {
         <Link to={backPath} className="mr-2" >
           <FontAwesomeIcon color="grey" icon={faChevronLeft} />
         </Link>
-        {record.name}
+        Parking Lot Details
         <span className="ml-4 general-text-3 text-nowrap">
           <h6 className="m-0">
             ID: {record.id}
