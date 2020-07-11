@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 import styles from './button.module.sass';
 
-const Button = ({ children, onClick, className, icon, status = 'primary', ...otherProps }) => {
+const Button = ({ children, onClick, className, icon, status = 'primary', size = 'sm', ...otherProps }) => {
   return (
     <button
-      className={`${styles.button} ${styles[`button-${status}`]} ${className || ''}`}
+      className={`${styles.button} ${styles[`button-${status}`]} ${styles[`button-${size}`]} ${className || ''}`}
       onClick={onClick}
       {...otherProps}
     >
@@ -15,9 +15,11 @@ const Button = ({ children, onClick, className, icon, status = 'primary', ...oth
           {icon}
         </div>
       }
-      <span>
-        {children}
-      </span>
+      {!!children &&
+        <span>
+          {children}
+        </span>
+      }
     </button>
   );
 };
@@ -27,7 +29,8 @@ Button.propTypes = {
   icon: PropTypes.node,
   onClick: PropTypes.func,
   className: PropTypes.string,
-  status: PropTypes.string
+  status: PropTypes.string,
+  size: PropTypes.string
 };
 
 export default Button;
