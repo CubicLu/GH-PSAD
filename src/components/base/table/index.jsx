@@ -130,33 +130,28 @@ export class IndexTable extends React.Component {
           submitForm={this.submitForm}
           {...this.props}
         />
-        <Row>
-          <Col xs="12" className="my-3 d-flex justify-content-center">
-            {toolbarWithProps}
-          </Col>
-          <Col xs="12">
-            <Table className="index-table table-responsive-md">
-              <thead className="bg-dark text-white">
-                <TRSort
-                  {...this.props}
-                  startFetchingSorting={this.startFetchingActionTable}
-                  stopFetchingSorting={this.stopFetchingActionTable}
-                  filterQuery={filterQuery}
-                  handleClick={this.handleSortedClick}
-                  sortedAttr={sortedAttr}
-                  setQuery={this.setQuery}
-                >
-                  {columns.props.children}
-                </TRSort>
-              </thead>
-              <tbody>
-                {this.renderRecords()}
-              </tbody>
-            </Table>
-          </Col>
-        </Row>
+        {toolbarWithProps}
+        <table className="index-table general-text-1">
+          <thead>
+            <TRSort
+              {...this.props}
+              startFetchingSorting={this.startFetchingActionTable}
+              stopFetchingSorting={this.stopFetchingActionTable}
+              filterQuery={filterQuery}
+              handleClick={this.handleSortedClick}
+              sortedAttr={sortedAttr}
+              setQuery={this.setQuery}
+            >
+              {columns.props.children}
+            </TRSort>
+          </thead>
+          <tbody>
+            {this.renderRecords()}
+          </tbody>
+        </table>
         <Pagination
           {...this.props}
+          className="mt-4"
           query={query}
           stopFetchingPagination={this.stopFetchingActionTable}
           startFetchingPagination={this.startFetchingActionTable}
