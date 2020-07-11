@@ -6,10 +6,10 @@ import New from 'components/pages/parking_lots/new';
 import Rules from 'components/pages/parking_lots/show/rules'
 import ParkingSessionsIndex from 'components/pages/parking_lots/show/parking_sessions/index'
 import ParkingSessionsShow from 'components/pages/parking_lots/show/parking_sessions/show'
-import ParkingSpaces from 'components/pages/parking_lots/show/parking_spaces'
 import Voi from 'components/pages/parking_lots/show/voi'
 import renderWithBackPath from 'components/modules/render_with_back_path';
 import renderWithParentPath from 'components/modules/render_with_parent_path';
+import { ParkingSpaces } from '../../asyncComponents';
 
 function Routing(props) {
   const { match } = props;
