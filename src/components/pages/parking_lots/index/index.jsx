@@ -16,6 +16,8 @@ import resourceFetcher from 'components/modules/resource_fetcher';
 import connectList from 'components/modules/connect_list';
 import withFetching from 'components/modules/with_fetching';
 import withCurrentUser from 'components/modules/with_current_user';
+/* Styles/Assets */
+import styles from './index.module.sass';
 
 class Index extends React.Component {
   state = {
@@ -53,7 +55,12 @@ class Index extends React.Component {
     });
   };
 
+  componentWillUnmount () {
+    document.querySelector('.frame-container').classList.remove('bg-transparent', 'shadow-none');
+  }
+
   componentDidMount() {
+    document.querySelector('.frame-container').classList.add('bg-transparent', 'shadow-none');
     const { startFetching, currentUser } = this.props
     Promise.all([
       startFetching(dropdownsSearch('parking_lot_parking_admins_filter', { admin_id: currentUser.id }))
@@ -69,28 +76,30 @@ class Index extends React.Component {
     const { dropdowns: { townManagers, parkingAdmins } } = this.state
 
     return (
-      <IndexTable
-        {...this.props}
-        isFetching={this.isFetching}
-        toolbar={<BasicListToolbar showFilters={true} {...this.props} createRequiredPermissions={[CREATE_PARKING_LOT]} label="+ Create New" title="Parking lot accounts" />}
-        filterFields={filterFields(parkingAdmins, townManagers)}
-        filterFetcher={filterFetcher}
-        resource={resource}
-        columns={
-          <React.Fragment>
-            <th disableSort>Lot ID</th>
-            <th disableSort>Name</th>
-            <th disableSort>Location</th>
-            <th disableSort>Contact Number</th>
-            <th disableSort>Email</th>
-            <th disableSort>Parking Admin</th>
-            <th disableSort>Town Manager</th>
-            <th disableSort>Status</th>
-          </React.Fragment>
-        }
-        renderRecords={this.renderRecords}
-      >
-      </IndexTable>
+      <div className={styles.container}>
+        <IndexTable
+          {...this.props}
+          isFetching={this.isFetching}
+          toolbar={<BasicListToolbar showFilters={true} {...this.props} createRequiredPermissions={[CREATE_PARKING_LOT]} label="+ Create New" title="Parking lot accounts" />}
+          filterFields={filterFields(parkingAdmins, townManagers)}
+          filterFetcher={filterFetcher}
+          resource={resource}
+          columns={
+            <React.Fragment>
+              <th disableSort style={{ width: '6%', minWidth: 50 }}>Lot ID</th>
+              <th disableSort style={{ width: '14%', minWidth: 120 }}>Name</th>
+              <th disableSort style={{ width: '30%', minWidth: 250 }}>Location</th>
+              <th disableSort style={{ width: '11%', minWidth: 100 }}>Contact Number</th>
+              <th disableSort style={{ width: '11%', minWidth: 100 }}>Email</th>
+              <th disableSort style={{ width: '11%', minWidth: 100 }}>Parking Admin</th>
+              <th disableSort style={{ width: '11%', minWidth: 100 }}>Town Manager</th>
+              <th disableSort style={{ width: '6%', minWidth: 50 }}>Status</th>
+            </React.Fragment>
+          }
+          renderRecords={this.renderRecords}
+        >
+        </IndexTable>
+      </div>
     );
   }
 }
