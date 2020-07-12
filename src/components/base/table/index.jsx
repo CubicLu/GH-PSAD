@@ -108,7 +108,7 @@ export class IndexTable extends React.Component {
 
   render() {
     const { sortedAttr, filterModalOpen, filterQuery } = this.state
-    const { toolbar, filterFields, columns, total: totalRecords, filterFetcher } = this.props
+    const { toolbar, filterFields, columns, total: totalRecords, filterFetcher, className } = this.props
     let toolbarWithProps = null
     if (toolbar) {
       toolbarWithProps = React.cloneElement(toolbar, {
@@ -131,7 +131,7 @@ export class IndexTable extends React.Component {
           {...this.props}
         />
         {toolbarWithProps}
-        <table className="index-table general-text-1">
+        <table className={`${className || ''} index-table general-text-1`}>
           <thead>
             <TRSort
               {...this.props}
