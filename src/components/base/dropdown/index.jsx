@@ -13,8 +13,7 @@ const CustomDropdown = ({
   width = '100%',
   size = 'md',
   className,
-  selectedOptionClassName,
-  isSelectedOptionDisabled
+  selectedOptionClassName
 }) => {
   const [selectedOption, setSelectedOption] = useState(defaultOption || options[0]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -78,13 +77,10 @@ const CustomDropdown = ({
       >
         {options.map((option, i) => {
           const isSelectedOption = selectedOption && selectedOption.value === option.value;
-          const onClick = isSelectedOptionDisabled
-            ? () => handleItemClick(option)
-            : () => {};
           return (
             <DropdownItem
               key={i}
-              onClick={onClick}
+              onClick={() => handleItemClick(option)}
               className={isSelectedOption ? selectedOptionClassName : ''}
             >
               <span className="general-text-2 d-flex align-items-center">
@@ -129,8 +125,7 @@ CustomDropdown.propTypes = {
   width: PropTypes.string, // width can be 100% or number px
   size: PropTypes.string, // we have 2 size sm and md
   className: PropTypes.string,
-  selectedOptionClassName: PropTypes.string,
-  isSelectedOptionDisabled: PropTypes.bool
+  selectedOptionClassName: PropTypes.string
 };
 
 export default CustomDropdown;
