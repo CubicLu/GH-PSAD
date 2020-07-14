@@ -151,7 +151,7 @@ export class IndexTable extends React.Component {
         </table>
         <Pagination
           {...this.props}
-          className="my-4"
+          className="my-3"
           query={query}
           stopFetchingPagination={this.stopFetchingActionTable}
           startFetchingPagination={this.startFetchingActionTable}
