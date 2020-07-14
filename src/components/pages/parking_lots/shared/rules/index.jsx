@@ -2,12 +2,21 @@ import React from 'react';
 import TooltipInfo from 'components/helpers/tooltip_info';
  import Select from 'react-select';
 import { ReactComponent as EditIcon } from 'assets/edit_icon.svg'
-
 import styles from './rules.module.sass'
+
+const stylesWithError = (error) => ({
+  control: (provided) => {
+    return ({
+    ...provided,
+   borderColor: error ? '#FB745B' : ''
+  })}
+});
 
 function renderRecords () {
   const { list, dropdown } = this.state;
   return list.map((record, idx) => {
+    const { status, agency_id } = record;
+    const error = status && !agency_id
     const currentAgency = dropdown.agencies.find(agency => agency.value === record.agency_id) || {}
     return (
       <tr key={idx} className="non-hover">
@@ -35,6 +44,7 @@ function renderRecords () {
         <td>
           <Select
             value={{value: currentAgency.value, label: currentAgency.label}}
+            styles={stylesWithError(error)}
             placeholder="Agencies"
             onChange={(selectedOptions) => {
               const newList = list
