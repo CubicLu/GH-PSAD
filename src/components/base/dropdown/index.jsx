@@ -93,7 +93,7 @@ const CustomDropdown = ({
             </DropdownItem>
           );
         })}
-        {customOptions.map(({ label, onClick, className }, i) =>
+        {customOptions && customOptions.map(({ label, onClick, className }, i) =>
           <DropdownItem key={i} onClick={onClick} className={className || ''}>
             <span className="general-text-2 d-flex align-items-center">
               {label}
