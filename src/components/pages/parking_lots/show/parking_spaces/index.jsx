@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { ActionCableConsumer } from 'react-actioncable-provider';
-import {
-  Button,
-  Col,
-  Row,
-  Nav,
-} from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faSync } from '@fortawesome/free-solid-svg-icons';
+import { faSync } from '@fortawesome/free-solid-svg-icons';
 import { isEmpty, isMatch } from 'underscore';
 import {
   isUserInsideEditingZone
@@ -27,6 +21,7 @@ import { SET_RECORD } from 'actions/parking_lots';
 import { index as indexParkingSlot } from 'api/parking_slots';
 import { show, createParkingPlan, deleteParkingPlan, updateParkingPlan } from 'api/parking_lots';
 /* Base */
+import Button from 'components/base/button';
 /* Helpers */
 import Loader from 'components/helpers/loader';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
@@ -39,6 +34,7 @@ import connectRecord from 'components/modules/connect_record';
 import withCurrentUser from 'components/modules/with_current_user';
 /* Assets */
 import styles from './parking_plans.module.sass'
+import Header from '../../shared/header';
 
 /**
   * @state (Bool)  isEditing indicate if the user is in editing mode
@@ -537,42 +533,6 @@ class ParkingPlans extends Component {
     }]);
   }
 
-  renderHeader () {
-    const { backPath, parentPath, history, match, record } = this.props;
-    return (
-      <Row>
-        <Col sm={12} className="px-4 pt-4 row">
-          <Col md={7} className="d-flex align-items-center ">
-            <Link to={backPath} className="mr-2" >
-              <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
-            </Link>
-            {record.name}
-            <span className="ml-4 general-text-3 text-nowrap">
-              <h6 className="m-0">
-                ID: {record.id}
-              </h6>
-            </span>
-          </Col>
-          <Col md={5}>
-            <Nav pills className="align-items-center float-right mx-auto">
-                <Button className="mr-1" onClick={() => history.push(parentPath)} color="disabled-lg">
-                  Information
-                </Button>
-                <Button className="mr-1" onClick={() => history.push(`${parentPath}/voi`)} color="disabled-lg">
-                  VOI
-                </Button>
-                <Button className="mr-1" onClick={() => history.push(`${parentPath}/rules`)} color="disabled-lg">
-                  Parking rules
-                </Button>
-                <Button className="mr-1" onClick={() => history.push(match.url)} color="primary-lg">
-                  Parking spaces
-                </Button>
-            </Nav>
-          </Col>
-        </Col>
-      </Row>);
-  }
-
   renderEmptyParkingPlan = () => {
     return (
       <React.Fragment>
@@ -601,40 +561,45 @@ class ParkingPlans extends Component {
 
 
   renderSaveButton = () => {
-    const { isEditing, isSavingCoordinates } = this.state
+    const { isEditing, isSavingCoordinates } = this.state;
+    if (!isEditing) return null;
     return (
-      isEditing && (
-        <Col>
-          <Button color="success" className="px-5 py-2 mx-5 my-2 float-right"  onClick={this.saveCoordinateCircles}>
-            {isSavingCoordinates ? btnSpinner() : 'Save Changes'}
-          </Button>
-        </Col>
-      )
-    )
+      <Button
+        status="success"
+        className="mt-4 float-right"
+        onClick={this.saveCoordinateCircles}
+        size="md"
+      >
+        {isSavingCoordinates ? btnSpinner() : 'Save Changes'}
+      </Button>
+    );
   }
 
   renderForm () {
     const { isSavingParkingPlan, parkingPlans, selectedIndexParkingPlan } = this.state
     const { history, parentPath } = this.props
     return (
-      <Row onMouseMove={isUserInsideEditingZone.bind(this)} className="pb-5">
-        <Col xs={12} md={3} className="p-0">
-            <Col className="row d-flex justify-content-between align-items-center text-white bg-primary p-3 m-0" xs={12}>
-              <span className="ml-4">Parking Spaces</span>
-              <FontAwesomeIcon icon={faSync} className="pointer" onClick={this.refreshData}/>
-            </Col>
-            <SlotPane/>
-        </Col>
-        <Col xs={12} md={9} className="p-0 overflow-auto">
-          <div className="mb-1">
-            <UpperPanel
-              history={history}
-              parentPath={parentPath}
-            />
+      <Row onMouseMove={isUserInsideEditingZone.bind(this)} className="no-gutters">
+        <Col className={`${styles.slotPaneWrapper} col-auto`}>
+          <div className={styles.slotPaneTitle}>
+            <span>Parking Spaces</span>
+            <FontAwesomeIcon icon={faSync} className="pointer" onClick={this.refreshData}/>
           </div>
+          <SlotPane />
+        </Col>
+        <Col className={styles.layoutPane}>
+          <UpperPanel
+            history={history}
+            parentPath={parentPath}
+          />
           <div className={`${styles.mapContainer} mx-auto card border-dark d-flex justify-content-center align-items-center p-5`}>
-            {
-              isSavingParkingPlan ? <Loader/> : this.renderParkingPlan(parkingPlans[selectedIndexParkingPlan] ? parkingPlans[selectedIndexParkingPlan].url : null)
+            {isSavingParkingPlan
+              ? <Loader/>
+              : this.renderParkingPlan(
+                parkingPlans[selectedIndexParkingPlan]
+                  ? parkingPlans[selectedIndexParkingPlan].url
+                  : null
+              )
             }
           </div>
           {this.renderSaveButton()}
@@ -719,24 +684,20 @@ class ParkingPlans extends Component {
         state: {...this.state},
         func: this
       }}>
-        <Row className="m-0">
-          <Col xs={12} className="mb-4 bg-white">
-            {this.renderHeader()}
-          </Col>
-          <Col xs={12}>
-            <ActionCableConsumer
-              ref='parkingSpaceRoom'
-              channel={{
-                channel: "ParkingSpacesChannel",
-                parking_lot_id: record.id
-              }}
-              onConnected={() => console.log("Websocket connection established")}
-              onReceived={this.handleReceived}
-            />
-            {this.renderForm()}
-          </Col>
+        <div className={styles.container}>
+          <Header {...this.props} />
+          <ActionCableConsumer
+            ref='parkingSpaceRoom'
+            channel={{
+              channel: "ParkingSpacesChannel",
+              parking_lot_id: record.id
+            }}
+            onConnected={() => console.log("Websocket connection established")}
+            onReceived={this.handleReceived}
+          />
+          {this.renderForm()}
           {this.renderModals()}
-        </Row>
+        </div>
       </ParkingPlanContext.Provider>
     );
   }
@@ -770,6 +731,7 @@ class ParkingPlans extends Component {
 
   // Update record on the redux store when leaving
   componentWillUnmount() {
+    document.querySelector('.frame-container').classList.remove('bg-transparent', 'shadow-none');
     const { record, setRecord } = this.props
     if(record) {
       show({ id: record.id})
@@ -784,6 +746,7 @@ class ParkingPlans extends Component {
   }
 
   componentDidMount () {
+    document.querySelector('.frame-container').classList.add('bg-transparent', 'shadow-none');
     const { record } = this.props;
     this.fetchData(record);
   }
