@@ -65,7 +65,7 @@ const SlotPane = () => {
   }
   if (isEmpty(list)) {
     return (
-      <p className="general-text-1 text-center">
+      <p className={`${styles.emptyText} general-text-1`}>
         You don't have any parking space for now.
       </p>
     );
