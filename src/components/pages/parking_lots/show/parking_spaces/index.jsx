@@ -592,7 +592,7 @@ class ParkingPlans extends Component {
             history={history}
             parentPath={parentPath}
           />
-          <div className={`${styles.mapContainer} mx-auto card border-dark d-flex justify-content-center align-items-center p-5`}>
+          <div className={styles.mapContainer}>
             {isSavingParkingPlan
               ? <Loader/>
               : this.renderParkingPlan(
