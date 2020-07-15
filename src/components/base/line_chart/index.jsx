@@ -11,11 +11,11 @@ const LineChart = ({ data, xAxisTitle = '', yAxisTitle = '' }) => {
   if (!data.length) {
     return null;
   }
-  const dataLine = [{ id: 'line', data }];
+
   return (
     <div className={styles.lineChart}>
       <ResponsiveLine
-        data={dataLine}
+        data={data}
         margin={{ top: 10, right: 10, bottom: 50, left: 60 }}
         xScale={{ type: 'time', format: '%Y-%m-%d' }}
         xFormat="time:%Y-%m-%d"

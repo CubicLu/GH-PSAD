@@ -10,6 +10,7 @@ import ParkingSessionReducers from './parking_sessions';
 import ReportReducers from './reports';
 import ServerErrorReducers from './server_errors';
 import VoiReducers from './voi';
+import DetailedReportsReducers from './detailed_reports';
 import { LOG_OUT } from 'actions/users';
 
 const reducers = combineReducers({
@@ -23,7 +24,8 @@ const reducers = combineReducers({
   parking_session: ParkingSessionReducers,
   voi: VoiReducers,
   report: ReportReducers,
-  server: ServerErrorReducers
+  server: ServerErrorReducers,
+  detailedReports: DetailedReportsReducers
 });
 
 export default (state, action) => {

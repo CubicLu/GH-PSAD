@@ -22,13 +22,12 @@ const colorPalette = [
   '#1ED698'
 ];
 
-const ReportsPieChart = ({ data }) => {
+const ReportsPieChart = ({ data, reportName }) => {
   if (!data.length) {
     return null;
   }
   return (
     <div className={styles.pieChart}>
-      <div />
       <div>
         <ResponsivePie
           data={data}
@@ -38,14 +37,14 @@ const ReportsPieChart = ({ data }) => {
           radialLabelsLinkColor="#E6E8F1"
           radialLabelsTextXOffset={4}
           radialLabelsLinkHorizontalLength={10}
-          width={510}
+          width={290}
           margin={{ top: 50, right: 0, bottom: 50, left: 0 }}
         />
       </div>
-      <div />
       <Legend
         data={data}
         colors={colorPalette}
+        reportName={reportName}
       />
       <div />
     </div>
@@ -53,7 +52,8 @@ const ReportsPieChart = ({ data }) => {
 };
 
 ReportsPieChart.propTypes = {
-  data: PropTypes.array.isRequired
+  data: PropTypes.array.isRequired,
+  reportName: PropTypes.string.isRequired
 };
 
 export default ReportsPieChart;
