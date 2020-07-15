@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './toggle.module.sass';
 
-const Toggle = ({ value, onChange, label, positiveText = 'YES', negativeText = 'NO' }) => {
+const Toggle = ({ value, onChange, label, positiveText = 'YES', negativeText = 'NO', className = '' }) => {
   return (
-    <div className="d-flex align-items-center">
+    <div className={`d-flex align-items-center ${className}`}>
       <div
         className={`${styles.toggle} ${value ? styles.toggleOn : ''}`}
         onClick={() => onChange(!value)}
@@ -30,7 +30,8 @@ Toggle.propTypes = {
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string,
   positiveText: PropTypes.string,
-  negativeText: PropTypes.string
+  negativeText: PropTypes.string,
+  className: PropTypes.string
 };
 
 export default Toggle;

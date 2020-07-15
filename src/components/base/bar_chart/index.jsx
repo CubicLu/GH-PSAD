@@ -7,7 +7,7 @@ import { displayMonthAndDay } from 'components/helpers';
 // data example
 // [{ x: '2018-01-01', y: 10 }, ...]
 
-const BarChart = ({ data, xAxisTitle = '', yAxisTitle = '' }) => {
+const BarChart = ({ data, keys, indexBy, xAxisTitle = '', yAxisTitle = '' }) => {
   if (!data.length) {
     return null;
   }
@@ -15,8 +15,8 @@ const BarChart = ({ data, xAxisTitle = '', yAxisTitle = '' }) => {
     <div className={styles.barChart}>
       <ResponsiveBar
         data={data}
-        keys={['y']}
-        indexBy='x'
+        keys={keys}
+        indexBy={indexBy}
         margin={{ top: 10, right: 10, bottom: 50, left: 60 }}
         padding={0.43}
         enableLabel={false}
@@ -91,7 +91,9 @@ const BarChart = ({ data, xAxisTitle = '', yAxisTitle = '' }) => {
 BarChart.propTypes = {
   data: PropTypes.array.isRequired,
   xAxisTitle: PropTypes.string,
-  yAxisTitle: PropTypes.string
+  yAxisTitle: PropTypes.string,
+  indexBy: PropTypes.string.isRequired,
+  keys: PropTypes.array.isRequired
 };
 
 export default BarChart;

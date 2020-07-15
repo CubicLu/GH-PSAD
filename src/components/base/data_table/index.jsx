@@ -4,16 +4,19 @@ import styles from './data_table.module.sass';
 import { ReactComponent as ChevronDown } from 'assets/chevron_down.svg';
 import { ReactComponent as ChevronUp } from 'assets/chevron_up.svg';
 
-const DataTable = ({ data, fields, defaultDisplayRow = Number.MAX_SAFE_INTEGER }) => {
+const DataTable = ({ data, defaultDisplayRow = Number.MAX_SAFE_INTEGER }) => {
   const [showAll, setShowAll] = useState(false);
   const displayData = data.filter((item, index) => (showAll || index < defaultDisplayRow));
+
+  const fields = Object.keys(data[0] || {});
+
   return (
-    <React.Fragment>
+    <div className="flex-fill">
       <table className={`${styles.table} general-text-1`}>
         <thead>
           <tr>
             {fields.map((field, index) => (
-              <th key={index}>{field.label}</th>
+              <th key={index}>{field}</th>
             ))}
           </tr>
         </thead>
@@ -21,13 +24,13 @@ const DataTable = ({ data, fields, defaultDisplayRow = Number.MAX_SAFE_INTEGER }
           {displayData.map((item, index) => (
             <tr key={index}>
               {fields.map((field, index) => (
-                <td key={index}>{item[field.id]}</td>
+                <td key={index}>{item[field]}</td>
               ))}
             </tr>
           ))}
         </tbody>
       </table>
-      {data.length > defaultDisplayRow &&
+      {data && data.length > defaultDisplayRow &&
         <button
           className={styles.btnShowAll}
           onClick={() => setShowAll(!showAll)}
@@ -44,19 +47,12 @@ const DataTable = ({ data, fields, defaultDisplayRow = Number.MAX_SAFE_INTEGER }
           }
         </button>
       }
-    </React.Fragment>
+    </div>
   );
 };
 
 DataTable.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.string,
-    label: PropTypes.string
-  })).isRequired,
-  fields: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    label: PropTypes.string
-  })).isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
   defaultDisplayRow: PropTypes.number
 };
 
