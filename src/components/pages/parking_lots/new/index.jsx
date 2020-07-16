@@ -43,7 +43,7 @@ class New extends React.Component {
     isDropdownFetching: true,
     currentLocation: exampleLocationData(),
     inputChanged: false,
-    showParkingRulesSection: true,
+    showParkingRulesSection: false,
     dropdowns: {},
     errors: {}
   }
@@ -92,7 +92,6 @@ class New extends React.Component {
   };
 
   save = (rules = []) => {
-    console.log('Huh')
     const { backPath } = this.props;
     this.setState({ isSaving: true });
 
