@@ -64,6 +64,7 @@ class New extends React.Component {
   }
 
   save = () => {
+    console.log('Yo')
     const list = this.state.list.map(rule => {
       rule.recipient_ids = rule.recipients.map(recipient => recipient.id)
       rule.agency_id = rule.agency_id || null
