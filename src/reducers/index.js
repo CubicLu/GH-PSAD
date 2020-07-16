@@ -5,6 +5,7 @@ import AdminReducers from './admins';
 import AgencyReducers from './agencies';
 import CameraReducers from './cameras';
 import ParkingLotReducers from './parking_lots';
+import TownsReducers from './towns';
 import ParkingLotCameraReducers from './parking_lots_camera';
 import ParkingSessionReducers from './parking_sessions';
 import ReportReducers from './reports';
@@ -23,7 +24,8 @@ const reducers = combineReducers({
   parking_session: ParkingSessionReducers,
   voi: VoiReducers,
   report: ReportReducers,
-  server: ServerErrorReducers
+  server: ServerErrorReducers,
+  towns: TownsReducers,
 });
 
 export default (state, action) => {

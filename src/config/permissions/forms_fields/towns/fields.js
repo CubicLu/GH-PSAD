@@ -1,0 +1,13 @@
+const NAME = "NAME"
+const PHONE = "PHONE"
+const EMAIL = "EMAIL"
+const TOWN_MANAGER_ID = "TOWN_MANAGER_ID"
+const STATUS = "STATUS"
+
+export {
+  NAME,
+  PHONE,
+  EMAIL,
+  TOWN_MANAGER_ID,
+  STATUS
+};
