@@ -1,10 +1,12 @@
 import React from 'react';
 import { Scope, Text, ArrayField } from 'informed';
-import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { fields as fieldsNearbyPlaces } from 'components/helpers/fields/parking/nearby_places';
-import { renderFields } from 'components/base/forms/common_form';
+import { renderFieldsWithGrid } from 'components/base/forms/common_form';
+import { ReactComponent as TrashIcon } from 'assets/trash_icon.svg';
+import Button from 'components/base/button';
+import styles from './nearby_places.module.sass';
 
 const PlacesList = (props) => (
   <ArrayField field="places">
@@ -13,12 +15,12 @@ const PlacesList = (props) => (
         {fields.map((dataField, i) => (
           <Place {...dataField} key={i} errors={props.errors} categoriesDropdown={props.categoriesDropdown} events={props.events} />
         ))}
-        <Button className="float-right" onClick={() => {
-            if (fields.length <= limit) {
-              add()
-            }
-          }}>
-          + Add Place
+        <Button
+          className="float-right"
+          status="primary-outline"
+          onClick={() => { fields.length <= limit && add(); }}
+        >
+          +Add Place
         </Button>
       </React.Fragment>
     )}
@@ -28,14 +30,22 @@ const PlacesList = (props) => (
 const Place = ({ field, remove, ...props}) => (
   <Scope scope={field} >
     <div>
-      <Button onClick={() => {
-        props.events.onChange() // To show 'save changes' button
-        remove()
-      }} className='float-right'>
-        <FontAwesomeIcon icon={faTimes}/>
-      </Button>
       <Text field="id" hidden/>
-      { renderFields(fieldsNearbyPlaces(props.categoriesDropdown), props) }
+      <div className="d-flex">
+        <div className="flex-grow-1">
+          { renderFieldsWithGrid(fieldsNearbyPlaces(props.categoriesDropdown), 2, 6, { ...props, iSize: 8, lSize: 4 }) }
+        </div>
+        <Button
+          onClick={() => {
+            props.events.onChange(); // To show 'save changes' button
+            remove();
+          }}
+          status="danger-outline"
+          icon={<TrashIcon />}
+          className={styles.btnDelete}
+          size="md"
+        />
+      </div>
       <hr/>
       <div className="mt-4"/>
     </div>
