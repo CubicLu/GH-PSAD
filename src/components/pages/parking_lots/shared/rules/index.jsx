@@ -1,6 +1,5 @@
 import React from 'react';
 import TooltipInfo from 'components/helpers/tooltip_info';
-import Select from 'react-select';
 import { ReactComponent as EditIcon } from 'assets/edit_icon.svg'
 
 import styles from './rules.module.sass';

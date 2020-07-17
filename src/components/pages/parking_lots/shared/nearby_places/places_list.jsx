@@ -1,7 +1,5 @@
 import React from 'react';
 import { Scope, Text, ArrayField } from 'informed';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { fields as fieldsNearbyPlaces } from 'components/helpers/fields/parking/nearby_places';
 import { renderFieldsWithGrid } from 'components/base/forms/common_form';
 import { ReactComponent as TrashIcon } from 'assets/trash_icon.svg';

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Badge, Row, Col } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { permissions } from 'config/permissions'
 /* Modules */
 import withCurrentUser from 'components/modules/with_current_user';
@@ -24,8 +24,6 @@ class BasicListToolbar extends React.Component {
       label,
       title,
       onClickFilter,
-      badgesFilter,
-      badgesDelete,
       createRequiredPermissions,
       currentUserRoleName,
       goBackPath,

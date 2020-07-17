@@ -1,6 +1,5 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Col, Row, Table } from 'reactstrap';
 import { isEmpty } from 'underscore';
 import { cloneDeep } from 'lodash'
 import TRSort from './tr_sort';
