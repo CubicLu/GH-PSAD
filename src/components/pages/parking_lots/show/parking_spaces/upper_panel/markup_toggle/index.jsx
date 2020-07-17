@@ -28,7 +28,7 @@ const EnableButton = () => {
       <Toggle
         value={isEditing}
         onChange={toggleEdit}
-        disabled={!!parkingPlans[selectedIndexParkingPlan]}
+        disabled={!parkingPlans[selectedIndexParkingPlan]}
       />
     </div>
   );

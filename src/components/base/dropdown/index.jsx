@@ -26,10 +26,6 @@ const CustomDropdown = ({
       return;
     }
     setSelectedOption(option);
-    if (value === 0) {
-      onChange();
-      return;
-    }
     onChange([value]);
   };
 
