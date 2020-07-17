@@ -3,15 +3,12 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { isEmpty } from 'underscore';
-import { Col, Nav, Row } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import { Form } from 'informed';
-import { Link } from 'react-router-dom';
 import LocationForm from '../shared/location/form';
 import SettingSection from '../shared/setting_section';
 import NearbyPlaces from '../shared/nearby_places';
 import Header from '../shared/header';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { cloneDeep } from 'lodash'
 import { permissions } from 'config/permissions/forms_fields/parking_lots/show'
 /* Actions */
