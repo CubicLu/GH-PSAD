@@ -121,7 +121,7 @@ class New extends React.Component {
     return (
       <Col>
         <Button color="success" className="px-5 text-uppercase py-2 mb-4 float-right"  onClick={() => this.save()}>
-          {isSaving ? btnSpinner() : 'Next >'}
+          {isSaving ? btnSpinner() : 'Submit >'}
         </Button>
       </Col>
     );

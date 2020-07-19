@@ -7,7 +7,7 @@ import renderWithBackPath from 'components/modules/render_with_back_path';
 function Routing(props) {
   const { match } = props;
   return (
-    <React.Fragment>      
+    <React.Fragment> 
         <Route exact path={`${match.path}/new/`} render={renderWithBackPath(New, `${match.url}/`)} />
     </React.Fragment>
   );
