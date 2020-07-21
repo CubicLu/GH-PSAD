@@ -1,6 +1,5 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Col, Row, Table } from 'reactstrap';
 import { isEmpty } from 'underscore';
 import { cloneDeep } from 'lodash'
 import TRSort from './tr_sort';
@@ -23,27 +22,39 @@ export class IndexTable extends React.Component {
     isSortingFetching: false
   }
 
-  customLoader = () => {
+  renderLoader = () => {
     return (
       <tr>
-        <td height="80">
-          <div className="w-100 position-absolute">
-            <Loader />
-          </div>
+        <td colSpan="100">
+          <Loader />
         </td>
       </tr>
-    )
+    );
+  }
+
+  renderNoData = () => {
+    return (
+      <tr>
+        <td colSpan="100" className="text-center">
+          <span className="general-text-1">No Data</span>
+        </td>
+      </tr>
+    );
   }
 
   renderRecords = () => {
-    const { isFetching, renderRecords } = this.props;
+    const { isFetching, renderRecords, total: totalRecords } = this.props;
     const { isActionTableFetching } = this.state;
 
     if (isFetching() || isActionTableFetching) {
-      return this.customLoader();
+      return this.renderLoader();
     }
 
-    return renderRecords()
+    if (totalRecords === 0) {
+      return this.renderNoData();
+    }
+
+    return renderRecords();
   };
 
   generateLocalStorageFilter = (values) => {
@@ -108,7 +119,7 @@ export class IndexTable extends React.Component {
 
   render() {
     const { sortedAttr, filterModalOpen, filterQuery } = this.state
-    const { toolbar, filterFields, columns, total: totalRecords, filterFetcher } = this.props
+    const { toolbar, filterFields, columns, total: totalRecords, filterFetcher, className } = this.props
     let toolbarWithProps = null
     if (toolbar) {
       toolbarWithProps = React.cloneElement(toolbar, {
@@ -130,33 +141,28 @@ export class IndexTable extends React.Component {
           submitForm={this.submitForm}
           {...this.props}
         />
-        <Row>
-          <Col xs="12" className="my-3 d-flex justify-content-center">
-            {toolbarWithProps}
-          </Col>
-          <Col xs="12">
-            <Table className="index-table table-responsive-md">
-              <thead className="bg-dark text-white">
-                <TRSort
-                  {...this.props}
-                  startFetchingSorting={this.startFetchingActionTable}
-                  stopFetchingSorting={this.stopFetchingActionTable}
-                  filterQuery={filterQuery}
-                  handleClick={this.handleSortedClick}
-                  sortedAttr={sortedAttr}
-                  setQuery={this.setQuery}
-                >
-                  {columns.props.children}
-                </TRSort>
-              </thead>
-              <tbody>
-                {this.renderRecords()}
-              </tbody>
-            </Table>
-          </Col>
-        </Row>
+        {toolbarWithProps}
+        <table className={`${className || ''} index-table general-text-1`}>
+          <thead>
+            <TRSort
+              {...this.props}
+              startFetchingSorting={this.startFetchingActionTable}
+              stopFetchingSorting={this.stopFetchingActionTable}
+              filterQuery={filterQuery}
+              handleClick={this.handleSortedClick}
+              sortedAttr={sortedAttr}
+              setQuery={this.setQuery}
+            >
+              {columns.props.children}
+            </TRSort>
+          </thead>
+          <tbody>
+            {this.renderRecords()}
+          </tbody>
+        </table>
         <Pagination
           {...this.props}
+          className="py-3"
           query={query}
           stopFetchingPagination={this.stopFetchingActionTable}
           startFetchingPagination={this.startFetchingActionTable}

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardBody, CardHeader, Collapse } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import { ReactComponent as ChevronDown } from 'assets/chevron_down.svg';
+import { ReactComponent as ChevronUp } from 'assets/chevron_up.svg';
 import style from './card.module.sass'
 
 const CollapsableCard = props => {
@@ -13,7 +13,10 @@ const CollapsableCard = props => {
     <Card className={style.Card}>
       <CardHeader className={`${style.CardHeader} shadow-sm`} onClick={() => toggle(!show)}>
         <span className="mr-1">{header}</span>
-        <FontAwesomeIcon className="float-right" size="lg" icon={show ? faAngleUp : faAngleDown}/>
+        {show
+          ? <ChevronUp width="16" height="16" className="svg-white" />
+          : <ChevronDown width="16" height="16" className="svg-white" />
+        }
       </CardHeader>
       <Collapse isOpen={show}>
         <CardBody>
