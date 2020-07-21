@@ -22,27 +22,39 @@ export class IndexTable extends React.Component {
     isSortingFetching: false
   }
 
-  customLoader = () => {
+  renderLoader = () => {
     return (
       <tr>
-        <td height="80">
-          <div className="w-100 position-absolute">
-            <Loader />
-          </div>
+        <td colSpan="100">
+          <Loader />
         </td>
       </tr>
-    )
+    );
+  }
+
+  renderNoData = () => {
+    return (
+      <tr>
+        <td colSpan="100" className="text-center">
+          <span className="general-text-1">No Data</span>
+        </td>
+      </tr>
+    );
   }
 
   renderRecords = () => {
-    const { isFetching, renderRecords } = this.props;
+    const { isFetching, renderRecords, total: totalRecords } = this.props;
     const { isActionTableFetching } = this.state;
 
     if (isFetching() || isActionTableFetching) {
-      return this.customLoader();
+      return this.renderLoader();
     }
 
-    return renderRecords()
+    if (totalRecords === 0) {
+      return this.renderNoData();
+    }
+
+    return renderRecords();
   };
 
   generateLocalStorageFilter = (values) => {
@@ -150,7 +162,7 @@ export class IndexTable extends React.Component {
         </table>
         <Pagination
           {...this.props}
-          className="my-3"
+          className="py-3"
           query={query}
           stopFetchingPagination={this.stopFetchingActionTable}
           startFetchingPagination={this.startFetchingActionTable}

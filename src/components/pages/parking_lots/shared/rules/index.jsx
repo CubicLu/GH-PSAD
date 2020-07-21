@@ -34,7 +34,6 @@ function renderRecords () {
     });
   };
   return list.map((record, idx) => {
-    const currentAgency = dropdown.agencies.find(agency => agency.value === record.agency_id) || {};
     return (
       <tr key={idx} className={`non-hover ${record.status ? styles.active : ''}`}>
         <td>
@@ -49,7 +48,6 @@ function renderRecords () {
         </td>
         <td>
           <Dropdown
-            value={currentAgency}
             options={dropdown.agencies}
             onChange={(selectedValues) => handleAgencyChange(idx, selectedValues)}
           />
