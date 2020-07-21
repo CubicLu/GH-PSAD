@@ -89,7 +89,7 @@ const LocationForm = (props) => {
           }
       </ModalForm>
        <InputGroup>
-        <div className={`position-relative ${hasError ? 'input-error' : ''}`}>
+        <div className={`position-relative w-100 ${hasError ? 'input-error' : ''}`}>
           <input readOnly value={currentLocation.full_address} className="pr-4 bg-white form-control" onClick={() => setIsOpen(true)} />
           <LocationIcon className={styles.LocationIcon} />
           <div className="text-left general-error general-text-1 pt-1">
