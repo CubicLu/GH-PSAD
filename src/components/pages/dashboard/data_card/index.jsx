@@ -106,7 +106,7 @@ class DataCard extends Component {
     const { from, to } = this.state
     filterFetcher({
       type,
-      parkingLotIds,
+      parkingLotIds: parkingLotIds.filter(id => id !== 0),
       range: {
         from,
         to

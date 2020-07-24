@@ -1,6 +1,29 @@
+@import 'src/styles/variables'
+
 .index-table
+  width: 100%
+  overflow-x: auto
+  font-weight: 300
   & .sortable
     cursor: pointer
+  & thead > tr
+    height: 50px
+    background-color: $grey-dark
+    & th > span
+      display: flex
+      align-items: center
+      white-space: nowrap
+      color: white !important
+      font-size: 13px !important
+      opacity: 1 !important
+      font-weight: 300
+  & tbody > tr
+    height: 45px
+    background-color: white
+  & tbody > tr:nth-of-type(even)
+    background-color: rgba($athens-grey, 0.33)
+  & th, td
+    padding: 0 20px
 .sortable
   svg
     font-size: 15px

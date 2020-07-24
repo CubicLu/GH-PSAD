@@ -8,7 +8,7 @@ import CheckBox from 'components/base/check_box';
 import styles from './individual_lot.module.sass';
 import NoData from '../no_data/index';
 
-const IndividualLot = ({ name, chartData, tableData, showAllDataTable, printable, defaultDataTableRows }) => {
+const IndividualLot = ({ name, chartData, tableData, tableDataFields, showAllDataTable, printable, defaultDataTableRows }) => {
   const [showDataTable, setShowDataTable] = useState(showAllDataTable);
 
   useEffect(() => {

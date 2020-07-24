@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Paggy from "react-js-pagination";
 import { list as selectList } from 'selectors/list';
+import styles from './pagination.module.sass';
 
 class Pagination extends React.Component {
 
@@ -43,25 +44,28 @@ class Pagination extends React.Component {
   };
 
   render () {
-    const { total, perPage, page } = this.props;
+    const { total, perPage, page, className } = this.props;
 
     if (total < perPage) return null;
 
     return (
-       <Paggy
-          prevPageText='Prev'
-          nextPageText='Next'
-          activePage={page}
-          itemsCountPerPage={perPage}
-          totalItemsCount={total}
-          pageRangeDisplayed={10}
-          onChange={this.open}
-          itemClass={"mr-1 general-text-1 page-item"}
-          innerClass={'pagination justify-content-center'}
-          linkClass={"page-link"}
-        />
-    )
-
+      <Paggy
+        activePage={page}
+        itemsCountPerPage={perPage}
+        totalItemsCount={total}
+        pageRangeDisplayed={10}
+        onChange={this.open}
+        innerClass={`${styles.pagination} ${className || ''}`}
+        itemClass={styles.paginationItem}
+        linkClass={`general-text-1 ${styles.paginationLink}`}
+        activeClass={styles.active}
+        disabledClass={styles.disable}
+        itemClassFirst={styles.itemFirst}
+        itemClassLast={styles.itemLast}
+        itemClassNext={styles.itemNext}
+        itemClassPrev={styles.itemPrev}
+      />
+    );
   }
 }
 
@@ -73,7 +77,8 @@ Pagination.propTypes = {
   fetcher: PropTypes.func.isRequired,
   query: PropTypes.object,
   setList: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
+  className: PropTypes.string
 };
 
 export default Pagination;
