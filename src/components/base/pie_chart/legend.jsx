@@ -13,7 +13,7 @@ const Legend = ({ data, colors }) => {
   return (
     <div className={styles.legend}>
       <div className={styles.total}>
-        <span className="general-text-2">Total:</span>
+        <span className="general-text-2">Total #:</span>
         <span className="general-text-2"> {total}</span>
       </div>
       {items}
