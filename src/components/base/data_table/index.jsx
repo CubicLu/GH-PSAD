@@ -11,7 +11,7 @@ const DataTable = ({ data, defaultDisplayRow = Number.MAX_SAFE_INTEGER }) => {
   const fields = Object.keys(data[0] || {});
 
   return (
-    <div className="flex-fill">
+    <React.Fragment>
       <table className={`${styles.table} general-text-1`}>
         <thead>
           <tr>
@@ -47,7 +47,7 @@ const DataTable = ({ data, defaultDisplayRow = Number.MAX_SAFE_INTEGER }) => {
           }
         </button>
       }
-    </div>
+    </React.Fragment>
   );
 };
 

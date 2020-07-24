@@ -16,18 +16,21 @@ const IndividualLot = ({ name, chartData, tableData, tableDataFields, showAllDat
   }, [showAllDataTable]);
 
   let Chart = BarChart;
-  let GraphData = chartData.barChartData;
-  const GraphKeys = Array.from(new Set(chartData.lineChartData.map(data => data.id)));
+  let graphData = chartData.barChartData;
+  const graphKeys = chartData.lineChartData.map(data => data.id);
 
   if (chartData.barChartData.length > 7) {
     Chart = LineChart;
-    GraphData = chartData.lineChartData;
+    graphData = chartData.lineChartData;
   }
 
   return (
     <Row className="no-gutters">
       <Col>
         <div className={styles.individualRule} />
+        <span className={`general-text-1 ${styles.individualTitle}`}>
+          {name}
+        </span>
         {
           !printable &&
           <CheckBox
@@ -37,31 +40,31 @@ const IndividualLot = ({ name, chartData, tableData, tableDataFields, showAllDat
           />
         }
         <Row className="no-gutters">
-          <Col xs="7" lg="7" className={styles.individualChartWrapper}>
+          <Col xs="12" lg="7" className={styles.individualChartWrapper}>
             {
-              GraphData.length
-              ? <Chart
-                data={GraphData}
-                keys={GraphKeys}
-                indexBy="date"
-                xAxisTitle="Covered Date"
-                yAxisTitle="Parked Vehicles"
-              />
-              : <NoData text="No Chart Data" />
+              graphData.length
+                ? <Chart
+                  data={graphData}
+                  keys={graphKeys}
+                  indexBy="date"
+                  xAxisTitle="Covered Date"
+                  yAxisTitle="Parked Vehicles"
+                />
+                : <NoData text="No Chart Data" />
             }
           </Col>
-          <Col xs="5" lg="5" className="d-lg-flex align-items-center">
+          <Col xs="12" lg="5" className="d-lg-flex flex-column justify-content-center pl-lg-4">
             {
-              showDataTable || printable
-              ? <DataTable
-                data={tableData}
-                defaultDisplayRow={defaultDataTableRows ? defaultDataTableRows: (printable ? tableData.length : 6)}
-              />
-              : <div className={styles.individualNoDataTable}>
-                <span className="general-text-1">
-                  If you want to show individual data for this parking lot, check it above the title.
-                </span>
-              </div>
+              (showDataTable || printable)
+                ? <DataTable
+                  data={tableData}
+                  defaultDisplayRow={defaultDataTableRows || (printable ? tableData.length : 6)}
+                />
+                : <div className={styles.individualNoDataTable}>
+                  <span className="general-text-1">
+                    If you want to show individual data for this parking lot, check it above the title.
+                  </span>
+                </div>
             }
           </Col>
         </Row>

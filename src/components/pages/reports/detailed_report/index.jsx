@@ -235,6 +235,19 @@ class DetailedReportPage extends React.Component {
     }
   }
 
+  renderPieCharts () {
+    const { pieChartsData } = this.props;
+    const pieChartGroups = Object.keys(pieChartsData);
+    if (pieChartGroups.length === 0) {
+      return <Col><NoData text="No PieChart Data" /></Col>;
+    }
+    return pieChartGroups.map((pieChartGroup, i) => (
+      <Col key={i} xs="12" className={pieChartGroups.length === 1 ? '' : styles.pieChartWrapper}>
+        <PieChart data={pieChartsData[pieChartGroup]} reportName={pieChartGroup} />
+      </Col>
+    ));
+  }
+
   renderIndividualLot () {
     const { individualReportsData } = this.props;
     const {
@@ -293,7 +306,6 @@ class DetailedReportPage extends React.Component {
   }
 
   render() {
-    const { pieChartsData } = this.props;
     const {
       reportTitle,
       parkingLots,
@@ -399,15 +411,9 @@ class DetailedReportPage extends React.Component {
             </Row>
           </React.Fragment>
         }
-          <Row className="no-gutters d-flex justify-content-center mt-3">
-            {
-              Object.keys(pieChartsData).map((pieChartGroup, i)  => {
-                return <Col key={i} className="text-center" xs="12" md={Object.keys(pieChartsData).length > 1 ? '6' : '12'}>
-                        <PieChart data={pieChartsData[pieChartGroup]} reportName={pieChartGroup} />
-                       </Col>
-              })
-            }
-          </Row>
+        <Row className="no-gutters">
+          {this.renderPieCharts()}
+        </Row>
         {(showIndividualLot || this.state.headless) && this.renderIndividualLot()}
       </div>
     );

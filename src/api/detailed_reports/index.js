@@ -65,4 +65,3 @@ const showPDF = (blob) => {
 
 
 export default { index, download, showPDF, printPDF };
-

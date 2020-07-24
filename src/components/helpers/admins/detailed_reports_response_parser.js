@@ -34,12 +34,16 @@ const DetailedReportsResponseParser = (resp) => {
       const byChartGroup = individualParkingLot.lineChartData.find(chartData => chartData.id === chartGroup) || { id: chartGroup, data: [] }
 
       for (const [date, count] of Object.entries(chartGroupValues)) {
-        const byDateGroup = individualParkingLot.barChartData.find(chartData => chartData.date === date) || { date }
+        const byDateGroup = individualParkingLot.barChartData.find(chartData => chartData.date === date);
 
-        individualParkingLot.barChartData.push({
-          ...byDateGroup,
-          [chartGroup]: count
-        });
+        if (byDateGroup) {
+          byDateGroup[chartGroup] = count;
+        } else {
+          individualParkingLot.barChartData.push({
+            date,
+            [chartGroup]: count
+          });
+        }
 
         byChartGroup.data.push({
           x: date,

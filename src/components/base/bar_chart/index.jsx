@@ -3,26 +3,43 @@ import { ResponsiveBar } from '@nivo/bar';
 import PropTypes from 'prop-types';
 import styles from './bar_chart.module.sass';
 import { displayMonthAndDay } from 'components/helpers';
-
-// data example
-// [{ x: '2018-01-01', y: 10 }, ...]
+import colorPalette from 'config/color_palette';
 
 const BarChart = ({ data, keys, indexBy, xAxisTitle = '', yAxisTitle = '' }) => {
   if (!data.length) {
     return null;
   }
+  const legends = keys.length > 1 ? [
+    {
+      dataFrom: 'keys',
+      anchor: 'top-right',
+      direction: 'column',
+      justify: false,
+      translateX: 90,
+      translateY: 0,
+      itemsSpacing: 0,
+      itemDirection: 'left-to-right',
+      itemWidth: 80,
+      itemHeight: 20,
+      itemOpacity: 0.75,
+      symbolSize: 12,
+      symbolShape: 'circle'
+    }
+  ] : [];
+
+  const chartMarginRight = keys.length > 1 ? 150 : 10;
   return (
     <div className={styles.barChart}>
       <ResponsiveBar
         data={data}
         keys={keys}
         indexBy={indexBy}
-        margin={{ top: 10, right: 10, bottom: 50, left: 60 }}
+        margin={{ top: 10, right: chartMarginRight, bottom: 50, left: 60 }}
         padding={0.43}
         enableLabel={false}
         enableGridX={false}
         gridYValues={5}
-        colors={['#3A9CED']}
+        colors={colorPalette}
         axisLeft={{
           tickValues: 5,
           tickSize: 4,
@@ -83,6 +100,7 @@ const BarChart = ({ data, keys, indexBy, xAxisTitle = '', yAxisTitle = '' }) => 
             }
           }
         }}
+        legends={legends}
       />
     </div>
   );
