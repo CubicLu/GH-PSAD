@@ -22,8 +22,8 @@ import DetailedReportApi from 'api/detailed_reports';
 import { index as ParkingApiIndex } from 'api/parking_lots';
 
 /* Helpers */
-import DetailedReportConfigStore from 'components/helpers/detailed_reports_config_store';
-import { titleizeSlug } from 'components/helpers/formatter';
+import DetailedReportConfigStore from 'components/modules/detailed_reports_config_store';
+import { capitalize } from 'components/helpers/name_formatter';
 import { displayDateRange } from 'components/helpers';
 import DetailedReportsResponseParser from 'components/helpers/admins/detailed_reports_response_parser';
 
@@ -167,7 +167,7 @@ class DetailedReportPage extends React.Component {
   componentDidMount () {
     const params = new URLSearchParams(this.props.location.search || '');
     const headless = params.get('frame') === 'headless';
-    const reportTitle = titleizeSlug(this.props.match.params.report_type);
+    const reportTitle = capitalize(this.props.match.params.report_type);
 
     this.setState({ headless, reportTitle: `${reportTitle} Reports` });
 
