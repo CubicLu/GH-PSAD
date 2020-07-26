@@ -1,5 +1,5 @@
-export const titleizeSlug = (slug, spacer = '_') => {
-  const words = slug.split(spacer);
+export const capitalize = (str, spacer = '_') => {
+  const words = str.split(spacer);
 
   for (let i = 0; i < words.length; i++) {
     let word = words[i];
