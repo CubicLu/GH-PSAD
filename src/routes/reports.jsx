@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, withRouter } from 'react-router';
 import Index from 'components/pages/reports/index';
-import DetailedReports from  'components/pages/reports/detailed_reports';
+import DetailedReports from 'components/pages/reports/detailed_reports';
 
 const Routing = (props) => {
   const { match } = props;
