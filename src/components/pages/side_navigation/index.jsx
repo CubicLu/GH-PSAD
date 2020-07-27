@@ -74,6 +74,7 @@ function SideNavigation(props) {
             </span>
           </Link>
         </li>
+
       </PermissibleRender>
       <li>
         <DropdownNavigation title="Law enf agency" className="selected-point" icon={<AgenciesIcon className="float-left mr-2"/>}>
