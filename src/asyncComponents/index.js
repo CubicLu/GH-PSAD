@@ -1,9 +1,5 @@
-import asyncComponent from './asyncComponent';
+import ParkingLotsShow from './parking_lots/show';
+import ParkingLotsNew from './parking_lots/new';
+import ParkingSpaces from './parking_lots/show/parking_spaces';
 
-const ParkingSpaces = asyncComponent(() => {
-  return import(
-    '../components/pages/parking_lots/show/parking_spaces/index.jsx'
-  );
-});
-
-export { ParkingSpaces };
+export { ParkingSpaces, ParkingLotsNew, ParkingLotsShow };

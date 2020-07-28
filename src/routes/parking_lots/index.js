@@ -1,15 +1,13 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router';
 import Index from 'components/pages/parking_lots/index';
-import Show from 'components/pages/parking_lots/show';
-import New from 'components/pages/parking_lots/new';
 import Rules from 'components/pages/parking_lots/show/rules'
 import ParkingSessionsIndex from 'components/pages/parking_lots/show/parking_sessions/index'
 import ParkingSessionsShow from 'components/pages/parking_lots/show/parking_sessions/show'
 import Voi from 'components/pages/parking_lots/show/voi'
 import renderWithBackPath from 'components/modules/render_with_back_path';
 import renderWithParentPath from 'components/modules/render_with_parent_path';
-import { ParkingSpaces } from '../../asyncComponents';
+import { ParkingSpaces, ParkingLotsNew as New, ParkingLotsShow as Show } from '../../asyncComponents';
 
 function Routing(props) {
   const { match } = props;
