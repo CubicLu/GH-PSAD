@@ -18,6 +18,10 @@ const CustomDropdown = ({
   const [selectedOption, setSelectedOption] = useState(defaultOption || options[0]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  React.useEffect(() => {
+    defaultOption && setSelectedOption(defaultOption);
+  }, [defaultOption]);
+
   const handleToggle = () => setDropdownOpen(prevState => !prevState);
 
   const handleItemClick = (option) => {
