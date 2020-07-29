@@ -66,7 +66,7 @@ function SideNavigation(props) {
               Parking lot accounts
             </span>
           </Link>
-        </li> 
+        </li>
         <li>
           <Link className={`nav-link ${isActive(props.location, routes.towns)}`} to={routes.towns}>
             <TownIcon className="float-left mr-2"/>
