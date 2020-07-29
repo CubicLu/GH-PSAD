@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Text } from 'informed';
-import { Button, Col, FormGroup, Label } from 'reactstrap';
+import { Col, FormGroup, Label } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
 import {
   CustomSelect,
@@ -9,12 +9,20 @@ import {
   FieldType
 } from 'components/helpers/form_fields';
 import Loader from 'components/helpers/loader';
+import Button from 'components/base/button';
+import styles from './filter_form.module.sass';
 
 class FilterForm extends React.Component {
   renderField = (field, key) => (
     <FormGroup row key={key}>
-      <Label for={field.name} sm={2}>{field.label}</Label>
-      <Col sm={10}>
+      <Label
+        className={`${styles.inputLabel} general-text-1`}
+        for={field.name}
+        xs={3}
+      >
+        {field.label}
+      </Label>
+      <Col xs={9}>
         {this.renderInput(field)}
       </Col>
     </FormGroup>
@@ -42,11 +50,22 @@ class FilterForm extends React.Component {
     const { cancelFilter, submitForm, isFetching } = this.props;
 
     return (
-      <div className="text-center mt-4">
-        <Button onClick={cancelFilter} className="btn btn-danger mr-1">
+      <div className="d-flex justify-content-center mt-5">
+        <Button
+          className="mr-3 text-uppercase"
+          onClick={cancelFilter}
+          status="danger"
+          size="md"
+        >
           Cancel
         </Button>
-        <Button onClick={() => submitForm(formState.values)} color="info" type="submit">
+        <Button
+          className="text-uppercase"
+          onClick={() => submitForm(formState.values)}
+          status="success"
+          type="submit"
+          size="md"
+        >
           {isFetching() ? btnSpinner() : 'Apply'}
         </Button>
       </div>
