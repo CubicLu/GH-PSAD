@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
 import { isEmpty } from 'underscore';
 import {
+  Row,
   Col,
   Card,
   CardTitle,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
+  Popover,
+  PopoverBody
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp, faArrowDown, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { ReactComponent as EllipsiIcon } from 'assets/ellipsi_icon.svg'
 import moment from 'moment';
-import DateModal from '../date_modal'
-import ParkingLotSelect from './parking_lot_select'
+import DateModal from 'components/base/date_modal'
+import Dropdown from 'components/base/dropdown'
 /* Actions */
 /* API */
 import { filterFetcher } from 'api/statistics';
@@ -35,23 +38,27 @@ class DataCard extends Component {
       {
         from: moment(),
         to: null,
-        text: '(Today)',
+        label: 'Today',
+        text: `Today (${moment().format('L')})`,
         since: 'since yesterday'
       },
       {
-        from: moment().weekday(1),
-        to: moment().weekday(7),
-        text: '(Week)',
+        from: moment().startOf('isoWeek'),
+        to: moment().endOf('isoWeek'),
+        label: 'This week',
+        text: `This week (${moment().startOf('isoWeek').format('MM/DD')}-${moment().endOf('isoWeek').format('MM/DD')})`,
         since: 'since last week'
       },
       {
         from: moment().startOf('month'),
         to: moment().endOf('month'),
-        text: '(This Month)',
+        label: 'This month',
+        text: `This month (${moment().startOf('month').format('MMM')})`,
         since: 'since last month'
       }
     ],
-    currentSinceText: 'last week'
+    currentSinceText: 'last week',
+    tileInfoOpen: false
   }
 
   componentDidUpdate(prevProps) {
@@ -114,13 +121,21 @@ class DataCard extends Component {
       })
   }
 
+  toggleTileInfo = () => {
+    this.setState({ tileInfoOpen: !this.state.tileInfoOpen });
+  }
+
   componentDidMount() {
     this.fetchData()
   }
 
+  isActiveMenu = (menu) => {
+    return this.state.data.range_current_period === menu
+  }
+
   render() {
-    const { data, datesToFilter, currentSinceText, modalIsOpen } = this.state
-    const { parkingLots, display, maxDate } = this.props
+    const { data, datesToFilter, modalIsOpen } = this.state
+    const { parkingLots, defaultParkingLot, display, maxDate, info, type } = this.props
 
     if(!display) {
       return null
@@ -137,6 +152,16 @@ class DataCard extends Component {
                 <CardTitle className={`${style.cardTitle} row`}>
                   <Col className={`${style.title} pr-0`}>
                     {data.title}
+                    {
+                      info ?
+                      <React.Fragment>
+                        <button className="ml-2 border-0 bg-white text-primary" id={type}><FontAwesomeIcon color="primary" icon={faQuestionCircle} /></button>
+                        <Popover placement="bottom" isOpen={this.state.tileInfoOpen} target={type} toggle={this.toggleTileInfo} trigger="click hover focus">
+                          <PopoverBody>{info}</PopoverBody>
+                        </Popover>
+                      </React.Fragment> :
+                      ''
+                    }
                   </Col>
                   <Col xs="auto" className="d-flex align-items-center pl-0">
                   <span className={style.secondaryText}>{data.range_current_period} </span>
@@ -148,11 +173,14 @@ class DataCard extends Component {
                         </DropdownToggle>
                         <DropdownMenu right className={style.dateDropdown}>
                           {
-                            datesToFilter.map(data => (
-                              <DropdownItem key={data.from.format('YYYY-M-D')} onClick={() => this.fetchData(data.from.format('YYYY-M-D'), data.to ? data.to.format('YYYY-M-D') : null, data.since)}>
-                                <span className="general-text-1" >{data.from.format('MM/DD')}{data.to ? `-${data.to.format('MM/DD')}` : ''} {data.text}</span>
-                              </DropdownItem>
-                            ))
+                            (
+                              datesToFilter &&
+                              datesToFilter.map(data => (
+                                <DropdownItem className={`${this.isActiveMenu(data.label) ? 'active' : ''} general-text-1`} key={data.from.format('YYYY-M-D')} onClick={() => this.fetchData(data.from.format('YYYY-M-D'), data.to ? data.to.format('YYYY-M-D') : null, data.since)}>
+                                  { data.text }
+                                </DropdownItem>
+                              ))
+                            )
                           }
                           <DropdownItem onClick={() => this.setState({ modalIsOpen: true })}>
                             <span className="general-text-1" >Select custom...</span>
@@ -163,43 +191,40 @@ class DataCard extends Component {
                   }
                   </Col>
                 </CardTitle>
-                <div className="row">
-                  <Col className={`${style.currentValue} pr-0`}>
+                <Row className={style.currentValueRow}>
+                  <Col className={`${style.currentValue} pr-0 d-flex align-items-center`}>
                     {data.result}
                   </Col>
                   <Col xs="auto" className="pl-0">
-                    <ParkingLotSelect
+                    <Dropdown
                       options={parkingLots}
-                      updateData={this.updateData}
+                      onChange={this.updateData}
+                      defaultOption={defaultParkingLot}
+                      width="150px"
+                      size="sm"
                     />
                   </Col>
+                </Row>
+                <Row className={style.previousResultRow}>
                   {
-                    data.compare_with_previous_period && (
-                      <Col xs="12" className="mt-1">
+                    (data.result_previous_period && data.compare_with_previous_period) && (
+                      <Col>
                         <FontAwesomeIcon color={data.compare_with_previous_period.raise ? 'green' : 'red'} icon={data.compare_with_previous_period.raise ? faArrowUp : faArrowDown} className="mr-1" />
-                        <strong className={data.compare_with_previous_period.raise ? style.raise : style.less}>{data.compare_with_previous_period.percentage} </strong>
-                        <span className={style.secondaryText}>{currentSinceText}</span>
+                        <span className={style.secondaryText}> {data.result_previous_period}</span>
                       </Col>
                     )
                   }
-                  {
-                    data.result_previous_period && (
-                      <Col xs="12" className="mt-1">
-                        <span className={style.secondaryText}> {data.result_previous_period} {currentSinceText ? `- ${currentSinceText}`: ''}</span>
-                      </Col>
-                    )
-                  }
-                  {/*
-                  <Col xs="12" className="justify-content-end pointer d-flex mt-2">
-                    <span className="text-primary">MORE </span>
+                </Row>
+                <Row className={style.moreRow}>
+                  <Col className="justify-content-end pointer d-flex">
+                    <span className="general-text-2 text-primary">MORE</span>
                   </Col>
-                  */}
-                </div>
+                </Row>
               </React.Fragment>
             )
           }
         </Card>
-        <DateModal maxDate={maxDate} isOpen={modalIsOpen} apply={this.fetchData} toggleModal={() => this.setState({ modalIsOpen: false })} />
+        <DateModal maxDate={maxDate} isOpen={modalIsOpen} apply={this.fetchData} toggleModal={() => this.setState({ modalIsOpen: false })} title={data.title} />
       </React.Fragment>
     )
   }

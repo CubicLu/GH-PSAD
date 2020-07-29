@@ -1,0 +1,28 @@
+@import 'src/styles/variables'
+
+.button
+  display: flex
+  align-items: center
+  justify-content: center
+  min-width: 130px
+  height: 35px
+  font-size: 12px
+  font-weight: 300
+  color: white
+  border-radius: 4px
+  border: none
+  outline: none !important
+  & > span
+    margin-left: 6px
+  &-primary
+    background-color: $primary-color
+  &-primary-outline
+    background-color: white
+    color: $general-text-color
+    border: 1px solid $primary-color
+  &-secondary
+    background-color: $grey-dark
+  &-success
+    background-color: $green
+  &-danger
+    background-color: $danger-color
