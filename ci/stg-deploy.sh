@@ -10,7 +10,7 @@ fi
 docker run -it -d --restart=always --name $1 -h $1 -p 8090:80 telesoftdevops/devops:telesoft-psad-dashboard-stg
 sleep 60
 curl_out=$(curl -w "%{http_code}" -s -o /dev/null "https://dashboard.telesoftmobile.com/")
-if [ "$curl_out" != "200" ]
+if [ "$curl_out" != "302" ]
 then
   exit 1
 fi
