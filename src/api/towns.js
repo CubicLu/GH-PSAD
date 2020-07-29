@@ -2,7 +2,6 @@ import resourceApi from 'components/modules/resource_api';
 
 const { index, show, update, create } = resourceApi('towns');
 
-
 const filterFetcher = (params = {}) => {
   const { page, perPage, query, filters = {} } = params;
 
