@@ -1,5 +1,6 @@
 import React from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button} from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Button from 'components/base/button';
 
 const Form = (props) => {
   const {
@@ -17,10 +18,23 @@ const Form = (props) => {
       <ModalBody>
         {props.children}
       </ModalBody>
-      <ModalFooter className="justify-content-center border-0">
-        <Button color="danger" className="px-5 py-2 mb-4" onClick={toggleModal}>Cancel</Button>{' '}
-        {
-          showSaveButton && <Button color="success" className="px-5 py-2 mb-4" onClick={onClickSave}>Save&nbsp;&nbsp;</Button>
+      <ModalFooter className="justify-content-center border-0 pb-4">
+        <Button
+          status="danger"
+          className="mr-4"
+          onClick={toggleModal}
+          size="md"
+        >
+          CANCEL
+        </Button>
+        {showSaveButton &&
+          <Button
+            status="success"
+            onClick={onClickSave}
+            size="md"
+          >
+            SAVE
+          </Button>
         }
       </ModalFooter>
     </Modal>
