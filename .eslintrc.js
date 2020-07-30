@@ -28,6 +28,16 @@ module.exports = {
         "react"
     ],
     "rules": {
-        "semi": [2, 'always']
+        "semi": [2, 'always'],
+        "comma-dangle": [
+            "error",
+            {
+              "arrays": "always-multiline",
+              "exports": "always-multiline",
+              "functions": "never",
+              "imports": "always-multiline",
+              "objects": "always-multiline"
+            }
+          ],
     }
 };
