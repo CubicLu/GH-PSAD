@@ -18,4 +18,4 @@ const filterFetcher = (params = {}) => {
   );
 };
 
-export { filterFetcher, show, index, create };
+export { filterFetcher, show, index, create, update };

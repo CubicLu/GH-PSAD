@@ -80,6 +80,16 @@ const filterFields = (townManagers) => [
   },
 ];
 
+const fields = (managers = [], permissions = []) => (
+  [
+    { name: 'name', label: 'Name', mandatory: true, autoFocus: true, disabled: !permissions.includes(NAME) },
+    { name: 'contact_number', label: 'Contact', mandatory: true, disabled: !permissions.includes(PHONE) },
+    { name: 'contact_email', label: 'Email', mandatory: true, disabled: !permissions.includes(EMAIL) },
+    { name: 'town_manager_id', label: 'Town Manager', mandatory: true, type: FieldType.SELECT_FIELD, disabled: !permissions.includes(TOWN_MANAGER_ID), options: managers.map(manager => { return { value: manager.value, label: manager.label } }) },
+    { name: 'status', label: 'Status', mandatory: true, type: FieldType.SELECT_FIELD, disabled: !permissions.includes(STATUS), options: [{ value: 'opened', label: 'Opened' }, { value: 'suspended', label: 'Suspended' }], defaultValue: 'active' },
+  ]
+);
+
 const exampleData = () =>
   process.env.NODE_ENV !== 'production'
     ? {
@@ -92,4 +102,4 @@ const exampleData = () =>
         status: 'open',
       }; // These are defaults values for each field
 
-export { fieldsNew, fieldsShow, exampleData, filterFields };
+export { fieldsNew, fieldsShow, exampleData, filterFields, fields };
