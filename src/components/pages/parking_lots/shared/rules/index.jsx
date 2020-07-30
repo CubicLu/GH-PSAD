@@ -15,9 +15,10 @@ const stylesWithError = (error) => ({
 
 function renderRecords () {
   const { list, dropdown } = this.state;
+  const { errors = {} } = this.props;
   return list.map((record, idx) => {
-    const { status, agency_id } = record;
-    const error = status && !agency_id
+    const { name } = record;
+    const error = errors[name];
     const currentAgency = dropdown.agencies.find(agency => agency.value === record.agency_id) || {}
     return (
       <tr key={idx} className="non-hover">
