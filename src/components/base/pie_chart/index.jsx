@@ -9,6 +9,10 @@ const ReportsPieChart = ({ data, reportName }) => {
   if (!data.length) {
     return null;
   }
+  const pieData = data.map((item, i) => ({
+    ...item,
+    color: colorPalette[i % colorPalette.length]
+  }));
   return (
     <React.Fragment>
       <div className={styles.title}>
@@ -18,8 +22,8 @@ const ReportsPieChart = ({ data, reportName }) => {
         <div />
         <div>
           <ResponsivePie
-            data={data}
-            colors={colorPalette}
+            data={pieData}
+            colors={item => item.color}
             enableSlicesLabels={false}
             radialLabelsTextColor="#242E42"
             radialLabelsLinkColor="#E6E8F1"
@@ -27,6 +31,15 @@ const ReportsPieChart = ({ data, reportName }) => {
             radialLabelsLinkHorizontalLength={10}
             width={490}
             margin={{ top: 10, right: 0, bottom: 50, left: 0 }}
+            theme={{
+              tooltip: {
+                container: {
+                  fontSize: 10,
+                  fontWeight: 300,
+                  color: 'rgba(36, 46, 66, 0.9)'
+                }
+              }
+            }}
           />
         </div>
         <div />

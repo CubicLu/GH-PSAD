@@ -15,7 +15,7 @@ const Configuration = ({ name, title, config, onConfigChange, parkingLots, defau
     onConfigChange(name, { parking_lot_ids: parkingLotIds });
   };
   return (
-    <Col xs="12" lg="auto" className="flex-lg-grow-1">
+    <Col xs="12" className="col-lg">
       <Row className={styles.configLabelWrapper}>
         <Col className="d-flex align-items-center">
           <span className={`general-text-1 ${styles.configLabel}`}>
@@ -42,6 +42,7 @@ const Configuration = ({ name, title, config, onConfigChange, parkingLots, defau
             options={parkingLots}
             defaultOption={defaultParkingLot}
             onChange={handleParkingLotChange}
+            size="sm"
           />
         </Col>
       </Row>

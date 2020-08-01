@@ -53,7 +53,7 @@ const IndividualLot = ({ name, chartData, tableData, showAllDataTable, printable
                 : <NoData text="No Chart Data" />
             }
           </Col>
-          <Col xs="12" lg="5" className="d-lg-flex flex-column justify-content-center pl-lg-4">
+          <Col xs="12" lg="5" className="d-lg-flex flex-column justify-content-center pl-lg-4 overflow-auto">
             {
               (showDataTable || printable)
                 ? <DataTable
