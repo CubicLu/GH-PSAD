@@ -14,7 +14,7 @@ const Legend = ({ data, colors, reportName }) => {
     <div className={styles.legend}>
       <span className={`${styles.reportName} mb-3`}>{reportName}</span>
       <div className={styles.total}>
-        <span className="general-text-2">Total #:</span>
+        <span className="general-text-2">Total:</span>
         <span className="general-text-2"> {total}</span>
       </div>
       {items}
