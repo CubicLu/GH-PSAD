@@ -11,6 +11,7 @@ import * as ParkingSessionActions from './parking_sessions';
 import * as ReportActions from './reports';
 import * as VoiActions from './voi';
 import * as ServerErrorActions from './server_errors';
+import * as DetailedReports from './detailed_reports';
 
 const INIT_SET_TOKEN = 'APP_INIT_SET_TOKEN';
 const INIT_SET_CURRENT_USER = 'APP_INIT_SET_CURRENT_USER';
@@ -42,6 +43,7 @@ export {
   ParkingSessionActions,
   ReportActions,
   TicketActions,
+  DetailedReports,
   INIT_SET_TOKEN,
   INIT_SET_CURRENT_USER,
   init_set_token,

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Button, Col, Row, Nav } from 'reactstrap';
+import { Col, Row, Nav } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { isEmpty } from 'underscore';
@@ -12,6 +12,7 @@ import { search as dropdownsSearch } from 'api/dropdowns';
 import { index } from 'api/parking_rules';
 /* Base */
  import IndexTable from 'components/base/table';
+import Button from 'components/base/button';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
  import Loader from 'components/helpers/loader';
@@ -112,11 +113,21 @@ class New extends React.Component {
   renderSaveButton = () => {
     const { isSaving } = this.state;
     return (
-      <Col>
-        <Button color="success" className="px-5 text-uppercase py-2 mb-4 float-right"  onClick={this.save}>
+      <Col className="mt-4">
+        <Button
+          status="success"
+          className="text-uppercase mb-4 float-right"
+          onClick={this.save}
+          size="md"
+        >
           {isSaving ? btnSpinner() : 'Submit'}
         </Button>
-        <Button className="bg-grey-dark px-5 py-2 text-uppercase mb-4 mr-4 float-right"  onClick={this.props.backParkingRule}>
+        <Button
+          status="secondary"
+          className="text-uppercase mb-4 mr-4 float-right"
+          onClick={this.props.backParkingRule}
+          size="md"
+        >
           {isSaving ? btnSpinner() : '< Back'}
         </Button>
       </Col>

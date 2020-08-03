@@ -47,6 +47,7 @@ class Dashboard extends Component {
     types: [
       {
         name: 'vehicles_parked',
+        reportType: 'vehicles_parked',
         display: true,
         reload: false,
         info: 'Historical number of vehicles that parked on the covered parking lots.',
@@ -54,12 +55,14 @@ class Dashboard extends Component {
       },
       {
         name: 'vehicles_currently_parked',
+        reportType: 'vehicles_currently_parked',
         display: true,
         reload: false,
         info: 'Number of vehicles parked as of this time.'
       },
       {
         name: 'violation_reports_opened',
+        reportType: 'violations',
         display: true,
         reload: false,
         info: 'Number of Violation Reports that have not been reviewed yet from the covered parking lots.',
@@ -67,13 +70,15 @@ class Dashboard extends Component {
       },
       {
         name: 'violation_reports_rejected',
+        reportType: 'violations',
         display: true,
         reload: false,
         info: 'Number of Violation reports that have been reviewed but were deemed invalid.',
         datesToFilter: defaultDateFilters
       },
       {
-        name: 'voi_match',
+        name: 'voi_matches',
+        reportType: 'voi_matches',
         display: true,
         reload: false,
         info: 'Number of vehicles in the Vehicle of Interest(VOI) that are detected inside covered parking lots.',
@@ -81,11 +86,13 @@ class Dashboard extends Component {
       },
       {
         name: 'voi_matches_currently',
+        reportType: 'voi_matches_currently',
         display: true,
         reload: false
       },
       {
         name: 'revenue',
+        reportType: 'revenue',
         display: true,
         reload: false,
         info: 'Total amount of parking fees collected from the covered parking lots.',
@@ -93,6 +100,7 @@ class Dashboard extends Component {
       },
       {
         name: 'parking_tickets_opened',
+        reportType: 'parking_tickets_opened',
         display: true,
         reload: false,
         info: 'Number of citation tickets that are not yet resolved/settled.',
@@ -100,12 +108,14 @@ class Dashboard extends Component {
       },
       {
         name: 'parking_tickets_issued',
+        reportType: 'parking_tickets_issued',
         display: true,
         reload: false,
         defaultDateFilters
       },
       {
         name: 'parking_tickets_settled',
+        reportType: 'parking_tickets_settled',
         display: true,
         reload: false,
         info: 'Number of citation tickets that are already resolved/settled.',
@@ -113,6 +123,7 @@ class Dashboard extends Component {
       },
       {
         name: 'ai_error',
+        reportType: 'ai_error',
         display: true,
         reload: false,
         info: 'Number of AI error occurrences logged in every parking lots.',
@@ -201,11 +212,11 @@ class Dashboard extends Component {
   }
 
   componentWillUnmount () {
-    document.querySelector(".frame-container").classList.remove("bg-transparent", "shadow-none")
+    document.querySelector('.frame-container').classList.remove('bg-transparent', 'shadow-none', 'overflow-hidden');
   }
 
-  componentDidMount() {
-    document.querySelector(".frame-container").classList.add("bg-transparent", "shadow-none")
+  componentDidMount () {
+    document.querySelector('.frame-container').classList.add('bg-transparent', 'shadow-none', 'overflow-hidden');
 
     index({ perPage: 50})
       .then(res => {
@@ -232,6 +243,7 @@ class Dashboard extends Component {
                       parkingLots={parkingLots}
                       defaultParkingLot={allParkingLots}
                       type={type.name}
+                      reportType={type.reportType}
                       reset={type.reset}
                       reload={type.reload}
                       display={type.display}

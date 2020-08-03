@@ -87,8 +87,8 @@ const DateModal = (props) => {
   };
 
   const handleApply = () => {
-    const from = moment(selectionRange.startDate).format('YYYY-M-D');
-    const to = moment(selectionRange.endDate).format('YYYY-M-D');
+    const from = moment(selectionRange.startDate).format('YYYY-MM-DD');
+    const to = moment(selectionRange.endDate).format('YYYY-MM-DD');
     apply(from, to);
   };
 

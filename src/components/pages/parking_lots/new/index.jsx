@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button, Col, Row, Nav } from 'reactstrap';
+import { Col, Row, Nav } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Form } from 'informed';
@@ -22,6 +22,7 @@ import { create } from 'api/parking_lots';
 import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
+import Button from 'components/base/button';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
 import { fieldsNew, exampleData } from 'components/helpers/fields/parking_lots';
@@ -204,7 +205,12 @@ class New extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success" className="px-5 text-uppercase py-2 mb-4 float-right"  onClick={() => this.save()}>
+        <Button
+          status="success"
+          className="text-uppercase mb-4 float-right"
+          onClick={() => this.save()}
+          size="md"
+        >
           {isSaving ? btnSpinner() : 'Next >'}
         </Button>
       </Col>
