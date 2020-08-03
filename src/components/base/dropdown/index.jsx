@@ -50,13 +50,14 @@ const CustomDropdown = ({
       })
     }
   };
-  const btnStyle = { width };
+  const btnStyle = {
+     width 
+  };
   return (
     <Dropdown
       className={`${styles.dropdown} ${styles[`dropdown-${size}`]} ${className || ''}`}
       isOpen={dropdownOpen}
       toggle={handleToggle}
-      style={btnStyle}
     >
       <DropdownToggle
         className={`${dropdownOpen ? styles.noneBorderBottom : ''} ${error ? styles.error : ''} d-flex justify-content-between align-items-center`}
@@ -71,7 +72,6 @@ const CustomDropdown = ({
         }
       </DropdownToggle>
       <DropdownMenu
-      style={btnStyle}
         right
         className="mt-0 py-0"
         modifiers={dropdownModifiers}
