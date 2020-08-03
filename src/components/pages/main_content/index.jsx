@@ -12,6 +12,7 @@ import ReportRoute from 'routes/reports';
 import ProfileRoute from 'routes/profile';
 import PrivateRoute from 'routes/private_route';
 import ParkingLotCameras from 'routes/parking_lots_camera'
+
 function MainContent(props) {
   const { match } = props;
 

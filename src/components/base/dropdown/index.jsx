@@ -5,9 +5,22 @@ import { ReactComponent as ChevronDown } from 'assets/chevron_down.svg';
 import { ReactComponent as ChevronUp } from 'assets/chevron_up.svg';
 import styles from './dropdown.module.sass';
 
-const CustomDropdown = ({ options, onChange, defaultOption, width = '100%', size = 'md' }) => {
+const CustomDropdown = ({
+  options,
+  customOptions,
+  onChange,
+  defaultOption,
+  width = '100%',
+  size = 'md',
+  className,
+  selectedOptionClassName
+}) => {
   const [selectedOption, setSelectedOption] = useState(defaultOption || options[0]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  React.useEffect(() => {
+    defaultOption && setSelectedOption(defaultOption);
+  }, [defaultOption]);
 
   const handleToggle = () => setDropdownOpen(prevState => !prevState);
 
@@ -17,10 +30,6 @@ const CustomDropdown = ({ options, onChange, defaultOption, width = '100%', size
       return;
     }
     setSelectedOption(option);
-    if (value === 0) {
-      onChange();
-      return;
-    }
     onChange([value]);
   };
 
@@ -45,7 +54,7 @@ const CustomDropdown = ({ options, onChange, defaultOption, width = '100%', size
   };
   return (
     <Dropdown
-      className={`${styles.dropdown} ${styles[`dropdown-${size}`]}`}
+      className={`${styles.dropdown} ${styles[`dropdown-${size}`]} ${className || ''}`}
       isOpen={dropdownOpen}
       toggle={handleToggle}
     >
@@ -66,10 +75,24 @@ const CustomDropdown = ({ options, onChange, defaultOption, width = '100%', size
         className="mt-0 py-0"
         modifiers={dropdownModifiers}
       >
-        {options.map((option, i) =>
-          <DropdownItem key={i} onClick={() => handleItemClick(option)}>
+        {options.map((option, i) => {
+          const isSelectedOption = selectedOption && selectedOption.value === option.value;
+          return (
+            <DropdownItem
+              key={i}
+              onClick={() => handleItemClick(option)}
+              className={isSelectedOption ? selectedOptionClassName : ''}
+            >
+              <span className="general-text-2 d-flex align-items-center">
+                {option.label}
+              </span>
+            </DropdownItem>
+          );
+        })}
+        {customOptions && customOptions.map(({ label, onClick, className }, i) =>
+          <DropdownItem key={i} onClick={onClick} className={className || ''}>
             <span className="general-text-2 d-flex align-items-center">
-              {option.label}
+              {label}
             </span>
           </DropdownItem>
         )}
@@ -86,6 +109,11 @@ CustomDropdown.propTypes = {
     ]),
     label: PropTypes.string
   })).isRequired,
+  customOptions: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
+    className: PropTypes.string
+  })),
   defaultOption: PropTypes.shape({
     value: PropTypes.oneOfType([
       PropTypes.string,
@@ -95,7 +123,9 @@ CustomDropdown.propTypes = {
   }),
   onChange: PropTypes.func.isRequired,
   width: PropTypes.string, // width can be 100% or number px
-  size: PropTypes.string // we have 2 size sm and md
+  size: PropTypes.string, // we have 2 size sm and md
+  className: PropTypes.string,
+  selectedOptionClassName: PropTypes.string
 };
 
 export default CustomDropdown;
