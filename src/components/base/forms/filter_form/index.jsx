@@ -28,7 +28,7 @@ class FilterForm extends React.Component {
       case FieldType.MULTISELECT_FIELD:
         return <CustomMultiSelect field={field.name} options={field.options} values={this.props.values} />;
       case FieldType.SELECT_FIELD:
-        return <CustomSelect field={field} selectOneEnabled />;
+        return <CustomSelect field={field} emptyOptionEnabled />;
       default:
         return <Text className="form-control" {...field.props} field={field.name} validate={field.validate} />;
     }
