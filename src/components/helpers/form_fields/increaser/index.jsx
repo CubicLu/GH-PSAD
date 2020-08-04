@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useField } from 'informed';
 import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { isUndefined } from 'underscore';
+import styles from './increaser.module.sass';
 
 const Increaser = props => {
   const { field, events, formState } = props;
@@ -46,7 +47,7 @@ const Increaser = props => {
 
   return (
     <React.Fragment>
-      <InputGroup>
+      <InputGroup className={styles.increaser}>
         <InputGroupAddon addonType="prepend">
           <Button color="secondary" outline onClick={onDecrease}>
             -

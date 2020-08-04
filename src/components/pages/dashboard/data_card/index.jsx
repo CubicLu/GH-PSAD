@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { isEmpty } from 'underscore';
 import {
   Row,
@@ -105,7 +106,7 @@ class DataCard extends Component {
     const { from, to } = this.state
     filterFetcher({
       type,
-      parkingLotIds,
+      parkingLotIds: parkingLotIds.filter(id => id !== 0),
       range: {
         from,
         to
@@ -135,7 +136,7 @@ class DataCard extends Component {
 
   render() {
     const { data, datesToFilter, modalIsOpen } = this.state
-    const { parkingLots, defaultParkingLot, display, maxDate, info, type } = this.props
+    const { parkingLots, defaultParkingLot, display, maxDate, info, type, reportType } = this.props
 
     if(!display) {
       return null
@@ -217,14 +218,16 @@ class DataCard extends Component {
                 </Row>
                 <Row className={style.moreRow}>
                   <Col className="justify-content-end pointer d-flex">
-                    <span className="general-text-2 text-primary">MORE</span>
+                    <Link to={`dashboard/reports/detailed/${reportType}`}>
+                      <span className="general-text-2 text-primary">MORE</span>
+                    </Link>
                   </Col>
                 </Row>
               </React.Fragment>
             )
           }
         </Card>
-        <DateModal maxDate={maxDate} isOpen={modalIsOpen} apply={this.fetchData} toggleModal={() => this.setState({ modalIsOpen: false })} title={data.title} />
+        <DateModal maxDate={maxDate && (maxDate.toDate())} isOpen={modalIsOpen} apply={this.fetchData} toggleModal={() => this.setState({ modalIsOpen: false })} title={data.title} />
       </React.Fragment>
     )
   }

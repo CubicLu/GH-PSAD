@@ -1,13 +1,36 @@
 @import 'src/styles/variables'
 
-.rowParkingSlot
-  height: 50px
-  margin-bottom: 1px
+.container
+  background-color: white
+  box-shadow: 0 2px 6px rgba($loblolly, 0.34)
+  margin: 0 2.5%
+.slotPaneWrapper
+  min-width: 190px
+.slotPaneTitle
+  display: flex
+  align-items: center
+  justify-content: space-between
+  height: 40px
+  padding: 0 30px
+  background-color: $primary-color
+  color: white
+  & > span
+    font-size: 14px
+    font-weight: 300
+.layoutPane
+  padding: 12px 20px !important
+  overflow: auto
+
 .mapContainer
+  display: flex
+  align-items: center
+  justify-content: center
+  border: 2px solid $grey-dark
   max-width: 885px
   max-height: 600px
   height: 885px
   height: 600px
+  margin-top: 16px
   overflow: auto
 .emptyImageMap
   max-height: 700px
@@ -19,11 +42,6 @@
   min-height: 150px
   max-height: 650px
   background-color: $grey-light
-.slotName
-  flex-grow: 1
-.availabilitySpace
-  height: 50px
-  width: 30px
 .imageMap
   max-height: 700px
   max-width: 700px
@@ -36,3 +54,7 @@
   height: 56px
   max-height: 56px
   z-index: 100
+
+@media (min-width: 992px)
+  .slotPaneWrapper
+    min-width: 230px
