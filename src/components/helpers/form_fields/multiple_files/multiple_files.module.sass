@@ -1,0 +1,43 @@
+@import 'src/styles/variables'
+
+.multipleFilesItem
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  padding: 1em
+  padding-left: 0
+  border-bottom: 1px solid #bababa
+
+.addPicture
+  cursor: pointer
+  background: rgba($primary-bg-color, 0.7)
+  width: 300px
+  padding: 1em
+  height: 40px
+  display: flex
+  align-items: center
+  justify-content: center
+  margin-bottom: 10px
+
+.imgContainer
+  display: flex
+  align-items: center
+  justify-content: center
+  overflow: hidden
+  position: relative
+  height: 120px
+  width: 160px
+  margin-right: 10px
+  border: 1px solid #eaeaea
+.imgThumb
+  width: 160px
+  height: auto
+  max-height: 100%
+  object-fit: contain;
+.imgRemove
+  position: absolute
+  top: 6px
+  right: 8px
+  padding: 4px 6px
+  cursor: pointer
+  background-color: rgba(0,0,0,0.1)
