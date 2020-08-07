@@ -101,7 +101,7 @@ const renderFields = (fields, props = {}) => (
   )
 );
 
-const renderFieldsWithGrid = (fields, step, cols, props = {}, values) => {
+const renderFieldsWithGrid = (fields, step, cols, props = {}) => {
   const fieldList = [];
   let start = 0;
 

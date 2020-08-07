@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardBody, CardHeader, Collapse } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown, faAngleUp, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import { ReactComponent as PlusIcon } from 'assets/plus_icon.svg';
 import style from './card.module.sass';
 
 const CollapsableCard = props => {
@@ -19,14 +20,16 @@ const CollapsableCard = props => {
 
   return (
     <Card className={`${style.Card}${className ? ` ${className}` : ''}`}>
-      <CardHeader className={`${style.CardHeader} shadow-sm`} onClick={() => toggle(!show)}>
+      <CardHeader className={`${style.CardHeader} shadow-sm d-flex align-items-center justify-content-between`} onClick={() => toggle(!show)}>
         <span className="mr-1">{header}</span>
-        <FontAwesomeIcon className="float-right" size="lg" icon={show ? faAngleUp : faAngleDown} />
-        {onAdd && (
-          <div className={`float-right ${style.addButton}`} onClick={onAddClick}>
-            <FontAwesomeIcon size="md" icon={faPlus} color="gray" />
-          </div>
-        )}
+        <div className="d-flex">
+          {onAdd && (
+            <div className={`${style.addButton}`} onClick={onAddClick}>
+              <PlusIcon />
+            </div>
+          )}
+          <FontAwesomeIcon className="" size="lg" icon={show ? faAngleUp : faAngleDown} />
+        </div>
       </CardHeader>
       <Collapse isOpen={show}>
         <CardBody>

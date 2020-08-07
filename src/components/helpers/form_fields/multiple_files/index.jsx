@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import { asField } from 'informed';
 import Holder from 'holderjs';
 import ReactFileReader from 'react-file-reader';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera, faTimes } from '@fortawesome/free-solid-svg-icons';
-
-import TooltipInfo from 'components/helpers/tooltip_info';
+import { ReactComponent as CloseIcon } from 'assets/close_icon.svg';
+import AlertErrors from 'components/base/errors/alert_errors';
 
 import styles from './multiple_files.module.sass';
 
@@ -21,18 +19,17 @@ class MultipleFiles extends React.Component {
 
   handleFiles = data => {
     const { error } = this.state;
-    const { fieldApi, fieldState, maxFileNumber, maxFileSize } = this.props;
-    const { value } = fieldState;
+    const { events, fieldApi, fieldState, maxFileNumber, maxFileSize } = this.props;
+    const { value = {} } = fieldState;
     const { setValue } = fieldApi;
-    const base64 = (value && value.base64) || [];
-    const fileList = (value && value.fileList) || [];
+    const { base64 = [], fileList = [] } = value;
     let sizeError = false;
     let numberError = false;
-    const maxFileSizeInBytes = 1024 * 1024 * this.props.maxFileSize;
+    const maxFileSizeInBytes = 1024 * 1024 * maxFileSize;
     data.base64.forEach((item, i) => {
       const file = data.fileList[i];
       const errorSize = file.size > maxFileSizeInBytes;
-      const errorNumber = base64.length >= this.props.maxFileNumber;
+      const errorNumber = base64.length >= maxFileNumber;
       sizeError = sizeError || errorSize;
       numberError = numberError || errorNumber;
       if (!errorSize && !errorNumber) {
@@ -40,28 +37,29 @@ class MultipleFiles extends React.Component {
         fileList.push(file);
       }
     });
-    let errorMessage = '';
+    const errorMessages = [];
     if (sizeError) {
-      errorMessage += `Max allowed file size is ${maxFileSize} MB.`;
+      errorMessages.push(`Max allowed file size is ${maxFileSize} MB. `);
     }
     if (numberError) {
-      errorMessage += `Max number of files is ${maxFileNumber}.`;
+      errorMessages.push(`Max number of files is ${maxFileNumber}.`);
     }
-    if (errorMessage || error) {
-      this.setState({ error: errorMessage });
+    if (errorMessages.length || error) {
+      this.setState({ error: errorMessages });
     }
     setValue({ base64, fileList });
-    this.props.events.onChange && this.props.events.onChange();
+    events.onChange && events.onChange();
   };
 
   onRemove = (index) => () => {
     const { fieldApi, fieldState } = this.props;
-    const { value } = fieldState;
+    const { value = {} } = fieldState;
     const { setValue } = fieldApi;
-    const data = (value && { ...value }) || {};
-    data.base64.splice(index, 1);
-    data.fileList.splice(index, 1);
-    setValue(data);
+    this.setState({ error: null });
+    setValue({
+      base64: value.base64.filter((_, i) => index !== i),
+      fileList: value.fileList.filter((_, i) => index !== i)
+    });
   };
 
   renderImage = (image, index) => (
@@ -73,19 +71,19 @@ class MultipleFiles extends React.Component {
         ref={ref => Holder.run({ images: ref })}
       />
       <div className={styles.imgRemove} onClick={this.onRemove(index)}>
-        <FontAwesomeIcon icon={faTimes} color="white" size="1x" />
+        <CloseIcon />
       </div>
     </div>
   );
 
   renderVideo = (video, index) => (
-    <div className={styles.imgContainer} key={`${index + 1}`}>
+    <div className={styles.videoContainer} key={`${index + 1}`}>
       <video className={styles.imgThumb} controls>
         <source type="video/webm" src={video} />
         <source type="video/mp4" src={video} />
       </video>
       <div className={styles.imgRemove} onClick={this.onRemove(index)}>
-        <FontAwesomeIcon icon={faTimes} color="white" size="1x" />
+        <CloseIcon />
       </div>
     </div>
   );
@@ -95,7 +93,7 @@ class MultipleFiles extends React.Component {
     const { value } = fieldState;
     if (value && value.base64 && value.base64.length) {
       return (
-        <div className="d-flex flex-row">
+        <div className="d-flex flex-wrap">
           {value.base64.map((file, index) =>
             value.fileList[index].type.includes('image')
               ? this.renderImage(file, index)
@@ -108,19 +106,13 @@ class MultipleFiles extends React.Component {
   };
 
   renderInputField = () => {
+    const { label } = this.props;
     if (!this.props.hideInput) {
       return (
         <div className="d-flex flex-column align-items-start">
           <div className={styles.addPicture}>
-            <FontAwesomeIcon className="mr-2" icon={faCamera}/>
-            this.props.label
+            {label}
           </div>
-          <p className="pt-1 text-center">
-            <span className="general-text-3">
-              this.props.labelForTypes
-            </span>
-            <TooltipInfo className="ml-2" text="This are citation ticket files" target="picture" />
-          </p>
         </div>
       );
     }
@@ -144,7 +136,7 @@ class MultipleFiles extends React.Component {
         >
           {this.props.renderCustomInputField ? this.props.renderCustomInputField() : this.renderInputField()}
         </ReactFileReader>
-        {error && <p className="general-error general-text-5">{error}</p>}
+        {error && <AlertErrors message={error} />}
         {this.renderFiles()}
       </React.Fragment>
     );
@@ -166,15 +158,17 @@ MultipleFiles.propTypes = {
   }),
   hideInput: PropTypes.bool,
   fileTypes: PropTypes.arrayOf(PropTypes.string),
+  label: PropTypes.string,
   maxFileNumber: PropTypes.number,
   maxFileSize: PropTypes.number,
   renderCustomInputField: PropTypes.func
 };
 
 MultipleFiles.defaultProps = {
-  fileTypes: ['image/*', 'video/*'],
+  fileTypes: ['image/*'],
+  label: 'Add image',
   maxFileNumber: 2,
   maxFileSize: 10
 };
 
-export default asField((props, ref) => <MultipleFiles ref={props.forwardedRef} {...props} />);
+export default asField((props) => <MultipleFiles ref={props.forwardedRef} {...props} />);
