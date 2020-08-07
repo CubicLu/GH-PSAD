@@ -1,75 +1,59 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { asField } from 'informed';
-import Holder from 'holderjs';
 import ReactFileReader from 'react-file-reader';
 import { ReactComponent as CloseIcon } from 'assets/close_icon.svg';
-import AlertErrors from 'components/base/errors/alert_errors';
+import { AlertMessagesContext } from 'components/helpers/alert_messages';
 
 import styles from './multiple_files.module.sass';
 
 class MultipleFiles extends React.Component {
-  constructor (props) {
-    super(props);
-    this.readerRef = React.createRef();
-    this.state = {
-      error: ''
-    };
-  };
+  static contextType = AlertMessagesContext
+
+  readerRef = React.createRef();
 
   handleFiles = data => {
-    const { error } = this.state;
-    const { events, fieldApi, fieldState, maxFileNumber, maxFileSize } = this.props;
-    const { value = {} } = fieldState;
+    const { events, fieldApi, fieldState, maxFileNumber, maxFileSize, multipleFiles } = this.props;
+    let { value = [] } = fieldState;
     const { setValue } = fieldApi;
-    const { base64 = [], fileList = [] } = value;
-    let sizeError = false;
-    let numberError = false;
-    const maxFileSizeInBytes = 1024 * 1024 * maxFileSize;
-    data.base64.forEach((item, i) => {
-      const file = data.fileList[i];
-      const errorSize = file.size > maxFileSizeInBytes;
-      const errorNumber = base64.length >= maxFileNumber;
-      sizeError = sizeError || errorSize;
-      numberError = numberError || errorNumber;
-      if (!errorSize && !errorNumber) {
-        base64.push(item);
-        fileList.push(file);
-      }
-    });
-    const errorMessages = [];
-    if (sizeError) {
-      errorMessages.push(`Max allowed file size is ${maxFileSize} MB. `);
+    let newError = '';
+    if (!multipleFiles) {
+      data = { base64: [data.base64], fileList: data.fileList };
     }
-    if (numberError) {
-      errorMessages.push(`Max number of files is ${maxFileNumber}.`);
+    if (value.length + data.base64.length > maxFileNumber) {
+      newError = `Max allowed number of files is ${maxFileNumber}.`;
+    } else {
+      const maxFileSizeInBytes = 1024 * 1024 * maxFileSize;
+      data.base64.forEach((item, i) => {
+        const file = data.fileList[i];
+        if (file.size > maxFileSizeInBytes) {
+          newError = `Max allowed file size is ${maxFileSize} MB.`;
+        } else {
+          value = [...value, item];
+        }
+      });
     }
-    if (errorMessages.length || error) {
-      this.setState({ error: errorMessages });
+    if (newError) {
+      this.context.addAlertMessages([{
+        type: 'Error',
+        text: newError
+      }]);
+    } else {
+      setValue(value);
+      events.onChange && events.onChange();
     }
-    setValue({ base64, fileList });
-    events.onChange && events.onChange();
   };
 
   onRemove = (index) => () => {
     const { fieldApi, fieldState } = this.props;
-    const { value = {} } = fieldState;
+    const { value = [] } = fieldState;
     const { setValue } = fieldApi;
-    this.setState({ error: null });
-    setValue({
-      base64: value.base64.filter((_, i) => index !== i),
-      fileList: value.fileList.filter((_, i) => index !== i)
-    });
+    setValue(value.filter((_, i) => index !== i));
   };
 
   renderImage = (image, index) => (
-    <div className={styles.imgContainer} key={`${index + 1}`}>
-      <img
-        src={image}
-        alt=""
-        className={styles.imgThumb}
-        ref={ref => Holder.run({ images: ref })}
-      />
+    <div className={styles.imgContainer} key={index}>
+      <img src={image} alt="" className={styles.imgThumb} />
       <div className={styles.imgRemove} onClick={this.onRemove(index)}>
         <CloseIcon />
       </div>
@@ -77,7 +61,7 @@ class MultipleFiles extends React.Component {
   );
 
   renderVideo = (video, index) => (
-    <div className={styles.videoContainer} key={`${index + 1}`}>
+    <div className={styles.videoContainer} key={index}>
       <video className={styles.imgThumb} controls>
         <source type="video/webm" src={video} />
         <source type="video/mp4" src={video} />
@@ -90,12 +74,12 @@ class MultipleFiles extends React.Component {
 
   renderFiles = () => {
     const { fieldState } = this.props;
-    const { value } = fieldState;
-    if (value && value.base64 && value.base64.length) {
+    const { value = [] } = fieldState;
+    if (value && value.length) {
       return (
         <div className="d-flex flex-wrap">
-          {value.base64.map((file, index) =>
-            value.fileList[index].type.includes('image')
+          {value.map((file, index) =>
+            file.includes('data:image/')
               ? this.renderImage(file, index)
               : this.renderVideo(file, index)
           )}
@@ -107,36 +91,39 @@ class MultipleFiles extends React.Component {
 
   renderInputField = () => {
     const { label } = this.props;
-    if (!this.props.hideInput) {
-      return (
-        <div className="d-flex flex-column align-items-start">
-          <div className={styles.addPicture}>
-            {label}
-          </div>
-        </div>
-      );
+    if (this.props.hideInput) {
+      return <span />;
     }
-    return null;
+    return (
+      <div className="d-flex flex-column align-items-start">
+        <div className={styles.addPicture}>
+          {label}
+        </div>
+      </div>
+    );
   };
 
   openFileInput = () => {
-    this.readerRef.current.clickInput();
+    const { fieldState, maxFileNumber } = this.props;
+    const { value = [] } = fieldState;
+    if (value.length < maxFileNumber) {
+      this.readerRef.current.clickInput();
+    }
   }
 
   render () {
-    const { error } = this.state;
+    const { multipleFiles } = this.props;
     return (
       <React.Fragment>
         <ReactFileReader
           ref={this.readerRef}
           base64={true}
           handleFiles={this.handleFiles}
-          multipleFiles
+          multipleFiles={multipleFiles}
           fileTypes={this.props.fileTypes}
         >
           {this.props.renderCustomInputField ? this.props.renderCustomInputField() : this.renderInputField()}
         </ReactFileReader>
-        {error && <AlertErrors message={error} />}
         {this.renderFiles()}
       </React.Fragment>
     );
@@ -151,16 +138,14 @@ MultipleFiles.propTypes = {
     setValue: PropTypes.func
   }),
   fieldState: PropTypes.shape({
-    value: PropTypes.shape({
-      base64: PropTypes.arrayOf(PropTypes.string),
-      fileList: PropTypes.arrayOf(PropTypes.string)
-    })
+    value: PropTypes.arrayOf(PropTypes.string)
   }),
   hideInput: PropTypes.bool,
   fileTypes: PropTypes.arrayOf(PropTypes.string),
   label: PropTypes.string,
   maxFileNumber: PropTypes.number,
   maxFileSize: PropTypes.number,
+  multipleFiles: PropTypes.bool,
   renderCustomInputField: PropTypes.func
 };
 
@@ -168,7 +153,8 @@ MultipleFiles.defaultProps = {
   fileTypes: ['image/*'],
   label: 'Add image',
   maxFileNumber: 2,
-  maxFileSize: 10
+  maxFileSize: 10,
+  multipleFiles: false
 };
 
 export default asField((props) => <MultipleFiles ref={props.forwardedRef} {...props} />);

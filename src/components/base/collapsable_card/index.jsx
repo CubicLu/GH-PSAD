@@ -20,9 +20,9 @@ const CollapsableCard = props => {
 
   return (
     <Card className={`${style.Card}${className ? ` ${className}` : ''}`}>
-      <CardHeader className={`${style.CardHeader} shadow-sm d-flex align-items-center justify-content-between`} onClick={() => toggle(!show)}>
+      <CardHeader className={`${style.CardHeader} shadow-sm`} onClick={() => toggle(!show)}>
         <span className="mr-1">{header}</span>
-        <div className="d-flex">
+        <div className="d-flex align-items-center">
           {onAdd && (
             <div className={`${style.addButton}`} onClick={onAddClick}>
               <PlusIcon />
