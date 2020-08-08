@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { Col, Row, Nav } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { Col, Row } from 'reactstrap';
 import { isEmpty } from 'underscore';
 
 /* Actions */
@@ -22,12 +19,11 @@ import TooltipInfo from 'components/helpers/tooltip_info';
  import withCurrentUser from 'components/modules/with_current_user';
 import withFetching from 'components/modules/with_fetching';
 
-import sharedStyles from '../shared.module.sass'
+import styles from './rules.module.sass';
 import ModalRecipients from '../../shared/rules/recipients'
 import { renderRecords } from '../../shared/rules'
 
-class New extends React.Component {
-
+class Rules extends React.Component {
   state = {
     isSaving: false,
     inputChanged: false,
@@ -73,64 +69,29 @@ class New extends React.Component {
     this.props.save(list)
   };
 
-  renderHeader () {
-    const { backPath } = this.props;
-    const { list } = this.state;
-    const activeRules = list.reduce((accumulator, currentValue) => ( accumulator + (currentValue.status ? 1 : 0) ), 0)
-
-    return (<Row>
-      <Col sm={12} className="p-4 row">
-        <Col md={7}>
-          <Link to={backPath} className="mr-2" >
-            <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
-          </Link>
-          Create a new parking lot account
-        </Col>
-        <Col md={5}>
-          <Nav pills className="align-items-center float-right mx-auto">
-            <div className="mr-4">
-              <span className={sharedStyles['border-number']}>1</span>
-              Information
-            </div>
-            <div className="mr-1 text-green">
-              <span className={sharedStyles['border-number']}>2</span>
-              Parking rules
-            </div>
-          </Nav>
-        </Col>
-      </Col>
-      <Col sm={12} className="bg-grey-light">
-        <p className="general-text-2 py-3 m-0">
-          Please select the parking rules that you want to be enforced. You can change this later
-        </p>
-        <p className="general-text-1 p-0 m-0">
-          Activated: {activeRules} rules
-        </p>
-      </Col>
-    </Row>);
-  }
-
   renderSaveButton = () => {
+    const { backParkingRule } = this.props;
     const { isSaving } = this.state;
     return (
-      <Col className="mt-4">
-        <Button
-          status="success"
-          className="text-uppercase mb-4 float-right"
-          onClick={this.save}
-          size="md"
-        >
-          {isSaving ? btnSpinner() : 'Submit'}
-        </Button>
-        <Button
-          status="secondary"
-          className="text-uppercase mb-4 mr-4 float-right"
-          onClick={this.props.backParkingRule}
-          size="md"
-        >
-          {isSaving ? btnSpinner() : '< Back'}
-        </Button>
-      </Col>
+      <Row>
+        <Col className={styles.btnWrapper}>
+          <Button
+            status="secondary"
+            className="mr-4"
+            onClick={backParkingRule}
+            size="md"
+          >
+            {isSaving ? btnSpinner() : '< Back'}
+          </Button>
+          <Button
+            status="success"
+            onClick={this.save}
+            size="md"
+          >
+            {isSaving ? btnSpinner() : 'Submit'}
+          </Button>
+        </Col>
+      </Row>
     );
   }
 
@@ -149,14 +110,14 @@ class New extends React.Component {
           filterFetcher={index}
           columns={
             <React.Fragment>
-              <th disableSort>Status</th>
-              <th disableSort>Rule's name</th>
-              <th disableSort>
-                <TooltipInfo className="mr-2" text="This is the enforcement agency where a violation of the parking rule will be reported to" target="agency"  />
+              <th disableSort style={{ width: '15%' }}>Status</th>
+              <th disableSort style={{ width: '30%' }}>Rule's name</th>
+              <th disableSort style={{ width: '30%' }}>
+                <TooltipInfo className="mr-1" text="This is the enforcement agency where a violation of the parking rule will be reported to" target="agency"  />
                 Assigned Agency
               </th>
-              <th disableSort>
-                <TooltipInfo className="mr-2" text="Lists all email addresses who will receive notification when the parking rule is violated" target="recipients"  />
+              <th disableSort style={{ width: '25%' }}>
+                <TooltipInfo className="mr-1" text="Lists all email addresses who will receive notification when the parking rule is violated" target="recipients"  />
                 Notification Recipient
               </th>
             </React.Fragment>
@@ -165,26 +126,6 @@ class New extends React.Component {
         />
         {this.renderSaveButton()}
       </React.Fragment>
-    );
-  }
-
-  renderRecord () {
-    const { showModalRecipient, currentRule } = this.state
-    return (
-      <Row className="m-0">
-        <Col xs={12} className="mb-4 bg-white">
-          {this.renderHeader()}
-        </Col>
-        <Col xs={12}>
-          {this.renderForm()}
-        </Col>
-        <ModalRecipients
-          updateRecipientsList={this.updateRecipientsList}
-          recipientsList={currentRule.recipients}
-          isOpen={showModalRecipient}
-          toggleModal={this.toggleModal}
-        />
-      </Row>
     );
   }
 
@@ -208,16 +149,40 @@ class New extends React.Component {
   }
 
   render () {
-    return this.isFetching() ?  <Loader/> : this.renderRecord()
+    if (this.isFetching()) {
+      return <Loader/>;
+    }
+    const { showModalRecipient, currentRule } = this.state;
+    const { list } = this.state;
+    const activeRules = list.reduce((accumulator, currentValue) => (accumulator + (currentValue.status ? 1 : 0)), 0);
+    return (
+      <React.Fragment>
+        <div className={`${styles.hint} bg-grey-light`}>
+          <p className="general-text-2 py-3">
+            Please select the parking rules that you want to be enforced. You can change this later
+          </p>
+          <p className="general-text-1">
+            Activated: {activeRules} rules
+          </p>
+        </div>
+        {this.renderForm()}
+        <ModalRecipients
+          updateRecipientsList={this.updateRecipientsList}
+          recipientsList={currentRule.recipients}
+          isOpen={showModalRecipient}
+          toggleModal={this.toggleModal}
+        />
+      </React.Fragment>
+    );
   }
 }
 
-
-New.propTypes = {
+Rules.propTypes = {
+  backParkingRule: PropTypes.func.isRequired,
   backPath: PropTypes.string.isRequired,
   currentUser: PropTypes.object
 };
 
-export default withFetching (
-  withCurrentUser(New)
+export default withFetching(
+  withCurrentUser(Rules)
 );
