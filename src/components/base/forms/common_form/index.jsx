@@ -19,7 +19,8 @@ import {
 import { Form, Text } from 'informed';
 import { Link } from 'react-router-dom';
 import { btnSpinner } from 'components/helpers';
-import ErrorWrapper from './error';
+import ErrorWrapper from './error'
+import styles from './common_form.module.sass';
 
 const renderLabel = (field, props, lSize) => {
   const { errors = {} } = props;
@@ -28,13 +29,14 @@ const renderLabel = (field, props, lSize) => {
 
   return (
     field.label &&
-    <Label for={field.name} md={lSize}>
-      <span className={`mr-1 ${errors[errorName] ? 'general-error' : 'text-primary'}`}>{field.mandatory ? '*' : ''}</span>
-      {labelFor(field)}
-      {
-        field.tooltip &&
-        <TooltipInfo className="ml-2" text={field.tooltip} target={field.name} />
-      }
+    <Label for={field.name} xs={lSize} className={`${styles.label} general-text-2`}>
+      <div>
+        <span className={`mr-1 ${errors[errorName] ? 'general-error' : 'text-primary'}`}>{field.mandatory ? '*' : ''}</span>
+        {labelFor(field)}
+        {field.tooltip &&
+          <TooltipInfo className="ml-2" text={field.tooltip} target={field.name} />
+        }
+      </div>
     </Label>
   )
 }
@@ -44,9 +46,9 @@ const renderField = (field, props = {}) => {
   const { lSize = 12, iSize = 6 } = props;
 
   return (
-    <FormGroup row>
+    <FormGroup row className={`${styles.formRow} no-gutters`}>
       {renderLabel(field, props, lSize)}
-      <Col md={iSize}>
+      <Col xs={iSize}>
         <ErrorWrapper errors={props.errors} field={field}>
           {field.render ? field.render(field, props) : renderInput(field, props)}
         </ErrorWrapper>
@@ -107,9 +109,7 @@ const renderFieldsWithGrid = (fields, step, cols, props = {}) => {
 
   while (start < fields.length) {
     const mappedFields = fields.slice(start, start + step)
-      .map((field, idx) => {
-        return <Col key={idx} md={cols}>{renderField(field, props)}</Col>;
-      });
+      .map((field, idx) => <Col key={idx} lg={cols}>{renderField(field, props)}</Col>);
     fieldList.push((<Row key={start}>{mappedFields}</Row>));
     start += step;
   }
