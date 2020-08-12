@@ -51,7 +51,7 @@ const CustomDropdown = ({
     }
   };
   const btnStyle = {
-     width 
+     width
   };
   return (
     <Dropdown
