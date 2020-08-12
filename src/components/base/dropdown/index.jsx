@@ -13,10 +13,15 @@ const CustomDropdown = ({
   width = '100%',
   size = 'md',
   className,
-  selectedOptionClassName
+  selectedOptionClassName,
+  error
 }) => {
   const [selectedOption, setSelectedOption] = useState(defaultOption || options[0]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  React.useEffect(() => {
+    defaultOption && setSelectedOption(defaultOption);
+  }, [defaultOption, error]);
 
   const handleToggle = () => setDropdownOpen(prevState => !prevState);
 
@@ -46,7 +51,7 @@ const CustomDropdown = ({
     }
   };
   const btnStyle = {
-    width
+     width
   };
   return (
     <Dropdown
@@ -55,7 +60,7 @@ const CustomDropdown = ({
       toggle={handleToggle}
     >
       <DropdownToggle
-        className={`${dropdownOpen ? styles.noneBorderBottom : ''} d-flex justify-content-between align-items-center`}
+        className={`${dropdownOpen ? styles.noneBorderBottom : ''} ${error ? styles.error : ''} d-flex justify-content-between align-items-center`}
         style={btnStyle}
       >
         <span className="general-text-2">
