@@ -22,15 +22,17 @@ const CollapsableCard = props => {
     <Card className={`${style.Card}${className ? ` ${className}` : ''}`}>
       <CardHeader className={`${style.CardHeader} shadow-sm`} onClick={() => toggle(!show)}>
         <span className="mr-1">{header}</span>
-        {onAdd && (
-          <div className={`${style.addButton}`} onClick={onAddClick}>
-            <PlusIcon />
-          </div>
-        )}
-        {show
-          ? <ChevronUp width="16" height="16" className="svg-white" />
-          : <ChevronDown width="16" height="16" className="svg-white" />
-        }
+        <div className="d-flex align-items-center">
+          {onAdd && (
+            <div className={`${style.addButton}`} onClick={onAddClick}>
+              <PlusIcon />
+            </div>
+          )}
+          {show
+            ? <ChevronUp width="16" height="16" className="svg-white" />
+            : <ChevronDown width="16" height="16" className="svg-white" />
+          }
+        </div>
       </CardHeader>
       <Collapse isOpen={show}>
         <CardBody>
