@@ -13,7 +13,7 @@ const FormSetting = props => {
       <Form getApi={setFormApi} initialValues={record} >
         {({ formState }) => (
           <React.Fragment>
-            {renderFieldsWithGrid(fields, 2, 6, {...fieldProps, formState })}
+            {renderFieldsWithGrid(fields, 2, 6, {...fieldProps, formState, iSize: 6, lSize: 6 })}
           </React.Fragment>
         )}
       </Form>
