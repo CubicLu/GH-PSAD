@@ -201,11 +201,11 @@ class Dashboard extends Component {
   }
 
   componentWillUnmount () {
-    document.querySelector(".frame-container").classList.remove("bg-transparent", "shadow-none")
+    document.querySelector('.frame-container').classList.remove('bg-transparent', 'shadow-none', 'overflow-hidden');
   }
 
-  componentDidMount() {
-    document.querySelector(".frame-container").classList.add("bg-transparent", "shadow-none")
+  componentDidMount () {
+    document.querySelector('.frame-container').classList.add('bg-transparent', 'shadow-none', 'overflow-hidden');
 
     index({ perPage: 50})
       .then(res => {
