@@ -1,6 +1,7 @@
 const SELECT_FIELD = 'select';
 const MULTISELECT_FIELD = 'multiselect';
 const FILE_FIELD = 'file';
+const MULTIPLE_FILE_FIELDS = 'files';
 const PASSWORD_FIELD = 'password';
 const DATE_FIELD = 'date';
 const TEXT_LINK_FIELD = 'text_link';
@@ -15,6 +16,7 @@ export {
   SELECT_FIELD,
   MULTISELECT_FIELD,
   FILE_FIELD,
+  MULTIPLE_FILE_FIELDS,
   PASSWORD_FIELD,
   TEXT_LINK_FIELD,
   TOGGLER_FIELD,
