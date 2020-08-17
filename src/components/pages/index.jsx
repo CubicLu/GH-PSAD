@@ -12,12 +12,11 @@ import { Redirect, Route } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { AlertMessages } from 'components/helpers/alert_messages';
-import { logOut } from 'actions/users';
 import { ActionCableProvider } from 'react-actioncable-provider';
 import env from '.env';
 
 /* Actions */
-import { setToken, setCurrentUserData } from 'actions/users';
+import { logOut, setToken, setCurrentUserData } from 'actions/users';
 
 class App extends React.Component {
   componentWillMount() {
@@ -66,7 +65,7 @@ class App extends React.Component {
 
 function RemoveData() {
   removeFilters()
-  this.props.dispatch(logOut);
+  this.props.logOut();
 }
 
 const removeFilters = () => {
@@ -94,7 +93,7 @@ const mapState = state => {
 };
 
 function mapDispatch (dispatch) {
-  return { ...bindActionCreators({ setToken, setCurrentUserData }, dispatch) };
+  return { ...bindActionCreators({ logOut, setToken, setCurrentUserData }, dispatch) };
 }
 
 export default connect(mapState, mapDispatch)(App);
