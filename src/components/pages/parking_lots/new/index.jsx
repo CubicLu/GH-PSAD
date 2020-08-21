@@ -234,6 +234,7 @@ class New extends React.Component {
   }
 
   render () {
+    const { backPath } = this.props;
     const { showParkingRulesSection, errors } = this.state;
 
     if (this.isFetching()) {

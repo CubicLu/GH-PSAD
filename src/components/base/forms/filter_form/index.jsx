@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Text } from 'informed';
-import { Button, Col, FormGroup, Label } from 'reactstrap';
+import { Col, FormGroup, Label } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { btnSpinner } from 'components/helpers';
 import {
