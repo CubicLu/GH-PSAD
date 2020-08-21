@@ -5,6 +5,7 @@ import AdminReducers from './admins';
 import AgencyReducers from './agencies';
 import CameraReducers from './cameras';
 import ParkingLotReducers from './parking_lots';
+import TownsReducers from './towns';
 import ParkingLotCameraReducers from './parking_lots_camera';
 import ParkingSessionReducers from './parking_sessions';
 import ReportReducers from './reports';
@@ -25,6 +26,7 @@ const reducers = combineReducers({
   voi: VoiReducers,
   report: ReportReducers,
   server: ServerErrorReducers,
+  towns: TownsReducers,
   detailedReports: DetailedReportsReducers
 });
 

@@ -7,6 +7,7 @@ import { ReactComponent as AdminIcon } from 'assets/menu_icons/user_accounts_ico
 import { ReactComponent as AgenciesIcon } from 'assets/menu_icons/law_enf_icon.svg'
 import { ReactComponent as CameraIcon } from 'assets/menu_icons/stream_footages_icon.svg'
 import { ReactComponent as ParkingLotIcon } from 'assets/menu_icons/parking_lot_icon.svg'
+import { ReactComponent as TownIcon } from 'assets/menu_icons/town_icon.svg'
 import { ReactComponent as ReportIcon } from 'assets/menu_icons/reports_icon.svg'
 import styles from './side-navigation.module.sass'
 import { permissions } from 'config/permissions'
@@ -22,6 +23,7 @@ const routes = {
   ticketsReport: '/dashboard/tickets-reports',
   cameras: '/dashboard/cameras',
   parkingLots: '/dashboard/parking_lots',
+  towns: '/dashboard/towns',
   parkingLotsCamera: '/dashboard/live/parking_lots',
   reports: '/dashboard/reports',
   archive: ''
@@ -65,6 +67,15 @@ function SideNavigation(props) {
             </span>
           </Link>
         </li>
+        <li>
+          <Link className={`nav-link ${isActive(props.location, routes.towns)}`} to={routes.towns}>
+            <TownIcon className="float-left mr-2"/>
+            <span className="d-none d-xl-block">
+              Towns
+            </span>
+          </Link>
+        </li>
+
       </PermissibleRender>
       <li>
         <DropdownNavigation title="Law enf agency" className="selected-point" icon={<AgenciesIcon className="float-left mr-2"/>}>

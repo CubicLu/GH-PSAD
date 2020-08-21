@@ -6,8 +6,17 @@ import styles from './rules.module.sass';
 import Toggle from 'components/base/toggle';
 import Dropdown from 'components/base/dropdown';
 
+const stylesWithError = (error) => ({
+  control: (provided) => {
+    return ({
+    ...provided,
+   borderColor: error ? '#FB745B' : ''
+  })}
+});
+
 function renderRecords () {
   const { list, dropdown } = this.state;
+  const { errors = {} } = this.props;
   const handleToggleStatus = (idx) => {
     const updatedList = list.map((item, i) => {
       if (i !== idx) return item;
@@ -34,6 +43,9 @@ function renderRecords () {
     });
   };
   return list.map((record, idx) => {
+    const { name } = record;
+    const error = errors[name];
+    console.log(error)
     return (
       <tr key={idx} className={`non-hover ${record.status ? styles.active : ''}`}>
         <td>
