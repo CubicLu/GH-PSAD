@@ -12,7 +12,9 @@ const Configuration = ({ name, title, config, onConfigChange, parkingLots, defau
     onConfigChange(name, { range: { from, to } });
   };
   const handleParkingLotChange = (parkingLotIds) => {
-    onConfigChange(name, { parking_lot_ids: parkingLotIds });
+    onConfigChange(name, {
+      parking_lot_ids: parkingLotIds.filter(id => id !== 0)
+    });
   };
   return (
     <Col xs="12" className="col-lg">
