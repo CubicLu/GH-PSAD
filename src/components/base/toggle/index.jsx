@@ -4,7 +4,7 @@ import styles from './toggle.module.sass';
 
 const Toggle = ({ value, onChange, label, positiveText = 'YES', negativeText = 'NO', disabled }) => {
   return (
-    <div className="d-flex align-items-center">
+    <div className={`d-flex align-items-center ${className}`}>
       <div
         className={`${styles.toggle} ${value ? styles.toggleOn : ''} ${disabled ? styles.disabled : ''}`}
         onClick={() => onChange(!value)}

@@ -8,6 +8,15 @@ import styles from './frame.module.sass'
 
 const Frame = props => {
   const { serverError } = props;
+  const params = new URLSearchParams(props.location.search || '');
+
+  if (params.get('frame') === 'headless') {
+    return (
+      <ErrorBoundary serverError={serverError}>
+        <MainContent/>
+      </ErrorBoundary>
+    )
+  }
 
   return (
     <div className='d-flex'>
