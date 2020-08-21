@@ -22,6 +22,7 @@ const DetailedReportsResponseParser = (resp) => {
   /*
     parses data for the individual parking lot
   */
+  // eslint-disable-next-line no-unused-vars
   for (const [_key, { bar_chart_data, table_data, name }] of Object.entries(parking_lots)) {
     const individualParkingLot = {
       barChartData: [],
