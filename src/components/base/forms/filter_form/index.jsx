@@ -1,12 +1,13 @@
 import React from 'react';
 import { Form, Text } from 'informed';
-import { Col, FormGroup, Label } from 'reactstrap';
+import { Button, Col, FormGroup, Label } from 'reactstrap';
+import PropTypes from 'prop-types';
 import { btnSpinner } from 'components/helpers';
 import {
   CustomSelect,
   CustomMultiSelect,
   DateRangeInput,
-  FieldType
+  FieldType,
 } from 'components/helpers/form_fields';
 import Loader from 'components/helpers/loader';
 import Button from 'components/base/button';
@@ -35,7 +36,7 @@ class FilterForm extends React.Component {
       case FieldType.MULTISELECT_FIELD:
         return <CustomMultiSelect field={field.name} options={field.options} values={this.props.values} />;
       case FieldType.SELECT_FIELD:
-        return <CustomSelect field={field} />;
+        return <CustomSelect field={field} emptyOptionEnabled />;
       default:
         return <Text className="form-control" {...field.props} field={field.name} validate={field.validate} />;
     }
@@ -79,12 +80,20 @@ class FilterForm extends React.Component {
     </React.Fragment>
   );
 
-  render() {
+  render () {
     const { values, isFetching } = this.props;
     return (
       isFetching() ? <Loader /> : <Form initialValues={values} component={this.renderForm} />
     );
   }
-}
+};
+
+FilterForm.propTypes = {
+  cancelFilter: PropTypes.func,
+  fields: PropTypes.object.isRequired,
+  isFetching: PropTypes.bool,
+  submitForm: PropTypes.func,
+  values: PropTypes.shape({}),
+};
 
 export default FilterForm;
