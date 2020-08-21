@@ -15,9 +15,9 @@ const clearToken = {
   type: CLEAR_TOKEN
 };
 
-const logOut = {
+const logOut = () => ({
   type: LOG_OUT
-};
+});
 
 const setCurrentUserData = () => dispatch => (
   me()
