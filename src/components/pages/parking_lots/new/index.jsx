@@ -234,8 +234,7 @@ class New extends React.Component {
   }
 
   render () {
-    const { backPath } = this.props;
-    const { showParkingRulesSection } = this.state;
+    const { showParkingRulesSection, errors } = this.state;
 
     if (this.isFetching()) {
       return <Loader/>;
@@ -252,6 +251,7 @@ class New extends React.Component {
             {...this.props}
             save={this.save}
             backParkingRule={this.backParkingRule}
+            errors={errors}
           />
         </div>
         <div className={showParkingRulesSection ? 'd-none' : ''}>
