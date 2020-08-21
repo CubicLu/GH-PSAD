@@ -32,7 +32,7 @@ const Header = ({ record, backPath, parentPath }) => {
       <Col xs={12} lg={6} className={styles.titleWrapper}>
         <Link to={backPath}>
           <ArrowBackIcon />
-          <span className="general-text-1">{record.name}</span>
+          <span className="general-text-1">Parking Lot Details</span>
         </Link>
         <span className="general-text-2">
           ID: {record.id}
