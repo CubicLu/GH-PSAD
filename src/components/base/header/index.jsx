@@ -10,11 +10,12 @@ import {
 } from 'reactstrap';
 import { withRouter, Link } from 'react-router-dom';
 import withCurrentUser from 'components/modules/with_current_user';
-import {ReactComponent as Logo } from 'assets/logo.svg'
+import { ReactComponent as Logo } from 'assets/logo.svg';
+import { ReactComponent as ArrowDownIcon } from 'assets/menu_icons/arrow_down_icon.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faSignOutAlt, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faPencilAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import CurrentTime from 'components/pages/dashboard/current_time';
-import styles from './header.module.sass'
+import styles from './header.module.sass';
 
 function Header (props) {
   const { currentUser } = props;
@@ -30,27 +31,26 @@ function Header (props) {
       <Nav className='ml-auto' navbar>
         <UncontrolledDropdown nav inNavbar className="d-flex align-items-center">
           <DropdownToggle nav className="text-light float-right">
-            {  currentUser ? (
-                <span className={styles.dFlex}>
-                  <img src={ currentUser.avatar || 'https://i.stack.imgur.com/34AD2.jpg'} alt="profile" className="rounded-circle mr-2 mt-1" width="40" height="40"/>
-                  <span className="d-none d-sm-inline">
-                    <DropdownToggle nav className="float-right text-light pl-0">
-                      <FontAwesomeIcon className="d-none d-lg-block d-xl-block" icon={faAngleDown}/>
-                    </DropdownToggle>
-                    <span className={`${styles.dFlex} ${styles.dFlexColumn}`}>
-                      <span>
-                        { process.env.NODE_ENV !== 'production' ? currentUser.role.name : currentUser.name}
-                      </span>
-                      <CurrentTime className={styles.currentTime} />
+            {currentUser ? (
+              <span className={`${styles.dFlex} align-items-center`}>
+                <img src={ currentUser.avatar || 'https://i.stack.imgur.com/34AD2.jpg'} alt="profile" className="rounded-circle mr-2" width="40" height="40"/>
+                <span className="d-none d-sm-inline">
+                  <DropdownToggle nav className="float-right text-light pl-0">
+                    <ArrowDownIcon className={styles.arrowDownIcon} />
+                  </DropdownToggle>
+                  <span className={`${styles.dFlex} ${styles.dFlexColumn}`}>
+                    <span className={styles.username}>
+                      {process.env.NODE_ENV !== 'production' ? currentUser.role.name : currentUser.name}
                     </span>
+                    <CurrentTime className={styles.currentTime} />
                   </span>
                 </span>
-              ) : (
-                <span>
-                  Loading...
-                </span>
-              )
-            }
+              </span>
+            ) : (
+              <span>
+                Loading...
+              </span>
+            )}
           </DropdownToggle>
           <DropdownMenu right>
             <DropdownItem>
