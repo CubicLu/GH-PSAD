@@ -7,28 +7,39 @@ const CustomSelect = props => {
 
   return (
     <Select className='form-control' {...props.events} disabled={field.disabled} field={field.name} type='select' >
-      <Option value='' disabled>Select One...</Option>
+      <Option value='' disabled={!props.emptyOptionEnabled}>Select One...</Option>
       {
-        field.options.map((option, idx) => (<Option key={idx} value={option.value} disabled={option.disabled || false}>{option.label}</Option>))
+        field.options.map((option, idx) => (
+          <Option
+            key={idx}
+            value={option.value}
+            disabled={option.disabled || false}
+          >
+            {option.label}
+          </Option>
+        ))
       }
     </Select>
   );
 };
 
 CustomSelect.propTypes = {
+  events: PropTypes.shape({}),
   field: PropTypes.shape({
     name: PropTypes.string,
-    options: PropTypes.arrayOf(PropTypes.shape({
-      value: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number
-      ]),
-      label: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number
-      ])
-    }))
-  })
+    disabled: PropTypes.bool,
+    options: PropTypes.arrayOf(
+      PropTypes.shape({
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      })
+    ),
+  }),
+  emptyOptionEnabled: PropTypes.bool,
+};
+
+CustomSelect.defaultProps = {
+  emptyOptionEnabled: false,
 };
 
 export default CustomSelect;

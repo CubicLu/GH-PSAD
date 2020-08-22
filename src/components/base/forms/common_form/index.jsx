@@ -14,28 +14,29 @@ import {
   GoogleMaps,
   TextArea,
   FieldType,
+  MultipleMedia
 } from 'components/helpers/form_fields';
 import { Form, Text } from 'informed';
 import { Link } from 'react-router-dom';
 import { btnSpinner } from 'components/helpers';
 import ErrorWrapper from './error'
-
+import styles from './common_form.module.sass';
 
 const renderLabel = (field, props, lSize) => {
-
-  const { errors = {} } = props
-  let errorName = null
-  errorName = field.prefix_error ? `${field.prefix_error}_${field.name}` : field.name
+  const { errors = {} } = props;
+  let errorName = null;
+  errorName = field.prefix_error ? `${field.prefix_error}_${field.name}` : field.name;
 
   return (
     field.label &&
-    <Label for={field.name} md={lSize}>
-      <span className={`mr-1 ${errors[errorName] ? 'general-error' : 'text-primary'}`}>{field.mandatory ? '*' : ''}</span>
-      {labelFor(field)}
-      {
-        field.tooltip &&
-        <TooltipInfo className="ml-2" text={field.tooltip} target={field.name} />
-      }
+    <Label for={field.name} xs={lSize} className={`${styles.label} general-text-2`}>
+      <div>
+        <span className={`mr-1 ${errors[errorName] ? 'general-error' : 'text-primary'}`}>{field.mandatory ? '*' : ''}</span>
+        {labelFor(field)}
+        {field.tooltip &&
+          <TooltipInfo className="ml-2" text={field.tooltip} target={field.name} />
+        }
+      </div>
     </Label>
   )
 }
@@ -45,9 +46,9 @@ const renderField = (field, props = {}) => {
   const { lSize = 12, iSize = 6 } = props;
 
   return (
-    <FormGroup row>
+    <FormGroup row className={`${styles.formRow} no-gutters`}>
       {renderLabel(field, props, lSize)}
-      <Col md={iSize}>
+      <Col xs={iSize}>
         <ErrorWrapper errors={props.errors} field={field}>
           {field.render ? field.render(field, props) : renderInput(field, props)}
         </ErrorWrapper>
@@ -69,9 +70,11 @@ const renderInput = (field, props = {}) => {
     case FieldType.MULTISELECT_FIELD:
       return <CustomMultiSelect {...props} field={field.name} options={field.options} autoFocus={field.autoFocus}/>;
     case FieldType.FILE_FIELD:
-      return <ImageInput {...props} className="form-control" field={field.name} autoFocus={field.autoFocus}/>;
+      return <ImageInput {...props} className="form-control" field={field.name} autoFocus={field.autoFocus} />;
+    case FieldType.MULTIPLE_FILE_FIELDS:
+      return <MultipleMedia {...props} ref={props.ref} className="form-control" field={field.name} autoFocus={field.autoFocus} />;
     case FieldType.SELECT_FIELD:
-      return <CustomSelect {...props} field={field} autoFocus={field.autoFocus}/>;
+      return <CustomSelect {...props} field={field} autoFocus={field.autoFocus} />;
     case FieldType.TOGGLER_FIELD:
       return <Toggler {...props} field={field.name} label={field.innerLabel} options={field.options} autoFocus={field.autoFocus}/>;
     case FieldType.TEXT_LINK_FIELD:
@@ -83,7 +86,7 @@ const renderInput = (field, props = {}) => {
     case FieldType.INCREASER_FIELD:
       return <Increaser {...props} field={field} autoFocus={field.autoFocus}/>;
     case FieldType.TEXT_AREA:
-        return <TextArea autoFocus={field.autoFocus} {...props} field={field}/>
+      return <TextArea autoFocus={field.autoFocus} {...props} field={field}/>
     case FieldType.NUMBER_FIELD:
       return <Text autoFocus={field.autoFocus} className="form-control" disabled={field.disabled} {...props.events} type="number" field={field.name} />;
 
@@ -106,14 +109,13 @@ const renderFieldsWithGrid = (fields, step, cols, props = {}) => {
 
   while (start < fields.length) {
     const mappedFields = fields.slice(start, start + step)
-      .map((field, idx) => <Col key={idx} md={cols}>{renderField(field, props)}</Col>);
+      .map((field, idx) => <Col key={idx} lg={cols}>{renderField(field, props)}</Col>);
     fieldList.push((<Row key={start}>{mappedFields}</Row>));
     start += step;
   }
 
   return fieldList;
 };
-
 
 const renderButtons = (formState, props = {}) => {
   const { backPath, isFetching } = props;
