@@ -15,8 +15,8 @@ const stylesWithError = (error) => ({
 });
 
 function renderRecords () {
-  const { errors = {} } = this.props;
   const { list, dropdown } = this.state;
+  const { errors = {} } = this.props;
   const handleToggleStatus = (idx) => {
     const updatedList = list.map((item, i) => {
       if (i !== idx) return item;
@@ -45,6 +45,7 @@ function renderRecords () {
   return list.map((record, idx) => {
     const { name } = record;
     const error = errors[name];
+    console.log(error)
     return (
       <tr key={idx} className={`non-hover ${record.status ? styles.active : ''}`}>
         <td>
@@ -61,7 +62,6 @@ function renderRecords () {
           <Dropdown
             options={dropdown.agencies}
             onChange={(selectedValues) => handleAgencyChange(idx, selectedValues)}
-            styles={stylesWithError(error)}
           />
         </td>
         <td
