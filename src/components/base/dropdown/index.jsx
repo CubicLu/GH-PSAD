@@ -21,7 +21,7 @@ const CustomDropdown = ({
 
   React.useEffect(() => {
     defaultOption && setSelectedOption(defaultOption);
-  }, [defaultOption, error]);
+  }, [defaultOption]);
 
   const handleToggle = () => setDropdownOpen(prevState => !prevState);
 
@@ -51,7 +51,7 @@ const CustomDropdown = ({
     }
   };
   const btnStyle = {
-     width
+    width
   };
   return (
     <Dropdown
@@ -126,7 +126,8 @@ CustomDropdown.propTypes = {
   width: PropTypes.string, // width can be 100% or number px
   size: PropTypes.string, // we have 2 size sm and md
   className: PropTypes.string,
-  selectedOptionClassName: PropTypes.string
+  selectedOptionClassName: PropTypes.string,
+  error: PropTypes.array
 };
 
 export default CustomDropdown;
