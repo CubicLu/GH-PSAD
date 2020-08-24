@@ -55,7 +55,7 @@ release_image_build:
     - docker push telesoftdevops/devops:telesoft-psad-dashboard-release
     - rm -rf /tmp/psad
   only:
-    - stg
+    - release
   tags:
     - shell
 
@@ -68,7 +68,7 @@ release_image_deploy:
     - echo "Deploy Image"
     - sudo ci/stg-deploy.sh ${RELEASE_APP_NAME}
   only:
-    - stg 
+    - release 
   tags:
     - shell
 
