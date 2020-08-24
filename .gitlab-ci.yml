@@ -16,7 +16,7 @@ stg_image_build:
     url: ${STG_URL}
   stage: build
   script:
-    - if [[ -d "/tmp/psad" ]] ; then [[ rm -rf /tmp/psad ]]; fi
+    - if [ -d "/tmp/psad" ] ; then [ $(rm -rf /tmp/psad) ]; fi
     - git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git
     - cp /tmp/psad/dashboard/conf/stg/.env.js ./src
     - docker build -t telesoftdevops/devops:telesoft-psad-dashboard-stg .
@@ -46,7 +46,7 @@ prod_image_build:
     url: ${PROD_URL}
   stage: build
   script:
-    - if [[ -d "/tmp/psad" ]] ; then [[ rm -rf /tmp/psad ]]; fi
+    - if [ -d "/tmp/psad" ] ; then [ $(rm -rf /tmp/psad) ]; fi
     - git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git
     - cp /tmp/psad/dashboard/conf/prod/.env.js ./src
     - docker build -t telesoftdevops/devops:telesoft-psad-dashboard-prod .
