@@ -44,7 +44,7 @@ stg_image_deploy:
 
 release_image_build:
   environment:
-    name: staging
+    name: release
     url: ${RELEASE_URL}
   stage: build
   script:
@@ -61,12 +61,12 @@ release_image_build:
 
 release_image_deploy:
   environment:
-    name: staging
+    name: release
     url: ${RELEASE_URL}
   stage: deploy
   script:
     - echo "Deploy Image"
-    - sudo ci/stg-deploy.sh ${RELEASE_APP_NAME}
+    - sudo ci/release-deploy.sh ${RELEASE_APP_NAME}
   only:
     - release 
   tags:
