@@ -92,7 +92,7 @@ class Index extends React.Component {
               <th disableSort style={{ width: '30%', minWidth: 250 }}>Location</th>
               <th disableSort style={{ width: '11%', minWidth: 100 }}>Contact Number</th>
               <th disableSort style={{ width: '11%', minWidth: 100 }}>Email</th>
-              <th disableSort style={{ width: '11%', minWidth: 100 }}>Parking Admin</th>
+              <th disableSort style={{ width: '11%', minWidth: 100 }}>Parking Operator</th>
               <th disableSort style={{ width: '11%', minWidth: 100 }}>Town Manager</th>
               <th disableSort style={{ width: '6%', minWidth: 50 }}>Status</th>
             </React.Fragment>
