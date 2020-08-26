@@ -50,7 +50,7 @@ release_image_build:
   script:
     - if [ -d "/tmp/psad" ] ; then [ $(rm -rf /tmp/psad) ]; fi
     - git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git
-    - cp /tmp/psad/dashboard/conf/stg/.env.js ./src
+    - cp /tmp/psad/dashboard/conf/release/.env.js ./src
     - docker build -t telesoftdevops/devops:telesoft-psad-dashboard-release .
     - docker push telesoftdevops/devops:telesoft-psad-dashboard-release
     - rm -rf /tmp/psad
