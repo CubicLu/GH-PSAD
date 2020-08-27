@@ -3,7 +3,7 @@ set -x
 
 docker pull telesoftdevops/devops:telesoft-psad-dashboard-stg
 
-if [[ $(docker ps -a | grep $1 | wc -l)  = 1 ]]
+if [[ $(docker ps -a | grep $1 | grep "0.0.0.0:8090" | wc -l)  = 1 ]]
 then 
   [[ $(docker stop $1 && docker rm $1) ]]
 fi
