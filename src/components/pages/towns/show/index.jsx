@@ -21,7 +21,7 @@ import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/co
 import { btnSpinner } from 'components/helpers';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import { FieldType } from 'components/helpers/form_fields';
-import { fields } from 'components/helpers/fields/towns';
+import { fieldsShow } from 'components/helpers/fields/towns';
 import Loader from 'components/helpers/loader';
 /* Modules */
 import connectRecord from 'components/modules/connect_record';
@@ -36,7 +36,10 @@ class Show extends React.Component {
     isSaving: false,
     isDropdownFetching: true,
     inputChanged: false,
-    dropdowns: {},
+    dropdowns: {
+      townManagers: [],
+      statuses: []
+    },
     errors: {}
   };
 
@@ -70,7 +73,7 @@ class Show extends React.Component {
   })
 
   save = () => {
-    const values = setEmptyFields(fields(), this.formApi);
+    const values = setEmptyFields(fieldsShow(), this.formApi);
     values.avatar = this.formApi.getValue('avatar');
     updateRecord.bind(this, update, '/dashboard/towns')(values);
   };
@@ -81,7 +84,7 @@ class Show extends React.Component {
 
     return (
       renderFieldsWithGrid(
-        fields(dropdowns.townManagers, permissions[currentUserRoleName]),
+        fieldsShow(dropdowns.statuses, dropdowns.townManagers, permissions[currentUserRoleName]),
         2,
         6,
         { ...this.fieldProps(), errors: this.state.errors })
@@ -96,7 +99,7 @@ class Show extends React.Component {
   }
 
   renderHeader() {
-    const { backPath, record, match, history } = this.props;
+    const { backPath, record } = this.props;
 
     return (<Row className="p-4">
       <Col md={2} className="d-flex align-items-center">
@@ -162,10 +165,13 @@ class Show extends React.Component {
   }
 
   componentDidMount() {
-    const { startFetching, record } = this.props;
+    const { startFetching } = this.props;
     Promise.all([
       startFetching(dropdownsSearch('admins_by_role-town_manager'))
-        .then(response => this.setDropdowns('townManagers', response.data))
+        .then(response => this.setDropdowns('townManagers', response.data)),
+      startFetching(dropdownsSearch('town_statuses_list'))
+        .then(response => this.setDropdowns('statuses', response.data))
+
     ])
       .finally(() => this.setState({ isDropdownFetching: false }))
   }

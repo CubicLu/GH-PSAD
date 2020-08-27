@@ -8,7 +8,7 @@ import {
   STATUS,
 } from 'config/permissions/forms_fields/towns/fields';
 
-const fieldsNew = (managers = [], permissions = []) => [
+const fieldsNew = (statuses = [], managers = [], permissions = []) => [
   {
     name: 'name',
     label: 'Name',
@@ -44,40 +44,14 @@ const fieldsNew = (managers = [], permissions = []) => [
     mandatory: true,
     type: FieldType.SELECT_FIELD,
     disabled: !permissions.includes(STATUS),
-    options: [
-      { value: 'open', label: 'Open' },
-      { value: 'suspended', label: 'Suspended' },
-    ],
-    defaultValue: 'open',
+    options: statuses.map((status) => {
+      return { value: status.value, label: status.label };
+    })
   },
 ];
 
-const fieldsShow = (managers = [], permissions = []) => [
-  ...fieldsNew(managers, permissions),
-];
-
-const filterFields = (townManagers) => [
-  { name: 'id', label: 'Parking Lot ID' },
-  { name: 'name', label: 'Parking Lot Name' },
-  { name: 'phone', label: 'Contact Number ' },
-  { name: 'email', label: 'Email Address' },
-  {
-    name: 'town_managers',
-    label: 'Town Manager',
-    type: FieldType.SELECT_FIELD,
-    options: townManagers.map(({ value, label }) => {
-      return { value, label };
-    }),
-  },
-  {
-    name: 'status',
-    label: 'Status',
-    type: FieldType.SELECT_FIELD,
-    options: [
-      { value: 'active', label: 'Active' },
-      { value: 'suspended', label: 'Suspended' },
-    ],
-  },
+const fieldsShow = (statuses = [], managers = [], permissions = []) => [
+  ...fieldsNew(statuses, managers, permissions),
 ];
 
 const fields = (managers = [], permissions = []) => (
@@ -96,10 +70,10 @@ const exampleData = () =>
         name: 'Towns test',
         contact_number: '+13583767678',
         contact_email: faker.internet.email(),
-        status: 'open',
+        status: 'opened',
       }
     : {
-        status: 'open',
+        status: 'opened',
       }; // These are defaults values for each field
 
-export { fieldsNew, fieldsShow, exampleData, filterFields, fields };
+export { fieldsNew, fieldsShow, exampleData, fields };

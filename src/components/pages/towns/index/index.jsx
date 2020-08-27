@@ -5,12 +5,10 @@ import { CREATE_TOWN } from 'config/permissions'
 import { SET_LIST } from 'actions/towns';
 /* API */
 import { filterFetcher } from 'api/towns';
-import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';
 /* Helpers */
-import { filterFields } from 'components/helpers/fields/towns';
 /* Modules */
 import resourceFetcher from 'components/modules/resource_fetcher';
 import connectList from 'components/modules/connect_list';
@@ -19,7 +17,6 @@ import withCurrentUser from 'components/modules/with_current_user';
 
 class Index extends React.Component {
   state = {
-    isDropdownFetching: true,
     dropdowns: {
       townManagers: [],
       parkingAdmins: []
@@ -28,8 +25,7 @@ class Index extends React.Component {
 
   isFetching = () => {
     const { isResourceFetching } = this.props
-    const { isDropdownFetching } = this.state
-    return isResourceFetching || isDropdownFetching
+    return isResourceFetching
   }
 
   setDropdowns = (key, data) => this.setState({ dropdowns: { ...this.state.dropdowns, [key]: data } })
@@ -50,25 +46,13 @@ class Index extends React.Component {
     });
   };
 
-  componentDidMount() {
-    const { startFetching, currentUser } = this.props
-    Promise.all([
-      startFetching(dropdownsSearch('parking_lot_town_managers_filter', { admin_id: currentUser.id }))
-        .then(response => this.setDropdowns('townManagers', response.data)),
-    ])
-      .finally(() => this.setState({ isDropdownFetching: false }))
-
-  }
-
   render() {
-    const { dropdowns: { townManagers } } = this.state
 
     return (
       <IndexTable
         {...this.props}
         isFetching={this.isFetching}
         toolbar={<BasicListToolbar showFilters={false} {...this.props} createRequiredPermissions={[CREATE_TOWN]} label="+ Create New" title="Towns" />}
-        filterFields={filterFields(townManagers)}
         filterFetcher={filterFetcher}
         resource={resource}
         columns={
@@ -77,7 +61,7 @@ class Index extends React.Component {
             <th disableSort>Town Name</th>
             <th disableSort>Town Manager</th>
             <th disableSort>Number of Parking Lots</th>
-            <th disableSort>Status</th>  
+            <th disableSort>Status</th>
           </React.Fragment>
         }
         renderRecords={this.renderRecords}

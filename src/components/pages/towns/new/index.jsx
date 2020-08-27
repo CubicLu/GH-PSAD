@@ -35,7 +35,10 @@ class New extends React.Component {
     isSaving: false,
     isDropdownFetching: true,
     inputChanged: false,
-    dropdowns: {},
+    dropdowns: {
+      townManagers: [],
+      statuses: []
+    },
     errors: {}
   }
 
@@ -80,7 +83,7 @@ class New extends React.Component {
 
     return (
       renderFieldsWithGrid(
-        fieldsNew(dropdowns.townManagers, permissions[currentUserRoleName]),
+        fieldsNew(dropdowns.statuses, dropdowns.townManagers, permissions[currentUserRoleName]),
         2,
         6,
         {...this.fieldProps(), errors: this.state.errors }
@@ -145,13 +148,6 @@ class New extends React.Component {
     );
   }
 
-  renderRulesForm () {
-    return (
-      <fieldset >
-      </fieldset>
-    )
-  }
-
   renderRecord () {
     return (
       <Row className="m-0">
@@ -169,7 +165,9 @@ class New extends React.Component {
     const { startFetching } = this.props
     Promise.all([
       startFetching(dropdownsSearch('admins_by_role-town_manager'))
-         .then(response => this.setDropdowns('townManagers', response.data)),
+        .then(response => this.setDropdowns('townManagers', response.data)),
+      startFetching(dropdownsSearch('town_statuses_list'))
+        .then(response => this.setDropdowns('statuses', response.data))
     ])
       .finally(() => this.setState({ isDropdownFetching: false }))
   }
