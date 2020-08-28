@@ -6,7 +6,6 @@ import * as AgencyActions from './agencies';
 import * as UserActions from './users';
 import * as CameraActions from './cameras';
 import * as ParkingLotActions from './parking_lots';
-import * as TownsActions from './towns';
 import * as ParkingLotCameraActions from './parking_lots_camera';
 import * as ParkingSessionActions from './parking_sessions';
 import * as ReportActions from './reports';
@@ -40,7 +39,6 @@ export {
   AgencyActions,
   CameraActions,
   ParkingLotActions,
-  TownsActions,
   ParkingLotCameraActions,
   ParkingSessionActions,
   ReportActions,
