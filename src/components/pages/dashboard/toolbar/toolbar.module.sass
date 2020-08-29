@@ -1,41 +1,14 @@
 @import 'src/styles/variables'
-.filterBox
-  align-items: center
-  margin-right: 10px
-  padding: 5px 20px
-  border-radius: 10px
-  .btn-badge
-    background: $grey-light
-    border-color: $grey-light
-    &:hover
-      background: $grey-light
-      color: $general-text-color
-      .badge
-        background: $grey-light
-    .badge
-      background: $grey-light
-      font-size: 12px
-      color: $general-text-color
-.filterContainer
-  justify-content: flex-end
-
-.search
-    position: relative
-    color: $disabled-bg-color
-.search input
-    border-radius: 0.5rem
-    color: $grey-dark
-    box-shadow: inset 0px 1px 8px rgba(0, 0, 0, 0.1)
-    -webkit-transition: .18s ease-out
-    -moz-transition: .18s ease-out
-    -o-transition: .18s ease-out
-    transition: .18s ease-out
-    padding-bottom: 8px
-.magnifier
- position: relative
- right: 30px
-@media (max-width: 992px)
-  .title
-    justify-content: center
-  .filterContainer
-    justify-content: center
+.toolBar
+  min-height: 70px
+  margin-bottom: 5px
+.title
+  & > span
+    font-size: 18px
+.btnRefresh
+  margin-left: 20px
+  min-width: 115px
+  height: 40px
+.inputDate
+  margin-left: 10px
+  min-width: 190px

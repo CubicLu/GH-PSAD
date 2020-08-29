@@ -14,6 +14,12 @@ function auth (state = { isAuthorized: false }, action) {
         isAuthorized: false,
         token: null
       });
+    case UserActions.LOG_OUT:
+      localStorage.removeItem('TOKEN');
+      return Object.assign({}, state, {
+        isAuthorized: false,
+        token: null
+      });
     default:
       return state;
   }

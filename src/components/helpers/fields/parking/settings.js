@@ -6,7 +6,7 @@ const fields = [
     label: 'Hourly Rate $',
     type: FieldType.INCREASER_FIELD,
     step: 0.25,
-    min: 0,
+    min: 0.1,
     tooltip: "Per hour rate of the parking lot",
     renderValue: value => `$${value}`
   },
@@ -20,21 +20,21 @@ const fields = [
     renderValue: value => (value / 60)
   },
   { name: 'parked',
-    label: 'Minutes before car is considered as parked',
+    label: 'Parking Grace Period',
     type: FieldType.INCREASER_FIELD,
-    step: 60,
-    max: 6000,
-    min: 60,
-    tooltip: " The car is considered as already parked if he stayed as long as what is indicated here on a parking space.",
+    step: 120,
+    max: 600,
+    min: 120,
+    tooltip: " Minutes before a car is considered as parked automatically.",
     renderValue: value => (value / 60)
   },
   { name: 'overtime',
-    label: 'Minutes of Overtime Allowed',
+    label: 'Expired Parking Grace Period',
     type: FieldType.INCREASER_FIELD,
-    step: 60,
-    max: 6000,
-    min: 60,
-    tooltip: "When the user's parking transaction has expired, the parking lot can give him enough time to leave and not have to pay extra fee as long as he does not exceed the minutes of overtime allowed.",
+    step: 120,
+    max: 600,
+    min: 120,
+    tooltip: "This is the time given for the user to vacate the parking space after parking expiry.",
     renderValue: value => (value / 60)
   }
 ];

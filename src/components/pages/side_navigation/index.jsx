@@ -36,11 +36,11 @@ const isActive = (location, path) => (
 function SideNavigation(props) {
   const { currentUserRoleName } = props
   return (
-    <Nav vertical pills className={`${styles.sideNavigation} shadow-sm pr-0 m-0 bg-white position-fixed h-100`}>
+    <Nav vertical pills className={`${styles.sideNavigation} shadow-sm pr-0 bg-white h-100`}>
       <li>
         <Link className={`nav-link ${isActive(props.location, routes.dashboard)}`} to={routes.dashboard}>
           <DashboardIcon className="float-left mr-2" />
-          <span className="d-none d-lg-block d-xl-block">
+          <span className="d-none d-xl-block">
             Dashboard
           </span>
         </Link>
@@ -48,7 +48,7 @@ function SideNavigation(props) {
       <li>
         <Link className={`nav-link ${isActive(props.location, routes.admins)}`} to={routes.admins}>
           <AdminIcon className="float-left mr-2" />
-          <span className="d-none d-lg-block d-xl-block">
+          <span className="d-none d-xl-block">
             User accounts
           </span>
         </Link>
@@ -60,7 +60,7 @@ function SideNavigation(props) {
         <li>
           <Link className={`nav-link ${isActive(props.location, routes.parkingLots)}`} to={routes.parkingLots}>
             <ParkingLotIcon className="float-left mr-2"/>
-            <span className="d-none d-lg-block d-xl-block">
+            <span className="d-none d-xl-block">
               Parking lot accounts
             </span>
           </Link>
@@ -82,7 +82,7 @@ function SideNavigation(props) {
         <li>
         <Link className={`nav-link ${isActive(props.location, routes.reports)}`} to={routes.reports}>
           <ReportIcon className="float-left mr-2" />
-          <span className="d-none d-lg-block d-xl-block">
+          <span className="d-none d-xl-block">
             Reports
           </span>
         </Link>

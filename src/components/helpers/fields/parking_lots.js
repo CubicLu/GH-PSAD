@@ -14,6 +14,8 @@ import {
 
 const fieldsNew = (managers = [], admins = [], renderLocationModal, permissions = []) => (
   [
+    { name: 'name', label: 'Name', mandatory: true, autoFocus: true, disabled: !permissions.includes(NAME) },
+    { name: 'parking_admin_id', label: 'Parking Admin', type: FieldType.SELECT_FIELD, disabled: !permissions.includes(PARKING_ADMIN_ID), options: admins.map(admin => { return { value: admin.value, label: admin.label } }) },
     {
       name: 'location',
       label: 'Location',
@@ -21,12 +23,10 @@ const fieldsNew = (managers = [], admins = [], renderLocationModal, permissions 
       render: renderLocationModal,
       disabled: !permissions.includes(LOCATION)
     },
-    { name: 'name', label: 'Name', mandatory: true, disabled: !permissions.includes(NAME) },
-    { name: 'phone', label: 'Contact', disabled: !permissions.includes(PHONE) },
-    { name: 'parking_admin_id', label: 'Parking Admin', type: FieldType.SELECT_FIELD, disabled: !permissions.includes(PARKING_ADMIN_ID), options: admins.map(admin => { return { value: admin.value, label: admin.label } }) },
-    { name: 'email', label: 'Email', disabled: !permissions.includes(EMAIL) },
     { name: 'town_manager_id', label: 'Town Manager', mandatory: true, type: FieldType.SELECT_FIELD, disabled: !permissions.includes(TOWN_MANAGER_ID), options: managers.map(manager => { return { value: manager.value, label: manager.label } }) },
-    { name: 'status', label: 'Status', mandatory: true, type: FieldType.SELECT_FIELD, disabled: !permissions.includes(STATUS), options: [{ value: 'active', label: 'Active' }, { value: 'suspended', label: 'Suspended' }], defaultValue: 'active' }
+    { name: 'phone', label: 'Contact', disabled: !permissions.includes(PHONE) },
+    { name: 'status', label: 'Status', mandatory: true, type: FieldType.SELECT_FIELD, disabled: !permissions.includes(STATUS), options: [{ value: 'active', label: 'Active' }, { value: 'suspended', label: 'Suspended' }], defaultValue: 'active' },
+    { name: 'email', label: 'Email', disabled: !permissions.includes(EMAIL) }
   ]
 );
 

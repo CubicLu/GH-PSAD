@@ -2,17 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { Button, Col, Row, Nav } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { Col, Row } from 'reactstrap';
 import { Form } from 'informed';
 import { isEmpty } from 'underscore';
-import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash';
 import LocationForm from '../shared/location/form';
 import SettingSection from '../shared/setting_section';
 import NearbyPlaces from '../shared/nearby_places';
-import Rules from './rules'
+import Rules from './rules';
+import Header from './header';
 import  { permissions } from 'config/permissions/forms_fields/parking_lots/new'
 /* Actions */
 import { invoke } from 'actions';
@@ -22,6 +20,7 @@ import { create } from 'api/parking_lots';
 import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
+import Button from 'components/base/button';
 /* Helpers */
 import { btnSpinner } from 'components/helpers';
 import { fieldsNew, exampleData } from 'components/helpers/fields/parking_lots';
@@ -34,7 +33,7 @@ import saveRecord from 'components/modules/form_actions/save_record';
 import withCurrentUser from 'components/modules/with_current_user';
 import withFetching from 'components/modules/with_fetching';
 import setEmptyFields from 'components/modules/set_empty_fields';
-import styles from './shared.module.sass'
+import styles from './new.module.sass';
 
 class New extends React.Component {
 
@@ -78,7 +77,8 @@ class New extends React.Component {
   }
 
   fieldProps = () => ({
-    lSize: 6,
+    lSize: 4,
+    iSize: 8,
     events: {
       onChange: () => this.setInputChanged()
     }
@@ -168,46 +168,21 @@ class New extends React.Component {
     )
   }
 
-  renderHeader () {
-    const { backPath } = this.props;
-
-    return (<Row>
-      <Col sm={12} className="p-4 row">
-        <Col md={7}>
-          <Link to={backPath} className="mr-2" >
-            <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
-          </Link>
-          Create a new parking lot account
-        </Col>
-        <Col md={5}>
-          <Nav pills className="align-items-center float-right mx-auto">
-            <div className="mr-4 text-green">
-              <span className={styles['border-number']}>1</span>
-              Information
-            </div>
-            <div className="mr-1">
-              <span className={styles['border-number']}>2</span>
-              Parking rules
-            </div>
-          </Nav>
-        </Col>
-      </Col>
-      <Col sm={12} className="bg-grey-light">
-       <p className="general-text-2 py-3 m-0">
-        Fields marked with an asterik (*) are mandatory
-       </p>
-      </Col>
-    </Row>);
-  }
-
   renderSaveButton = () => {
     const { isSaving } = this.state;
     return (
-      <Col>
-        <Button color="success" className="px-5 text-uppercase py-2 mb-4 float-right"  onClick={() => this.save()}>
-          {isSaving ? btnSpinner() : 'Next >'}
-        </Button>
-      </Col>
+      <Row>
+        <Col className="d-flex justify-content-end">
+          <Button
+            status="success"
+            onClick={() => this.save()}
+            className={styles.btnSave}
+            size="md"
+          >
+            {isSaving ? btnSpinner() : 'Next >'}
+          </Button>
+        </Col>
+      </Row>
     );
   }
 
@@ -215,12 +190,16 @@ class New extends React.Component {
     const { isSaving } = this.state;
     return (
       <fieldset disabled={isSaving}>
-        <Form getApi={this.setFormApi} initialValues={exampleData()}>
+        <Form
+          getApi={this.setFormApi}
+          initialValues={exampleData()}
+          className={styles.form}
+        >
           <Row>
-            <Col sm={12} md={3}>
+            <Col xs={3}>
               {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, this.fieldProps())}
             </Col>
-            <Col sm={12} md={9}>
+            <Col xs={9} className={styles.formFields}>
               {this.renderFields()}
             </Col>
           </Row>
@@ -236,20 +215,8 @@ class New extends React.Component {
     )
   }
 
-  renderRecord () {
-    return (
-      <Row className="m-0">
-        <Col xs={12} className="mb-4 bg-white">
-          {this.renderHeader()}
-        </Col>
-        <Col xs={12}>
-          {this.renderForm()}
-        </Col>
-      </Row>
-    );
-  }
-
   componentDidMount () {
+    document.querySelector('.frame-container').classList.add('bg-transparent', 'shadow-none');
     const { startFetching } = this.props
     Promise.all([
       startFetching(dropdownsSearch('admins_by_role-town_manager'))
@@ -262,28 +229,45 @@ class New extends React.Component {
       .finally(() => this.setState({ isDropdownFetching: false }))
   }
 
-  render () {
-    const { showParkingRulesSection } = this.state;
+  componentWillUnmount () {
+    document.querySelector('.frame-container').classList.remove('bg-transparent', 'shadow-none');
+  }
 
-    return this.isFetching() ? <Loader/> : (
-      <React.Fragment>
+  render () {
+    const { backPath } = this.props;
+    const { showParkingRulesSection, errors } = this.state;
+
+    if (this.isFetching()) {
+      return <Loader/>;
+    }
+
+    return (
+      <div className={styles.container}>
+        <Header
+          backPath={backPath}
+          showParkingRulesSection={showParkingRulesSection}
+        />
         <div className={showParkingRulesSection ? '' : 'd-none'}>
           <Rules
             {...this.props}
             save={this.save}
             backParkingRule={this.backParkingRule}
+            errors={errors}
           />
         </div>
         <div className={showParkingRulesSection ? 'd-none' : ''}>
-          {this.renderRecord()}
-          <div className="mt-1"/>
+          <div className={`${styles.hint} bg-grey-light`}>
+            <p className="general-text-2 m-0">
+              Fields marked with an asterik (*) are mandatory
+            </p>
+          </div>
+          {this.renderForm()}
           {this.renderSetting()}
           <div className="mt-1"/>
           {this.renderNearbyPlaces()}
-          <div className="mt-4"/>
-          { this.renderSaveButton()}
+          {this.renderSaveButton()}
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }

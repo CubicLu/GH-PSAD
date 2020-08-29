@@ -12,6 +12,34 @@ const displayUnixTimestamp = (timestamp, format = 'ddd, MMM Do YYYY, h:mm:ss a' 
   return momentUnix(timestamp).format(format);
 };
 
+const displayDate = (date) => {
+  if (!date) {
+    return '';
+  }
+  return moment(date).format('MM/DD/YYYY');
+};
+
+const displayDateRange = (from, to) => {
+  const fromDate = displayDate(from);
+  const toDate = displayDate(to);
+  if (fromDate === toDate) {
+    return fromDate;
+  }
+  const fromYear = moment(from).year();
+  const toYear = moment(to).year();
+  if (fromYear === toYear) {
+    return `${moment(from).format('MM/DD')} - ${toDate}`;
+  }
+  return `${fromDate} - ${toDate}`;
+};
+
+const displayMonthAndDay = (date) => {
+  if (!date) {
+    return '';
+  }
+  return moment(date).format('MMM DD');
+};
+
 const unixDatePicker = (timestamp, inputProps, pickerProps, readOnly = false) => {
   return (
     <DatePicker readOnly={readOnly} selected={momentUnix(timestamp).toDate()} customInput={<Input {...inputProps}/>} {...pickerProps}/>
@@ -37,4 +65,14 @@ const camelize = (text, separator = '_') => (
     .join(' ')
 );
 
-export { momentUnix, camelize, displayUnixTimestamp, unixDatePicker, dateToUnix, btnSpinner };
+export {
+  momentUnix,
+  camelize,
+  displayUnixTimestamp,
+  displayDate,
+  displayDateRange,
+  displayMonthAndDay,
+  unixDatePicker,
+  dateToUnix,
+  btnSpinner
+};

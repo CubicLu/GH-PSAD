@@ -8,10 +8,19 @@ import styles from './frame.module.sass'
 
 const Frame = props => {
   const { serverError } = props;
+  const params = new URLSearchParams(props.location.search || '');
+
+  if (params.get('frame') === 'headless') {
+    return (
+      <ErrorBoundary serverError={serverError}>
+        <MainContent/>
+      </ErrorBoundary>
+    )
+  }
 
   return (
-    <div className='d-flex justify-content-between'>
-      <div className={styles.SideNavigationContainer}>
+    <div className='d-flex'>
+      <div className={`${styles.SideNavigationContainer} position-sticky`}>
         <SideNavigation />
       </div>
       <div className={`${styles.contentContainer} frame-container shadow-sm bg-white`}>

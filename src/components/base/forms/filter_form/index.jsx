@@ -1,20 +1,29 @@
 import React from 'react';
 import { Form, Text } from 'informed';
-import { Button, Col, FormGroup, Label } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { Col, FormGroup, Label } from 'reactstrap';
 import { btnSpinner } from 'components/helpers';
 import {
   CustomSelect,
   CustomMultiSelect,
   DateRangeInput,
-  FieldType
+  FieldType,
 } from 'components/helpers/form_fields';
 import Loader from 'components/helpers/loader';
+import Button from 'components/base/button';
+import styles from './filter_form.module.sass';
 
 class FilterForm extends React.Component {
   renderField = (field, key) => (
     <FormGroup row key={key}>
-      <Label for={field.name} sm={2}>{field.label}</Label>
-      <Col sm={10}>
+      <Label
+        className={`${styles.inputLabel} general-text-1`}
+        for={field.name}
+        xs={3}
+      >
+        {field.label}
+      </Label>
+      <Col xs={9}>
         {this.renderInput(field)}
       </Col>
     </FormGroup>
@@ -27,7 +36,7 @@ class FilterForm extends React.Component {
       case FieldType.MULTISELECT_FIELD:
         return <CustomMultiSelect field={field.name} options={field.options} values={this.props.values} />;
       case FieldType.SELECT_FIELD:
-        return <CustomSelect field={field} />;
+        return <CustomSelect field={field} emptyOptionEnabled />;
       default:
         return <Text className="form-control" {...field.props} field={field.name} validate={field.validate} />;
     }
@@ -42,11 +51,22 @@ class FilterForm extends React.Component {
     const { cancelFilter, submitForm, isFetching } = this.props;
 
     return (
-      <div className="text-center mt-4">
-        <Button onClick={cancelFilter} className="btn btn-danger mr-1">
+      <div className="d-flex justify-content-center mt-5">
+        <Button
+          className="mr-3 text-uppercase"
+          onClick={cancelFilter}
+          status="danger"
+          size="md"
+        >
           Cancel
         </Button>
-        <Button onClick={() => submitForm(formState.values)} color="info" type="submit">
+        <Button
+          className="text-uppercase"
+          onClick={() => submitForm(formState.values)}
+          status="success"
+          type="submit"
+          size="md"
+        >
           {isFetching() ? btnSpinner() : 'Apply'}
         </Button>
       </div>
@@ -60,12 +80,20 @@ class FilterForm extends React.Component {
     </React.Fragment>
   );
 
-  render() {
+  render () {
     const { values, isFetching } = this.props;
     return (
       isFetching() ? <Loader /> : <Form initialValues={values} component={this.renderForm} />
     );
   }
-}
+};
+
+FilterForm.propTypes = {
+  cancelFilter: PropTypes.func,
+  fields: PropTypes.object.isRequired,
+  isFetching: PropTypes.bool,
+  submitForm: PropTypes.func,
+  values: PropTypes.shape({}),
+};
 
 export default FilterForm;

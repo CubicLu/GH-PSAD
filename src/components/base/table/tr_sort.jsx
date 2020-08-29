@@ -43,10 +43,10 @@ const TRSort = (props) => {
       {
         props.children.map((th, index) => (
           <React.Fragment key={th.props.attr || index}>
-            <th className="px-4">
+            <th style={th.props.style}>
               <span className={th.props.disableSort ? 'non-sortable' : 'sortable'} onClick={() => onClickSort(th)}>
                 {th.props.children}
-                {th.disableSort && <FontAwesomeIcon icon={arrowPosition(th.props, sortedAttr)}/>}
+                {!th.props.disableSort && <FontAwesomeIcon icon={arrowPosition(th.props, sortedAttr)}/>}
               </span>
             </th>
           </React.Fragment>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 /* Actions */
 import { SET_LIST } from 'actions/parking_lots_camera';
 /* API */
-import { filterFetcher } from 'api/parking_lots_camera';
+import { filterFetcher } from 'api/parking_lots';
 /* Base */
 import BasicListToolbar from 'components/base/basic_list_toolbar';
 import IndexTable from 'components/base/table';
@@ -20,8 +20,6 @@ class Index extends React.Component {
     const { isResourceFetching } = this.props
     return isResourceFetching
   }
-
-
 
   renderRecords = () => {
     const { list, match, history } = this.props;
@@ -63,8 +61,6 @@ class Index extends React.Component {
   }
 }
 
-
-
 Index.propTypes = {
   list: PropTypes.arrayOf(PropTypes.object).isRequired,
   match: PropTypes.object.isRequired
@@ -72,7 +68,11 @@ Index.propTypes = {
 
 const resource = 'parking_lot_camera'
 
-export default connectList(resource, SET_LIST, resourceFetcher(filterFetcher, resource), withFetching(
-  withCurrentUser(Index)
-))
-
+export default connectList(
+  resource,
+  SET_LIST,
+  resourceFetcher(filterFetcher, resource),
+  withFetching(
+    withCurrentUser(Index)
+  )
+)
