@@ -84,8 +84,6 @@ prod_image_build:
     - docker build -t telesoftdevops/devops:telesoft-psad-dashboard-prod .
     - docker push telesoftdevops/devops:telesoft-psad-dashboard-prod
     - rm -rf /tmp/psad
-  when:
-    manual
   only:
     - master
   tags:
@@ -99,7 +97,6 @@ prod_image_deploy:
   script:
     - echo "Deploy iamge to PROD"
     - sudo ci/prod-deploy.sh ${PROD_APP_1_NAME} ${PROD_APP_2_NAME}
-  when: manual
   only:
     - master
   tags:
