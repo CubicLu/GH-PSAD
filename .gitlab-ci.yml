@@ -37,6 +37,7 @@ stg_image_deploy:
   script:
     - echo "Deploy Image"
     - sudo ci/stg-deploy.sh ${STG_APP_NAME}
+    - curl "http:/172.26.16.220:8088/deployments/amount/psad_dashboard/stg"
   only:
     - stg 
   tags:
@@ -67,6 +68,7 @@ release_image_deploy:
   script:
     - echo "Deploy Image"
     - sudo ci/release-deploy.sh ${RELEASE_APP_NAME}
+    - curl "http:/172.26.16.220:8088/deployments/amount/psad_dashboard/release"
   only:
     - release 
   tags:
@@ -97,6 +99,7 @@ prod_image_deploy:
   script:
     - echo "Deploy iamge to PROD"
     - sudo ci/prod-deploy.sh ${PROD_APP_1_NAME} ${PROD_APP_2_NAME}
+    - curl "http:/172.26.16.220:8088/deployments/amount/psad_dashboard/master"
   only:
     - master
   tags:
