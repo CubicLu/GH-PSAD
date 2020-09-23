@@ -14,8 +14,8 @@ import {
 
 const fieldsNew = (managers = [], admins = [], renderLocationModal, permissions = []) => (
   [
-    { name: 'name', label: 'Name', mandatory: true, autoFocus: true, disabled: !permissions.includes(NAME) },
-    { name: 'parking_admin_id', label: 'Parking Operator', type: FieldType.SELECT_FIELD, disabled: !permissions.includes(PARKING_ADMIN_ID), options: admins.map(admin => { return { value: admin.value, label: admin.label } }) },
+    { name: 'name', label: 'Name', mandatory: true, autoFocus: true },
+    { name: 'parking_admin_id', label: 'Parking Operator', type: FieldType.SELECT_FIELD, options: admins.map(admin => { return { value: admin.value, label: admin.label } }) },
     {
       name: 'location',
       label: 'Location',
