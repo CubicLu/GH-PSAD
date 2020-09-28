@@ -62,11 +62,11 @@ class Index extends React.Component {
         filterFetcher={filterFetcher}
         columns={
           <React.Fragment>
-            <th attr="username">Username</th>
-            <th attr="admins.name">Name</th>
-            <th attr="admins.email">Email</th>
-            <th attr="roles.name">Role</th>
-            <th attr="admins.status">Status</th>
+            <th disableSort>Username</th>
+            <th disableSort>Name</th>
+            <th disableSort>Email</th>
+            <th disableSort>Role</th>
+            <th disableSort>Status</th>
           </React.Fragment>
         }
         renderRecords={this.renderRecords}
