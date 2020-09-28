@@ -1,9 +1,9 @@
 import { list as selectList } from 'selectors/list';
 import fetchData from './fetch_data';
+import listFetchCondition from './fetch_list_condition';
 
 const defaultProcessor = res => selectList(res);
 const defaultMapper = entity => state => state[entity].index;
-
 
 const connectList = (entity, actionType, fetcher, Component, props = {}) => {
   const {
@@ -11,7 +11,8 @@ const connectList = (entity, actionType, fetcher, Component, props = {}) => {
     action = 'setList',
     mapState = defaultMapper(entity),
     mapDispatch,
-    processResponse = defaultProcessor
+    processResponse = defaultProcessor,
+    fetchCondition = listFetchCondition
   } = props;
 
   return fetchData(
@@ -23,7 +24,8 @@ const connectList = (entity, actionType, fetcher, Component, props = {}) => {
       actionType,
       prop,
       action,
-      processResponse
+      processResponse,
+      fetchCondition
     }
   );
 };

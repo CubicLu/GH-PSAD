@@ -48,10 +48,10 @@ class Index extends React.Component {
         resource={resource}
         columns={
           <React.Fragment>
-            <th attr="parking_lots.name">Parking lot name</th>
-            <th attr="parking_lots.id">Parking lot ID</th>
-            <th attr="locations.full_address">Location</th>
-            <th attr="available_cameras">Available Cameras</th>
+            <th disableSort>Parking lot name</th>
+            <th disableSort>Parking lot ID</th>
+            <th disableSort>Location</th>
+            <th disableSort>Available Cameras</th>
           </React.Fragment>
         }
         renderRecords={this.renderRecords}

@@ -8,16 +8,17 @@ const defaultProcessor = res => res.data;
 const defaultDispatch = (action, actionType) => dispatch => (
   bindActionCreators({ [action]: invoke(actionType) }, dispatch)
 );
+const defaultFetchCondition = (wrapper, prop) => isEmpty(wrapper.props[prop]);
 
 const fetchData = props => {
   const { Component, fetcher, action, actionType, prop } = props;
-  const { processResponse = defaultProcessor } = props;
+  const { processResponse = defaultProcessor, fetchCondition = defaultFetchCondition } = props;
   const { mapState, mapDispatch = defaultDispatch(action, actionType) } = props;
 
   const fetch = wrapper => {
-    const fetchCondition = isEmpty(wrapper.props[prop]);
+    const shouldFetch = fetchCondition(wrapper, prop);
 
-    fetcher(wrapper, fetchCondition, res => {
+    fetcher(wrapper, shouldFetch, res => {
       try {
         wrapper.props[action](processResponse(res));
       } catch (exc) {

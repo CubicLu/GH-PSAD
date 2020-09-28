@@ -17,11 +17,10 @@ function saveRecord(create, backPath, values) {
 };
 
 function createSucceed(backPath, res) {
-  const { history, setRecord, setListElement } = this.props;
+  const { history, setRecord } = this.props;
   setRecord(res.data);
-  setListElement(res.data)
   if(backPath) {
-    history.push(backPath);
+    history.push(backPath, { shouldFetch: true });
   }
 };
 
