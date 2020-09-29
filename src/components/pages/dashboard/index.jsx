@@ -107,21 +107,6 @@ class Dashboard extends Component {
         datesToFilter: defaultDateFilters
       },
       {
-        name: 'parking_tickets_issued',
-        reportType: 'parking_tickets_issued',
-        display: true,
-        reload: false,
-        defaultDateFilters
-      },
-      {
-        name: 'parking_tickets_settled',
-        reportType: 'parking_tickets_settled',
-        display: true,
-        reload: false,
-        info: 'Number of citation tickets that are already resolved/settled.',
-        datesToFilter: defaultDateFilters
-      },
-      {
         name: 'ai_error',
         reportType: 'ai_error',
         display: true,
