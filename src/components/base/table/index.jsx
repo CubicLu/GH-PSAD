@@ -11,6 +11,7 @@ import generateBadgesFilter from 'components/modules/badges_filter/generate'
 import deleteBadgesFilter from 'components/modules/badges_filter/delete'
 import { retrieveFilters } from 'components/modules/retrieve_filters';
 import withFetching from 'components/modules/with_fetching';
+import getRangeOfPage from 'components/modules/get_range_of_page';
 
 import './table.sass'
 
@@ -119,7 +120,17 @@ export class IndexTable extends React.Component {
 
   render() {
     const { sortedAttr, filterModalOpen, filterQuery } = this.state
-    const { toolbar, filterFields, columns, total: totalRecords, filterFetcher, className } = this.props
+    const {
+      toolbar,
+      filterFields,
+      columns,
+      total: totalRecords,
+      filterFetcher,
+      className,
+      page,
+      perPage,
+      entityName,
+    } = this.props;
     let toolbarWithProps = null
     if (toolbar) {
       toolbarWithProps = React.cloneElement(toolbar, {
@@ -132,6 +143,7 @@ export class IndexTable extends React.Component {
       })
     }
     const query = this.setQuery(sortedAttr)
+    const pageRange = getRangeOfPage(totalRecords, page, perPage).join(' - ');
     return (
       <React.Fragment>
         <ModalFilter
@@ -160,14 +172,21 @@ export class IndexTable extends React.Component {
             {this.renderRecords()}
           </tbody>
         </table>
-        <Pagination
-          {...this.props}
-          className="py-3"
-          query={query}
-          stopFetchingPagination={this.stopFetchingActionTable}
-          startFetchingPagination={this.startFetchingActionTable}
-          fetcher={this.paginationFetcher}
-        />
+        <div className="paginationWrapper">
+          {!!entityName && (
+            <span className="general-text-3">
+              {`Displaying ${pageRange} of ${totalRecords} ${entityName}`}
+            </span>
+          )}
+          <Pagination
+            {...this.props}
+            className="m-0"
+            query={query}
+            stopFetchingPagination={this.stopFetchingActionTable}
+            startFetchingPagination={this.startFetchingActionTable}
+            fetcher={this.paginationFetcher}
+          />
+        </div>
       </React.Fragment>
     );
   }

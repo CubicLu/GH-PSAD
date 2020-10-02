@@ -216,7 +216,6 @@ class New extends React.Component {
   }
 
   componentDidMount () {
-    document.querySelector('.frame-container').classList.add('bg-transparent', 'shadow-none');
     const { startFetching } = this.props
     Promise.all([
       startFetching(dropdownsSearch('admins_by_role-town_manager'))
@@ -227,10 +226,6 @@ class New extends React.Component {
          .then(response => this.setDropdowns('categoriesPlace', response.data))
     ])
       .finally(() => this.setState({ isDropdownFetching: false }))
-  }
-
-  componentWillUnmount () {
-    document.querySelector('.frame-container').classList.remove('bg-transparent', 'shadow-none');
   }
 
   render () {

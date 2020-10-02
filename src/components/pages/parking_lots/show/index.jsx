@@ -206,7 +206,6 @@ class Show extends React.Component {
   }
 
   componentDidMount() {
-    document.querySelector('.frame-container').classList.add('bg-transparent', 'shadow-none');
     const { startFetching, record } = this.props
     if (record) {
       this.setState({ currentLocation: record.location })
@@ -221,10 +220,6 @@ class Show extends React.Component {
     ])
       .finally(() => this.setState({ isDropdownFetching: false }))
 
-  }
-
-  componentWillUnmount () {
-    document.querySelector('.frame-container').classList.remove('bg-transparent', 'shadow-none');
   }
 
   render() {

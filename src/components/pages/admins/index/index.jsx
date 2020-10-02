@@ -70,6 +70,7 @@ class Index extends React.Component {
           </React.Fragment>
         }
         renderRecords={this.renderRecords}
+        entityName="accounts"
       >
       </IndexTable>
     );
