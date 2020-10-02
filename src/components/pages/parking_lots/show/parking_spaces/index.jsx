@@ -684,20 +684,18 @@ class ParkingPlans extends Component {
         state: {...this.state},
         func: this
       }}>
-        <div className={styles.container}>
-          <Header {...this.props} />
-          <ActionCableConsumer
-            ref='parkingSpaceRoom'
-            channel={{
-              channel: "ParkingSpacesChannel",
-              parking_lot_id: record.id
-            }}
-            onConnected={() => console.log("Websocket connection established")}
-            onReceived={this.handleReceived}
-          />
-          {this.renderForm()}
-          {this.renderModals()}
-        </div>
+        <Header {...this.props} />
+        <ActionCableConsumer
+          ref='parkingSpaceRoom'
+          channel={{
+            channel: "ParkingSpacesChannel",
+            parking_lot_id: record.id
+          }}
+          onConnected={() => console.log("Websocket connection established")}
+          onReceived={this.handleReceived}
+        />
+        {this.renderForm()}
+        {this.renderModals()}
       </ParkingPlanContext.Provider>
     );
   }
@@ -731,7 +729,6 @@ class ParkingPlans extends Component {
 
   // Update record on the redux store when leaving
   componentWillUnmount() {
-    document.querySelector('.frame-container').classList.remove('bg-transparent', 'shadow-none');
     const { record, setRecord } = this.props
     if(record) {
       show({ id: record.id})
@@ -746,7 +743,6 @@ class ParkingPlans extends Component {
   }
 
   componentDidMount () {
-    document.querySelector('.frame-container').classList.add('bg-transparent', 'shadow-none');
     const { record } = this.props;
     this.fetchData(record);
   }
