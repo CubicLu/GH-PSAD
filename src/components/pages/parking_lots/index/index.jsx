@@ -75,7 +75,7 @@ class Index extends React.Component {
         {...this.props}
         className={styles.table}
         isFetching={this.isFetching}
-        toolbar={<BasicListToolbar showFilters={true} {...this.props} createRequiredPermissions={[CREATE_PARKING_LOT]} label="+ Create New" title="Parking lot accounts" />}
+        toolbar={<BasicListToolbar showFilters={true} {...this.props} createRequiredPermissions={[CREATE_PARKING_LOT]} label="+ Create New" title="Parking Lots Management" />}
         filterFields={filterFields(parkingAdmins, townManagers)}
         filterFetcher={filterFetcher}
         resource={resource}
