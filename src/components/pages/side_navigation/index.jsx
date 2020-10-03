@@ -61,7 +61,7 @@ function SideNavigation(props) {
           <Link className={`nav-link ${isActive(props.location, routes.parkingLots)}`} to={routes.parkingLots}>
             <ParkingLotIcon className="float-left mr-2"/>
             <span className="d-none d-xl-block">
-              Parking lot accounts
+              Parking Lots Management
             </span>
           </Link>
         </li>
