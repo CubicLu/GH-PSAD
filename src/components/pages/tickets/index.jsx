@@ -77,12 +77,12 @@ class Index extends React.Component {
         resource={resource}
         columns={
           <React.Fragment>
-            <th disableSort>#</th>
-            <th disableSort>Violation Name</th>
-            <th disableSort>Parking Lot Name</th>
-            <th disableSort>Date</th>
-            <th disableSort>Officer</th>
-            <th disableSort>Status</th>
+            <th attr="parking_tickets.id">#</th>
+            <th attr="parking_rules.name">Violation Name</th>
+            <th attr="parking_lots.name">Parking Lot Name</th>
+            <th attr="parking_tickets.created_at">Date</th>
+            <th attr="admins.name">Officer</th>
+            <th attr="parking_tickets.status">Status</th>
           </React.Fragment>
         }
         renderRecords={this.renderRecords}
