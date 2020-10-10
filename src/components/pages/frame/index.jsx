@@ -23,7 +23,7 @@ const Frame = props => {
       <div className={`${styles.SideNavigationContainer} position-sticky`}>
         <SideNavigation />
       </div>
-      <div className={`${styles.contentContainer} frame-container shadow-sm bg-white`}>
+      <div className={`${styles.contentContainer} frame-container`}>
         <ErrorBoundary serverError={serverError}>
           <MainContent/>
         </ErrorBoundary>

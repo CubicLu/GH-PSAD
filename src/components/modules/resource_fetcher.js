@@ -1,8 +1,8 @@
 import { retrieveFilters } from 'components/modules/retrieve_filters';
 
 const resourceFetcher = (fetcher, resource) => {
-  return (wrapper, fetchCondition, onResponse) => {
-    if (!fetchCondition) {
+  return (wrapper, shouldFetch, onResponse) => {
+    if (!shouldFetch) {
       wrapper.resourceFetchFinished();
       return;
     }

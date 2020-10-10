@@ -187,13 +187,8 @@ class Rules extends React.Component {
   }
 
   componentDidMount () {
-    document.querySelector('.frame-container').classList.add('bg-transparent', 'shadow-none');
     const { record } = this.props;
     this.fetchData(record);
-  }
-
-  componentWillUnmount () {
-    document.querySelector('.frame-container').classList.remove('bg-transparent', 'shadow-none');
   }
 
   render () {
@@ -204,7 +199,7 @@ class Rules extends React.Component {
     const { list } = this.state;
     const activeRules = list.reduce((accumulator, currentValue) => (accumulator + (currentValue.status ? 1 : 0)), 0);
     return (
-      <div className={styles.container}>
+      <React.Fragment>
         <Header {...this.props} />
         <div className={`${styles.hint} bg-grey-light`}>
           <p className="general-text-2 py-3">
@@ -221,7 +216,7 @@ class Rules extends React.Component {
           isOpen={showModalRecipient}
           toggleModal={this.toggleModal}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }

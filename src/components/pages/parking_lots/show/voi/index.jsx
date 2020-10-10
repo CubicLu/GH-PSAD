@@ -17,8 +17,6 @@ import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import withFetching from 'components/modules/with_fetching';
 import withCurrentUser from 'components/modules/with_current_user';
-/* Styles/Assets */
-import styles from './voi.module.sass';
 
 class Show extends React.Component {
   state = {
@@ -32,22 +30,12 @@ class Show extends React.Component {
     return isResourceFetching;
   }
 
-  componentDidMount () {
-    document.querySelector('.frame-container').classList.add('bg-transparent', 'shadow-none');
-  }
-
-  componentWillUnmount () {
-    document.querySelector('.frame-container').classList.remove('bg-transparent', 'shadow-none');
-  }
-
   render () {
     if (this.isFetching()) {
       return <Loader />;
     }
     return (
-      <div className={styles.container}>
-        <Header {...this.props} />
-      </div>
+      <Header {...this.props} />
     );
   }
 }

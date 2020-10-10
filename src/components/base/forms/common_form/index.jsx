@@ -31,8 +31,8 @@ const renderLabel = (field, props, lSize) => {
     field.label &&
     <Label for={field.name} xs={lSize} className={`${styles.label} general-text-2`}>
       <div>
-        <span className={`mr-1 ${errors[errorName] ? 'general-error' : 'text-primary'}`}>{field.mandatory ? '*' : ''}</span>
         {labelFor(field)}
+        <span className={`mr-1 ${errors[errorName] ? 'general-error' : 'text-primary'}`}>{field.mandatory ? '*' : ''}</span>
         {field.tooltip &&
           <TooltipInfo className="ml-2" text={field.tooltip} target={field.name} />
         }
