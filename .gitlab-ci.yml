@@ -7,7 +7,7 @@ variables:
   RELEASE_URL: https://dashboard-stable.telesoftmobile.com
   PROD_URL: https://dashboard.eastonmd.gov
   PROD_APP_1_NAME: telesoft-psad-dashboard-1
-  PROD_APP_2_NAME: telesoft-psad-dashboard-2  
+  PROD_APP_2_NAME: telesoft-psad-dashboard-2
 
 before_script:
   - docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
@@ -17,17 +17,14 @@ stg_image_build:
     name: staging
     url: ${STG_URL}
   stage: build
-  script:
-    - if [ -d "/tmp/psad" ] ; then [ $(rm -rf /tmp/psad) ]; fi
-    - git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git
-    - cp /tmp/psad/dashboard/conf/stg/.env.js ./src
-    - docker build -t telesoftdevops/devops:telesoft-psad-dashboard-stg .
-    - docker push telesoftdevops/devops:telesoft-psad-dashboard-stg
-    - rm -rf /tmp/psad
+  script: |-
+    apk add git curl
+    git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git
+    cp /tmp/psad/dashboard/conf/stg/.env.js ./src
+    docker build -t telesoftdevops/devops:telesoft-psad-dashboard-stg .
+    docker push telesoftdevops/devops:telesoft-psad-dashboard-stg
   only:
     - stg
-  tags:
-    - shell
 
 stg_image_deploy:
   environment:
@@ -35,29 +32,26 @@ stg_image_deploy:
     url: ${STG_URL}
   stage: deploy
   script:
+    - apk add curl
     - echo "Deploy Image"
-    - sudo ci/stg-deploy.sh ${STG_APP_NAME}
+    - curl -X PUT "http:/172.26.16.220:8088/deployments/amount/psad_dashboard/stg"
+    - sh ci/stg-deploy.sh ${STG_APP_NAME}
   only:
-    - stg 
-  tags:
-    - shell
+    - stg
 
 release_image_build:
   environment:
     name: release
     url: ${RELEASE_URL}
   stage: build
-  script:
-    - if [ -d "/tmp/psad" ] ; then [ $(rm -rf /tmp/psad) ]; fi
-    - git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git
-    - cp /tmp/psad/dashboard/conf/release/.env.js ./src
-    - docker build -t telesoftdevops/devops:telesoft-psad-dashboard-release .
-    - docker push telesoftdevops/devops:telesoft-psad-dashboard-release
-    - rm -rf /tmp/psad
+  script: |-
+    apk add git curl
+    git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git
+    cp /tmp/psad/dashboard/conf/release/.env.js ./src
+    docker build -t telesoftdevops/devops:telesoft-psad-dashboard-release .
+    docker push telesoftdevops/devops:telesoft-psad-dashboard-release
   only:
     - release
-  tags:
-    - shell
 
 release_image_deploy:
   environment:
@@ -65,12 +59,12 @@ release_image_deploy:
     url: ${RELEASE_URL}
   stage: deploy
   script:
+    - apk add curl
     - echo "Deploy Image"
-    - sudo ci/release-deploy.sh ${RELEASE_APP_NAME}
+    - curl -X PUT "http:/172.26.16.220:8088/deployments/amount/psad_dashboard/release"
+    - sh ci/release-deploy.sh ${RELEASE_APP_NAME}
   only:
-    - release 
-  tags:
-    - shell
+    - release
 
 prod_image_build:
   environment:
@@ -78,18 +72,13 @@ prod_image_build:
     url: ${PROD_URL}
   stage: build
   script:
-    - if [ -d "/tmp/psad" ] ; then [ $(rm -rf /tmp/psad) ]; fi
-    - git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git
-    - cp /tmp/psad/dashboard/conf/prod/.env.js ./src
-    - docker build -t telesoftdevops/devops:telesoft-psad-dashboard-prod .
-    - docker push telesoftdevops/devops:telesoft-psad-dashboard-prod
-    - rm -rf /tmp/psad
-  when:
-    manual
+    apk add git curl
+    git -C /tmp clone https://${token_username}:${deployed_token}@gitlab.telesoftmobile.com/devops/psad.git
+    cp /tmp/psad/dashboard/conf/prod/.env.js ./src
+    docker build -t telesoftdevops/devops:telesoft-psad-dashboard-prod .
+    docker push telesoftdevops/devops:telesoft-psad-dashboard-prod
   only:
     - master
-  tags:
-    - shell
 
 prod_image_deploy:
   environment:
@@ -98,8 +87,8 @@ prod_image_deploy:
   stage: deploy
   script:
     - echo "Deploy iamge to PROD"
+    - curl -X PUT "http:/146.177.0.220:8088/deployments/amount/psad_dashboard/master"
     - sudo ci/prod-deploy.sh ${PROD_APP_1_NAME} ${PROD_APP_2_NAME}
-  when: manual
   only:
     - master
   tags:

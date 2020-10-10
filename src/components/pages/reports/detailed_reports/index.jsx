@@ -171,10 +171,6 @@ class DetailedReportPage extends React.Component {
 
     this.setState({ headless, reportTitle: `${reportTitle} Reports` });
 
-    if (!headless) {
-      document.querySelector('.frame-container').classList.add('bg-transparent', 'shadow-none');
-    }
-
     if (this.props.currentUser) {
       if (headless) {
         this.fetchDataByPassedFilters();
@@ -185,9 +181,6 @@ class DetailedReportPage extends React.Component {
   }
 
   componentWillUnmount () {
-    if (!this.state.headless) {
-      document.querySelector('.frame-container').classList.remove('bg-transparent', 'shadow-none');
-    }
     this.props.resetDetailedReportsData();
   }
 
