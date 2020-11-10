@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { Col, Nav, Row } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Form } from 'informed';
 import { generatePath } from 'react-router';
 import LocationForm from '../location/form';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { cloneDeep } from 'lodash'
 /* Actions */
 import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/agencies';
@@ -19,6 +16,7 @@ import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 import Button from 'components/base/button';
+import Breadcrumb from 'components/base/breadcrumb';
 /* Helpers */
 import { fields } from 'components/helpers/fields/agencies';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
@@ -92,40 +90,19 @@ class Show extends React.Component {
     return values;
   };
 
-  renderHeader() {
-    const { backPath, record } = this.props;
-
-    return (<Row className="p-4">
-      <Col md={2} className="align-self-center">
-        <Link to={backPath} className="mr-2" >
-          <FontAwesomeIcon color="grey" icon={faChevronLeft} />
-        </Link>
-        {record.name}
-      </Col>
-      <Col md={10}>
-        <Nav pills className="float-right general-text-3">
-          <h6>
-            ID: {record.id}
-          </h6>
-        </Nav>
-      </Col>
-    </Row>);
-  }
-
   renderSaveButton = () => {
     const { isSaving } = this.state;
     return (
-      <Col>
+      <div className="d-flex justify-content-end pt-2 pr-4">
         <Button
           size="md"
           status="success"
-          className="px-5 py-2 mb-4 float-right"
           onClick={this.save}
           isLoading={isSaving}
         >
           Save Changes
         </Button>
-      </Col>
+      </div>
     );
   }
 
@@ -144,12 +121,12 @@ class Show extends React.Component {
   }
 
   renderForm() {
-    const { isSaving, inputChanged } = this.state;
+    const { isSaving } = this.state;
 
     return (
       <fieldset disabled={isSaving}>
         <Form getApi={this.setFormApi} initialValues={this.values()}>
-          <Row>
+          <Row className="no-gutters px-2">
             <Col sm={12} md={3}>
               {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, this.fieldProps())}
             </Col>
@@ -157,23 +134,8 @@ class Show extends React.Component {
               {this.renderFields()}
             </Col>
           </Row>
-          {inputChanged && this.renderSaveButton()}
         </Form>
       </fieldset>
-    );
-  }
-
-  renderRecord() {
-    return (
-
-      <Row className="m-0">
-        <Col xs={12} className="mb-4 bg-white">
-          {this.renderHeader()}
-        </Col>
-        <Col xs={12}>
-          {this.renderForm()}
-        </Col>
-      </Row>
     );
   }
 
@@ -197,9 +159,22 @@ class Show extends React.Component {
       .finally(() => this.setState({ isDropdownFetching: false }))
   }
 
-  render() {
-    return this.isFetching() ? <Loader /> : (
-      this.renderRecord()
+  render () {
+    if (this.isFetching()) {
+      return <Loader />;
+    }
+    const { backPath, record } = this.props;
+    const { inputChanged } = this.state;
+    return (
+      <div className="pb-4">
+        <Breadcrumb
+          title={record.name}
+          id={record.id}
+          backPath={backPath}
+        />
+        {this.renderForm()}
+        {inputChanged && this.renderSaveButton()}
+      </div>
     );
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Col, Nav, Row, Label, FormGroup } from 'reactstrap';
+import { Col, Row, Label, FormGroup } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Form } from 'informed';
@@ -13,6 +13,7 @@ import { updateMe } from 'api/users';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 import Button from 'components/base/button';
+import Breadcrumb from 'components/base/breadcrumb';
 /* Helpers */
 import { fields } from 'components/helpers/fields/profile';
 import { FieldType } from 'components/helpers/form_fields';
@@ -65,37 +66,19 @@ class Profile extends React.Component {
       .finally(() => this.setState({ isSaving: false }))
   };
 
-  renderHeader() {
-    const { currentUser } = this.props;
-
-    return (
-      <Row className="p-4">
-        <Col md={2} className="align-self-center  h2-title">
-          Account information
-        </Col>
-        <Col md={10} >
-          <Nav pills className="float-right mx-auto general-text-4">
-            ID: {currentUser.id}
-          </Nav>
-        </Col>
-      </Row>
-    );
-  }
-
   renderSaveButton = () => {
     const { isSaving } = this.state;
     return (
-      <Col className="my-5">
+      <div className="my-5">
         <Button
           size="md"
           status="success"
-          className="px-5 py-2 mb-4"
           onClick={this.update}
           isLoading={isSaving}
         >
           Save Changes
         </Button>
-      </Col>
+      </div>
     );
   }
 
@@ -148,28 +131,23 @@ class Profile extends React.Component {
     );
   }
 
-  renderRecord() {
-    const { currentUser } = this.props
+  render() {
+    const { currentUser } = this.props;
     return (
-      <Row className="m-0">
+      <div className="pb-4">
         <ChangePasswordModal
           toggleModal={this.toggleModal}
           isOpen={this.state.modal}
           currentUser={currentUser}
           addAlertMessages={this.context.addAlertMessages}
         />
-        <Col xs={12} className="mb-4 bg-white">
-          {this.renderHeader()}
-        </Col>
-        <Col xs={12}>
-          {this.renderForm()}
-        </Col>
-      </Row>
+        <Breadcrumb
+          title='Account information'
+          id={currentUser.id}
+        />
+        {this.renderForm()}
+      </div>
     );
-  }
-
-  render() {
-    return this.renderRecord()
   }
 }
 

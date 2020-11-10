@@ -109,8 +109,12 @@ const renderFieldsWithGrid = (fields, step, cols, props = {}) => {
 
   while (start < fields.length) {
     const mappedFields = fields.slice(start, start + step)
-      .map((field, idx) => <Col key={idx} lg={cols}>{renderField(field, props)}</Col>);
-    fieldList.push((<Row key={start}>{mappedFields}</Row>));
+      .map((field, idx) => (
+        <Col key={idx} lg={cols} className="px-2">
+          {renderField(field, props)}
+        </Col>
+      ));
+    fieldList.push((<Row key={start} className="no-gutters">{mappedFields}</Row>));
     start += step;
   }
 
