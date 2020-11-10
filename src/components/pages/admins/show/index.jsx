@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Col, Nav, Row } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { generatePath } from 'react-router';
-import { Link } from 'react-router-dom';
 import { Form } from 'informed';
 import { isEmpty } from 'underscore';
-import ActivityIndex from './activity/index';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 /* Actions */
 import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/admins';
 import { invoke } from 'actions';
@@ -19,6 +15,7 @@ import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 import Button from 'components/base/button';
+import Breadcrumb from 'components/base/breadcrumb';
 /* Helpers */
 import { fields } from 'components/helpers/fields/admins';
 import PasswordConfirmationModal from 'components/helpers/modals/password_confirmation';
@@ -97,38 +94,19 @@ class Show extends React.Component {
     });
   };
 
-  renderHeader() {
-    const { backPath, record } = this.props;
-
-    return (<Row className="p-4">
-      <Col md={2} className="align-self-center ">
-        <Link to={backPath} className="mr-2" >
-          <FontAwesomeIcon color="grey" icon={faChevronLeft} />
-        </Link>
-        {record.username}
-      </Col>
-      <Col md={10} >
-        <Nav pills className="float-right mx-auto">
-          ID: {record.id}
-        </Nav>
-      </Col>
-    </Row>);
-  }
-
   renderSaveButton = () => {
     const { isSaving } = this.state;
     return (
-      <Col>
+      <div className="d-flex justify-content-end pt-2 pr-4">
         <Button
           size="md"
           status="success"
-          className="px-5 py-2 mb-4 float-right"
           onClick={this.save}
           isLoading={isSaving}
         >
           Save Changes
         </Button>
-      </Col>
+      </div>
     );
   }
 
@@ -138,12 +116,12 @@ class Show extends React.Component {
 
   renderForm() {
     const { record } = this.props;
-    const { isSaving, inputChanged } = this.state;
+    const { isSaving } = this.state;
 
     return (
       <fieldset disabled={isSaving || !record.actions.update}>
         <Form getApi={this.setFormApi} initialValues={this.values()}>
-          <Row>
+          <Row className="no-gutters px-2">
             <Col sm={12} md={3}>
               {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, this.fieldProps())}
             </Col>
@@ -151,27 +129,8 @@ class Show extends React.Component {
               {this.renderFields()}
             </Col>
           </Row>
-          {inputChanged && this.renderSaveButton()}
         </Form>
       </fieldset>
-    );
-  }
-
-  renderRecord() {
-    return (
-      <Row className="m-0">
-        <PasswordConfirmationModal
-          toggleModal={this.toggleModal}
-          isOpen={this.state.modal}
-          handleSuccess={this.handlePasswordSuccess}
-        />
-        <Col xs={12} className="mb-4 bg-white">
-          {this.renderHeader()}
-        </Col>
-        <Col xs={12}>
-          {this.renderForm()}
-        </Col>
-      </Row>
     );
   }
 
@@ -209,12 +168,26 @@ class Show extends React.Component {
   }
 
   render() {
-    return this.isFetching() ? <Loader /> : (
-      <React.Fragment>
-        {this.renderRecord()}
-        <div className="mt-1" />
-        <ActivityIndex />
-      </React.Fragment>
+    if (this.isFetching()) {
+      return <Loader />;
+    }
+    const { backPath, record } = this.props;
+    const { inputChanged } = this.state;
+    return (
+      <div className="pb-4">
+        <PasswordConfirmationModal
+          toggleModal={this.toggleModal}
+          isOpen={this.state.modal}
+          handleSuccess={this.handlePasswordSuccess}
+        />
+        <Breadcrumb
+          title={record.username}
+          id={record.id}
+          backPath={backPath}
+        />
+        {this.renderForm()}
+        {inputChanged && this.renderSaveButton()}
+      </div>
     );
   }
 }

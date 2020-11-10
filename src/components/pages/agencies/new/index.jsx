@@ -3,11 +3,8 @@ import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router-dom';
 import { Form } from 'informed';
 import LocationForm from '../location/form';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { cloneDeep } from 'lodash'
 /* Actions */
 import { invoke } from 'actions';
@@ -16,6 +13,7 @@ import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/agencies';
 import { create } from 'api/agencies';
 import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
+import Breadcrumb from 'components/base/breadcrumb';
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 import Button from 'components/base/button';
 /* Helpers */
@@ -60,33 +58,19 @@ class New extends React.Component {
     saveRecord.call(this, create, backPath, values);
   };
 
-  renderHeader () {
-    const { backPath } = this.props;
-
-    return (<Row className="p-4">
-      <Col md={2}>
-        <Link to={backPath} className="mr-2" >
-          <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
-        </Link>
-        Create new agency
-      </Col>
-    </Row>);
-  }
-
   renderSaveButton = () => {
     const { isSaving } = this.state;
     return (
-      <Col>
+      <div className="d-flex justify-content-end pt-2 pr-4">
         <Button
           size="md"
           status="success"
-          className="px-5 py-2 mb-4 float-right"
           onClick={this.save}
           isLoading={isSaving}
         >
           Save Changes
         </Button>
-      </Col>
+      </div>
     );
   }
 
@@ -109,7 +93,7 @@ class New extends React.Component {
     return (
       <fieldset disabled={isSaving}>
         <Form getApi={this.setFormApi} initialValues={exampleData()}>
-          <Row>
+          <Row className="no-gutters px-2">
             <Col sm={12} md={3}>
               {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, fieldProps)}
             </Col>
@@ -117,22 +101,8 @@ class New extends React.Component {
               {this.renderFields()}
             </Col>
           </Row>
-          { this.renderSaveButton()}
         </Form>
       </fieldset>
-    );
-  }
-
-  renderRecord () {
-    return (
-      <Row className="m-0">
-        <Col xs={12} className="mb-4 bg-white">
-          {this.renderHeader()}
-        </Col>
-        <Col xs={12}>
-          {this.renderForm()}
-        </Col>
-      </Row>
     );
   }
 
@@ -151,10 +121,19 @@ class New extends React.Component {
   }
 
   render () {
-    return this.isFetching() ? <Loader/> : (
-      <React.Fragment>
-        {this.renderRecord()}
-      </React.Fragment>
+    if (this.isFetching()) {
+      return <Loader />;
+    }
+    const { backPath } = this.props;
+    return (
+      <div className="pb-4">
+        <Breadcrumb
+          title='Create new agency'
+          backPath={backPath}
+        />
+        {this.renderForm()}
+        {this.renderSaveButton()}
+      </div>
     );
   }
 }
