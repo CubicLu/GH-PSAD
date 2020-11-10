@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, Nav, Row } from 'reactstrap';
 import { generatePath } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Form } from 'informed';
@@ -12,8 +12,9 @@ import { SET_RECORD } from 'actions/tickets';
 import { update, statuses, show } from 'api/parking/tickets';
 /* Base */
 import { renderFieldsWithGrid } from 'components/base/forms/common_form';
+import Button from 'components/base/button';
 /* Helpers */
-import { btnSpinner, displayUnixTimestamp } from 'components/helpers';
+import { displayUnixTimestamp } from 'components/helpers';
 import { fields } from 'components/helpers/fields/tickets';
 import searchAdminByRoleName from 'components/helpers/admins/search_by_role_name';
 import { fromJson as showErrors } from 'components/helpers/errors';
@@ -45,8 +46,14 @@ class Edit extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success float-right" outline onClick={this.save}>
-          {isSaving ? btnSpinner() : 'Save Changes'}
+        <Button
+          size="md"
+          status="success"
+          className="float-right"
+          onClick={this.save}
+          isLoading={isSaving}
+        >
+          Save Changes
         </Button>
       </Col>
     );

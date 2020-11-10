@@ -125,7 +125,7 @@ class ResetPassword extends React.Component {
               />
             </div>
 
-            <Button disabled={this.state.passwordTokenInvalid}  color={this.validInputs() ? 'primary-lg' : 'disabled-lg' } className="mt-4 p-3 text-uppercase btn-lg btn-block" type="submit">
+            <Button disabled={this.state.passwordTokenInvalid || this.state.isFetching}  color={this.validInputs() ? 'primary-lg' : 'disabled-lg' } className="mt-4 p-3 text-uppercase btn-lg btn-block" type="submit">
               {this.state.isFetching ? btnSpinner({ className: 'spinner-border' }) : 'Save'}
             </Button>
           </form>

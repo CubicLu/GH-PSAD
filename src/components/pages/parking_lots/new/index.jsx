@@ -22,7 +22,6 @@ import { search as dropdownsSearch } from 'api/dropdowns';
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 import Button from 'components/base/button';
 /* Helpers */
-import { btnSpinner } from 'components/helpers';
 import { fieldsNew, exampleData } from 'components/helpers/fields/parking_lots';
 import Loader from 'components/helpers/loader';
 import { exampleData as exampleLocationData } from 'components/helpers/fields/location';
@@ -178,8 +177,9 @@ class New extends React.Component {
             onClick={() => this.save()}
             className={styles.btnSave}
             size="md"
+            isLoading={isSaving}
           >
-            {isSaving ? btnSpinner() : 'Next >'}
+            {'Next >'}
           </Button>
         </Col>
       </Row>
@@ -230,7 +230,7 @@ class New extends React.Component {
 
   render () {
     const { backPath } = this.props;
-    const { showParkingRulesSection, errors } = this.state;
+    const { showParkingRulesSection, errors, isSaving } = this.state;
 
     if (this.isFetching()) {
       return <Loader/>;
@@ -246,6 +246,7 @@ class New extends React.Component {
           <Rules
             {...this.props}
             save={this.save}
+            isSaving={isSaving}
             backParkingRule={this.backParkingRule}
             errors={errors}
           />

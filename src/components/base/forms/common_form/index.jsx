@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Button, Col, FormGroup, Label, Row } from 'reactstrap';
+import { Alert, Col, FormGroup, Label, Row } from 'reactstrap';
+import Button from 'components/base/button';
 import { labelFor } from 'components/helpers/forms';
 import TooltipInfo from 'components/helpers/tooltip_info';
 import {
@@ -18,7 +19,6 @@ import {
 } from 'components/helpers/form_fields';
 import { Form, Text } from 'informed';
 import { Link } from 'react-router-dom';
-import { btnSpinner } from 'components/helpers';
 import ErrorWrapper from './error'
 import styles from './common_form.module.sass';
 
@@ -123,8 +123,13 @@ const renderButtons = (formState, props = {}) => {
   return (
     <React.Fragment>
       <Link to={backPath} className="btn btn-primary mr-1">Back</Link>
-      <Button color="success" type="submit">
-        {isFetching() ? btnSpinner() : 'Save'}
+      <Button
+        type="submit"
+        status="success"
+        isLoading={isFetching()}
+        size="md"
+      >
+        Save
       </Button>
     </React.Fragment>
   );

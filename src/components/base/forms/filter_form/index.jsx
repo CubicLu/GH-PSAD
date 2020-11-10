@@ -2,7 +2,6 @@ import React from 'react';
 import { Form, Text } from 'informed';
 import PropTypes from 'prop-types';
 import { Col, FormGroup, Label } from 'reactstrap';
-import { btnSpinner } from 'components/helpers';
 import {
   CustomSelect,
   CustomMultiSelect,
@@ -66,8 +65,9 @@ class FilterForm extends React.Component {
           status="success"
           type="submit"
           size="md"
+          isLoading={isFetching()}
         >
-          {isFetching() ? btnSpinner() : 'Apply'}
+          Apply
         </Button>
       </div>
     );

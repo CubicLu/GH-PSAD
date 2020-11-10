@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
 import { Form } from 'informed';
 import { withRouter } from 'react-router-dom';
 /* Actions */
@@ -8,8 +8,8 @@ import { withRouter } from 'react-router-dom';
 import { update } from 'api/agencies';
 /* Base */
 import { renderFieldsWithGrid, renderField } from 'components/base/forms/common_form';
+import Button from 'components/base/button';
 /* Helpers */
-import { btnSpinner } from 'components/helpers';
 import { fields } from 'components/helpers/fields/parking_rules';
 import { fromJson as showErrors } from 'components/helpers/errors';
 /* Modules */
@@ -62,8 +62,14 @@ class SectionRule extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success float-right" outline onClick={this.save}>
-          {isSaving ? btnSpinner() : 'Save Changes'}
+        <Button
+          size="md"
+          status="success"
+          className="float-right"
+          onClick={this.save}
+          isLoading={isSaving}
+        >
+          Save Changes
         </Button>
       </Col>
     );

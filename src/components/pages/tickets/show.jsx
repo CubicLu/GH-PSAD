@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Col, Nav, Row, FormGroup, Label, Table } from 'reactstrap';
+import { Col, Nav, Row, FormGroup, Label, Table } from 'reactstrap';
 import { generatePath } from 'react-router';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -16,8 +16,9 @@ import { update, show } from 'api/parking/tickets';
 import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
+import Button from 'components/base/button';
 /* Helpers */
-import { btnSpinner, displayUnixTimestamp } from 'components/helpers';
+import { displayUnixTimestamp } from 'components/helpers';
 import { fields } from 'components/helpers/fields/tickets';
 import Loader from 'components/helpers/loader';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
@@ -67,8 +68,14 @@ class Show extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success" className="px-5 py-2 float-right"  onClick={this.save}>
-          {isSaving ? btnSpinner() : 'Save Changes'}
+        <Button
+          size="md"
+          status="success"
+          className="px-5 py-2 float-right"
+          onClick={this.save}
+          isLoading={isSaving}
+        >
+          Save Changes
         </Button>
       </Col>
     );

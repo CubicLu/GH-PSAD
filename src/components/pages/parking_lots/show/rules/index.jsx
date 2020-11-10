@@ -17,7 +17,6 @@ import { show } from 'api/parking_lots';
 import IndexTable from 'components/base/table';
 import Button from 'components/base/button';
 /* Helpers */
-import { btnSpinner } from 'components/helpers';
 import Loader from 'components/helpers/loader';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import TooltipInfo from 'components/helpers/tooltip_info';
@@ -115,8 +114,9 @@ class Rules extends React.Component {
             className={styles.btnSave}
             size="md"
             onClick={this.save}
+            isLoading={isSaving}
           >
-            {isSaving ? btnSpinner() : 'Save Changes'}
+            Save Changes
           </Button>
         </Col>
       </Row>

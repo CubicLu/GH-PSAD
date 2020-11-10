@@ -105,7 +105,7 @@ class Login extends React.Component {
             </div>
 
             <Link to='/forgot_password' className="mr-1 mt-2 mb-5 d-block general-text-1">Forgot password?</Link>
-            <Button color={this.validInputs() ? 'primary-lg' : 'disabled-lg' } className="mt-4 p-3 text-uppercase btn-lg btn-block" type="submit">
+            <Button color={this.validInputs() ? 'primary-lg' : 'disabled-lg' } className="mt-4 p-3 text-uppercase btn-lg btn-block" type="submit" disabled={this.state.isFetching}>
               {this.state.isFetching ? btnSpinner({ className: 'spinner-border' }) : 'Log In'}
             </Button>
           </form>

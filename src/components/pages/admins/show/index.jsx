@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Col, Nav, Row } from 'reactstrap';
+import { Col, Nav, Row } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { generatePath } from 'react-router';
@@ -18,11 +18,11 @@ import { show, update } from 'api/admins';
 import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
+import Button from 'components/base/button';
 /* Helpers */
 import { fields } from 'components/helpers/fields/admins';
 import PasswordConfirmationModal from 'components/helpers/modals/password_confirmation';
 import { FieldType } from 'components/helpers/form_fields';
-import { btnSpinner } from 'components/helpers';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 /* Module */
 import connectRecord from 'components/modules/connect_record';
@@ -119,8 +119,14 @@ class Show extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success" className="px-5 py-2 float-right" onClick={this.save}>
-          {isSaving ? btnSpinner() : 'Save Changes'}
+        <Button
+          size="md"
+          status="success"
+          className="px-5 py-2 mb-4 float-right"
+          onClick={this.save}
+          isLoading={isSaving}
+        >
+          Save Changes
         </Button>
       </Col>
     );

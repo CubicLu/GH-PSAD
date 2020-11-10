@@ -87,7 +87,7 @@ class SendResetPasswordInstructions extends React.Component {
                 autoFocus
               />
             </div>
-            <Button color={this.validInputs() ? 'primary-lg' : 'disabled-lg' } className="p-3 text-uppercase btn-lg btn-block" type="submit">
+            <Button color={this.validInputs() ? 'primary-lg' : 'disabled-lg' } className="p-3 text-uppercase btn-lg btn-block" type="submit" disabled={this.state.isFetching}>
               {this.state.isFetching ? btnSpinner({ className: 'spinner-border' }) : 'Reset Password'}
             </Button>
           </form>

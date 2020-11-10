@@ -21,7 +21,6 @@ import { show, update } from 'api/parking_lots';
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 import Button from 'components/base/button';
 /* Helpers */
-import { btnSpinner } from 'components/helpers';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import { FieldType } from 'components/helpers/form_fields';
 import { fieldsShow } from 'components/helpers/fields/parking_lots';
@@ -140,8 +139,9 @@ class Show extends React.Component {
             onClick={this.save}
             className={styles.btnSave}
             size="md"
+            isLoading={isSaving}
           >
-            {isSaving ? btnSpinner() : 'Save Changes'}
+            Save Changes
           </Button>
         </Col>
       </Row>
