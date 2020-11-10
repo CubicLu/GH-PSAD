@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button, Col, Row } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Form } from 'informed';
@@ -16,8 +16,8 @@ import { create } from 'api/admins';
 import { search as dropdownsSearch } from 'api/dropdowns';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
+import Button from 'components/base/button';
 /* Helpers */
-import { btnSpinner } from 'components/helpers';
 import { fields, exampleData } from 'components/helpers/fields/admins';
 import Loader from 'components/helpers/loader';
 import { FieldType } from 'components/helpers/form_fields';
@@ -73,8 +73,14 @@ class New extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col>
-        <Button color="success" className="px-5 py-2 mb-4 float-right"  onClick={this.save}>
-          {isSaving ? btnSpinner() : 'Save Changes'}
+        <Button
+          size="md"
+          status="success"
+          className="px-5 py-2 mb-4 float-right"
+          onClick={this.save}
+          isLoading={isSaving}
+        >
+          Save Changes
         </Button>
       </Col>
     );

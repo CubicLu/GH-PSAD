@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Col, Nav, Row, Label, FormGroup } from 'reactstrap';
+import { Col, Nav, Row, Label, FormGroup } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Form } from 'informed';
@@ -12,10 +12,10 @@ import { setCurrentUserData } from 'actions/users';
 import { updateMe } from 'api/users';
 /* Base */
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
+import Button from 'components/base/button';
 /* Helpers */
 import { fields } from 'components/helpers/fields/profile';
 import { FieldType } from 'components/helpers/form_fields';
-import { btnSpinner } from 'components/helpers';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 /* Module */
 import setEmptyFields from 'components/modules/set_empty_fields';
@@ -43,6 +43,7 @@ class Profile extends React.Component {
   update = () => {
     const values = setEmptyFields(fields(), this.formApi);
     values.avatar = this.formApi.getValue('avatar');
+    this.setState({ isSaving: true });
     updateMe(values)
       .then(() => {
         this.props.setCurrentUserData()
@@ -85,8 +86,14 @@ class Profile extends React.Component {
     const { isSaving } = this.state;
     return (
       <Col className="my-5">
-        <Button color="success" className="px-5 py-2 mb-4 "  onClick={this.update}>
-          {isSaving ? btnSpinner() : 'Save Changes'}
+        <Button
+          size="md"
+          status="success"
+          className="px-5 py-2 mb-4"
+          onClick={this.update}
+          isLoading={isSaving}
+        >
+          Save Changes
         </Button>
       </Col>
     );

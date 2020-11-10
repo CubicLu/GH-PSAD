@@ -26,7 +26,6 @@ import Button from 'components/base/button';
 import Loader from 'components/helpers/loader';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import ConfirmationModal from 'components/helpers/modals/confirmation';
-import { btnSpinner } from 'components/helpers';
 /* Modules */
 import withFetching from 'components/modules/with_fetching';
 import resourceFetcher from 'components/modules/resource_fetcher';
@@ -569,8 +568,9 @@ class ParkingPlans extends Component {
         className="mt-4 float-right"
         onClick={this.saveCoordinateCircles}
         size="md"
+        isLoading={isSavingCoordinates}
       >
-        {isSavingCoordinates ? btnSpinner() : 'Save Changes'}
+        Save Changes
       </Button>
     );
   }

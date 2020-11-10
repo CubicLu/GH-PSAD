@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { Row, Col, Button } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Form } from 'informed';
@@ -17,9 +17,9 @@ import { create } from 'api/cameras';
 import { show as parkingLotShow } from 'api/parking_lots';
 /* Base */
 import { renderFieldsWithGrid } from 'components/base/forms/common_form';
+import Button from 'components/base/button';
 /* Helpers */
 import { fields, exampleData } from 'components/helpers/fields/cameras';
-import { btnSpinner } from 'components/helpers';
 import CameraNotConnected from 'components/helpers/camera/not_connected'
 import CameraConnecting from 'components/helpers/camera/connecting'
 import Loader from 'components/helpers/loader';
@@ -109,8 +109,15 @@ class New extends React.Component {
     const { isSaving, cameraConnectionSuccessful } = this.state;
     return (
       <Col className="mx-4">
-        <Button color="success" disabled={!cameraConnectionSuccessful} className={`${cameraConnectionSuccessful ? '' : 'not-allowed'} px-5 py-2 mb-4 float-right`}  onClick={this.save}>
-          {isSaving ? btnSpinner() : 'Save Changes'}
+        <Button
+          size="md"
+          status="success"
+          className={`${cameraConnectionSuccessful ? '' : 'not-allowed'} px-5 py-2 mb-4 float-right`}
+          onClick={this.save}
+          isLoading={isSaving}
+          disabled={!cameraConnectionSuccessful}
+        >
+          Save Changes
         </Button>
       </Col>
     );

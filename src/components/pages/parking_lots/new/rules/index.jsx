@@ -11,7 +11,6 @@ import { index } from 'api/parking_rules';
  import IndexTable from 'components/base/table';
 import Button from 'components/base/button';
 /* Helpers */
-import { btnSpinner } from 'components/helpers';
  import Loader from 'components/helpers/loader';
  import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import TooltipInfo from 'components/helpers/tooltip_info';
@@ -25,7 +24,6 @@ import { renderRecords } from '../../shared/rules'
 
 class Rules extends React.Component {
   state = {
-    isSaving: false,
     inputChanged: false,
     showModalRecipient: false,
     dropdown: {},
@@ -70,8 +68,7 @@ class Rules extends React.Component {
   };
 
   renderSaveButton = () => {
-    const { backParkingRule } = this.props;
-    const { isSaving } = this.state;
+    const { backParkingRule, isSaving } = this.props;
     return (
       <Row>
         <Col className={styles.btnWrapper}>
@@ -80,15 +77,17 @@ class Rules extends React.Component {
             className="mr-4"
             onClick={backParkingRule}
             size="md"
+            isLoading={isSaving}
           >
-            {isSaving ? btnSpinner() : '< Back'}
+            {'< Back'}
           </Button>
           <Button
             status="success"
             onClick={this.save}
             size="md"
+            isLoading={isSaving}
           >
-            {isSaving ? btnSpinner() : 'Submit'}
+            Submit
           </Button>
         </Col>
       </Row>
@@ -180,7 +179,8 @@ class Rules extends React.Component {
 Rules.propTypes = {
   backParkingRule: PropTypes.func.isRequired,
   backPath: PropTypes.string.isRequired,
-  currentUser: PropTypes.object
+  currentUser: PropTypes.object,
+  isSaving: PropTypes.bool
 };
 
 export default withFetching(
