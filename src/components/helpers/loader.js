@@ -1,11 +1,11 @@
 import React from 'react';
-import { Row, Col, Spinner } from 'reactstrap';
+import { Spinner } from 'reactstrap';
 
 const Loader = () => (
-  <Row className="justify-content-center align-items-center">
-    <Col sm={12} className="text-center">Loading...</Col>
-    <Spinner size="lg" color="primary"/>
-  </Row>
-)
+  <div className="d-flex justify-content-center align-items-center flex-column pb-2">
+    <div className="text-center">Loading...</div>
+    <Spinner color="primary" size="lg" />
+  </div>
+);
 
 export default Loader;
