@@ -3,12 +3,28 @@
 .checkBox
   display: flex
   align-items: center
+  cursor: pointer
   & > span
     margin-left: 10px
     font-weight: 300
   & g > g
-    stroke: $loblolly
+    stroke: $mystic
     fill: white
   &.active g > g
     stroke: $primary-color
     fill: $primary-color
+  &.disabled
+    cursor: default !important
+    & g > g
+      opacity: 0.5
+      stroke: $mystic
+      fill: $mystic
+    & g > path
+      display: none
+    &.active g > g
+      opacity: 1
+      stroke: $mystic
+      fill: $primary-color
+    &.active g > path
+      display: inline
+      stroke: $mystic

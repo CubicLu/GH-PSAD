@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { Row, Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { permissions } from 'config/permissions'
 /* Modules */
 import withCurrentUser from 'components/modules/with_current_user';
 import PermissibleRender from 'components/modules/permissible_render';
@@ -24,8 +23,8 @@ class BasicListToolbar extends React.Component {
       label,
       title,
       onClickFilter,
-      createRequiredPermissions,
-      currentUserRoleName,
+      createRequiredPermission,
+      currentUserPermissions,
       goBackPath,
       extraButtons = () => { },
       showFilters,
@@ -56,8 +55,8 @@ class BasicListToolbar extends React.Component {
           }
           {label && (
             <PermissibleRender
-              userPermissions={permissions[currentUserRoleName]}
-              requiredPermissions={createRequiredPermissions || permissions[currentUserRoleName]}
+              userPermissions={currentUserPermissions}
+              requiredPermission={createRequiredPermission}
             >
               <Button
                 className={`${styles.btnCreate} text-uppercase`}
@@ -79,7 +78,9 @@ BasicListToolbar.propTypes = {
   history: PropTypes.object.isRequired,
   onClickFilter: PropTypes.func,
   setList: PropTypes.func.isRequired,
-  label: PropTypes.string
+  label: PropTypes.string,
+  createRequiredPermission: PropTypes.object,
+  currentUserPermissions: PropTypes.array
 };
 
 export default withCurrentUser(BasicListToolbar);

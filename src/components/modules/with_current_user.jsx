@@ -6,13 +6,14 @@ import Loader from 'components/helpers/loader';
 const withCurrentUser = (Component, CustomLoader = null) => {
   const HOC = class extends React.Component {
     state = {
-      currentUser: null
+      currentUser: null,
+      currentUserPermissions: []
     }
 
     componentWillUnmount() {
       this.setState({
         currentUser: null,
-        currentUserRoleName: null
+        currentUserPermissions: []
       })
     }
 
@@ -20,7 +21,7 @@ const withCurrentUser = (Component, CustomLoader = null) => {
       if (!isEmpty(nextProps.currentUser)) {
         this.setState({
           currentUser: nextProps.currentUser,
-          currentUserRoleName: nextProps.currentUser.role.name
+          currentUserPermissions: nextProps.currentUser.role.permissions
         })
       }
     }
@@ -28,12 +29,12 @@ const withCurrentUser = (Component, CustomLoader = null) => {
     componentDidMount() {
       this.setState({
         currentUser: this.props.currentUser,
-        currentUserRoleName: this.props.currentUser ? this.props.currentUser.role.name : null
+        currentUserPermissions: this.props.currentUser ? this.props.currentUser.role.permissions : []
       })
     }
 
     render() {
-      const { currentUser, currentUserRoleName, ...other_props} = this.props
+      const { currentUser, currentUserPermissions, ...other_props} = this.props
       return this.state.currentUser ?
             <Component {...this.state} {...other_props}/> :
             CustomLoader ? <CustomLoader/> : <Loader/>

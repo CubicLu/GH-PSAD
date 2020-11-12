@@ -11,7 +11,6 @@ import SettingSection from '../shared/setting_section';
 import NearbyPlaces from '../shared/nearby_places';
 import Rules from './rules';
 import Header from './header';
-import  { permissions } from 'config/permissions/forms_fields/parking_lots/new'
 /* Actions */
 import { invoke } from 'actions';
 import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/parking_lots';
@@ -117,11 +116,10 @@ class New extends React.Component {
 
   renderFields () {
     const { dropdowns } = this.state;
-    const { currentUserRoleName } = this.props;
 
     return (
       renderFieldsWithGrid(
-        fieldsNew(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this), permissions[currentUserRoleName]),
+        fieldsNew(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this)),
         2,
         6,
         {...this.fieldProps(), errors: this.state.errors }
@@ -254,7 +252,7 @@ class New extends React.Component {
         <div className={showParkingRulesSection ? 'd-none' : ''}>
           <div className={`${styles.hint} bg-grey-light`}>
             <p className="general-text-2 m-0">
-              Fields marked with an asterik (*) are mandatory
+              Fields marked with an asterisk (*) are mandatory.
             </p>
           </div>
           {this.renderForm()}

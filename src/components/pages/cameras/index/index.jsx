@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import ReactPlayer from 'react-player'
-import { permissions } from 'config/permissions/forms_fields/cameras/index'
-import { STREAM_TRANSMISSION } from 'config/permissions/forms_fields/cameras/fields'
+import permissions from 'config/permissions';
 /* Actions */
 import { SET_LIST } from 'actions/cameras';
 import { SET_LIST_ELEMENT } from 'actions/parking_lots_camera';
@@ -31,6 +30,7 @@ import { invoke } from 'actions';
 import styles from './index.module.sass'
 import BasicListToolbar from '../../../base/basic_list_toolbar'
 import debounce from 'lodash/debounce'
+import PermissibleRender from 'components/modules/permissible_render';
 
 class Index extends React.Component {
   state = {
@@ -85,7 +85,7 @@ class Index extends React.Component {
     const { backPath } = this.props;
     return (<Row className="p-4" >
       <Col md={12} >
-        <BasicListToolbar showFilters={false} goBackPath={backPath} title={this.state.parkingLot.name} {...this.props} label="+ Add Camera" badgesFilter={null} extraButtons={() => {
+        <BasicListToolbar showFilters={false} goBackPath={backPath} title={this.state.parkingLot.name} {...this.props} createRequiredPermission={permissions.CREATE_CAMERA} label="+ Add Camera" badgesFilter={null} extraButtons={() => {
           return (
             this.renderSearchRefresh()
           )
@@ -194,27 +194,26 @@ class Index extends React.Component {
     );
   }
 
-  renderStream(stream, allowed) {
-    const { currentUserRoleName } = this.props
-    const canPlay = ReactPlayer.canPlay(stream)
-
-    if(!allowed && !permissions[currentUserRoleName].includes(STREAM_TRANSMISSION)) {
-      return <CameraNotAllowed/>
-    }
+  renderStream (stream, allowed) {
+    const { currentUserPermissions } = this.props;
+    const canPlay = ReactPlayer.canPlay(stream);
 
     return (
-      canPlay ? (
-        <div>
-          <ReactPlayer className={`${styles.stream}`} url={stream} playing={true} width={'80 %'} />
-          <p className={`${styles.live}`}>LIVE</p>
-        </div>
-      ) : (
-        <CameraNotConnected canPlay={canPlay} />
-      )
-    )
+      <PermissibleRender
+        userPermissions={currentUserPermissions}
+        requiredPermission={allowed ? undefined : permissions.READ_CAMERA}
+        renderOtherwise={<CameraNotAllowed/>}
+      >
+        {canPlay
+          ? <div>
+            <ReactPlayer className={`${styles.stream}`} url={stream} playing={true} width={'80 %'} />
+            <p className={`${styles.live}`}>LIVE</p>
+          </div>
+          : <CameraNotConnected canPlay={canPlay} />
+        }
+      </PermissibleRender>
+    );
   }
-
-
 
   render() {
     const { isModalOpen, cameraModal } = this.state;
@@ -245,7 +244,8 @@ Index.propTypes = {
     updated_at: PropTypes.number.isRequired,
     created_at: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired
-  })
+  }),
+  currentUserPermissions: PropTypes.array
 };
 
 function mapDispatch(dispatch) {

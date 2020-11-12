@@ -10,8 +10,7 @@ import { Link } from 'react-router-dom';
 import { Row, Col, Button, Input } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { permissions } from 'config/permissions/forms_fields/cameras/show'
-import { STREAM_PERMISSION, STREAM_NAME, DELETE_STREAM, STREAM_TRANSMISSION } from 'config/permissions/forms_fields/cameras/fields'
+import permissions from 'config/permissions';
 /* Actions */
 import { SET_RECORD, SET_LIST_ELEMENT, POP_LIST_ELEMENT } from 'actions/cameras';
 import { invoke } from 'actions';
@@ -30,6 +29,7 @@ import updateRecord from 'components/modules/form_actions/update_record';
 import connectRecord from 'components/modules/connect_record';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import withCurrentUser from 'components/modules/with_current_user';
+import PermissibleRender from 'components/modules/permissible_render';
 import ReactPlayer from 'react-player'
 
 import styles from './show.module.sass'
@@ -147,44 +147,45 @@ class Show extends React.Component {
   }
 
   renderCameraHeaderDetails = () => {
-    const { record, currentUserRoleName } = this.props
+    const { record, currentUserPermissions } = this.props
     const { streamName, errors } = this.state
 
     return (
       <Row>
         <Col xs={12} md={4} className="text-center d-flex justify-content-center align-items-center">
-          {
-            permissions[currentUserRoleName].includes(STREAM_NAME) ? (
-              <React.Fragment>
-                <span className={`${errors['name'] && 'general-error'} general-text-3 mr-1`}>Stream name:</span>
-                <Input className={` pr-4 ${errors['name'] && 'input-error'}`} onChange={this.changeStreamName} value={streamName || record.name}/>
-                <div className={`position-relative input-error`}>
-                  <div className="text-left general-error general-text-1 pt-1">
-                    {errors['name']}
-                  </div>
-                </div>
-                <EditIcon width="22" height="22" className={`svg-dark position-relative ${styles.pencil}`}/>
-              </React.Fragment>
-            ) : (
+          <PermissibleRender
+            userPermissions={currentUserPermissions}
+            requiredPermission={permissions.UPDATE_CAMERA}
+            renderOtherwise={
               <React.Fragment>
                 <span className="general-text-3 mr-1">Stream name:</span> <strong className="general-text-1">{record.name}</strong>
               </React.Fragment>
-            )
-          }
+            }
+          >
+            <span className={`${errors['name'] && 'general-error'} general-text-3 mr-1`}>Stream name:</span>
+            <Input className={` pr-4 ${errors['name'] && 'input-error'}`} onChange={this.changeStreamName} value={streamName || record.name}/>
+            <div className={`position-relative input-error`}>
+              <div className="text-left general-error general-text-1 pt-1">
+                {errors['name']}
+              </div>
+            </div>
+            <EditIcon width="22" height="22" className={`svg-dark position-relative ${styles.pencil}`}/>
+          </PermissibleRender>
         </Col>
         <Col xs={12} md={3} className="text-center d-flex justify-content-center align-items-center">
           <span className="general-text-3 mr-1">Current status: </span> <strong className={`general-text-1 ${record.status === 'active' ? 'text-green' : 'general-error' }`}>{record.status}</strong>
         </Col>
-        {
-          permissions[currentUserRoleName].includes(STREAM_PERMISSION) && (
-            <Col xs={12} md={4} className="text-center d-flex justify-content-center align-items-center">
-              <span className="general-text-3 mr-1">Stream permission:</span> <strong className={`general-text-1`}>{record.allowed ? 'Allowed' : 'Disallowed'}</strong>
-              <Button onClick={() => this.changeAllowStatus()} size="sm" outline color="primary" className="general-text-1 py-2 px-5 ml-3 ">
-                <span className="">{record.allowed ? 'Disallow' : 'Allow'}</span>
-              </Button>
-            </Col>
-          )
-        }
+        <PermissibleRender
+          userPermissions={currentUserPermissions}
+          requiredPermission={permissions.UPDATE_CAMERA}
+        >
+          <Col xs={12} md={4} className="text-center d-flex justify-content-center align-items-center">
+            <span className="general-text-3 mr-1">Stream permission:</span> <strong className={`general-text-1`}>{record.allowed ? 'Allowed' : 'Disallowed'}</strong>
+            <Button onClick={() => this.changeAllowStatus()} size="sm" outline color="primary" className="general-text-1 py-2 px-5 ml-3 ">
+              <span className="">{record.allowed ? 'Disallow' : 'Allow'}</span>
+            </Button>
+          </Col>
+        </PermissibleRender>
       </Row>
     )
   }
@@ -209,32 +210,31 @@ class Show extends React.Component {
   }
 
   renderCamera = () => {
-    const { record, currentUserRoleName } = this.props
+    const { record, currentUserPermissions } = this.props;
     const { parkingLot } = this.state
     const canPlay = ReactPlayer.canPlay(record.stream)
     return (
       <React.Fragment>
         {this.renderCameraHeaderDetails()}
         <Row>
-          {
-            (!record.allowed && !permissions[currentUserRoleName].includes(STREAM_TRANSMISSION)) ? (
-              <CameraNotAllowed/>
-            ) : (
-              canPlay ? (
-                <Col xs={12}>
-                  <ReactPlayer className={`${styles.stream}`} url={record.stream} playing={true} width={'80 %'} />
-                  <p className={`${styles.live}`}>LIVE</p>
-                  <p className={`${styles.timestamp}`}>
-                    <p>{record.name}</p>
-                    <p>{ moment().utcOffset(parkingLot.time_zone.offset).format('MMM Do, YYYY')}</p>
-                    <p ref={this.clockRef}></p>
-                  </p>
-                </Col>
-              ) : (
-                <CameraNotConnected canPlay={canPlay} />
-              )
-            )
-          }
+          <PermissibleRender
+            userPermissions={currentUserPermissions}
+            requiredPermission={record.allowed ? undefined : permissions.READ_CAMERA}
+            renderOtherwise={<CameraNotAllowed/>}
+          >
+            {canPlay
+              ? <Col xs={12}>
+                <ReactPlayer className={`${styles.stream}`} url={record.stream} playing={true} width={'80 %'} />
+                <p className={`${styles.live}`}>LIVE</p>
+                <p className={`${styles.timestamp}`}>
+                  <p>{record.name}</p>
+                  <p>{ moment().utcOffset(parkingLot.time_zone.offset).format('MMM Do, YYYY')}</p>
+                  <p ref={this.clockRef}></p>
+                </p>
+              </Col>
+              : <CameraNotConnected canPlay={canPlay} />
+            }
+          </PermissibleRender>
         </Row>
         {this.renderCameraFooterDetails()}
       </React.Fragment>
@@ -249,7 +249,7 @@ class Show extends React.Component {
   }
 
   renderHeader () {
-    const { backPath, currentUserRoleName } = this.props;
+    const { backPath, currentUserPermissions } = this.props;
     const { parkingLot } = this.state;
 
     return (
@@ -258,13 +258,14 @@ class Show extends React.Component {
           <FontAwesomeIcon color="grey" icon={faChevronLeft}/>
         </Link>
         {parkingLot.name}
-        {
-          permissions[currentUserRoleName].includes(DELETE_STREAM) && (
-            <Button color="danger" onClick={this.toggleConfirmationModal} className={`mb-3 ml-4 float-right`}>
-              <TrashIcon className="svg-white" />
-            </Button>
-          )
-        }
+        <PermissibleRender
+          userPermissions={currentUserPermissions}
+          requiredPermission={permissions.DELETE_CAMERA}
+        >
+          <Button color="danger" onClick={this.toggleConfirmationModal} className={`mb-3 ml-4 float-right`}>
+            <TrashIcon className="svg-white" />
+          </Button>
+        </PermissibleRender>
       </React.Fragment>
     );
   }
@@ -349,7 +350,8 @@ Show.propTypes = {
     updated_at: PropTypes.number.isRequired,
     created_at: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired
-  })
+  }),
+  currentUserPermissions: PropTypes.array
 };
 
 function mapDispatch(dispatch) {

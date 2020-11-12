@@ -1,12 +1,39 @@
-export const CREATE_ADMIN = 'CREATE_ADMIN';
-export const INDEX_PARKING_LOT = 'INDEX_PARKING_LOT';
-export const CREATE_PARKING_LOT = 'CREATE_PARKING_LOT';
+export const PERMISSION_NAMES = [
+  'Role',
+  'Admin',
+  'ParkingLot',
+  'Agency',
+  'Camera',
+  'Report'
+];
 
-export const permissions = {
-  super_admin: [CREATE_ADMIN, INDEX_PARKING_LOT, CREATE_PARKING_LOT],
-  system_admin: [CREATE_ADMIN, INDEX_PARKING_LOT, CREATE_PARKING_LOT],
-  town_manager: [CREATE_ADMIN, INDEX_PARKING_LOT, CREATE_PARKING_LOT],
-  manager: [CREATE_ADMIN],
-  parking_admin: [CREATE_ADMIN, INDEX_PARKING_LOT],
-  officer: []
-};
+export const ACTIONS = [
+  'create',
+  'read',
+  'update',
+  'delete'
+];
+
+// create permission map with this format
+// {
+//   CREATE_PARKINGLOT: {
+//     name: 'ParkingLot',
+//     action: 'create'
+//   },
+//   UPDATE_PARKINGLOT: {
+//     name: 'ParkingLot',
+//     action: 'update'
+//   },
+//   ...
+// }
+const permissions = {};
+PERMISSION_NAMES.forEach(permissionName => {
+  ACTIONS.forEach(action => {
+    const permissionAction = `${action.toUpperCase()}_${permissionName.toUpperCase()}`;
+    permissions[permissionAction] = {
+      name: permissionName,
+      action: action
+    };
+  });
+});
+export default permissions;

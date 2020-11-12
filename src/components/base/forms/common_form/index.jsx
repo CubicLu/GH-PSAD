@@ -70,7 +70,7 @@ const renderInput = (field, props = {}) => {
     case FieldType.MULTISELECT_FIELD:
       return <CustomMultiSelect {...props} field={field.name} options={field.options} autoFocus={field.autoFocus}/>;
     case FieldType.FILE_FIELD:
-      return <ImageInput {...props} className="form-control" field={field.name} autoFocus={field.autoFocus} />;
+      return <ImageInput {...props} className="form-control" field={field.name} autoFocus={field.autoFocus} disabled={field.disabled} />;
     case FieldType.MULTIPLE_FILE_FIELDS:
       return <MultipleMedia {...props} ref={props.ref} className="form-control" field={field.name} autoFocus={field.autoFocus} />;
     case FieldType.SELECT_FIELD:
@@ -84,7 +84,7 @@ const renderInput = (field, props = {}) => {
     case FieldType.GOOGLE_MAPS_FIELD:
       return <GoogleMaps {...props.events} {...field.options} autoFocus={field.autoFocus}/>;
     case FieldType.INCREASER_FIELD:
-      return <Increaser {...props} field={field} autoFocus={field.autoFocus}/>;
+      return <Increaser {...props} field={field} autoFocus={field.autoFocus} disabled={field.disabled}/>;
     case FieldType.TEXT_AREA:
       return <TextArea autoFocus={field.autoFocus} {...props} field={field}/>
     case FieldType.NUMBER_FIELD:

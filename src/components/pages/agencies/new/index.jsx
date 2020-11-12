@@ -17,7 +17,7 @@ import Breadcrumb from 'components/base/breadcrumb';
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 import Button from 'components/base/button';
 /* Helpers */
-import { fields, exampleData } from 'components/helpers/fields/agencies';
+import { fieldsNew, exampleData } from 'components/helpers/fields/agencies';
 import { exampleData as exampleLocationData } from 'components/helpers/fields/location';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import { FieldType } from 'components/helpers/form_fields';
@@ -76,7 +76,7 @@ class New extends React.Component {
 
   renderFields () {
     const { officers, managers, townManagers } = this.state.dropdowns;
-    return renderFieldsWithGrid(fields(officers, managers, townManagers, this.renderLocationModal.bind(this)), 2, 6, {...fieldProps, errors: this.state.errors});
+    return renderFieldsWithGrid(fieldsNew(officers, managers, townManagers, this.renderLocationModal.bind(this)), 2, 6, {...fieldProps, errors: this.state.errors});
   }
 
   renderLocationModal (field, props) {

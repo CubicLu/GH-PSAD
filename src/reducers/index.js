@@ -11,6 +11,7 @@ import ReportReducers from './reports';
 import ServerErrorReducers from './server_errors';
 import VoiReducers from './voi';
 import DetailedReportsReducers from './detailed_reports';
+import RolesReducers from './roles';
 import { LOG_OUT } from 'actions/users';
 
 const reducers = combineReducers({
@@ -25,7 +26,8 @@ const reducers = combineReducers({
   voi: VoiReducers,
   report: ReportReducers,
   server: ServerErrorReducers,
-  detailedReports: DetailedReportsReducers
+  detailedReports: DetailedReportsReducers,
+  role: RolesReducers
 });
 
 export default (state, action) => {

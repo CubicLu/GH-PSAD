@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'underscore';
-import  { CREATE_ADMIN } from 'config/permissions'
+import permissions from 'config/permissions';
 /* Actions */
 import { SET_LIST } from 'actions/admins';
 /* API */
@@ -56,14 +56,14 @@ class Index extends React.Component {
       <IndexTable
         {...this.props}
         isFetching={this.isFetching}
-        toolbar={ <BasicListToolbar  showFilters={true} {...this.props} createRequiredPermissions={[CREATE_ADMIN]} title='User accounts' label="+ Create Account" /> }
+        toolbar={ <BasicListToolbar showFilters={true} {...this.props} createRequiredPermission={permissions.CREATE_ADMIN} title='User accounts' label="+ Create Account" /> }
         resource={resource}
         filterFields={filterFields(this.state.filterRolesField)}
         filterFetcher={filterFetcher}
         columns={
           <React.Fragment>
-            <th attr="username">Username</th>
-            <th attr="admins.name">Name</th>
+            <th attr="username">User Name</th>
+            <th attr="admins.name">Full Name</th>
             <th attr="admins.email">Email</th>
             <th attr="roles.name">Role</th>
             <th attr="admins.status">Status</th>

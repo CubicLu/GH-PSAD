@@ -11,21 +11,23 @@ const PlacesList = (props) => (
     {({ add, fields }) => (
       <React.Fragment>
         {fields.map((dataField, i) => (
-          <Place {...dataField} key={i} errors={props.errors} categoriesDropdown={props.categoriesDropdown} events={props.events} />
+          <Place {...dataField} key={i} errors={props.errors} categoriesDropdown={props.categoriesDropdown} events={props.events} disabled={props.disabled} />
         ))}
-        <Button
-          className="float-right"
-          status="primary-outline"
-          onClick={() => { fields.length <= limit && add(); }}
-        >
-          +Add Place
-        </Button>
+        {!props.disabled &&
+          <Button
+            className="float-right"
+            status="primary-outline"
+            onClick={() => { fields.length <= limit && add(); }}
+          >
+            +Add Place
+          </Button>
+        }
       </React.Fragment>
     )}
   </ArrayField>
 )
 
-const Place = ({ field, remove, ...props}) => (
+const Place = ({ field, remove, disabled, ...props}) => (
   <Scope scope={field} >
     <div>
       <Text field="id" hidden/>
@@ -33,16 +35,18 @@ const Place = ({ field, remove, ...props}) => (
         <div className="flex-grow-1">
           { renderFieldsWithGrid(fieldsNearbyPlaces(props.categoriesDropdown), 2, 6, { ...props, iSize: 8, lSize: 4 }) }
         </div>
-        <Button
-          onClick={() => {
-            props.events.onChange(); // To show 'save changes' button
-            remove();
-          }}
-          status="danger-outline"
-          icon={<TrashIcon />}
-          className={styles.btnDelete}
-          size="md"
-        />
+        {!disabled &&
+          <Button
+            onClick={() => {
+              props.events.onChange(); // To show 'save changes' button
+              remove();
+            }}
+            status="danger-outline"
+            icon={<TrashIcon />}
+            className={styles.btnDelete}
+            size="md"
+          />
+        }
       </div>
       <hr/>
       <div className="mt-4"/>

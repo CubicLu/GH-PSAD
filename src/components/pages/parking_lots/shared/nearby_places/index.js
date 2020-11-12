@@ -10,16 +10,16 @@ import CollapsableCard from 'components/base/collapsable_card';
 /* Module */
 
 const NearbyPlacesForm = props => {
-  const { records, isSaving, setFormApi, setInputChanged, categoriesDropdown, errors } = props;
+  const { records, isSaving, setFormApi, setInputChanged, categoriesDropdown, errors, disabled } = props;
   const events = {
     onChange: () => setInputChanged()
   }
 
   return (
-    <fieldset disabled={isSaving}>
+    <fieldset disabled={isSaving || disabled}>
       <Form getApi={setFormApi} initialValues={{places: records}} >
         {({ formState, formApi }) => (
-          <PlacesList errors={errors} categoriesDropdown={categoriesDropdown || []} events={events}/>
+          <PlacesList errors={errors} categoriesDropdown={categoriesDropdown || []} events={events} disabled={disabled} />
         )}
       </Form>
     </fieldset>
@@ -41,7 +41,8 @@ NearbyPlaces.propTypes = {
 NearbyPlacesForm.propTypes = {
   record: PropTypes.object,
   isSaving: PropTypes.bool.isRequired,
-  setFormApi: PropTypes.func.isRequired
+  setFormApi: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
 };
 
 export default NearbyPlaces;

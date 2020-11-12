@@ -11,6 +11,7 @@ import ReportRoute from 'routes/reports';
 import ProfileRoute from 'routes/profile';
 import PrivateRoute from 'routes/private_route';
 import ParkingLotCameras from 'routes/parking_lots_camera'
+import RoleRoute from 'routes/roles';
 
 function MainContent(props) {
   const { match } = props;
@@ -26,6 +27,7 @@ function MainContent(props) {
       <PrivateRoute path={`${match.path}/parking_lots`} component={ParkingLotRoute} />
       <PrivateRoute path={`${match.path}/live/parking_lots`} component={ParkingLotCameras} />
       <PrivateRoute path={`${match.path}/reports`} component={ReportRoute} />
+      <PrivateRoute path={`${match.path}/roles`} component={RoleRoute} />
     </div>
   );
 }

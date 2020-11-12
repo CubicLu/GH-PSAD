@@ -10,7 +10,6 @@ import SettingSection from '../shared/setting_section';
 import NearbyPlaces from '../shared/nearby_places';
 import Header from '../shared/header';
 import { cloneDeep } from 'lodash'
-import { permissions } from 'config/permissions/forms_fields/parking_lots/show'
 /* Actions */
 import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/parking_lots';
 import { invoke } from 'actions';
@@ -34,6 +33,8 @@ import setEmptyFields from 'components/modules/set_empty_fields';
 import withCurrentUser from 'components/modules/with_current_user';
 /* Styles/Assets */
 import styles from './show.module.sass';
+import doesUserHasPermission from 'components/modules/does_user_has_permission';
+import permissions from 'config/permissions';
 
 class Show extends React.Component {
   state = {
@@ -100,11 +101,11 @@ class Show extends React.Component {
 
   renderFields() {
     const { dropdowns } = this.state;
-    const { currentUserRoleName } = this.props;
+    const { currentUserPermissions } = this.props;
 
     return (
       renderFieldsWithGrid(
-        fieldsShow(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this), permissions[currentUserRoleName]),
+        fieldsShow(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this), currentUserPermissions),
         2,
         6,
         { ...this.fieldProps(), errors: this.state.errors })
@@ -121,11 +122,13 @@ class Show extends React.Component {
   }
 
   renderLocationModal(field, props) {
+    const { currentUserPermissions } = this.props;
     return (
       <LocationForm
         errors={props.errors}
         setCurrentLocation={this.setCurrentLocation}
         currentLocation={this.state.currentLocation}
+        disabled={!doesUserHasPermission(currentUserPermissions, permissions.UPDATE_PARKINGLOT)}
       />);
   }
 
@@ -150,6 +153,8 @@ class Show extends React.Component {
 
   renderForm() {
     const { isSaving } = this.state;
+    const { record, currentUserPermissions } = this.props;
+    const disabledAvatar = !doesUserHasPermission(currentUserPermissions, permissions.UPDATE_PARKINGLOT);
 
     return (
       <fieldset disabled={isSaving}>
@@ -160,7 +165,7 @@ class Show extends React.Component {
         >
           <Row>
             <Col xs={3}>
-              {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, this.fieldProps())}
+              {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD, disabled: disabledAvatar }, this.fieldProps())}
             </Col>
             <Col xs={9} className={styles.formFields}>
               {this.renderFields()}
@@ -172,19 +177,20 @@ class Show extends React.Component {
   }
 
   renderSetting() {
-    const { record } = this.props;
+    const { record, currentUserPermissions } = this.props;
     return (
       <SettingSection
         fieldProps={this.fieldProps()}
         isSaving={this.state.isSaving}
         setFormApi={this.setSettingFormApi}
         record={record.setting}
+        disabled={!doesUserHasPermission(currentUserPermissions, permissions.UPDATE_PARKINGLOT)}
       />
     );
   }
 
   renderNearbyPlaces() {
-    const { record } = this.props;
+    const { record, currentUserPermissions } = this.props;
     const { isSaving, dropdowns: { categoriesPlace } } = this.state
 
     return (
@@ -195,6 +201,7 @@ class Show extends React.Component {
         records={record.places}
         categoriesDropdown={categoriesPlace}
         setInputChanged={this.setInputChanged}
+        disabled={!doesUserHasPermission(currentUserPermissions, permissions.UPDATE_PARKINGLOT)}
       />
     )
   }
@@ -236,7 +243,7 @@ class Show extends React.Component {
         />
         <div className={`${styles.hint} bg-grey-light`}>
           <p className="general-text-2 m-0">
-            Fields marked with an asterik (*) are mandatory
+            Fields marked with an asterisk (*) are mandatory.
           </p>
         </div>
         {this.renderForm()}
@@ -261,7 +268,8 @@ Show.propTypes = {
     parking_admin: PropTypes.object,
     vehicle_rules: PropTypes.arrayOf(PropTypes.object),
     setting: PropTypes.object
-  })
+  }),
+  currentUserPermissions: PropTypes.array
 };
 
 export default connectRecord('parking_lot', SET_RECORD, resourceFetcher(show), connect(
