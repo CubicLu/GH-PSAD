@@ -6,7 +6,7 @@ import {
   CustomSelect,
   CustomMultiSelect,
   DateRangeInput,
-  FieldType,
+  FieldType
 } from 'components/helpers/form_fields';
 import Loader from 'components/helpers/loader';
 import Button from 'components/base/button';
@@ -90,10 +90,10 @@ class FilterForm extends React.Component {
 
 FilterForm.propTypes = {
   cancelFilter: PropTypes.func,
-  fields: PropTypes.object.isRequired,
-  isFetching: PropTypes.bool,
+  fields: PropTypes.array.isRequired,
+  isFetching: PropTypes.func,
   submitForm: PropTypes.func,
-  values: PropTypes.shape({}),
+  values: PropTypes.shape({})
 };
 
 export default FilterForm;

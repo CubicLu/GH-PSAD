@@ -18,7 +18,7 @@ class BasicListToolbar extends React.Component {
     history.push(`${match.url}/new`);
   };
 
-  render() {
+  render () {
     const {
       label,
       title,
@@ -27,7 +27,7 @@ class BasicListToolbar extends React.Component {
       currentUserPermissions,
       goBackPath,
       extraButtons = () => { },
-      showFilters,
+      showFilters
     } = this.props;
 
     return (
@@ -59,7 +59,7 @@ class BasicListToolbar extends React.Component {
               requiredPermission={createRequiredPermission}
             >
               <Button
-                className={`${styles.btnCreate} text-uppercase`}
+                className={styles.btnCreate}
                 onClick={this.newRecord}
                 size="md"
               >
@@ -79,8 +79,12 @@ BasicListToolbar.propTypes = {
   onClickFilter: PropTypes.func,
   setList: PropTypes.func.isRequired,
   label: PropTypes.string,
+  title: PropTypes.string,
   createRequiredPermission: PropTypes.object,
-  currentUserPermissions: PropTypes.array
+  currentUserPermissions: PropTypes.array,
+  showFilters: PropTypes.bool,
+  goBackPath: PropTypes.func,
+  extraButtons: PropTypes.func
 };
 
 export default withCurrentUser(BasicListToolbar);
