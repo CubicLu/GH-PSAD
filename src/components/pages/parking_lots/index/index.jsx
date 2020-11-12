@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CREATE_PARKING_LOT } from 'config/permissions'
+import permissions from 'config/permissions';
 /* Actions */
 import { SET_LIST } from 'actions/parking_lots';
 /* API */
@@ -75,7 +75,7 @@ class Index extends React.Component {
         {...this.props}
         className={styles.table}
         isFetching={this.isFetching}
-        toolbar={<BasicListToolbar showFilters={true} {...this.props} createRequiredPermissions={[CREATE_PARKING_LOT]} label="+ Create New" title="Parking Lots Management" />}
+        toolbar={<BasicListToolbar showFilters={true} {...this.props} createRequiredPermission={permissions.CREATE_PARKINGLOT} label="+ Create New" title="Parking Lots Management" />}
         filterFields={filterFields(parkingAdmins, townManagers)}
         filterFetcher={filterFetcher}
         resource={resource}

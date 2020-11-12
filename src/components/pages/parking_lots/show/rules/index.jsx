@@ -6,6 +6,7 @@ import { cloneDeep } from 'lodash'
 import ModalRecipients from '../../shared/rules/recipients'
 import { renderRecords } from '../../shared/rules'
 import Header from '../../shared/header'
+import permissions from 'config/permissions';
 
 /* Actions */
 import { SET_RECORD } from 'actions/parking_lots';
@@ -25,6 +26,7 @@ import withFetching from 'components/modules/with_fetching';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import connectRecord from 'components/modules/connect_record';
 import withCurrentUser from 'components/modules/with_current_user';
+import doesUserHasPermission from 'components/modules/does_user_has_permission';
 /* Styles/Assets */
 import styles from './rules.module.sass';
 
@@ -124,9 +126,11 @@ class Rules extends React.Component {
   }
 
   renderForm () {
+    const { currentUserPermissions } = this.props;
     const { list } = this.state;
+    const disabled = !doesUserHasPermission(currentUserPermissions, permissions.UPDATE_PARKINGLOT);
     return (
-      <React.Fragment>
+      <div className="position-relative">
         <IndexTable
           list={list}
           perPage={100}
@@ -152,8 +156,9 @@ class Rules extends React.Component {
           }
           renderRecords={renderRecords.bind(this)}
         />
-        {this.renderSaveButton()}
-      </React.Fragment>
+        {disabled && <div className={styles.overlay} />}
+        {!disabled && this.renderSaveButton()}
+      </div>
     );
   }
 
@@ -223,7 +228,8 @@ class Rules extends React.Component {
 
 Rules.propTypes = {
   backPath: PropTypes.string.isRequired,
-  currentUser: PropTypes.object
+  currentUser: PropTypes.object,
+  currentUserPermissions: PropTypes.array
 };
 
 export default connectRecord(

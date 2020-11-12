@@ -4,7 +4,7 @@ import ReactFileReader from 'react-file-reader';
 import Media from './media';
 import TooltipInfo from 'components/helpers/tooltip_info';
 
-const ImageInput = asField(({ fieldState, fieldApi, events = {}}) => {
+const ImageInput = asField(({ fieldState, fieldApi, events = {}, disabled }) => {
   const { value } = fieldState;
   const { setValue } = fieldApi;
 
@@ -36,6 +36,7 @@ const ImageInput = asField(({ fieldState, fieldApi, events = {}}) => {
     <ReactFileReader
       base64={true}
       handleFiles={handleFiles}
+      disabled={disabled}
     >
       <React.Fragment>
         <Media

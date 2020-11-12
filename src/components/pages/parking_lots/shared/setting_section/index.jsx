@@ -6,14 +6,14 @@ import { renderFieldsWithGrid } from 'components/base/forms/common_form';
 import CollapsableCard from 'components/base/collapsable_card';
 
 const FormSetting = props => {
-  const { record, isSaving, setFormApi, fieldProps } = props;
+  const { record, isSaving, setFormApi, fieldProps, disabled } = props;
 
   return (
     <fieldset disabled={isSaving}>
       <Form getApi={setFormApi} initialValues={record} >
         {({ formState }) => (
           <React.Fragment>
-            {renderFieldsWithGrid(fields, 2, 6, {...fieldProps, formState, iSize: 6, lSize: 6 })}
+            {renderFieldsWithGrid(fields(disabled), 2, 6, {...fieldProps, formState, iSize: 6, lSize: 6 })}
           </React.Fragment>
         )}
       </Form>
@@ -36,7 +36,8 @@ SettingSection.propTypes = {
 FormSetting.propTypes = {
   record: PropTypes.object,
   isSaving: PropTypes.bool.isRequired,
-  setFormApi: PropTypes.func.isRequired
+  setFormApi: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired
 };
 
 export default SettingSection;

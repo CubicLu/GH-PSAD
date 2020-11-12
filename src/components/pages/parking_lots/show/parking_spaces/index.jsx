@@ -8,6 +8,7 @@ import { isEmpty, isMatch } from 'underscore';
 import {
   isUserInsideEditingZone
 } from './mouse_events'
+import permissions from 'config/permissions';
 
 import ParkingPlanEditableZone from './parking_plan_editable_zone'
 import FileLayoutModal from './file_layout_modal'
@@ -31,6 +32,7 @@ import withFetching from 'components/modules/with_fetching';
 import resourceFetcher from 'components/modules/resource_fetcher';
 import connectRecord from 'components/modules/connect_record';
 import withCurrentUser from 'components/modules/with_current_user';
+import doesUserHasPermission from 'components/modules/does_user_has_permission';
 /* Assets */
 import styles from './parking_plans.module.sass'
 import Header from '../../shared/header';
@@ -577,7 +579,8 @@ class ParkingPlans extends Component {
 
   renderForm () {
     const { isSavingParkingPlan, parkingPlans, selectedIndexParkingPlan } = this.state
-    const { history, parentPath } = this.props
+    const { history, parentPath, currentUserPermissions } = this.props;
+    const disabledUpperPanel = !doesUserHasPermission(currentUserPermissions, permissions.UPDATE_PARKINGLOT);
     return (
       <Row onMouseMove={isUserInsideEditingZone.bind(this)} className="no-gutters">
         <Col className={`${styles.slotPaneWrapper} col-auto`}>
@@ -591,6 +594,7 @@ class ParkingPlans extends Component {
           <UpperPanel
             history={history}
             parentPath={parentPath}
+            disabled={disabledUpperPanel}
           />
           <div className={styles.mapContainer}>
             {isSavingParkingPlan
@@ -754,7 +758,8 @@ class ParkingPlans extends Component {
 
 ParkingPlans.propTypes = {
   backPath: PropTypes.string.isRequired,
-  currentUser: PropTypes.object
+  currentUser: PropTypes.object,
+  currentUserPermissions: PropTypes.array
 };
 
 export default connectRecord(

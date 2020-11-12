@@ -17,7 +17,7 @@ import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/co
 import Button from 'components/base/button';
 import Breadcrumb from 'components/base/breadcrumb';
 /* Helpers */
-import { fields } from 'components/helpers/fields/admins';
+import { fieldsShow } from 'components/helpers/fields/admins';
 import PasswordConfirmationModal from 'components/helpers/modals/password_confirmation';
 import { FieldType } from 'components/helpers/form_fields';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
@@ -135,7 +135,8 @@ class Show extends React.Component {
   }
 
   fieldsForCommonForm = () => {
-    const fieldsSet = fields(this.state.dropdowns.roles);
+    const { currentUserPermissions } = this.props;
+    const fieldsSet = fieldsShow(this.state.dropdowns.roles, currentUserPermissions);
     fieldsSet.push({
       name: 'password', label: 'Password', type: FieldType.PASSWORD_FIELD, filled: true
     });
@@ -197,6 +198,7 @@ Show.propTypes = {
   match: PropTypes.object.isRequired,
   isResourceFetching: PropTypes.bool.isRequired,
   currentUser: PropTypes.object,
+  currentUserPermissions: PropTypes.array,
   record: PropTypes.shape({
     id: PropTypes.number.isRequired,
     role: PropTypes.object.isRequired,

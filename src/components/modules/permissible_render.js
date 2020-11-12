@@ -1,40 +1,25 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { intersection, difference } from 'lodash';
+import doesUserHasPermission from './does_user_has_permission';
 
-class PermissibleRender extends Component {
-  static propTypes = {
-    oneperm: PropTypes.bool,
-    userPermissions: PropTypes.arrayOf(PropTypes.string).isRequired,
-    requiredPermissions: PropTypes.arrayOf(PropTypes.string).isRequired,
-    children: PropTypes.element.isRequired,
-    renderOtherwise: PropTypes.element,
-  };
-
-  checkPermissions() {
-    const { userPermissions, requiredPermissions, oneperm } = this.props;
-
-    if (oneperm) {
-      return intersection(userPermissions, requiredPermissions).length;
-    }
-
-    return difference(requiredPermissions, userPermissions).length === 0;
+const PermissibleRender = ({
+  children,
+  renderOtherwise,
+  userPermissions,
+  requiredPermission
+}) => {
+  if (doesUserHasPermission(userPermissions, requiredPermission)) {
+    return children;
+  } else if (renderOtherwise) {
+    return renderOtherwise;
   }
+  return null;
+};
 
-  render() {
-    const { children, userPermissions, requiredPermissions, renderOtherwise } = this.props;
+PermissibleRender.propTypes = {
+  userPermissions: PropTypes.array.isRequired,
+  requiredPermission: PropTypes.object,
+  children: PropTypes.element.isRequired,
+  renderOtherwise: PropTypes.element
+};
 
-    if (!children || !userPermissions || !requiredPermissions) {
-      return null;
-    }
-
-    if (this.checkPermissions()) {
-      return children;
-    } else if (renderOtherwise) {
-      return renderOtherwise;
-    }
-    return null;
-  }
-}
-
-export default PermissibleRender
+export default PermissibleRender;

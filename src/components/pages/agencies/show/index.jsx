@@ -18,7 +18,7 @@ import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/co
 import Button from 'components/base/button';
 import Breadcrumb from 'components/base/breadcrumb';
 /* Helpers */
-import { fields } from 'components/helpers/fields/agencies';
+import { fieldsShow } from 'components/helpers/fields/agencies';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 import { FieldType } from 'components/helpers/form_fields';
 /* Modules */
@@ -28,6 +28,7 @@ import resourceFetcher from 'components/modules/resource_fetcher';
 import setEmptyFields from 'components/modules/set_empty_fields';
 import withFetching from 'components/modules/with_fetching';
 import Loader from 'components/helpers/loader';
+import withCurrentUser from 'components/modules/with_current_user';
 
 class Show extends React.Component {
   state = {
@@ -73,7 +74,7 @@ class Show extends React.Component {
   };
 
   save = () => {
-    const values = setEmptyFields(fields([], [], []), this.formApi);
+    const values = setEmptyFields(fieldsShow([], [], []), this.formApi);
     values.avatar = this.formApi.getValue('avatar');
     values.location = cloneDeep(this.state.currentLocation)
     const { backPath, record } = this.props;
@@ -106,9 +107,21 @@ class Show extends React.Component {
     );
   }
 
-  renderFields() {
+  renderFields () {
+    const { currentUserPermissions } = this.props;
     const { officers, managers, townManagers } = this.state.dropdowns;
-    return renderFieldsWithGrid(fields(officers, managers, townManagers, this.renderLocationModal.bind(this)), 2, 6, { ...this.fieldProps(), errors: this.state.errors });
+    return renderFieldsWithGrid(
+      fieldsShow(
+        officers,
+        managers,
+        townManagers,
+        this.renderLocationModal.bind(this),
+        currentUserPermissions
+      ),
+      2,
+      6,
+      { ...this.fieldProps(), errors: this.state.errors }
+    );
   }
 
   renderLocationModal(field, props) {
@@ -139,15 +152,11 @@ class Show extends React.Component {
     );
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (nextProps.record) {
-      this.setState({ currentLocation: nextProps.record.location })
-    }
-  }
-
   componentDidMount() {
-    const { startFetching } = this.props
-
+    const { startFetching, record } = this.props
+    if (record) {
+      this.setState({ currentLocation: record.location });
+    }
     Promise.all([
         startFetching(dropdownsSearch('admins_by_role-town_manager'))
           .then(response => this.setDropdowns('townManagers', response.data)),
@@ -157,6 +166,13 @@ class Show extends React.Component {
           .then(response => this.setDropdowns('managers', response.data))
     ])
       .finally(() => this.setState({ isDropdownFetching: false }))
+  }
+
+  componentDidUpdate (prevProps) {
+    const { record } = this.props;
+    if (!prevProps.record && record) {
+      this.setState({ currentLocation: record.location });
+    }
   }
 
   render () {
@@ -189,11 +205,17 @@ Show.propTypes = {
     town_manager: PropTypes.object,
     manager: PropTypes.object,
     officers: PropTypes.arrayOf(PropTypes.object)
-  })
+  }),
+  currentUserPermissions: PropTypes.array
 };
 
 function mapDispatch(dispatch) {
   return bindActionCreators({ setListElement: invoke(SET_LIST_ELEMENT) }, dispatch);
 }
 
-export default connectRecord('agency', SET_RECORD, resourceFetcher(show), connect(null, mapDispatch)(withFetching(Show)));
+export default connectRecord(
+  'agency',
+  SET_RECORD,
+  resourceFetcher(show),
+  connect(null, mapDispatch)(withFetching(withCurrentUser(Show)))
+);

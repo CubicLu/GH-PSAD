@@ -31,7 +31,11 @@ function handleFailed(error) {
       type: 'Error',
       text: 'Wrong data in marked fields. Please check them and correct.'
     }])
-    this.setState({ errors: error.response.data.errors })
+    if (typeof this.transformErrorFunc === 'function') {
+      this.setState({ errors: this.transformErrorFunc(error.response.data.errors) });
+    } else {
+      this.setState({ errors: error.response.data.errors });
+    }
   }
 
 };

@@ -13,6 +13,7 @@ function DropdownNavigation (props) {
   }, [props.location.pathname]);
 
   const isSomeLinkActive = props.children.some(element => {
+    if (!element) return false;
     return element.props.className.includes('selected-point')
   })
 
@@ -30,6 +31,7 @@ function DropdownNavigation (props) {
           {props.title}
           <ul className="shadow-sm bg-white p-0">
            {props.children.map((element, index) => {
+              if (!element) return null;
               return (
                 <NavItem className="ml-3 text-center" key={element.props.to}>
                   {element}
@@ -41,6 +43,7 @@ function DropdownNavigation (props) {
       </div>
       <Collapse isOpen={isOpen}>
         {props.children.map((element, index) => {
+          if (!element) return null;
           return (
             <NavItem className="ml-3 d-none d-xl-block" key={element.props.to}>
               {element}

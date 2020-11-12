@@ -20,13 +20,17 @@ function updateSucceed(backPath, res) {
   history.push(backPath);
 }
 
-function updateFailed(error) {
+function updateFailed (error) {
   if (error.response) {
-     this.context.addAlertMessages([{
+    this.context.addAlertMessages([{
       type: 'Error',
       text: 'Wrong data in marked fields. Please check them and correct.'
-    }])
-    this.setState({ errors: error.response.data.errors })
+    }]);
+    if (typeof this.transformErrorFunc === 'function') {
+      this.setState({ errors: this.transformErrorFunc(error.response.data.errors) });
+    } else {
+      this.setState({ errors: error.response.data.errors });
+    }
   }
 }
 

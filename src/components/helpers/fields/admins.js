@@ -1,10 +1,12 @@
 import faker from 'faker'
 import { FieldType } from 'components/helpers/form_fields'
+import permissions from 'config/permissions';
+import fieldsWithPermission from './fields_with_permission';
 
-const fields = (roles) => [
-  { name: 'name', label: 'Name', mandatory: true },
+const fieldsNew = (roles) => [
+  { name: 'name', label: 'Full name', mandatory: true },
   { name: 'email', label: 'Email', mandatory: true },
-  { name: 'username', label: 'Username', mandatory: true },
+  { name: 'username', label: 'User name', mandatory: true },
   {
     name: 'role_id',
     label: 'Role',
@@ -18,17 +20,21 @@ const fields = (roles) => [
   { name: 'phone', label: 'Phone' },
   {
     name: 'status',
-    label: 'Status',
+    label: 'Current status',
     mandatory: true,
     type: FieldType.SELECT_FIELD,
     options: [{ value: 'active', label: 'Active' }, { value: 'suspended', label: 'Suspended' }]
   }
 ];
 
+const fieldsShow = (roles, userPermissions) => fieldsWithPermission(
+  fieldsNew(roles),
+  userPermissions,
+  permissions.UPDATE_ADMIN
+);
+
 const filterFields = (roles) => [
-  { name: 'username', label: 'Username' },
   { name: 'name', label: 'Name' },
-  { name: 'email', label: 'Email' },
   {
     name: 'role_names',
     label: 'Role',
@@ -56,4 +62,4 @@ const exampleData = (roles) => process.env.NODE_ENV !== 'production' ? {
     status: 'suspended'
   } // These are defaults values for each field
 
-export { fields, exampleData, filterFields };
+export { fieldsNew, fieldsShow, exampleData, filterFields };

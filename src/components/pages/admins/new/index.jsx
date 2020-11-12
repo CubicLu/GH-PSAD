@@ -16,7 +16,7 @@ import Breadcrumb from 'components/base/breadcrumb';
 import { renderFieldsWithGrid, renderImageField } from 'components/base/forms/common_form';
 import Button from 'components/base/button';
 /* Helpers */
-import { fields, exampleData } from 'components/helpers/fields/admins';
+import { fieldsNew, exampleData } from 'components/helpers/fields/admins';
 import Loader from 'components/helpers/loader';
 import { FieldType } from 'components/helpers/form_fields';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
@@ -51,7 +51,7 @@ class New extends React.Component {
 
   renderFields () {
     const { roles } = this.state.dropdowns;
-    return renderFieldsWithGrid(fields(roles), 2, 6, {...fieldProps, errors: this.state.errors });
+    return renderFieldsWithGrid(fieldsNew(roles), 2, 6, {...fieldProps, errors: this.state.errors });
   }
 
   renderSaveButton = () => {

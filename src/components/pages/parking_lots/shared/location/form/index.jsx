@@ -16,7 +16,7 @@ import { FieldType } from 'components/helpers/form_fields';
 /* Modules */
 
 const LocationForm = (props) => {
-  const { currentLocation, setCurrentLocation, formApi, errors = {} } = props
+  const { currentLocation, setCurrentLocation, formApi, errors = {}, disabled } = props
   const [ isOpen, setIsOpen] = useState(false)
   const [ isSaved, setIsSaved] = useState(null)
   const [ showSaveButton, setShowSaveButton] = useState(null)
@@ -90,7 +90,13 @@ const LocationForm = (props) => {
       </ModalForm>
        <InputGroup>
         <div className={`position-relative w-100 ${hasError ? 'input-error' : ''}`}>
-          <input readOnly value={currentLocation.full_address} className="pr-4 bg-white form-control" onClick={() => setIsOpen(true)} />
+          <input
+            readOnly
+            value={currentLocation.full_address}
+            className={`pr-4 form-control ${disabled ? '' : 'bg-white'}`}
+            onClick={() => setIsOpen(true)}
+            disabled={disabled}
+          />
           <LocationIcon className={styles.LocationIcon} />
           <div className="text-left general-error general-text-1 pt-1">
             {hasError ? 'Some required data is missing' : ''}

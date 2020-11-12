@@ -24,7 +24,7 @@ const UpperPanel = (props) => {
     toggleParkingPlanDeleteConfirmationModal
   } = parkingPlanContext.func;
 
-  const { parentPath, history } = props;
+  const { parentPath, history, disabled } = props;
 
   const deleteParkingPlan = () => {
     if (!isEmpty(parkingPlans)) {
@@ -41,25 +41,27 @@ const UpperPanel = (props) => {
   const buttonDisabled = !parkingPlans[selectedIndexParkingPlan];
   return (
     <Row className="no-gutters">
-      <Col xs="12" lg="auto" className={styles.uploadLayout}>
-        <LayoutDropdown />
-      </Col>
+      <LayoutDropdown hasAddButton={!disabled} />
       <Col xs="12" lg="auto" className="d-flex flex-lg-grow-1 justify-content-between">
         <div className="d-flex">
-          <Button
-            status="primary"
-            onClick={editParkingPlan}
-            className={styles.btnTool}
-            icon={<EditIcon width="12" height="12" />}
-            disabled={buttonDisabled}
-          />
-          <Button
-            status="danger"
-            onClick={deleteParkingPlan}
-            className={styles.btnTool}
-            icon={<TrashIcon width="12" height="12" className="svg-white" />}
-            disabled={buttonDisabled}
-          />
+          {!disabled &&
+            <Button
+              status="primary"
+              onClick={editParkingPlan}
+              className={styles.btnTool}
+              icon={<EditIcon width="12" height="12" />}
+              disabled={buttonDisabled}
+            />
+          }
+          {!disabled &&
+            <Button
+              status="danger"
+              onClick={deleteParkingPlan}
+              className={styles.btnTool}
+              icon={<TrashIcon width="12" height="12" className="svg-white" />}
+              disabled={buttonDisabled}
+            />
+          }
           <Button
             status="secondary"
             onClick={() => history.push(`${parentPath}/parking_sessions`)}
@@ -68,7 +70,7 @@ const UpperPanel = (props) => {
             disabled={buttonDisabled}
           />
         </div>
-        <MarkupToggle />
+        {!disabled && <MarkupToggle />}
       </Col>
     </Row>
   );

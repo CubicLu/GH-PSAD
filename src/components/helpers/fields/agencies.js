@@ -1,7 +1,9 @@
 import faker from 'faker'
 import { FieldType } from 'components/helpers/form_fields'
+import permissions from 'config/permissions';
+import fieldsWithPermission from './fields_with_permission';
 
-const fields = (officers, managers, townManagers, renderLocationModal) => [
+const fieldsNew = (officers, managers, townManagers, renderLocationModal) => [
   {
     name: 'location',
     label: 'Location',
@@ -17,6 +19,12 @@ const fields = (officers, managers, townManagers, renderLocationModal) => [
   { name: 'town_manager_id', label: 'Town Manager', mandatory: true, type: FieldType.SELECT_FIELD, emptyValue: 0, options: townManagers.map(townManager => { return { value: townManager.value, label: townManager.label }}) },
   { name: 'officer_ids', label: 'Officers', type: FieldType.MULTISELECT_FIELD, options: officers.map(officer => { return { value: officer.value, label: officer.label }})  }
 ];
+
+const fieldsShow = (officers, managers, townManagers, renderLocationModal, userPermissions) => fieldsWithPermission(
+  fieldsNew(officers, managers, townManagers, renderLocationModal),
+  userPermissions,
+  permissions.UPDATE_AGENCY
+);
 
 const exampleData = () => process.env.NODE_ENV !== 'production' ? {
   'email': faker.internet.email(),
@@ -34,4 +42,4 @@ const filterFields = (roles) => [
   { name: 'full_address', label: 'Full Address' }
 ];
 
-export { fields, exampleData, filterFields };
+export { fieldsNew, fieldsShow, exampleData, filterFields };

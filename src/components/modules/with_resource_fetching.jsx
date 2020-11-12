@@ -43,6 +43,7 @@ const withResourceFetching = (Component, fetchData) => {
     render() {
       return <Component
         {...this.props}
+        fetchData={() => fetchData(this)}
         isResourceFetching={this.state.isResourceFetching}
         resourceFetchFinished={this.resourceFetchFinished}
         resourceFetchStarted={this.resourceFetchStarted} />;

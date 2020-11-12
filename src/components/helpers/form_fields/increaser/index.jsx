@@ -6,7 +6,7 @@ import { isUndefined } from 'underscore';
 import styles from './increaser.module.sass';
 
 const Increaser = props => {
-  const { field, events, formState } = props;
+  const { field, events, formState, disabled } = props;
   const { fieldState, fieldApi } = useField({ field: field.name });
   const { value } = fieldState;
   const { setValue } = fieldApi;
@@ -49,13 +49,13 @@ const Increaser = props => {
     <React.Fragment>
       <InputGroup className={styles.increaser}>
         <InputGroupAddon addonType="prepend">
-          <Button color="secondary" outline onClick={onDecrease}>
+          <Button color="secondary" outline onClick={onDecrease} disabled={disabled}>
             -
           </Button>
         </InputGroupAddon>
         <Input className={`${formState.errors[field.name] ? 'input-error' : ''} text-center`} value={renderValue(value)} readOnly plaintext/>
         <InputGroupAddon addonType="append">
-          <Button color="secondary" outline onClick={onIncrease}>
+          <Button color="secondary" outline onClick={onIncrease} disabled={disabled}>
             +
           </Button>
         </InputGroupAddon>
@@ -68,7 +68,8 @@ const Increaser = props => {
 };
 
 Increaser.propTypes = {
-  field: PropTypes.object.isRequired
+  field: PropTypes.object.isRequired,
+  disabled: PropTypes.bool
 };
 
 export default Increaser;
