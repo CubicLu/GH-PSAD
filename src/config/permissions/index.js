@@ -3,8 +3,15 @@ export const PERMISSION_NAMES = [
   'Admin',
   'ParkingLot',
   'Agency',
+  'AgencyType',
   'Camera',
-  'Report'
+  'Report',
+  'User',
+  'Vehicle',
+  'Payment',
+  'Dispute',
+  'Violation',
+  'Notification'
 ];
 
 export const ACTIONS = [

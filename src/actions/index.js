@@ -13,6 +13,7 @@ import * as VoiActions from './voi';
 import * as ServerErrorActions from './server_errors';
 import * as DetailedReports from './detailed_reports';
 import * as RoleActions from './roles';
+import * as SideNavActions from './side_navigation';
 
 const INIT_SET_TOKEN = 'APP_INIT_SET_TOKEN';
 const INIT_SET_CURRENT_USER = 'APP_INIT_SET_CURRENT_USER';
@@ -52,5 +53,6 @@ export {
   init_set_current_user,
   VoiActions,
   ServerErrorActions,
-  invoke
+  invoke,
+  SideNavActions
 };
