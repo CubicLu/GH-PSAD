@@ -1,37 +1,48 @@
+@import 'src/styles/variables'
+
 .sideNavigation
+  flex-wrap: nowrap !important
+  margin-top: 15px
   padding-left: 0
-  padding-right: 24px
+  padding-right: 0px
   width: 250px
   li
     width: 100%
     & > a
       z-index: 2
-      margin-top: 30px
-      margin-left: 40px
-      padding: 0
-      height: 23px
+      padding: 20px
+      height: 55px
   nav
     height: 100%
     opacity: 1
     font-size: 16px
-    &:hover
-      font-size: 16px
-    div:first-child
-      margin-top: 30px
-      margin-left: 40px
-      padding: 0
+    & > div:first-child
+      display: flex
+      align-items: center
+      justify-content: space-between
+      width: 100%
+      padding: 20px
+      & > div:first-child
+        display: flex
+        flex: 1
+        align-items: center
     a
       height: 100%
+      width: 100%
+      border-left: none
+      background-color: transparent
 
 .transitionWidth
   width: 100%
-  transition: all .4s
   z-index: 1
   border-top-right-radius: 10px
   border-bottom-right-radius: 10px
   span
     margin: 0 auto
     display: none
+
+.selectedSubPoint > a
+  color: #60B7FF !important
 
 @media (max-width: 1199px)
   .svgWhiteMobile
@@ -40,19 +51,24 @@
   .activeNavbar
     color: white
     background-color: #3A9CED
-    width: 200px !important
+    width: 250px !important
     span
-      display: inline-block
+      display: flex
+      justify-content: flex-end
+      margin-left: 80px
       ul
         position: absolute
-        padding: 20px
+        margin-left: 75px
         top: 48px
+        left: 0
+        right: 0
+        z-index: 5
         li
           margin: 0 !important
   .sideNavigation
     width: 75px
     li
-      z-index: 10
+      z-index: 5
       & > a
         display: flex !important
         justify-content: center
