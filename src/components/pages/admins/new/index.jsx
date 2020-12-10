@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Col, Row } from 'reactstrap';
 import { Form } from 'informed';
-import { isEmpty } from 'underscore';
 /* Actions */
 import { invoke } from 'actions';
 import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/admins';
@@ -22,21 +21,52 @@ import { FieldType } from 'components/helpers/form_fields';
 import { AlertMessagesContext } from 'components/helpers/alert_messages';
 /* Modules */
 import saveRecord from 'components/modules/form_actions/save_record';
+import withFetching from 'components/modules/with_fetching';
 import withCurrentUser from 'components/modules/with_current_user';
 
 class New extends React.Component {
   state = {
     isSaving: false,
     dropdowns: {
-      roles: []
-    }
+      roles: [],
+      agencies: [],
+      parkingLots: []
+    },
+    roleType: '',
+    isDropdownFetching: true
   }
 
   static contextType = AlertMessagesContext
 
   isFetching () {
-    const { roles } = this.state.dropdowns;
-    return isEmpty(roles)
+    const { isDropdownFetching } = this.state;
+    return isDropdownFetching;
+  }
+
+  setDropdowns = (key, data) => this.setState({ dropdowns: { ...this.state.dropdowns, [key]: data } })
+
+  fieldProps = () => ({
+    lSize: 6,
+    events: {
+      onChange: this.handleInputChange
+    }
+  })
+
+  handleInputChange = (event) => {
+    const { name, value } = event?.target || {};
+    if (name !== 'role_type') return;
+    this.setState({ roleType: value });
+    setTimeout(this.fillAllParkingLots);
+  }
+
+  fillAllParkingLots = () => {
+    const { roleType, dropdowns } = this.state;
+    if (roleType === 'town_manager') {
+      const allParkingLotIds = dropdowns.parkingLots.map(p => p.value);
+      this.formApi.setValue('parking_lot_ids', allParkingLotIds);
+    } else if (roleType === 'parking_lot_manager') {
+      this.formApi.setValue('parking_lot_ids', []);
+    }
   }
 
   setFormApi = formApi => {
@@ -50,8 +80,9 @@ class New extends React.Component {
   };
 
   renderFields () {
-    const { roles } = this.state.dropdowns;
-    return renderFieldsWithGrid(fieldsNew(roles), 2, 6, {...fieldProps, errors: this.state.errors });
+    const { roleType } = this.state;
+    const { roles, agencies, parkingLots } = this.state.dropdowns;
+    return renderFieldsWithGrid(fieldsNew(roles, agencies, parkingLots, roleType), 2, 6, { ...this.fieldProps(), errors: this.state.errors });
   }
 
   renderSaveButton = () => {
@@ -77,7 +108,7 @@ class New extends React.Component {
         <Form getApi={this.setFormApi} initialValues={exampleData()}>
           <Row className="no-gutters px-2">
             <Col sm={12} md={3}>
-              {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, fieldProps)}
+              {renderImageField({ name: 'avatar', label: '', type: FieldType.FILE_FIELD }, this.fieldProps())}
             </Col>
             <Col sm={12} md={9}>
               {this.renderFields()}
@@ -89,8 +120,16 @@ class New extends React.Component {
   }
 
   componentDidMount () {
-    dropdownsSearch('role_id', { admin_id: this.props.currentUser.id })
-      .then(response => this.setState({ dropdowns: { roles: response.data } }));
+    const { startFetching } = this.props;
+    Promise.all([
+      startFetching(dropdownsSearch('role_type'))
+        .then(response => this.setDropdowns('roles', response.data)),
+      startFetching(dropdownsSearch('agency_list'))
+        .then(response => this.setDropdowns('agencies', response.data)),
+      startFetching(dropdownsSearch('parking_lot_list'))
+        .then(response => this.setDropdowns('parkingLots', response.data))
+    ])
+      .finally(() => this.setState({ isDropdownFetching: false }));
   }
 
   render () {
@@ -115,14 +154,13 @@ function mapDispatch (dispatch) {
   return {...bindActionCreators({ setRecord: invoke(SET_RECORD), setListElement: invoke(SET_LIST_ELEMENT) }, dispatch)};
 }
 
-const fieldProps = { lSize: 6 };
-
 New.propTypes = {
   backPath: PropTypes.string.isRequired,
-  currentUser: PropTypes.object
+  currentUser: PropTypes.object,
+  startFetching: PropTypes.func.isRequired
 };
 
 export default connect(
   null,
   mapDispatch
-)(withCurrentUser(New));
+)(withFetching(withCurrentUser(New)));

@@ -1,37 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import CheckBox from 'components/base/check_box';
 import { DropdownMenu, DropdownItem, DropdownToggle, Dropdown } from 'reactstrap';
 import { ReactComponent as ChevronDown } from 'assets/chevron_down.svg';
 import { ReactComponent as ChevronUp } from 'assets/chevron_up.svg';
+import TooltipInfo from 'components/helpers/tooltip_info';
 import styles from './dropdown.module.sass';
 
+const useComponentVisible = (initialIsVisible) => {
+  const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible);
+  const ref = React.useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setIsComponentVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  });
+
+  return { ref, isComponentVisible, setIsComponentVisible };
+};
+
 const CustomDropdown = ({
+  value,
+  onChange,
   options,
   customOptions,
-  onChange,
-  defaultOption,
+  multiple = false,
   width = '100%',
   size = 'md',
   className,
   selectedOptionClassName,
-  error
+  error,
+  disabled = false,
+  coveringText
 }) => {
-  const [selectedOption, setSelectedOption] = useState(defaultOption || options[0]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  React.useEffect(() => {
-    defaultOption && setSelectedOption(defaultOption);
-  }, [defaultOption]);
+  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
 
   const handleToggle = () => setDropdownOpen(prevState => !prevState);
 
+  const handleToggleWithMultiple = () => setIsComponentVisible(true);
+
   const handleItemClick = (option) => {
-    const { value } = option;
-    if (value === selectedOption.value) {
+    if (multiple) {
+      let newValue;
+      if (value.some(e => e.value === option.value)) {
+        newValue = value.filter(e => e.value !== option.value);
+      } else {
+        newValue = [...value, option];
+      }
+      onChange(newValue);
       return;
     }
-    setSelectedOption(option);
-    onChange([value]);
+    if (option.value === value.value) {
+      return;
+    }
+    onChange(option);
   };
 
   const dropdownModifiers = {
@@ -50,59 +81,107 @@ const CustomDropdown = ({
       })
     }
   };
-  const btnStyle = {
-    width
-  };
-  return (
-    <Dropdown
-      className={`${styles.dropdown} ${styles[`dropdown-${size}`]} ${className || ''}`}
-      isOpen={dropdownOpen}
-      toggle={handleToggle}
-    >
-      <DropdownToggle
-        className={`${dropdownOpen ? styles.noneBorderBottom : ''} ${error ? styles.error : ''} d-flex justify-content-between align-items-center`}
-        style={btnStyle}
-      >
-        <span className="general-text-2">
-          {selectedOption ? selectedOption.label : ''}
-        </span>
-        {dropdownOpen
-          ? <ChevronUp width="12" height="12" />
-          : <ChevronDown width="12" height="12" />
+  const tooltipModifiers = {
+    setMaxHeight: {
+      enabled: true,
+      fn: (data) => ({
+        ...data,
+        styles: {
+          ...data.styles,
+          overflow: 'auto',
+          maxHeight: size === 'sm' ? '216px' : '222px',
+          transform: `${data.styles.transform} translateX(0)`
         }
-      </DropdownToggle>
-      <DropdownMenu
-        right
-        className="mt-0 py-0"
-        modifiers={dropdownModifiers}
+      })
+    }
+  };
+
+  const tooltipText = () => {
+    if (!value || !value.length) return 'No selected option';
+    return value.map((e, i) => {
+      return <div key={i} className={styles.tooltipInfo}> {e.label} </div>;
+    });
+  };
+
+  if (!value) return null;
+  return (
+    <div ref={ref}>
+      <Dropdown
+        className={`${styles.dropdown} ${styles[`dropdown-${size}`]} ${className || ''}`}
+        isOpen={multiple ? isComponentVisible : dropdownOpen}
+        toggle={multiple ? handleToggleWithMultiple : handleToggle}
+        disabled={disabled}
       >
-        {options.map((option, i) => {
-          const isSelectedOption = selectedOption && selectedOption.value === option.value;
-          return (
-            <DropdownItem
-              key={i}
-              onClick={() => handleItemClick(option)}
-              className={isSelectedOption ? selectedOptionClassName : ''}
-            >
+        <DropdownToggle
+          className={`${dropdownOpen ? styles.noneBorderBottom : ''} ${error ? styles.error : ''} 
+          d-flex justify-content-between align-items-center`}
+          style={{ width }}
+        >
+          <span className="general-text-2">
+            {coveringText ? coveringText(value) : (multiple ? '' : (value.label || ''))}
+          </span>
+          {multiple &&
+            <TooltipInfo
+              white
+              className="ml-2"
+              tooltipModifiers={tooltipModifiers}
+              styles={{ backgroundColor: '#ffffff', color: '#242E42' }}
+              text={tooltipText()}
+              target="dropdown"
+            />
+          }
+          {dropdownOpen
+            ? <ChevronUp width="12" height="12" />
+            : <ChevronDown width="12" height="12" />
+          }
+        </DropdownToggle>
+        <DropdownMenu
+          right
+          className="mt-0 py-0"
+          modifiers={dropdownModifiers}
+        >
+          {options.map((option, i) => {
+            const isSelected = multiple
+              ? value.some(e => e.value === option.value)
+              : value.value === option.value;
+            return (
+              <DropdownItem
+                key={i}
+                onClick={() => handleItemClick(option)}
+                className={`${isSelected ? selectedOptionClassName : ''} d-flex`}
+              >
+                {multiple &&
+                  <CheckBox
+                    className={styles.checkBox}
+                    value={isSelected}
+                    onChange={() => handleItemClick(option)}
+                  />
+                }
+                <span className="general-text-2 d-flex align-items-center">
+                  {option.label}
+                </span>
+              </DropdownItem>
+            );
+          })}
+          {customOptions && customOptions.map(({ label, onClick, className }, i) =>
+            <DropdownItem key={i} onClick={onClick} className={className || ''}>
               <span className="general-text-2 d-flex align-items-center">
-                {option.label}
+                {label}
               </span>
             </DropdownItem>
-          );
-        })}
-        {customOptions && customOptions.map(({ label, onClick, className }, i) =>
-          <DropdownItem key={i} onClick={onClick} className={className || ''}>
-            <span className="general-text-2 d-flex align-items-center">
-              {label}
-            </span>
-          </DropdownItem>
-        )}
-      </DropdownMenu>
-    </Dropdown>
+          )}
+        </DropdownMenu>
+      </Dropdown>
+    </div>
   );
 };
 
 CustomDropdown.propTypes = {
+  value: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array
+  ]),
+  onChange: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.oneOfType([
       PropTypes.string,
@@ -115,19 +194,14 @@ CustomDropdown.propTypes = {
     onClick: PropTypes.func.isRequired,
     className: PropTypes.string
   })),
-  defaultOption: PropTypes.shape({
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]),
-    label: PropTypes.string
-  }),
-  onChange: PropTypes.func.isRequired,
+  multiple: PropTypes.bool,
   width: PropTypes.string, // width can be 100% or number px
   size: PropTypes.string, // we have 2 size sm and md
   className: PropTypes.string,
   selectedOptionClassName: PropTypes.string,
-  error: PropTypes.array
+  error: PropTypes.array,
+  disabled: PropTypes.bool,
+  coveringText: PropTypes.func
 };
 
 export default CustomDropdown;

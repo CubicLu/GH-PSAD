@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { Col, Row } from 'reactstrap';
-import { isEmpty } from 'underscore';
 import { cloneDeep } from 'lodash'
 import ModalRecipients from '../../shared/rules/recipients'
 import { renderRecords } from '../../shared/rules'
@@ -36,19 +36,23 @@ class Rules extends React.Component {
     isSaving: false,
     inputChanged: false,
     showModalRecipient: false,
-    dropdown: {},
+    dropdowns: {
+      officers: []
+    },
     list: [],
     currentRule: {
       recipients: []
-    }
+    },
+    isFetching: true
   }
 
   static contextType = AlertMessagesContext
 
   isFetching = () => {
-    const { list, dropdown } = this.state
-    return isEmpty(list) || isEmpty(dropdown)
+    return this.state.isFetching;
   }
+
+  setDropdowns = (key, data) => this.setState({ dropdowns: { ...this.state.dropdowns, [key]: data } })
 
   setFormApi = formApi => {
     this.formApi = formApi;
@@ -78,9 +82,6 @@ class Rules extends React.Component {
     const list = cloneDeep(this.state.list).map(rule => {
       rule.recipient_ids = rule.recipients.map(recipient => recipient.id)
       delete rule.recipients
-      if (!rule.agency_id) {
-        delete rule.agency_id
-      }
       return rule
     })
 
@@ -145,8 +146,8 @@ class Rules extends React.Component {
               <th disableSort style={{ width: '15%' }}>Status</th>
               <th disableSort style={{ width: '30%' }}>Rule's name</th>
               <th disableSort style={{ width: '30%' }}>
-                <TooltipInfo className="mr-1" text="Optional. Lists all agencies where we can assign the parking rule" target="agency"  />
-                Assigned Agency
+                <TooltipInfo className="mr-1" text="Optional. Lists all assignable officers from parking lot assigned agency." target="agency"  />
+                Assigned Agency Officer
               </th>
               <th disableSort style={{ width: '25%' }}>
                 <TooltipInfo className="mr-1" text="Optional. Lists all email addresses who will receive notification when the parking rule is violated" target="recipients"  />
@@ -163,26 +164,23 @@ class Rules extends React.Component {
   }
 
   fetchData = (record) => {
-    const { startFetching, currentUser } = this.props;
-
-    if (record) {
-
-      startFetching(indexRules({ query: {parking_lot_id: record.id }}))
-        .then((result) => {
-          this.setState({
-            list: result.data
-          });
-        })
-
-      startFetching(dropdownsSearch('parking_rule-agencies_list', { admin_id: currentUser.id, parking_lot_id: record.id  }))
-        .then((result) => {
-          this.setState({
-            dropdown: {
-              agencies: result.data
-            }
-          });
-        })
+    if (!record) return;
+    const { startFetching } = this.props;
+    const promises = [];
+    promises.push(
+      startFetching(
+        indexRules({ query: { parking_lot_id: record.id } })
+      ).then((response) => this.setState({ list: response.data }))
+    );
+    if (record.agency_id) {
+      promises.push(
+        startFetching(
+          dropdownsSearch('agency_officers_list', { agency_id: record.agency_id })
+        ).then(response => this.setDropdowns('officers', response.data))
+      );
     }
+    Promise.all(promises)
+      .finally(() => this.setState({ isFetching: false }));
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
@@ -213,6 +211,12 @@ class Rules extends React.Component {
           <p className="general-text-1">
             Activated: {activeRules} rules
           </p>
+          {
+            this.props.record && !this.props.record.agency_id ?
+            <p className="general-text-2 py-3 text-danger">
+              Please <Link to={`/dashboard/parking_lots/${this.props.record.id}`}>assign</Link> agency to this parking lot first before you can assign agency's officer for each rule.
+            </p> : ''
+          }
         </div>
         {this.renderForm()}
         <ModalRecipients

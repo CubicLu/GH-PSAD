@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
 
@@ -8,13 +8,13 @@ import Dropdown from 'components/base/dropdown';
 import { ReactComponent as InfoIcon } from 'assets/info_icon.svg';
 
 const Configuration = ({ name, title, config, onConfigChange, parkingLots, defaultParkingLot }) => {
+  const [parkingLot, setParkingLot] = useState(defaultParkingLot);
   const handleDateChange = (from, to) => {
     onConfigChange(name, { range: { from, to } });
   };
-  const handleParkingLotChange = (parkingLotIds) => {
-    onConfigChange(name, {
-      parking_lot_ids: parkingLotIds.filter(id => id !== 0)
-    });
+  const handleParkingLotChange = (parkingLot) => {
+    setParkingLot(parkingLot);
+    onConfigChange(name, { parking_lot_ids: parkingLot.value === 0 ? [] : [parkingLot.value] });
   };
   return (
     <Col xs="12" className="col-lg">
@@ -42,7 +42,7 @@ const Configuration = ({ name, title, config, onConfigChange, parkingLots, defau
         <Col>
           <Dropdown
             options={parkingLots}
-            defaultOption={defaultParkingLot}
+            value={parkingLot}
             onChange={handleParkingLotChange}
             size="sm"
           />

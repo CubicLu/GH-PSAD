@@ -108,7 +108,8 @@ class New extends React.Component {
       .then(() => {
         if(isEmpty(rules)) {
           this.setState({
-            showParkingRulesSection: true
+            showParkingRulesSection: true,
+            agencyId: values.agency_id
           })
         }
       });
@@ -119,7 +120,7 @@ class New extends React.Component {
 
     return (
       renderFieldsWithGrid(
-        fieldsNew(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this)),
+        fieldsNew(dropdowns.townManagers, dropdowns.parkingAdmins, dropdowns.agencies, this.renderLocationModal.bind(this)),
         2,
         6,
         {...this.fieldProps(), errors: this.state.errors }
@@ -220,6 +221,8 @@ class New extends React.Component {
          .then(response => this.setDropdowns('townManagers', response.data)),
       startFetching(dropdownsSearch('admins_by_role-parking_admin'))
          .then(response => this.setDropdowns('parkingAdmins', response.data)),
+      startFetching(dropdownsSearch('agency_list'))
+        .then(response => this.setDropdowns('agencies', response.data)),
       startFetching(dropdownsSearch('categories_place'))
          .then(response => this.setDropdowns('categoriesPlace', response.data))
     ])
@@ -228,7 +231,7 @@ class New extends React.Component {
 
   render () {
     const { backPath } = this.props;
-    const { showParkingRulesSection, errors, isSaving } = this.state;
+    const { showParkingRulesSection, errors, isSaving, agencyId } = this.state;
 
     if (this.isFetching()) {
       return <Loader/>;
@@ -240,15 +243,16 @@ class New extends React.Component {
           backPath={backPath}
           showParkingRulesSection={showParkingRulesSection}
         />
-        <div className={showParkingRulesSection ? '' : 'd-none'}>
+        {showParkingRulesSection &&
           <Rules
             {...this.props}
             save={this.save}
             isSaving={isSaving}
             backParkingRule={this.backParkingRule}
             errors={errors}
+            agencyId={agencyId}
           />
-        </div>
+        }
         <div className={showParkingRulesSection ? 'd-none' : ''}>
           <div className={`${styles.hint} bg-grey-light`}>
             <p className="general-text-2 m-0">

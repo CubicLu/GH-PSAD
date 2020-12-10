@@ -68,7 +68,7 @@ const renderImageField = (field, props = {}) => (
 const renderInput = (field, props = {}) => {
   switch (field.type) {
     case FieldType.MULTISELECT_FIELD:
-      return <CustomMultiSelect {...props} field={field.name} options={field.options} autoFocus={field.autoFocus}/>;
+      return <CustomMultiSelect {...props} field={field.name} options={field.options} disabled={field.disabled} autoFocus={field.autoFocus} entityName={field.entityName} />;
     case FieldType.FILE_FIELD:
       return <ImageInput {...props} className="form-control" field={field.name} autoFocus={field.autoFocus} disabled={field.disabled} />;
     case FieldType.MULTIPLE_FILE_FIELDS:

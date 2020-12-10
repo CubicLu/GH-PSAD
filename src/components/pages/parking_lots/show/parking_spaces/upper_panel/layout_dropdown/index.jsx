@@ -21,7 +21,8 @@ const LayoutDropdown = ({ hasAddButton }) => {
     addNewMap
   } = parkingPlanContext.func;
 
-  if (!parkingPlans[selectedIndexParkingPlan]) {
+  const parkingPlan = parkingPlans[selectedIndexParkingPlan];
+  if (!parkingPlan) {
     if (!hasAddButton) return null;
     return (
       <Col xs="12" lg="auto" className={styles.uploadLayout}>
@@ -46,7 +47,8 @@ const LayoutDropdown = ({ hasAddButton }) => {
       <Dropdown
         options={parkingPlans.map(({ name }, i) => ({ value: i, label: name }))}
         customOptions={customOptions}
-        onChange={(selectedOptions) => selectIndexParkingPlan(selectedOptions[0])}
+        value={{ value: selectedIndexParkingPlan, label: parkingPlan.name }}
+        onChange={(selectedOption) => selectIndexParkingPlan(selectedOption.value)}
         className={styles.layoutDropdown}
         selectedOptionClassName={styles.layoutSelectedOption}
       />
