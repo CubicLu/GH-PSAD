@@ -105,7 +105,7 @@ class Show extends React.Component {
 
     return (
       renderFieldsWithGrid(
-        fieldsShow(dropdowns.townManagers, dropdowns.parkingAdmins, this.renderLocationModal.bind(this), currentUserPermissions),
+        fieldsShow(dropdowns.townManagers, dropdowns.parkingAdmins, dropdowns.agencies, this.renderLocationModal.bind(this), currentUserPermissions),
         2,
         6,
         { ...this.fieldProps(), errors: this.state.errors })
@@ -222,6 +222,8 @@ class Show extends React.Component {
         .then(response => this.setDropdowns('townManagers', response.data)),
       startFetching(dropdownsSearch('admins_by_role-parking_admin'))
         .then(response => this.setDropdowns('parkingAdmins', response.data)),
+      startFetching(dropdownsSearch('agency_list'))
+        .then(response => this.setDropdowns('agencies', response.data)),
       startFetching(dropdownsSearch('categories_place'))
         .then(response => this.setDropdowns('categoriesPlace', response.data))
     ])

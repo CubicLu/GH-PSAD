@@ -3,7 +3,7 @@ import { FieldType } from 'components/helpers/form_fields'
 import permissions from 'config/permissions';
 import fieldsWithPermission from './fields_with_permission';
 
-const fieldsNew = (managers = [], admins = [], renderLocationModal) => (
+const fieldsNew = (managers = [], admins = [], agencies = [], renderLocationModal) => (
   [
     { name: 'name', label: 'Name', mandatory: true, autoFocus: true },
     { name: 'parking_admin_id', label: 'Parking Operator', type: FieldType.SELECT_FIELD, options: admins.map(admin => { return { value: admin.value, label: admin.label } }) },
@@ -16,11 +16,12 @@ const fieldsNew = (managers = [], admins = [], renderLocationModal) => (
     { name: 'town_manager_id', label: 'Town Manager', mandatory: true, type: FieldType.SELECT_FIELD, options: managers.map(manager => { return { value: manager.value, label: manager.label } }) },
     { name: 'phone', label: 'Contact' },
     { name: 'status', label: 'Status', mandatory: true, type: FieldType.SELECT_FIELD, options: [{ value: 'active', label: 'Active' }, { value: 'suspended', label: 'Suspended' }], defaultValue: 'active' },
-    { name: 'email', label: 'Email' }
+    { name: 'email', label: 'Email' },
+    { name: 'agency_id', label: 'Agency', mandatory: true, type: FieldType.SELECT_FIELD, options: agencies }
   ]
 );
 
-const fieldsShow = (managers = [], admins = [], renderLocationModal, userPermissions = []) => fieldsWithPermission(
+const fieldsShow = (managers = [], admins = [], agencies = [], renderLocationModal, userPermissions = []) => fieldsWithPermission(
   [
   // TODO: It hasn't been discussed yet
   //  {
@@ -37,7 +38,7 @@ const fieldsShow = (managers = [], admins = [], renderLocationModal, userPermiss
   //   style: { maxWidth: 'inherit', display: 'inline' },
   //   label: 'Violation records',
   // },
-    ...fieldsNew(managers, admins, renderLocationModal)
+    ...fieldsNew(managers, admins, agencies, renderLocationModal)
   ],
   userPermissions,
   permissions.UPDATE_PARKINGLOT

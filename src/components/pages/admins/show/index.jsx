@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { generatePath } from 'react-router';
 import { Form } from 'informed';
-import { isEmpty } from 'underscore';
 /* Actions */
 import { SET_RECORD, SET_LIST_ELEMENT } from 'actions/admins';
 import { invoke } from 'actions';
@@ -27,6 +26,7 @@ import resourceFetcher from 'components/modules/resource_fetcher';
 import updateRecord from 'components/modules/form_actions/update_record';
 import setEmptyFields from 'components/modules/set_empty_fields';
 import withCurrentUser from 'components/modules/with_current_user';
+import withFetching from 'components/modules/with_fetching';
 import Loader from 'components/helpers/loader';
 
 class Show extends React.Component {
@@ -35,8 +35,11 @@ class Show extends React.Component {
     defaultRecord: {},
     inputChanged: false,
     dropdowns: {
-      roles: []
+      roles: [],
+      agencies: [],
+      parkingLots: []
     },
+    isDropdownFetching: true,
     modal: false,
     password_verification: '',
     errors: {}
@@ -44,11 +47,13 @@ class Show extends React.Component {
 
   static contextType = AlertMessagesContext
 
-  isFetching() {
-    const { isResourceFetching } = this.props
-    const { roles } = this.state.dropdowns;
-    return isResourceFetching || isEmpty(roles)
+  isFetching () {
+    const { isResourceFetching } = this.props;
+    const { isDropdownFetching } = this.state;
+    return isResourceFetching || isDropdownFetching;
   }
+
+  setDropdowns = (key, data) => this.setState({ dropdowns: { ...this.state.dropdowns, [key]: data } })
 
   fieldProps = () => ({
     lSize: 6,
@@ -56,9 +61,30 @@ class Show extends React.Component {
       onChange: () => this.setState({ inputChanged: true })
     },
     events: {
-      onChange: () => this.setState({ inputChanged: true })
+      onChange: this.handleInputChange
     }
   })
+
+  handleInputChange = (event) => {
+    const { name } = event?.target || {};
+    if (name !== 'role_type') {
+      this.setState({ inputChanged: true });
+      return;
+    }
+    this.setState({ inputChanged: true });
+    setTimeout(this.fillAllParkingLots);
+  }
+
+  fillAllParkingLots = () => {
+    const { dropdowns } = this.state;
+    const roleType = this.formApi.getValue('role_type');
+    if (roleType === 'town_manager') {
+      const allParkingLotIds = dropdowns.parkingLots.map(p => p.value);
+      this.formApi.setValue('parking_lot_ids', allParkingLotIds);
+    } else if (roleType === 'parking_lot_manager') {
+      this.formApi.setValue('parking_lot_ids', []);
+    }
+  }
 
   setFormApi = formApi => {
     this.formApi = formApi;
@@ -89,9 +115,9 @@ class Show extends React.Component {
 
   values = () => {
     const { record } = this.props;
-    return Object.assign({}, record, {
-      role_id: record.role.id
-    });
+    const values = Object.assign({}, record);
+    values.agency_id = record.agency_id ? record.agency_id.toString() : null;
+    return values;
   };
 
   renderSaveButton = () => {
@@ -135,37 +161,27 @@ class Show extends React.Component {
   }
 
   fieldsForCommonForm = () => {
-    const { currentUserPermissions } = this.props;
-    const fieldsSet = fieldsShow(this.state.dropdowns.roles, currentUserPermissions);
+    const { record, currentUserPermissions } = this.props;
+    const { roles, agencies, parkingLots } = this.state.dropdowns;
+    const roleType = this.formApi ? this.formApi.getValue('role_type') : record.role_type;
+    const fieldsSet = fieldsShow(roles, agencies, parkingLots, roleType, currentUserPermissions);
     fieldsSet.push({
       name: 'password', label: 'Password', type: FieldType.PASSWORD_FIELD, filled: true
     });
     return fieldsSet;
   }
 
-  fetchData = (currentUser, record) => {
-    dropdownsSearch('role_id', { admin_id: currentUser.id, edited_admin_id: record.id })
-      .then(response => {
-        if (!isEmpty(response.data)) {
-          this.setState({ dropdowns: { roles: response.data } })
-        } else {
-          // This happens when the user is not allowed to update
-          this.setState({ dropdowns: { roles: [{ value: currentUser.role.id, label: currentUser.role.name }] } })
-        }
-      });
-  }
-  componentWillReceiveProps(nextProps) {
-    const { currentUser, record } = nextProps
-    if (currentUser && record) {
-      this.fetchData(currentUser, record)
-    }
-  }
-
-  componentDidMount() {
-    const { currentUser, record } = this.props
-    if (currentUser && record) {
-      this.fetchData(currentUser, record)
-    }
+  componentDidMount () {
+    const { startFetching } = this.props;
+    Promise.all([
+      startFetching(dropdownsSearch('role_type'))
+        .then(response => this.setDropdowns('roles', response.data)),
+      startFetching(dropdownsSearch('agency_list'))
+        .then(response => this.setDropdowns('agencies', response.data)),
+      startFetching(dropdownsSearch('parking_lot_list'))
+        .then(response => this.setDropdowns('parkingLots', response.data))
+    ])
+      .finally(() => this.setState({ isDropdownFetching: false }));
   }
 
   render() {
@@ -203,11 +219,19 @@ Show.propTypes = {
     id: PropTypes.number.isRequired,
     role: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired
-  })
+  }),
+  startFetching: PropTypes.func.isRequired
 };
 
 function mapDispatch(dispatch) {
   return bindActionCreators({ setListElement: invoke(SET_LIST_ELEMENT) }, dispatch);
 }
 
-export default connectRecord('admin', SET_RECORD, resourceFetcher(show), connect(null, mapDispatch)(withCurrentUser(Show)));
+export default connectRecord('admin', SET_RECORD, resourceFetcher(show), connect(
+  null,
+  mapDispatch
+)(
+  withFetching(
+    withCurrentUser(Show)
+  )
+));

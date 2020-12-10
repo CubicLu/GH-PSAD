@@ -7,7 +7,7 @@ import Toggle from 'components/base/toggle';
 import Dropdown from 'components/base/dropdown';
 
 function renderRecords () {
-  const { list, dropdown } = this.state;
+  const { list, dropdowns } = this.state;
   const { errors = {} } = this.props;
   const handleToggleStatus = (idx) => {
     const updatedList = list.map((item, i) => {
@@ -21,22 +21,29 @@ function renderRecords () {
       list: updatedList
     });
   };
-  const handleAgencyChange = (idx, selectedValues) => {
-    if (!Array.isArray(selectedValues) || selectedValues.length === 0) return;
+  const handleOfficerChange = (idx, selectedOfficer) => {
+    if (!selectedOfficer) return;
     const updatedList = list.map((item, i) => {
       if (i !== idx) return item;
-      return {
-        ...item,
-        agency_id: selectedValues[0]
-      };
+      return { ...item, admin_id: selectedOfficer.value };
     });
     this.setState({
       list: updatedList
     });
   };
   return list.map((record, idx) => {
-    const { name } = record;
+    const { name, admin_id: adminId } = record;
     const error = errors[name];
+
+    let selectedOfficer;
+    if (dropdowns.officers.length > 0) {
+      if (adminId) {
+        selectedOfficer = dropdowns.officers.find(officer => officer.value === adminId);
+      } else {
+        selectedOfficer = dropdowns.officers[0];
+      }
+    }
+
     return (
       <tr key={idx} className={`non-hover ${record.status ? styles.active : ''}`}>
         <td>
@@ -51,9 +58,11 @@ function renderRecords () {
         </td>
         <td>
           <Dropdown
-            options={dropdown.agencies}
-            onChange={(selectedValues) => handleAgencyChange(idx, selectedValues)}
+            options={dropdowns.officers}
+            value={selectedOfficer}
+            onChange={(selectedValue) => handleOfficerChange(idx, selectedValue)}
             error={error}
+            disabled={dropdowns.officers.length === 0}
           />
         </td>
         <td
@@ -70,4 +79,4 @@ function renderRecords () {
 
 export {
   renderRecords
-}
+};

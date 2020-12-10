@@ -59,7 +59,8 @@ class DataCard extends Component {
       }
     ],
     currentSinceText: 'last week',
-    tileInfoOpen: false
+    tileInfoOpen: false,
+    selectedParkingLot: this.props.defaultParkingLot
   }
 
   componentDidUpdate(prevProps) {
@@ -101,12 +102,13 @@ class DataCard extends Component {
       })
   }
 
-  updateData = (parkingLotIds) => {
+  updateData = (parkingLot) => {
     const { type } = this.props
     const { from, to } = this.state
+    this.setState({ selectedParkingLot: parkingLot });
     filterFetcher({
       type,
-      parkingLotIds: parkingLotIds.filter(id => id !== 0),
+      parkingLotIds: parkingLot.value === 0 ? [] : [parkingLot.value],
       range: {
         from,
         to
@@ -135,8 +137,8 @@ class DataCard extends Component {
   }
 
   render() {
-    const { data, datesToFilter, modalIsOpen } = this.state
-    const { parkingLots, defaultParkingLot, display, maxDate, info, type, reportType } = this.props
+    const { data, datesToFilter, modalIsOpen, selectedParkingLot } = this.state
+    const { parkingLots, display, maxDate, info, type, reportType } = this.props
 
     if(!display) {
       return null
@@ -200,7 +202,7 @@ class DataCard extends Component {
                     <Dropdown
                       options={parkingLots}
                       onChange={this.updateData}
-                      defaultOption={defaultParkingLot}
+                      value={selectedParkingLot}
                       width="150px"
                       size="sm"
                     />

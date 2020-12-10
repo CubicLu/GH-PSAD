@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
-import { isEmpty } from 'underscore';
 
 /* Actions */
 /* API */
@@ -26,19 +25,23 @@ class Rules extends React.Component {
   state = {
     inputChanged: false,
     showModalRecipient: false,
-    dropdown: {},
+    dropdowns: {
+      officers: []
+    },
     list: [],
     currentRule: {
       recipients: []
-    }
+    },
+    isFetching: true
   }
 
   static contextType = AlertMessagesContext
 
   isFetching = () => {
-    const { list, dropdown } = this.state
-    return isEmpty(list) || isEmpty(dropdown)
+    return this.state.isFetching;
   }
+
+  setDropdowns = (key, data) => this.setState({ dropdowns: { ...this.state.dropdowns, [key]: data } })
 
   setFormApi = formApi => {
     this.formApi = formApi;
@@ -61,7 +64,7 @@ class Rules extends React.Component {
   save = () => {
     const list = this.state.list.map(rule => {
       rule.recipient_ids = rule.recipients.map(recipient => recipient.id)
-      rule.agency_id = rule.agency_id || null
+      rule.admin_id = rule.admin_id || null
       return rule
     })
     this.props.save(list)
@@ -112,8 +115,8 @@ class Rules extends React.Component {
               <th disableSort style={{ width: '15%' }}>Status</th>
               <th disableSort style={{ width: '30%' }}>Rule's name</th>
               <th disableSort style={{ width: '30%' }}>
-                <TooltipInfo className="mr-1" text="This is the enforcement agency where a violation of the parking rule will be reported to" target="agency"  />
-                Assigned Agency
+                <TooltipInfo className="mr-1" text="Optional. Lists all assignable officers from parking lot assigned agency." target="agency" />
+                Assigned Agency Officer
               </th>
               <th disableSort style={{ width: '25%' }}>
                 <TooltipInfo className="mr-1" text="Lists all email addresses who will receive notification when the parking rule is violated" target="recipients"  />
@@ -129,22 +132,14 @@ class Rules extends React.Component {
   }
 
   componentDidMount () {
-    const { startFetching, currentUser } = this.props
-
-    startFetching(index())
-      .then((result) => {
-        this.setState({
-          list: result.data
-        });
-      })
-    startFetching(dropdownsSearch('parking_rule-agencies_list', { admin_id:currentUser.id }))
-      .then((result) => {
-        this.setState({
-          dropdown: {
-            agencies: result.data
-          }
-        });
-      })
+    const { startFetching, agencyId } = this.props;
+    Promise.all([
+      startFetching(index())
+        .then((result) => this.setState({ list: result.data }) ),
+      startFetching(dropdownsSearch('agency_officers_list', { agency_id: agencyId }))
+        .then(response => this.setDropdowns('officers', response.data))
+    ])
+      .finally(() => this.setState({ isFetching: false }));
   }
 
   render () {
@@ -177,10 +172,12 @@ class Rules extends React.Component {
 }
 
 Rules.propTypes = {
+  startFetching: PropTypes.func.isRequired,
   backParkingRule: PropTypes.func.isRequired,
   backPath: PropTypes.string.isRequired,
   currentUser: PropTypes.object,
-  isSaving: PropTypes.bool
+  isSaving: PropTypes.bool,
+  agencyId: PropTypes.string
 };
 
 export default withFetching(
